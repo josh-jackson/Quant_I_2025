@@ -1,5 +1,5 @@
 ---
-title: Correlations 
+title: Data Description and Correlations 
 format: revealjs
 slide-number: true
 editor: visual
@@ -12,7 +12,8 @@ html:
 ---
 
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+```{r}
 library(tidyverse) # for pipes and plots
 library(lsr) # for mode and maxFreq functions
 library(kableExtra) # for tables
@@ -74,6 +75,7 @@ names(world)
 A **distribution** often refers to a description of the [relative] number of times a variable X will take each of its unique values. 
 
 ```{r}
+
 hist(world$Happiness, breaks = 30, main = "Distribution of happiness scores", 
      xlab = "Happiness")
 ```
@@ -169,7 +171,7 @@ sum((x - mean(x))^2)/length(x)
 sqrt(sum(deviation^2)/length(deviation))
 ```
 
---
+---
 
 ```{r}
 # --- Distribution 1: Standard Normal ---
@@ -231,7 +233,7 @@ ggplot(all_data, aes(x = value, color = distribution, fill = distribution)) +
 ```
 
 
----
+
   
 ## Skew and Kurtosis
   
@@ -354,7 +356,7 @@ Scores interpreted as distance from the mean, in standard deviations.
 - Assuming normal, we can estimate sample probability
 
 
-## simulation
+## Simulation
 
 ```{r}
 
@@ -565,13 +567,14 @@ data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 
 What is the correlation between these two variables?
 
---
+---
 
 Correlation = `r round(cor(data$x, data$y),2)`
 
 ---
 
-```{r, echo = FALSE}
+```{r}
+
 set.seed(101019) # so we all get the same random numbers
 mu = c(10, 100)
 Sigma = matrix(c(.8, -.3, -.3, .8), ncol =2) #diagonals are reliabilites, off-diagonals are correlations
@@ -655,7 +658,7 @@ ggplot(galton.data, aes(x=parent, y=child)) +
 
 ## Visualizing correlations
 
-```{r, echo = F, warning = FALSE, message=FALSE}
+```{r}
 library(datasauRus)
 datasaurus_dozen %>%
   filter(dataset == "away") %>%
@@ -670,7 +673,7 @@ datasaurus_dozen %>%
 
 ---
 
-```{r, echo = F}
+```{r}
 datasaurus_dozen %>%
   filter(dataset == "h_lines") %>%
   ggplot(aes(x = x, y = y)) +
@@ -683,7 +686,7 @@ datasaurus_dozen %>%
 
 ---
 
-```{r, echo = F}
+```{r}
 datasaurus_dozen %>%
   filter(dataset == "x_shape") %>%
   ggplot(aes(x = x, y = y)) +
@@ -696,7 +699,7 @@ datasaurus_dozen %>%
 
 ---
 
-```{r, echo = F}
+```{r}
 datasaurus_dozen %>%
   filter(dataset == "circle") %>%
   ggplot(aes(x = x, y = y)) +
@@ -709,7 +712,8 @@ datasaurus_dozen %>%
 
 
 ---
-```{r, echo = F}
+
+```{r}
 datasaurus_dozen %>%
   filter(dataset == "wide_lines") %>%
   ggplot(aes(x = x, y = y)) +
@@ -722,7 +726,8 @@ datasaurus_dozen %>%
 
 
 ---
-```{r, echo = F}
+
+```{r}
 datasaurus_dozen %>%
   filter(dataset == "bullseye") %>%
   ggplot(aes(x = x, y = y)) +
@@ -734,7 +739,8 @@ datasaurus_dozen %>%
 ```
 
 ---
-```{r, echo = F}
+
+```{r}
 datasaurus_dozen %>%
   filter(dataset == "star") %>%
   ggplot(aes(x = x, y = y)) +
@@ -746,7 +752,8 @@ datasaurus_dozen %>%
 ```
 
 ---
-```{r, echo = F}
+
+```{r}
 datasaurus_dozen %>%
   filter(dataset == "dino") %>%
   ggplot(aes(x = x, y = y)) +

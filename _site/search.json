@@ -572,5 +572,229 @@
     "title": "Probability Distributions",
     "section": "Chi square distirbution",
     "text": "Chi square distirbution\n\nAlso is used a lot in this class:\nGeneral/more applicable test for model comparisons\nChi-square test of association (categorical correlation)\nGoodness of fit (observed counts differ from expected)"
+  },
+  {
+    "objectID": "correlation_2.html#why-do-we-describe-data",
+    "href": "correlation_2.html#why-do-we-describe-data",
+    "title": "Data Description and Correlations",
+    "section": "Why do we describe data?",
+    "text": "Why do we describe data?\n\nUnderstand your data\nBasis of inference\nFind errors in data entry or collection"
+  },
+  {
+    "objectID": "correlation_2.html#happiness",
+    "href": "correlation_2.html#happiness",
+    "title": "Data Description and Correlations",
+    "section": "Happiness",
+    "text": "Happiness\nExamples today are based on data from the 2015 World Happiness Report, which is an annual survey part of the Gallup World Poll.\nThe dataset is available on our GitHub site in the data folder, for those who want to play along at home."
+  },
+  {
+    "objectID": "correlation_2.html#distributions",
+    "href": "correlation_2.html#distributions",
+    "title": "Data Description and Correlations",
+    "section": "Distributions",
+    "text": "Distributions\nA distribution often refers to a description of the [relative] number of times a variable X will take each of its unique values.\n\nhist(world$Happiness, breaks = 30, main = \"Distribution of happiness scores\", \n     xlab = \"Happiness\")"
+  },
+  {
+    "objectID": "correlation_2.html#moments-of-a-distribution",
+    "href": "correlation_2.html#moments-of-a-distribution",
+    "title": "Data Description and Correlations",
+    "section": "Moments of a distribution",
+    "text": "Moments of a distribution\n\nMean\nVariance\nSkew\nKurtosis"
+  },
+  {
+    "objectID": "correlation_2.html#mean-mu",
+    "href": "correlation_2.html#mean-mu",
+    "title": "Data Description and Correlations",
+    "section": "Mean, \\(\\mu\\)",
+    "text": "Mean, \\(\\mu\\)\n\nThe mean is the average\nThe population mean is represented by the Greek symbol \\(\\mu\\)\nThe sample mean is represented by the Latin symbol \\(\\bar{X}\\)\nExample: a set of numbers is: 7, 7, 8, 3, 9, 2.\n\n\\[\\mu = \\frac{\\Sigma(x_i)}{N}=\\frac{7+7+8+3+9+2}{6}\\]"
+  },
+  {
+    "objectID": "correlation_2.html#dispersion",
+    "href": "correlation_2.html#dispersion",
+    "title": "Data Description and Correlations",
+    "section": "dispersion",
+    "text": "dispersion\n\nDistributions are most often described by their first two moments, mean and variance.\nTypically, these moments are the two used in common inferential techniques.\nThe mean represents the average score in a distribution. A good measure of spread will tell us something about how the typical score deviates from the mean."
+  },
+  {
+    "objectID": "correlation_2.html#average-deviation",
+    "href": "correlation_2.html#average-deviation",
+    "title": "Data Description and Correlations",
+    "section": "Average deviation",
+    "text": "Average deviation\n\nx = c(7,7,8,3,9,2)\nmean(x)\n\n[1] 6\n\nx - mean(x)\n\n[1]  1  1  2 -3  3 -4\n\nsum(x - mean(x))\n\n[1] 0\n\nsum(x - mean(x))/length(x)\n\n[1] 0"
+  },
+  {
+    "objectID": "correlation_2.html#sums-of-squares",
+    "href": "correlation_2.html#sums-of-squares",
+    "title": "Data Description and Correlations",
+    "section": "Sums of squares",
+    "text": "Sums of squares\nOur solution is to square deviations.\n\nx = c(7,7,8,3,9,2)\nmean(x)\n\n[1] 6\n\ndeviation = x - mean(x)\ndeviation^2\n\n[1]  1  1  4  9  9 16\n\nsum(deviation^2)\n\n[1] 40\n\n\nThe sum of squared deviations is referred variation and as the Sum of Squares (SS)\n\\[SS = {\\sum{(x-\\bar{x})^2}}\\]"
+  },
+  {
+    "objectID": "correlation_2.html#variance",
+    "href": "correlation_2.html#variance",
+    "title": "Data Description and Correlations",
+    "section": "Variance",
+    "text": "Variance\nWe calculate the average squared deviation: this is our variance, \\(\\sigma^2\\):\n\nsum((x - mean(x))^2)/length(x)\n\n[1] 6.666667"
+  },
+  {
+    "objectID": "correlation_2.html#variance-1",
+    "href": "correlation_2.html#variance-1",
+    "title": "Data Description and Correlations",
+    "section": "Variance",
+    "text": "Variance\n\nIt’s additive. Given two variables X and Y, if I create \\(Z = X + Y\\) then \\(Var(Z) = Var(X) + Var(Y)\\)\nRepresents all values in a dataset\nBut it is not in the original metric"
+  },
+  {
+    "objectID": "correlation_2.html#standard-deviation",
+    "href": "correlation_2.html#standard-deviation",
+    "title": "Data Description and Correlations",
+    "section": "Standard Deviation",
+    "text": "Standard Deviation\nStandard deviation \\(\\sigma\\) is the square root of the variance.\n\nsqrt(sum(deviation^2)/length(deviation))\n\n[1] 2.581989"
+  },
+  {
+    "objectID": "correlation_2.html#skew-and-kurtosis",
+    "href": "correlation_2.html#skew-and-kurtosis",
+    "title": "Data Description and Correlations",
+    "section": "Skew and Kurtosis",
+    "text": "Skew and Kurtosis\nMoments 3 and 4 of a distribution are skew and kurtosis.\n\nSkewness = asymmetry\n\nNegative skew = tail pointed towards the negative values (left)\nPositive skew = tail pointed towards the positive values (right)\n\nKurtosis = pointyness\n\nToo pointy = leptokurtic; \\(+\\) kurtosis\nPerfect = mesokurtic\nToo flat = platykurtic (as in platypus!); \\(-\\) kurtosis"
+  },
+  {
+    "objectID": "correlation_2.html#population-versus-sample",
+    "href": "correlation_2.html#population-versus-sample",
+    "title": "Data Description and Correlations",
+    "section": "Population versus sample",
+    "text": "Population versus sample\n\nThe value that represents the entire population is called a parameter.\n\nWe collect samples to estimate the properties of populations; the statistic that represents a sample is called a statistic.\nPopulation parameters are represented with Greek letters ( \\(\\mu\\) , \\(\\sigma\\)).\nSample statistics are represented with Latin letters ( \\(M\\) , \\(\\bar{X}\\) , \\(s\\))."
+  },
+  {
+    "objectID": "correlation_2.html#bias-and-efficiency",
+    "href": "correlation_2.html#bias-and-efficiency",
+    "title": "Data Description and Correlations",
+    "section": "Bias and efficiency",
+    "text": "Bias and efficiency\n\nIn deciding about different ways to estimate a parameter (e.g., central tendency), it is important to consider bias and efficiency (and sometimes consistency).\nBias: An estimator is biased if its expected value and the true value of the parameter are different.\nEfficiency: Of two alternative estimators, the more efficient one will estimate the parameter with less error for the same sample size."
+  },
+  {
+    "objectID": "correlation_2.html#bias-and-efficiency-1",
+    "href": "correlation_2.html#bias-and-efficiency-1",
+    "title": "Data Description and Correlations",
+    "section": "Bias and efficiency",
+    "text": "Bias and efficiency\n\nVariance (and standard deviation) are biased estimators when applied to samples.\nUsing the formulas we’ve described, these statistics will underestimate variability in the population.\n\nPopulation \\[\\sigma^2 = \\frac{\\Sigma(X_i-\\mu)^2}{N}\\]\nSample \\[s^2 = \\hat{\\sigma}^2 = \\frac{\\Sigma(X_i-\\bar{X})^2}{N-1}\\]]"
+  },
+  {
+    "objectID": "correlation_2.html#standard-deviation-1",
+    "href": "correlation_2.html#standard-deviation-1",
+    "title": "Data Description and Correlations",
+    "section": "Standard Deviation",
+    "text": "Standard Deviation\nPopulation \\[\\sigma = \\sqrt{\\frac{\\Sigma(X_i-\\mu)^2}{N}}\\]\nSample \\[s = \\hat{\\sigma} = \\sqrt{\\frac{\\Sigma(X_i-\\bar{X})^2}{N-1}}\\]]"
+  },
+  {
+    "objectID": "correlation_2.html#simulation",
+    "href": "correlation_2.html#simulation",
+    "title": "Data Description and Correlations",
+    "section": "Simulation",
+    "text": "Simulation\n\nset.seed(100917) #so everyone gets same random draws\n\n#function to estimate variance using population formula\nsample_var = function(x){\n  sum((x - mean(x, na.rm=T))^2, na.rm=T)/length(which(!is.na(x)))\n}\n#number of samples\ndraws = 10000\n#which sample sizes to test\nsample_sizes = seq(from = 5, to = 100, by = 5)\n#data frame to store simulations\nvar_estimates = data.frame(size = sample_sizes, sample = NA, estimate = NA)\n\nfor(i in sample_sizes){ # loop through sample sizes\n  sample_est = numeric(length = draws) #create empty vectors\n  estimate = numeric(length = draws)\n  for(j in 1:draws){ # loop through draws\n    sample = rnorm(n = i, mean = 1000, sd = 10) # randomly draw sample from pop with variance 100\n    sample_est[j] = sample_var(sample) # calculate variance using population formula\n    estimate[j] = var(sample) # calculate variance using sample formula\n  }\n  row = which(var_estimates$size == i) #which row in data frame does this belong to?\n  var_estimates$sample[row] = mean(sample_est) # average of variance estimates (using pop) across draws\n  var_estimates$estimate[row] = mean(estimate) # average of variances (using sample) across draws\n}\n\nvar_estimates %&gt;%\n  mutate(population = 100) %&gt;% #add population variable\n  gather(\"var\", \"value\", -size) %&gt;% # long-form\n  mutate(var = factor(var, \n                      levels = c(\"population\",\"sample\",\"estimate\"),\n                      labels = c(\"Population Variance\",\n                                 \"Sample Variance\", \n                                 \"Sample Estimate of Population Variance\"))) %&gt;% #lovely labels\n  ggplot(aes(x = size, y = value)) +\n  geom_line(aes(color = var), size = 3) +\n  scale_x_continuous(\"Sample Size\", breaks = sample_sizes) +\n  scale_color_discrete(\"\")+\n  geom_point() + \n  theme_bw(base_size = 25)"
+  },
+  {
+    "objectID": "correlation_2.html#standardized-scores-z-scores",
+    "href": "correlation_2.html#standardized-scores-z-scores",
+    "title": "Data Description and Correlations",
+    "section": "Standardized scores (z-scores)",
+    "text": "Standardized scores (z-scores)\n\\[ z = \\frac{x_i - \\bar{x}}{s} \\] Scores interpreted as distance from the mean, in standard deviations.\n\nCompare across scales and unit of measures\nMore easily identify extreme data\nAssuming normal, we can estimate sample probability"
+  },
+  {
+    "objectID": "correlation_2.html#simulation-1",
+    "href": "correlation_2.html#simulation-1",
+    "title": "Data Description and Correlations",
+    "section": "Simulation",
+    "text": "Simulation\n\n# Simulate raw data from a normal distribution\n# Let's say it's some measured variable, like \"test scores\"\nn_samples &lt;- 10000\nraw_mean &lt;- 10  # e.g., average test score\nraw_sd &lt;- 3.5    # e.g., spread of test scores\n\nraw_data &lt;- rnorm(n_samples, mean = raw_mean, sd = raw_sd)\n\n# Calculate Z-scores for the raw data\n# Z = (X - mu) / sigma\n# Where X is an individual data point, mu is the mean, and sigma is the standard deviation\n\n# Calculate the mean and standard deviation of our *simulated* raw data\n# (It will be very close to raw_mean and raw_sd, but not exactly due to randomness)\nmean_raw_data &lt;- mean(raw_data)\nsd_raw_data &lt;- sd(raw_data)\n\nz_scored_data &lt;- (raw_data - mean_raw_data) / sd_raw_data\n\n# Create a data frame for plotting\n# We'll put both raw and z-scored values in a single 'value' column\n# and use a 'type' column to distinguish them.\nplot_data &lt;- data.frame(\n  value = c(raw_data, z_scored_data),\n  type = factor(c(rep(\"Raw Data\", n_samples), rep(\"Z-Scored Data\", n_samples)),\n                levels = c(\"Raw Data\", \"Z-Scored Data\")) # Ensure consistent order\n)\n\n# ----------------------------------------------------------------------\n# Part 2: Graphing in ggplot2\n# ----------------------------------------------------------------------\n\nggplot(plot_data, aes(x = value, fill = type, color = type)) +\n  geom_density(alpha = 0.5) + # Use alpha for transparency where distributions overlap\n  labs(\n    title = \"Density Distribution of Raw vs. Z-Scored Data\",\n    x = \"Value\",\n    y = \"Density\",\n    fill = \"Data Type\",\n    color = \"Data Type\"\n  ) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "correlation_2.html#associations",
+    "href": "correlation_2.html#associations",
+    "title": "Data Description and Correlations",
+    "section": "Associations",
+    "text": "Associations\n\ni.e., relationships\nto look at continuous variable associations we need to think in terms of how variables relate to one another"
+  },
+  {
+    "objectID": "correlation_2.html#covariation-cross-products",
+    "href": "correlation_2.html#covariation-cross-products",
+    "title": "Data Description and Correlations",
+    "section": "Covariation (cross products)",
+    "text": "Covariation (cross products)\nSample:\n\\[\\large SS = {\\sum{(x-\\bar{x})(y-\\bar{y})}}\\]\nPopulation:\n\\[SS = {\\sum{{(x-\\mu_{x}})(y-\\mu_{y})}}\\]"
+  },
+  {
+    "objectID": "correlation_2.html#covariance",
+    "href": "correlation_2.html#covariance",
+    "title": "Data Description and Correlations",
+    "section": "Covariance",
+    "text": "Covariance\nSample:\n\\[\\large cov_{xy} = s_{xy} = {\\frac{\\sum{(x-\\bar{x})(y-\\bar{y})}}{N-1}}\\]\nPopulation:\n\\[\\large \\sigma_{xy} = {\\frac{\\sum{(x-\\mu_{x})(y-\\mu_{y})}}{N}}\\]"
+  },
+  {
+    "objectID": "correlation_2.html#correlation",
+    "href": "correlation_2.html#correlation",
+    "title": "Data Description and Correlations",
+    "section": "Correlation",
+    "text": "Correlation\nSample:\n\\[\\large r_{xy} = {\\frac{\\sum({z_{x}z_{y})}}{N}}\\]\nPopulation:\n\\[\\large \\rho_{xy} = {\\frac{cov(X,Y)}{\\sigma_{x}\\sigma_{y}}}\\]"
+  },
+  {
+    "objectID": "correlation_2.html#correlations",
+    "href": "correlation_2.html#correlations",
+    "title": "Data Description and Correlations",
+    "section": "Correlations",
+    "text": "Correlations\n\nHow much two variables are linearly related\n-1 to 1\nInvariant to changes in mean or scaling\nMost common (and basic) effect size measure\nWill use to build our regression model"
+  },
+  {
+    "objectID": "correlation_2.html#covariance-table",
+    "href": "correlation_2.html#covariance-table",
+    "title": "Data Description and Correlations",
+    "section": "Covariance table",
+    "text": "Covariance table\n\\[\\mathbf{K_{XX}} = \\left[\\begin{array}\n{rrr}\n\\sigma^2_X & cov_{XY} & cov_{XZ} \\\\\ncov_{YX} & \\sigma^2_Y & cov_{YZ} \\\\\ncov_{ZX} & cov_{ZY} & \\sigma^2_Z\n\\end{array}\\right]\\]"
+  },
+  {
+    "objectID": "correlation_2.html#covariance-table-1",
+    "href": "correlation_2.html#covariance-table-1",
+    "title": "Data Description and Correlations",
+    "section": "Covariance table",
+    "text": "Covariance table\n\\[\\mathbf{K_{XX}} = \\left[\\begin{array}\n{rrr}\n\\sigma^2_X & 126.5 & 5.2 \\\\\n126.5 & \\sigma^2_Y & cov_{YZ} \\\\\n5.2 & cov_{ZY} & \\sigma^2_Z\n\\end{array}\\right]\\]\nWhich variable, \\(Y\\) or \\(Z\\), does \\(X\\) have greater relationship with?"
+  },
+  {
+    "objectID": "correlation_2.html#correlation-1",
+    "href": "correlation_2.html#correlation-1",
+    "title": "Data Description and Correlations",
+    "section": "Correlation",
+    "text": "Correlation\nPearson product moment correlation\nPopulation\n\\[\\rho_{XY} = \\frac{\\Sigma z_Xz_Y}{N} = \\frac{Cov_{xy}}{\\sqrt{SS_X}\\sqrt{SS_Y}} = \\frac{\\sigma_{XY}}{\\sigma_X \\sigma_Y}\\] Sample \\[r_{XY} = \\frac{\\Sigma z_Xz_Y}{n-1} = \\frac{SP}{\\sqrt{SS_X}\\sqrt{SS_Y}} = \\frac{s_{XY}}{s_X s_Y}\\]"
+  },
+  {
+    "objectID": "correlation_2.html#effect-size",
+    "href": "correlation_2.html#effect-size",
+    "title": "Data Description and Correlations",
+    "section": "Effect size",
+    "text": "Effect size\n\nRecall that z-scores allow us to compare across units of measure; the products of standardized scores are themselves standardized.\nThe correlation coefficient is a standardized effect size which can be used communicate the strength of a relationship.\nCorrelations can be compared across studies, measures, constructs, time.\nExample: the correlation between age and height among children is \\(r = .70\\). The correlation between self- and other-ratings of extraversion is \\(r = .25\\)."
+  },
+  {
+    "objectID": "correlation_2.html#what-are-good-benchmarks",
+    "href": "correlation_2.html#what-are-good-benchmarks",
+    "title": "Data Description and Correlations",
+    "section": "What are good benchmarks?",
+    "text": "What are good benchmarks?\nFrom Ozer & Funder (2019)\n\nClassic social psych studies: \\(r = .36-.42\\)\nScarcity increases the perceived alure of a commodity \\(r = .12\\)\nPeople attribute failures to bad luck \\(r = .10\\)\nCommunicators perceived as more credible are more persuasive \\(r = .10\\)\nPeople in a bad mood are more aggressive \\(r = .41\\)\nAntihistamine and symptom relief \\(r = .11\\)\nIbuprofen and pain relief \\(r = .14\\)\nHeight and weight \\(r = .44\\)"
+  },
+  {
+    "objectID": "correlation_2.html#special-cases-of-the-pearson-correlation",
+    "href": "correlation_2.html#special-cases-of-the-pearson-correlation",
+    "title": "Data Description and Correlations",
+    "section": "Special cases of the Pearson correlation",
+    "text": "Special cases of the Pearson correlation\n\nSpearman/Kendall correlation coefficient\n\nApplies when both X and Y are ranks (ordinal data) instead of continuous\n\nPoint-biserial correlation coefficient\n\nApplies when Y is binary.\n\nPhi (\\(\\phi\\)) coefficient\n\nBoth X and Y are dichotomous."
+  },
+  {
+    "objectID": "correlation_2.html#correlations-1",
+    "href": "correlation_2.html#correlations-1",
+    "title": "Data Description and Correlations",
+    "section": "Correlations",
+    "text": "Correlations\n\ngalton.data &lt;- psychTools::galton\nggplot(galton.data, aes(x=parent, y=child)) +\n    geom_jitter(alpha = .4) +\n    geom_smooth(method=lm,   # Add linear regression line\n                se=FALSE) +     # Don't add shaded confidence region\n    labs(x = \"parent height\", y = \"child height\")"
+  },
+  {
+    "objectID": "correlation_2.html#visualizing-correlations",
+    "href": "correlation_2.html#visualizing-correlations",
+    "title": "Data Description and Correlations",
+    "section": "Visualizing correlations",
+    "text": "Visualizing correlations\n\nlibrary(datasauRus)\ndatasaurus_dozen %&gt;%\n  filter(dataset == \"away\") %&gt;%\n  ggplot(aes(x = x, y = y)) +\n  geom_point()+\n  ggtitle(expression(paste(M[X], \"= 54.3 \", S[X], \"= 16.8 \", \n                           M[Y], \"= 47.8 \", S[Y], \"= 26.9 \",\n                           \"R = -.06\"))) +\n  theme_bw(base_size = 15)"
   }
 ]
