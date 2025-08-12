@@ -41,7 +41,7 @@ The dataset is available on our GitHub site in the `data` folder, for those who 
 ---
 
 ```{r}
-world = read.csv("../data/world_happiness_2015.csv")
+world = read.csv("world_happiness_2015.csv")
 head(world)
 ```
 
@@ -642,12 +642,12 @@ From Ozer & Funder (2019)
 
 
 ```{r}
+galton.data <- psychTools::galton
 ggplot(galton.data, aes(x=parent, y=child)) +
     geom_jitter(alpha = .4) +
     geom_smooth(method=lm,   # Add linear regression line
                 se=FALSE) +     # Don't add shaded confidence region
-    labs(x = "parent height", y = "child height") +
-  theme_bw(base_size = 20)
+    labs(x = "parent height", y = "child height") 
 ```
 
 
