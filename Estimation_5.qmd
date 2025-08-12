@@ -1,0 +1,145 @@
+---
+title: "Estimation"
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+## Today
+
+-   How do I find the regression line
+-   How do I evaluate the regression line
+
+## How do I find the regression line?
+
+-   For any given scatter plot, you could propose an infinite number of regression lines to best describe the relationship
+-   The likelihood function calculates a value for each of those potential lines and tells you which are most "likely"
+
+## Ordinary least squares
+
+
+
+
+
+## When OLS doesn't work
+
+-   OLS is
+
+## Log Likelihood
+
+-   Maximizing the log-likelihood is the same as maximizing the likelihood, but it's mathematically and computationally much easier.
+
+-   Likelihood of observing all your data points is the product of the likelihood of each individual point. Multiplying many small probs will lead to issues. So we log them to turn it into addition.
+
+-   For likelihood, the data are treated as a given, and value of theta varies. L(θ \| data )
+
+## Log Likelihood example
+
+-   calculate a mean and SD
+
+## Log Likelihood example
+
+-   define what values we want to calculate log likelihood for
+
+```{r}
+library(psychTools)
+library(tidyr)
+library(tidyverse)
+galton.data <- galton
+grid <-
+  crossing(mu = seq(from = 66, to = 69, length.out = 200), sigma = seq(from = 2, to = 3, length.out = 200))
+grid
+```
+
+## Log Likelihood example
+
+-   Need to calcualte the log likelihood of our data (each child’s height) assuming each part of our grid is true.
+
+-   Take the first line of our grid (mu = 66, sigma = 2) so we can see how likely each child (all 928) by dnorm(height, 66, 2)
+
+-   We sum the LLs across all 928 participants for each spot in the grid to get the average log-likelihood for each grid spot
+
+## Model fit
+
+-   The way the world is = our model + error
+-   How good is our model? Is it a good representation of reality? Does it "fit" the data well?
+-   Need to go beyond asking if it is significant, because what does that mean? Remember, all models are wrong
+-   We are going to make predictions and see if the predictions (based on our model) matches our data
+
+## Model fit
+
+-   Our model is a prediction machine.
+-   They are created by simply plugging a persons Xs into the created model
+-   If you have bs and have Xs you can create a prediction
+
+$\hat{Y}_{i}$ = 2.65064 + -0.48111\* $X_{i}$
+
+## Model fit
+
+-   We want our predictions to be close to our actual data for each person ( $Y_{i}$ )
+-   The difference between the actual data and our our prediction ( $Y_{i} - \hat{Y}_{i} = e$ ) is the residual, how far we are "off". This tells us how good our fit is.
+-   You can have the same estimates for two models but completely different fit.
+
+## Model fit
+
+-   Can you point out the predictions?
+
+```{r}
+#| code-fold: true
+
+twogroup_fun = function(nrep = 100, b0 = 6, b1 = -2, sigma = 1) {
+     ngroup = 2
+     group = rep( c("group1", "group2"), each = nrep)
+     eps = rnorm(ngroup*nrep, 0, sigma)
+     traffic = b0 + b1*(group == "group2") + eps
+     growthfit = lm(traffic ~ group)
+     growthfit
+}
+
+
+twogroup_fun2 = function(nrep = 100, b0 = 6, b1 = -2, sigma = 2) {
+     ngroup = 2
+     group = rep( c("group1", "group2"), each = nrep)
+     eps = rnorm(ngroup*nrep, 0, sigma)
+     traffic = b0 + b1*(group == "group2") + eps
+     growthfit = lm(traffic ~ group)
+     growthfit
+}
+
+set.seed(16)
+library(broom)
+lm1 <- augment(twogroup_fun())
+
+set.seed(16)
+lm2 <- augment(twogroup_fun2())
+
+plot1<- ggplot(lm1) +
+  aes(x = group, y = traffic) +
+  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11)
+
+plot2<- ggplot(lm2) +
+  aes(x = group, y = traffic) +
+  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11)
+
+
+library(gridExtra)
+ grid.arrange(plot1, plot2, ncol=2)
+```
+
+## Same plot with continuous
+
+
+
+
+
+## Partitioning variance
+
+$$\sum (Y - \bar{Y})^2 = \sum (\hat{Y} -\bar{Y})^2 + \sum(Y - \hat{Y})^2$$
+
+## Sigma

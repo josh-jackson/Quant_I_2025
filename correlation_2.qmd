@@ -1,0 +1,758 @@
+---
+title: Correlations 
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse) # for pipes and plots
+library(lsr) # for mode and maxFreq functions
+library(kableExtra) # for tables
+library(psych)
+library(MASS)
+```
+
+
+## Why do we describe data?
+
+- Understand your data
+
+- Basis of inference
+
+- Find errors in data entry or collection
+
+
+---
+
+## Happiness
+
+Examples today are based on data from the [2015 World Happiness Report](https://worldhappiness.report/ed/2015/), which is an annual survey part of the [Gallup World Poll](https://www.gallup.com/178667/gallup-world-poll-work.aspx). 
+
+The dataset is available on our GitHub site in the `data` folder, for those who want to play along at home.
+
+---
+
+```{r}
+world = read.csv("../data/world_happiness_2015.csv")
+head(world)
+```
+
+---
+
+
+```{r}
+names(world)
+```
+
+
+**Happiness**: “Please imagine a ladder, with steps numbered from 0 at the bottom to 10 at the top. 
+
+**GDP**: Log gross domestic product per capita
+
+**Support**: “If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?”    
+
+**Life**: Healthy life expectancy at birth
+
+**Freedom**: “Are you satisfied or dissatisfied with your freedom to choose what you do with your life?”
+
+**Generosity**: “Have you donated money to a charity in the past month?” (residual, adjusting for GDP)
+
+**Corruption**: “Is corruption widespread throughout the government or not” and “Is corruption widespread within businesses or not?” (avg of 2 questions)
+
+
+
+## Distributions
+
+A **distribution** often refers to a description of the [relative] number of times a variable X will take each of its unique values. 
+
+```{r}
+hist(world$Happiness, breaks = 30, main = "Distribution of happiness scores", 
+     xlab = "Happiness")
+```
+
+
+## Moments of a distribution
+
+1. Mean
+2. Variance
+3. Skew
+4. Kurtosis
+
+
+---
+
+## Mean, $\mu$
+
+- The **mean** is the average
+
+- The population mean is represented by the Greek symbol $\mu$
+
+- The sample mean is represented by the Latin symbol $\bar{X}$
+
+- Example: a set of numbers is:  `7, 7, 8, 3, 9, 2`. 
+
+$$\mu = \frac{\Sigma(x_i)}{N}=\frac{7+7+8+3+9+2}{6}$$
+
+## dispersion
+
+- Distributions are most often described by their first two moments, mean and **variance**. 
+
+- Typically, these moments are the two used in common inferential techniques. 
+
+- The mean represents the average score in a distribution. A good measure of spread will tell us something about how the typical score deviates from the mean.
+
+
+
+## Average deviation
+
+```{r}
+x = c(7,7,8,3,9,2)
+mean(x)
+x - mean(x)
+sum(x - mean(x))
+sum(x - mean(x))/length(x)
+```
+
+
+## Sums of squares
+
+Our solution is to square deviations.
+
+```{r}
+x = c(7,7,8,3,9,2)
+mean(x)
+deviation = x - mean(x)
+deviation^2
+sum(deviation^2)
+```
+
+The sum of squared deviations is referred variation and as **the Sum of Squares (SS)** 
+
+
+$$SS = {\sum{(x-\bar{x})^2}}$$
+
+
+
+## Variance
+
+We calculate the average squared deviation: this is our variance, $\sigma^2$:
+
+```{r}
+sum((x - mean(x))^2)/length(x)
+```
+
+
+
+## Variance
+
+- It's additive.  Given two variables X and Y, if I create $Z = X + Y$ then $Var(Z) = Var(X) + Var(Y)$
+  
+- Represents all values in a dataset
+
+- But it is not in the original metric
+
+
+
+## Standard Deviation
+
+**Standard deviation $\sigma$** is the square root of the variance. 
+
+```{r}
+sqrt(sum(deviation^2)/length(deviation))
+```
+
+--
+
+```{r}
+# --- Distribution 1: Standard Normal ---
+# Mean = 0, Standard Deviation = 1
+n_samples <- 10000 # Number of data points to simulate
+data_dist1 <- data.frame(
+  value = rnorm(n_samples, mean = 0, sd = 1),
+  distribution = "Mean = 0, SD = 1"
+)
+
+# --- Distribution 2: Shifted Mean ---
+# Mean = 5, Standard Deviation = 1 (same spread, shifted right)
+data_dist2 <- data.frame(
+  value = rnorm(n_samples, mean = 5, sd = 1),
+  distribution = "Mean = 5, SD = 1"
+)
+
+# --- Distribution 3: Larger Standard Deviation ---
+# Mean = 0, Standard Deviation = 2 (wider spread, centered at 0)
+data_dist3 <- data.frame(
+  value = rnorm(n_samples, mean = 0, sd = 2),
+  distribution = "Mean = 0, SD = 2"
+)
+
+# --- Distribution 4: Different Mean and SD ---
+# Mean = -3, Standard Deviation = 0.5 (narrower, shifted left)
+data_dist4 <- data.frame(
+  value = rnorm(n_samples, mean = -3, sd = 0.5),
+  distribution = "Mean = -3, SD = 0.5"
+)
+
+# Combine all data into a single data frame for ggplot
+all_data <- rbind(data_dist1, data_dist2, data_dist3, data_dist4)
+
+# Convert 'distribution' to a factor for proper ordering and discrete coloring
+all_data$distribution <- factor(all_data$distribution,
+                                levels = c("Mean = 0, SD = 1",
+                                           "Mean = 5, SD = 1",
+                                           "Mean = 0, SD = 2",
+                                           "Mean = -3, SD = 0.5"))
+
+# ----------------------------------------------------------------------
+# Part 2: Graphing in ggplot2
+# ----------------------------------------------------------------------
+
+# Using geom_density to show the smooth distribution
+ggplot(all_data, aes(x = value, color = distribution, fill = distribution)) +
+  geom_density(alpha = 0.3) + # alpha for transparency of fill
+  labs(
+    title = "Comparison of Different Distributions",
+    x = "Value",
+    y = "Density",
+    color = "Distribution Parameters",
+    fill = "Distribution Parameters"
+  ) +
+  theme_minimal() + # A clean theme
+  scale_color_brewer(palette = "Set1") + # Choose a color palette
+  scale_fill_brewer(palette = "Set1") # Match fill color palette
+```
+
+
+---
+  
+## Skew and Kurtosis
+  
+  Moments 3 and 4 of a distribution are **skew** and **kurtosis**.
+
+- Skewness = asymmetry
+  - Negative skew = tail pointed towards the negative values (left)
+  - Positive skew = tail pointed towards the positive values (right)
+
+- Kurtosis = pointyness
+  - Too pointy = leptokurtic; $+$ kurtosis
+  - Perfect = mesokurtic
+  - Too flat = platykurtic (as in platypus!); $-$ kurtosis
+
+
+
+## Population versus sample
+
+- The value that represents the entire population is called a **parameter**.
+
+  - We collect samples to estimate the properties of populations; the statistic that represents a sample is called a **statistic**.
+  
+  - Population parameters are represented with Greek letters (
+  $\mu$
+  , 
+  $\sigma$).
+  - Sample statistics are represented with Latin letters (
+  $M$
+  , 
+  $\bar{X}$
+  , 
+  $s$).
+  
+
+## Bias and efficiency
+
+- In deciding about different ways to estimate a parameter (e.g., central tendency), it is important to consider bias and efficiency (and sometimes consistency).
+
+- **Bias**: An estimator is biased if its expected value and the true value of the parameter are different. 
+
+- **Efficiency**: Of two alternative estimators, the more efficient one will estimate the parameter with less error for the same sample size.
+
+
+
+## Bias and efficiency
+
+- Variance (and standard deviation) are *biased* estimators when applied to samples. 
+
+- Using the formulas we've described, these statistics will *underestimate* variability in the population. 
+
+*Population*
+$$\sigma^2 = \frac{\Sigma(X_i-\mu)^2}{N}$$
+
+*Sample*
+$$s^2 = \hat{\sigma}^2 = \frac{\Sigma(X_i-\bar{X})^2}{N-1}$$]
+
+
+## Standard Deviation
+
+*Population*
+$$\sigma = \sqrt{\frac{\Sigma(X_i-\mu)^2}{N}}$$
+
+*Sample*
+$$s = \hat{\sigma} = \sqrt{\frac{\Sigma(X_i-\bar{X})^2}{N-1}}$$]
+
+
+## Simulation
+
+```{r}
+set.seed(100917) #so everyone gets same random draws
+
+#function to estimate variance using population formula
+sample_var = function(x){
+  sum((x - mean(x, na.rm=T))^2, na.rm=T)/length(which(!is.na(x)))
+}
+#number of samples
+draws = 10000
+#which sample sizes to test
+sample_sizes = seq(from = 5, to = 100, by = 5)
+#data frame to store simulations
+var_estimates = data.frame(size = sample_sizes, sample = NA, estimate = NA)
+
+for(i in sample_sizes){ # loop through sample sizes
+  sample_est = numeric(length = draws) #create empty vectors
+  estimate = numeric(length = draws)
+  for(j in 1:draws){ # loop through draws
+    sample = rnorm(n = i, mean = 1000, sd = 10) # randomly draw sample from pop with variance 100
+    sample_est[j] = sample_var(sample) # calculate variance using population formula
+    estimate[j] = var(sample) # calculate variance using sample formula
+  }
+  row = which(var_estimates$size == i) #which row in data frame does this belong to?
+  var_estimates$sample[row] = mean(sample_est) # average of variance estimates (using pop) across draws
+  var_estimates$estimate[row] = mean(estimate) # average of variances (using sample) across draws
+}
+
+var_estimates %>%
+  mutate(population = 100) %>% #add population variable
+  gather("var", "value", -size) %>% # long-form
+  mutate(var = factor(var, 
+                      levels = c("population","sample","estimate"),
+                      labels = c("Population Variance",
+                                 "Sample Variance", 
+                                 "Sample Estimate of Population Variance"))) %>% #lovely labels
+  ggplot(aes(x = size, y = value)) +
+  geom_line(aes(color = var), size = 3) +
+  scale_x_continuous("Sample Size", breaks = sample_sizes) +
+  scale_color_discrete("")+
+  geom_point() + 
+  theme_bw(base_size = 25)
+```
+
+
+## Standardized scores (z-scores)
+
+$$ z = \frac{x_i - \bar{x}}{s} $$
+Scores interpreted as distance from the mean, in standard deviations. 
+
+- Compare across scales and unit of measures
+- More easily identify extreme data
+- Assuming normal, we can estimate sample probability
+
+
+## simulation
+
+```{r}
+
+# Simulate raw data from a normal distribution
+# Let's say it's some measured variable, like "test scores"
+n_samples <- 10000
+raw_mean <- 10  # e.g., average test score
+raw_sd <- 3.5    # e.g., spread of test scores
+
+raw_data <- rnorm(n_samples, mean = raw_mean, sd = raw_sd)
+
+# Calculate Z-scores for the raw data
+# Z = (X - mu) / sigma
+# Where X is an individual data point, mu is the mean, and sigma is the standard deviation
+
+# Calculate the mean and standard deviation of our *simulated* raw data
+# (It will be very close to raw_mean and raw_sd, but not exactly due to randomness)
+mean_raw_data <- mean(raw_data)
+sd_raw_data <- sd(raw_data)
+
+z_scored_data <- (raw_data - mean_raw_data) / sd_raw_data
+
+# Create a data frame for plotting
+# We'll put both raw and z-scored values in a single 'value' column
+# and use a 'type' column to distinguish them.
+plot_data <- data.frame(
+  value = c(raw_data, z_scored_data),
+  type = factor(c(rep("Raw Data", n_samples), rep("Z-Scored Data", n_samples)),
+                levels = c("Raw Data", "Z-Scored Data")) # Ensure consistent order
+)
+
+# ----------------------------------------------------------------------
+# Part 2: Graphing in ggplot2
+# ----------------------------------------------------------------------
+
+ggplot(plot_data, aes(x = value, fill = type, color = type)) +
+  geom_density(alpha = 0.5) + # Use alpha for transparency where distributions overlap
+  labs(
+    title = "Density Distribution of Raw vs. Z-Scored Data",
+    x = "Value",
+    y = "Density",
+    fill = "Data Type",
+    color = "Data Type"
+  ) +
+  theme_minimal() 
+
+  
+```
+
+
+------------
+
+DOES NOT CHANGE SHAPE OF DATA
+
+```{r}
+library(FamilyRank)
+n_samples <- 10000
+mean1 <- 10
+mean2 <- 5 # e.g., average test score
+sd1 <- 1.5    # e.g., spread of test scores
+sd2 <- 1.5   
+
+raw_data <- rbinorm(n_samples, mean1, mean2, sd1, sd2, prop = .5)
+
+mean_raw_data <- mean(raw_data)
+sd_raw_data <- sd(raw_data)
+
+z_scored_data <- (raw_data - mean_raw_data) / sd_raw_data
+
+plot_data <- data.frame(
+  value = c(raw_data, z_scored_data),
+  type = factor(c(rep("Raw Data", n_samples), rep("Z-Scored Data", n_samples)),
+                levels = c("Raw Data", "Z-Scored Data")) # Ensure consistent order
+)
+
+
+
+ggplot(plot_data, aes(x = value, fill = type, color = type)) +
+  geom_density(alpha = 0.5) + 
+  labs(
+    title = "Density Distribution of Raw vs. Z-Scored Data",
+    x = "Value",
+    y = "Density",
+    fill = "Data Type",
+    color = "Data Type"
+  ) +
+  theme_minimal() 
+  
+```
+
+
+## Associations
+
+- i.e., relationships
+- to look at continuous variable associations we need to think in terms of how variables relate to one another
+
+
+## Covariation (cross products)
+
+
+**Sample:**
+
+$$\large SS = {\sum{(x-\bar{x})(y-\bar{y})}}$$
+
+**Population:**
+
+$$SS = {\sum{{(x-\mu_{x}})(y-\mu_{y})}}$$
+
+
+## Covariance
+
+**Sample:**
+
+$$\large cov_{xy} = s_{xy} = {\frac{\sum{(x-\bar{x})(y-\bar{y})}}{N-1}}$$
+
+**Population:**
+
+$$\large \sigma_{xy} = {\frac{\sum{(x-\mu_{x})(y-\mu_{y})}}{N}}$$
+
+
+## Correlation
+
+**Sample:**
+
+$$\large r_{xy} = {\frac{\sum({z_{x}z_{y})}}{N}}$$
+
+**Population:**
+
+$$\large \rho_{xy} = {\frac{cov(X,Y)}{\sigma_{x}\sigma_{y}}}$$
+
+
+## Correlations
+
+
+- How much two variables are linearly related
+
+- -1 to 1
+
+- Invariant to changes in mean or scaling
+
+- Most common (and basic) effect size measure
+
+- Will use to build our regression model
+
+
+
+
+## Covariance table
+
+$$\mathbf{K_{XX}} = \left[\begin{array}
+{rrr}
+\sigma^2_X & cov_{XY} & cov_{XZ} \\
+cov_{YX} & \sigma^2_Y & cov_{YZ} \\
+cov_{ZX} & cov_{ZY} & \sigma^2_Z
+\end{array}\right]$$
+
+
+
+## Covariance table
+
+
+
+$$\mathbf{K_{XX}} = \left[\begin{array}
+{rrr}
+\sigma^2_X & 126.5 & 5.2 \\
+126.5 & \sigma^2_Y & cov_{YZ} \\
+5.2 & cov_{ZY} & \sigma^2_Z
+\end{array}\right]$$
+
+
+
+Which variable, $Y$ or $Z$, does $X$ have greater relationship with?
+
+
+
+## Correlation
+
+Pearson product moment correlation
+
+*Population*
+
+$$\rho_{XY} = \frac{\Sigma z_Xz_Y}{N} = \frac{Cov_{xy}}{\sqrt{SS_X}\sqrt{SS_Y}} = \frac{\sigma_{XY}}{\sigma_X \sigma_Y}$$
+*Sample*
+$$r_{XY} = \frac{\Sigma z_Xz_Y}{n-1} = \frac{SP}{\sqrt{SS_X}\sqrt{SS_Y}} = \frac{s_{XY}}{s_X s_Y}$$
+
+---- 
+
+**Why is it called the Pearson Product Moment correlation?**
+Pearson = Karl Pearson
+Product = multiply
+Moment = variance is the second moment of a distribution
+
+---
+
+```{r, echo = FALSE}
+
+set.seed(101019) # so we all get the same random numbers
+mu = c(50, 5)
+Sigma = matrix(c(.8, .5, .5, .7), ncol =2) #diagonals are reliabilites, off-diagonals are correlations
+data = mvrnorm(n = 150, mu = mu, Sigma = Sigma)
+data = as.data.frame(data)
+colnames(data) = c("x", "y")
+```
+
+```{r, out.width='50%'}
+data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
+```
+
+What is the correlation between these two variables?
+
+--
+
+Correlation = `r round(cor(data$x, data$y),2)`
+
+---
+
+```{r, echo = FALSE}
+set.seed(101019) # so we all get the same random numbers
+mu = c(10, 100)
+Sigma = matrix(c(.8, -.3, -.3, .8), ncol =2) #diagonals are reliabilites, off-diagonals are correlations
+data = mvrnorm(n = 150, mu = mu, Sigma = Sigma)
+data = as.data.frame(data)
+colnames(data) = c("x", "y")
+```
+
+```{r}
+data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
+```
+
+What is the correlation between these two variables?
+
+
+---
+
+```{r}
+cor(data$x, data$y)
+```
+
+
+
+---
+
+## Effect size
+
+- Recall that *z*-scores allow us to compare across units of measure; the products of standardized scores are themselves standardized. 
+
+- The correlation coefficient is a **standardized effect size** which can be used communicate the strength of a relationship.
+
+- Correlations can be compared across studies, measures, constructs, time. 
+
+- Example: the correlation between age and height among children is $r = .70$. The correlation between self- and other-ratings of extraversion is $r = .25$. 
+    
+
+
+## What are good benchmarks? 
+
+From Ozer & Funder (2019)
+
+- Classic social psych studies: $r = .36-.42$
+- Scarcity increases the perceived alure of a commodity $r = .12$
+- People attribute failures to bad luck $r = .10$
+- Communicators perceived as more credible are more persuasive $r = .10$
+- People in a bad mood are more aggressive $r = .41$
+- Antihistamine and symptom relief $r = .11$
+- Ibuprofen and pain relief $r = .14$
+- Height and weight $r = .44$
+
+
+
+## Special cases of the Pearson correlation
+
+- **Spearman/Kendall correlation coefficient**
+    - Applies when both X and Y are ranks (ordinal data) instead of continuous
+
+- **Point-biserial correlation coefficient**
+    - Applies when Y is binary.
+
+- **Phi ($\phi$) coefficient**
+  - Both X and Y are dichotomous.
+
+
+
+
+## Correlations
+
+
+```{r}
+ggplot(galton.data, aes(x=parent, y=child)) +
+    geom_jitter(alpha = .4) +
+    geom_smooth(method=lm,   # Add linear regression line
+                se=FALSE) +     # Don't add shaded confidence region
+    labs(x = "parent height", y = "child height") +
+  theme_bw(base_size = 20)
+```
+
+
+
+
+## Visualizing correlations
+
+```{r, echo = F, warning = FALSE, message=FALSE}
+library(datasauRus)
+datasaurus_dozen %>%
+  filter(dataset == "away") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point()+
+  ggtitle(expression(paste(M[X], "= 54.3 ", S[X], "= 16.8 ", 
+                           M[Y], "= 47.8 ", S[Y], "= 26.9 ",
+                           "R = -.06"))) +
+  theme_bw(base_size = 15)
+```
+
+
+---
+
+```{r, echo = F}
+datasaurus_dozen %>%
+  filter(dataset == "h_lines") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point()+
+  ggtitle(expression(paste(M[X], "= 54.3 ", S[X], "= 16.8 ", 
+                           M[Y], "= 47.8 ", S[Y], "= 26.9 ",
+                           "R = -.06"))) +
+  theme_bw(base_size = 15)
+```
+
+---
+
+```{r, echo = F}
+datasaurus_dozen %>%
+  filter(dataset == "x_shape") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point()+
+  ggtitle(expression(paste(M[X], "= 54.3 ", S[X], "= 16.8 ", 
+                           M[Y], "= 47.8 ", S[Y], "= 26.9 ",
+                           "R = -.06"))) +
+  theme_bw(base_size = 15)
+```
+
+---
+
+```{r, echo = F}
+datasaurus_dozen %>%
+  filter(dataset == "circle") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point()+
+  ggtitle(expression(paste(M[X], "= 54.3 ", S[X], "= 16.8 ", 
+                           M[Y], "= 47.8 ", S[Y], "= 26.9 ",
+                           "R = -.06"))) +
+  theme_bw(base_size = 15)
+```
+
+
+---
+```{r, echo = F}
+datasaurus_dozen %>%
+  filter(dataset == "wide_lines") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point()+
+  ggtitle(expression(paste(M[X], "= 54.3 ", S[X], "= 16.8 ", 
+                           M[Y], "= 47.8 ", S[Y], "= 26.9 ",
+                           "R = -.06"))) +
+  theme_bw(base_size = 15)
+```
+
+
+---
+```{r, echo = F}
+datasaurus_dozen %>%
+  filter(dataset == "bullseye") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point()+
+  ggtitle(expression(paste(M[X], "= 54.3 ", S[X], "= 16.8 ", 
+                           M[Y], "= 47.8 ", S[Y], "= 26.9 ",
+                           "R = -.06"))) +
+  theme_bw(base_size = 15)
+```
+
+---
+```{r, echo = F}
+datasaurus_dozen %>%
+  filter(dataset == "star") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point(size = 2)+
+  ggtitle(expression(paste(M[X], "= 54.3 ", S[X], "= 16.8 ", 
+                           M[Y], "= 47.8 ", S[Y], "= 26.9 ",
+                           "R = -.06"))) +
+  theme_bw(base_size = 15)
+```
+
+---
+```{r, echo = F}
+datasaurus_dozen %>%
+  filter(dataset == "dino") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point(size = 2)+
+  ggtitle(expression(paste(M[X], "= 54.3 ", S[X], "= 16.8 ", 
+                           M[Y], "= 47.8 ", S[Y], "= 26.9 ",
+                           "R = -.06"))) +
+  theme_bw(base_size = 15)
+```

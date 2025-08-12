@@ -1,0 +1,14 @@
+---
+title: "Lectures"
+editor: source
+---
+
+1.  [What are models](Basics_1.qmd)
+
+2.  [Data and description](correlation_2.qmd)
+
+3.  [GLM basics](glm_3.qmd)
+
+4. [Distributions](Distributions_4.qmd)
+
+5. [Estimation](Estimation_5.qmd)
