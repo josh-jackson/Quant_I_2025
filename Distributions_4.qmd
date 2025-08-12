@@ -61,6 +61,7 @@ html:
 -   The PMF gives you the probability of observing exactly a specific outcome
 
 ```{r}
+library(ggplot2)
 # Set the parameters
 n <- 10 ;p <- 0.5; x <- 0:n
 # Calculate the probability mass function

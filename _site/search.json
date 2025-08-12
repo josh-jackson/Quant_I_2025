@@ -151,7 +151,7 @@
     "href": "index.html",
     "title": "Quant 1",
     "section": "",
-    "text": "Welcome to the first day of class! If you want to follow along with examples, head over to github for all of the code and data. https://github.com/josh-jackson/Quant_I_2025\ndf"
+    "text": "Welcome to the first day of class! If you want to follow along with examples, head over to github for all of the code and data. https://github.com/josh-jackson/Quant_I_2025\ndfg"
   },
   {
     "objectID": "syllabus.html",
@@ -264,5 +264,313 @@
     "title": "Estimation",
     "section": "Sigma",
     "text": "Sigma"
+  },
+  {
+    "objectID": "glm_3.html#thinking-in-terms-of-models",
+    "href": "glm_3.html#thinking-in-terms-of-models",
+    "title": "GLM basics",
+    "section": "Thinking in terms of models",
+    "text": "Thinking in terms of models\n\nOur DV (here forth Y) is what we are trying to understand\nWe hypothesize it has some relationship with your IV(s) (here forth Xs), with what is left over described as error (E)\n\n\\(y = b_0 + b_{1}X + e\\)"
+  },
+  {
+    "objectID": "glm_3.html#how-can-we-visualize-data-to-make-sense-of-it",
+    "href": "glm_3.html#how-can-we-visualize-data-to-make-sense-of-it",
+    "title": "GLM basics",
+    "section": "How can we visualize data to make sense of it?",
+    "text": "How can we visualize data to make sense of it?\n\n\nCode\nlibrary(broom)\nlibrary(tidyverse)\nset.seed(123)\nx.1 &lt;- rnorm(100, 0, 1)\ne.1 &lt;- rnorm(100, 0, 2)\ny.1 &lt;- .5 + .55 * x.1 + e.1\nd.1 &lt;- data.frame(x.1,y.1)\nm.1 &lt;- lm(y.1 ~ x.1, data = d.1)\nd1.f&lt;- augment(m.1)\nd.1\n\n\n             x.1         y.1\n1   -0.560475647 -1.22907473\n2   -0.230177489  0.88716980\n3    1.558708314  0.86390582\n4    0.070508391 -0.15630558\n5    0.129287735 -1.33212888\n6    1.715064987  1.35323029\n7    0.460916206 -0.81630503\n8   -1.265061235 -3.53166755\n9   -0.686852852 -0.63822211\n10  -0.445661970  2.09287913\n11   1.224081797  0.02255106\n12   0.359813827  1.91382625\n13   0.400771451 -2.51534112\n14   0.110682716  0.44975156\n15  -0.555841135  1.23310178\n16   1.786913137  2.08510895\n17   0.497850478  0.98517015\n18  -1.966617157 -1.86305145\n19   0.701355902 -0.81366295\n20  -0.472791408 -1.80829286\n21  -1.067823706  0.14799016\n22  -0.217974915 -1.51483543\n23  -1.026004448 -1.04541733\n24  -0.728891229 -0.41307456\n25  -0.625039268  3.84395241\n26  -1.686693311 -1.73158112\n27   0.837787044  1.43155602\n28   0.153373118  0.74027691\n29  -1.138136937 -2.04968858\n30   1.253814921  1.04698203\n31   0.426464221  3.62365704\n32  -0.295071483  1.24071879\n33   0.895125661  1.07478496\n34   0.878133488  0.13797975\n35   0.821581082 -3.15462485\n36   0.688640254  3.14142657\n37   0.553917654 -2.11662543\n38  -0.061911711  1.94584358\n39  -0.305962664  4.14992767\n40  -0.380471001 -2.59704537\n41  -0.694706979  1.52147983\n42  -0.207917278 -0.13874948\n43  -1.265396352 -3.34025631\n44   2.168955965 -1.33640953\n45   1.207961998 -2.03869325\n46  -1.123108583 -1.17952277\n47  -0.402884835 -2.64509783\n48  -0.466655354  1.61917310\n49   0.779965118  5.12919870\n50  -0.083369066 -2.11991394\n51   0.253318514  2.21480288\n52  -0.028546755  2.02238377\n53  -0.042870457  1.14082641\n54   1.368602284 -0.76402196\n55  -0.225770986  0.13692074\n56   1.516470604  0.77326816\n57  -1.548752804  0.77416502\n58   0.584613750  0.07666005\n59   0.123854244  2.52206661\n60   0.215941569 -0.13039385\n61   0.379639483  2.81422465\n62  -0.502323453 -1.87463191\n63  -0.333207384 -2.20357455\n64  -1.018575383  6.42186341\n65  -1.071791226 -0.92320035\n66   0.303528641  1.26339594\n67   0.448209779  2.01965473\n68   0.053004227 -0.43840893\n69   0.922267468  2.04097120\n70   2.050084686  2.36547563\n71  -0.491031166 -0.20082816\n72  -2.309168876 -0.63945681\n73   1.005738524  0.98502168\n74  -0.709200763  4.36684338\n75  -0.688008616 -1.36107693\n76   1.025571370 -1.12792828\n77  -0.284773007  0.41895164\n78  -1.220717712  0.44956676\n79   0.181303480  1.47276387\n80  -0.138891362 -0.49312091\n81   0.005764186 -1.62348197\n82   0.385280401  3.23827457\n83  -0.370660032 -0.40316379\n84   0.644376549 -0.87661862\n85  -0.220486562 -0.09382675\n86   0.331781964  0.28812829\n87   1.096839013  3.32310204\n88   0.435181491  0.90882440\n89  -0.325931586  1.82884520\n90   1.148807618  0.13326016\n91   0.993503856  1.47531774\n92   0.548396960  0.15224650\n93   0.238731735  0.82046951\n94  -0.627906076 -1.63607506\n95   1.360652449 -1.37324422\n96  -0.600259587  4.16428400\n97   2.187332993  2.90445079\n98   1.532610626 -1.15960688\n99  -0.235700359 -0.85196703\n100 -1.026420900 -2.43549166"
+  },
+  {
+    "objectID": "glm_3.html#general-linear-model-glm",
+    "href": "glm_3.html#general-linear-model-glm",
+    "title": "GLM basics",
+    "section": "General linear model (GLM)",
+    "text": "General linear model (GLM)\n\nThis model (equation) can be very simple as in a treatment/control experiment\nIt can be very complex in terms of trying to understand something like academic achievement\nThe majority of our models fall under the umbrella of a general(ized) linear model (often referred to as regression models)\nModels imply our theory about how the data are generated (ie how the world works)"
+  },
+  {
+    "objectID": "glm_3.html#parts-of-the-model",
+    "href": "glm_3.html#parts-of-the-model",
+    "title": "GLM basics",
+    "section": "Parts of the model",
+    "text": "Parts of the model\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\]\n\nEach individual has a unique Y value an X value and a residual/error term\n\nThe model only has a single \\(b_{0}\\) and \\(b_{1}\\) term. These are the regression parameters. \\(b_{0}\\) is the intercept and \\(b_{1}\\) quantifies the relationship between your model of the world and the DV."
+  },
+  {
+    "objectID": "glm_3.html#in-r",
+    "href": "glm_3.html#in-r",
+    "title": "GLM basics",
+    "section": "in R",
+    "text": "in R\n\nfit &lt;- lm(Y ~ X, data)\n\n\nName regression object\nUse linear model function, lm\nVariable for your DV/Y\n~ is interpretted as regressed on\nVariable for your IV/X"
+  },
+  {
+    "objectID": "glm_3.html#what-do-the-estimates-tell-us",
+    "href": "glm_3.html#what-do-the-estimates-tell-us",
+    "title": "GLM basics",
+    "section": "What do the estimates tell us?",
+    "text": "What do the estimates tell us?\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\]\n\ncoef(m.1)\n\n(Intercept)         x.1 \n  0.2943939   0.4450568"
+  },
+  {
+    "objectID": "glm_3.html#how-to-interpret-regression-estimates",
+    "href": "glm_3.html#how-to-interpret-regression-estimates",
+    "title": "GLM basics",
+    "section": "How to interpret regression estimates",
+    "text": "How to interpret regression estimates\n\nThe entire class will go over different ways to interpret these estimates/parameters/coefficients\nIntercept (b0) signifies the level of Y when your model IVs (Xs) are zero\nRegression (b1) signifies the difference for a one unit change in your X"
+  },
+  {
+    "objectID": "glm_3.html#regression-coefficient",
+    "href": "glm_3.html#regression-coefficient",
+    "title": "GLM basics",
+    "section": "Regression coefficient",
+    "text": "Regression coefficient\n“For a one unit change in X, there is a b1 predicted change in Y.”\n\\[\\large b_{1} = \\frac{cov_{XY}}{s_{x}^{2}} = r_{xy} \\frac{s_{y}}{s_{x}}\\] \\[\\large r_{xy} = \\frac{s_{xy}}{s_xs_y}\\]"
+  },
+  {
+    "objectID": "glm_3.html#pop-quiz",
+    "href": "glm_3.html#pop-quiz",
+    "title": "GLM basics",
+    "section": "pop quiz",
+    "text": "pop quiz\nIf I flipped the x and y variables, would I get the same regression coefficient?"
+  },
+  {
+    "objectID": "glm_3.html#pop-quiz-2",
+    "href": "glm_3.html#pop-quiz-2",
+    "title": "GLM basics",
+    "section": "pop quiz #2",
+    "text": "pop quiz #2\nWhat would the regression coefficient be if I standardized (z-scored) the variables?"
+  },
+  {
+    "objectID": "glm_3.html#intercept",
+    "href": "glm_3.html#intercept",
+    "title": "GLM basics",
+    "section": "Intercept",
+    "text": "Intercept\n\nThe intercept serves to adjust for differences in means between x and y.\nWhat is the intercept in a standardized regression?\nWhat happens to the intercept if I add 5 to x?"
+  },
+  {
+    "objectID": "glm_3.html#centroid",
+    "href": "glm_3.html#centroid",
+    "title": "GLM basics",
+    "section": "Centroid",
+    "text": "Centroid\n\nThe mean of X and the mean of Y must always pass through the regression line\nWe will revisit this later in the semester as we discuss evaluating our models. The mean will be our baseline “guess” for using X to predict Y."
+  },
+  {
+    "objectID": "glm_3.html#predictions",
+    "href": "glm_3.html#predictions",
+    "title": "GLM basics",
+    "section": "Predictions",
+    "text": "Predictions\n\nThe regression line is made up of predictions\nWe will often call them \\(\\hat{Y}\\)\n\n\n\nCode\nggplot(d1.f , aes(x=x.1, y=y.1)) +\n    geom_point(size = 2) +\n  geom_smooth(method = lm, se = FALSE)"
+  },
+  {
+    "objectID": "glm_3.html#predictions-1",
+    "href": "glm_3.html#predictions-1",
+    "title": "GLM basics",
+    "section": "Predictions",
+    "text": "Predictions\n\\[\\hat{Y_i} = b_{0} + b_{1}X_i \\] - People who have the same IV, get the same DV. No error in our equation."
+  },
+  {
+    "objectID": "glm_3.html#predictions-2",
+    "href": "glm_3.html#predictions-2",
+    "title": "GLM basics",
+    "section": "Predictions",
+    "text": "Predictions\n\n\\(\\hat{Y_i}\\) are also known as fitted values\n\n\nd1.f&lt;- augment(m.1)\nd1.f\n\n# A tibble: 100 × 8\n      y.1     x.1 .fitted .resid   .hat .sigma   .cooksd .std.resid\n    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;\n 1 -1.23  -0.560   0.0450 -1.27  0.0151   1.95 0.00336      -0.661 \n 2  0.887 -0.230   0.192   0.695 0.0112   1.95 0.000738      0.360 \n 3  0.864  1.56    0.988  -0.124 0.0361   1.95 0.0000796    -0.0652\n 4 -0.156  0.0705  0.326  -0.482 0.0100   1.95 0.000315     -0.250 \n 5 -1.33   0.129   0.352  -1.68  0.0100   1.94 0.00385      -0.872 \n 6  1.35   1.72    1.06    0.296 0.0420   1.95 0.000530      0.156 \n 7 -0.816  0.461   0.500  -1.32  0.0117   1.95 0.00274      -0.682 \n 8 -3.53  -1.27   -0.269  -3.26  0.0323   1.92 0.0487       -1.71  \n 9 -0.638 -0.687  -0.0113 -0.627 0.0173   1.95 0.000935     -0.326 \n10  2.09  -0.446   0.0960  2.00  0.0135   1.94 0.00733       1.04  \n# ℹ 90 more rows"
+  },
+  {
+    "objectID": "glm_3.html#residuals",
+    "href": "glm_3.html#residuals",
+    "title": "GLM basics",
+    "section": "Residuals",
+    "text": "Residuals\nThe residuals can be thought of as what is left over in Y that is not explained by our model. ie difference between actual and predicted\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\]\n\\[\\hat{Y_i} = b_{0} + b_{1}X_i\\] \\[{Y_i} - \\hat{Y_i} = e_i \\]"
+  },
+  {
+    "objectID": "glm_3.html#residuals-1",
+    "href": "glm_3.html#residuals-1",
+    "title": "GLM basics",
+    "section": "Residuals",
+    "text": "Residuals\n\nggplot(d1.f , aes(x=x.1, y=y.1)) +\n    geom_point(size = 2) +\n  geom_smooth(method = lm, se = FALSE)"
+  },
+  {
+    "objectID": "glm_3.html#residuals-2",
+    "href": "glm_3.html#residuals-2",
+    "title": "GLM basics",
+    "section": "Residuals",
+    "text": "Residuals\n\nAssociation between \\(\\hat{Y_i}\\) and e?\n\n\nd1.f |&gt; \nggplot(aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth(se = F, method = \"lm\")"
+  },
+  {
+    "objectID": "glm_3.html#sigma",
+    "href": "glm_3.html#sigma",
+    "title": "GLM basics",
+    "section": "Sigma",
+    "text": "Sigma\n\nHow do we know whether we have a lot or a little residuals?\nSigma (σ) is the SD of residuals. It can be thought of as how much left over in Y that we cannot explain by our model."
+  },
+  {
+    "objectID": "Distributions_4.html#today",
+    "href": "Distributions_4.html#today",
+    "title": "Probability Distributions",
+    "section": "Today",
+    "text": "Today\n\nChoosing the right regression model\nOften this boils down to how you measure your variables\nA model built on poor measures is like a statistical house on a cracked foundation, destined to crumble under the slightest scrutiny\nThese measurement choices are just the bare minimum for quality models and inferences"
+  },
+  {
+    "objectID": "Distributions_4.html#data-generating-process-dgp",
+    "href": "Distributions_4.html#data-generating-process-dgp",
+    "title": "Probability Distributions",
+    "section": "Data generating process (DGP)",
+    "text": "Data generating process (DGP)\n\nFor every DV we are interested in, we have to think about what produces it (i.e. the rules)\nMost of the time we have no idea (this is why we are doing the experiment), but it is helpful to think about a simplified approximation of the true, unknown DGP\nThe goal of fitting a regression model is to use your sample data to estimate the parameters of a chosen probability distribution that represent this DGP."
+  },
+  {
+    "objectID": "Distributions_4.html#what-are-probability-distributions",
+    "href": "Distributions_4.html#what-are-probability-distributions",
+    "title": "Probability Distributions",
+    "section": "What are probability distributions?",
+    "text": "What are probability distributions?\n\nIn stats: mathematical function that describes the likelihood of all possible outcomes for a random variable\nFor our purposes, we will use them to describe the assumed pattern of variability (distribution) in the outcome variable\nChoosing a probability distribution ~= choosing a DGP"
+  },
+  {
+    "objectID": "Distributions_4.html#common-theoretical-probability-distributions",
+    "href": "Distributions_4.html#common-theoretical-probability-distributions",
+    "title": "Probability Distributions",
+    "section": "Common theoretical probability distributions",
+    "text": "Common theoretical probability distributions\n\nNormal Distribution\nt-Distribution\nF-Distribution\nBernoulli Distribution\nBinomial Distribution\nNegative Binomial\nChi-square distribution\nPoisson Distribution\nMultinomial (categorical)"
+  },
+  {
+    "objectID": "Distributions_4.html#parameters",
+    "href": "Distributions_4.html#parameters",
+    "title": "Probability Distributions",
+    "section": "Parameters",
+    "text": "Parameters\n\nEach distribution comes with a set of parameters that are used to describe the distribution\nDescribes the likelihood of all possible outcomes for a random variable. E.g., coin flip. The Bernoulli distribution is the mathematical rule that describes the probability of heads or tails for a coin that has p probability of heads\nWe can represent these via a Probability Mass Function (PMF) for discrete variables or a Probability Density Function (PDF) for continuous variables."
+  },
+  {
+    "objectID": "Distributions_4.html#probability-mass-function-pmf",
+    "href": "Distributions_4.html#probability-mass-function-pmf",
+    "title": "Probability Distributions",
+    "section": "Probability Mass Function (PMF)",
+    "text": "Probability Mass Function (PMF)\n\nFor discrete variables\nThe PMF gives you the probability of observing exactly a specific outcome\n\n\nlibrary(ggplot2)\n# Set the parameters\nn &lt;- 10 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") +scale_x_continuous(breaks = seq(0, 10, by = 1))"
+  },
+  {
+    "objectID": "Distributions_4.html#probability-density-function-pdf",
+    "href": "Distributions_4.html#probability-density-function-pdf",
+    "title": "Probability Distributions",
+    "section": "Probability Density Function (PDF)",
+    "text": "Probability Density Function (PDF)\n\nFor continuous variables.\nThe value of the PDF at any specific point is not a probability. The probability of observing exactly one value is zero.\nProbability is represented by the area under the curve over a range (density)\n\n\nx &lt;- seq(from = -5, to = 5, by = 0.05)\nnorm_dat &lt;- data.frame(x = x, pdf = dnorm(x))\nggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle(\"PDF of Normal Distribution\") +\n  ylab(\"Density\")"
+  },
+  {
+    "objectID": "Distributions_4.html#cumulative-distribtuion-function-cdf",
+    "href": "Distributions_4.html#cumulative-distribtuion-function-cdf",
+    "title": "Probability Distributions",
+    "section": "Cumulative distribtuion function (CDF)",
+    "text": "Cumulative distribtuion function (CDF)\n\nThe CDF applies to both discrete and continuous variables. It gives the “running total” of probability. The CDF at a value x is the probability of observing an outcome less than or equal to x.\nWill use to calculate p-values and percentiles or quantiles\n\n\n# Set the parameters\nn &lt;- 10;p &lt;- 0.5;x &lt;- 0:n\n# Cumulative Distribution Function\ncdf &lt;- pbinom(x, n, p)\ncdf_df &lt;- data.frame(x, cdf)\n#creates a ggplot object with cdf_df as the data source\nggplot(cdf_df, aes(x = x, y = cdf)) +\n  geom_bar(stat = \"identity\") + \n  ggtitle(\"CDF of Binomial Distribution\") +\n  xlab(\"Number of Successes\") + ylab(\"Cumulative Probability\")"
+  },
+  {
+    "objectID": "Distributions_4.html#binomial-distribution",
+    "href": "Distributions_4.html#binomial-distribution",
+    "title": "Probability Distributions",
+    "section": "Binomial Distribution",
+    "text": "Binomial Distribution\nTheoretical probability distribution appropriate when modeling the expected binary outcomes, X, across N trials, with the same probability of success (p) across independent trials.\nPMF: \\[P(X = x|n,p) = \\frac{N!}{X!(N-X)!}p^X(1-p)^{N-X}\\]\nX = Number of successes p = probability of success n = number of trials\nFirst part tells you the number of ways to select k success from a set of N, where order doesn’t matter. Second tells you the probability of any given sequence. By multiplying the number of ways an event can happen by the probability of any single one of those ways, you get the total overall probability."
+  },
+  {
+    "objectID": "Distributions_4.html#history-of-binomial",
+    "href": "Distributions_4.html#history-of-binomial",
+    "title": "Probability Distributions",
+    "section": "History of Binomial",
+    "text": "History of Binomial\n\nThe foundation of probability theory based ways to win gambling! (“problem of points”)\nBuilt upon Pascals’s triangle, which was a way to describe the binomial coefficient (the number of ways k successes can occur in n trials)\n\nPMF: \\[\\frac{N!}{X!(N-X)!} = \\binom{N}{X}\\]\n\nLaid the groundwork for setting up expected values \\(E(x)\\) which are long run averages\nJacob Bernoulli took Pascal’s binomial coefficient and ran with it, using it to set up the Law of Large Numbers (more later)"
+  },
+  {
+    "objectID": "Distributions_4.html#binomial-distribution-1",
+    "href": "Distributions_4.html#binomial-distribution-1",
+    "title": "Probability Distributions",
+    "section": "Binomial Distribution",
+    "text": "Binomial Distribution\n\nOur mean and variance are related in the binomial distribution\n\nE(X) = Np\nVar(X) = Np(1-p)"
+  },
+  {
+    "objectID": "Distributions_4.html#binomial-distribution-2",
+    "href": "Distributions_4.html#binomial-distribution-2",
+    "title": "Probability Distributions",
+    "section": "Binomial Distribution",
+    "text": "Binomial Distribution\nWhat proportion of outcomes in the sample space that fall at or below a given outcome, say 75%?\n\nn &lt;- 20 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution, p = .5, N = 20\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") +scale_x_continuous(breaks = seq(0, 20, by = 1))"
+  },
+  {
+    "objectID": "Distributions_4.html#why-do-we-care",
+    "href": "Distributions_4.html#why-do-we-care",
+    "title": "Probability Distributions",
+    "section": "Why do we care?",
+    "text": "Why do we care?\n\\[X \\sim \\text{Bin}(n ,p)\\]\nThe binomial is of interest beyond describing the behavior of dice and coins. For example, suppose I give a 40-item multiple choice test, with each question having 4 options.\nI am worried that students might do well by chance alone. I would not want to pass students in the class if they were just showing up for the exams and guessing for each question.\nWhat are the parameters in the binomial distribution that will help me address this question?"
+  },
+  {
+    "objectID": "Distributions_4.html#bernoulli-distribution",
+    "href": "Distributions_4.html#bernoulli-distribution",
+    "title": "Probability Distributions",
+    "section": "Bernoulli distribution",
+    "text": "Bernoulli distribution\n\\[X \\sim \\text{Bin}(n = 1,p)\\]\n\\[X \\sim \\text{Bern}(p)\\]\n\nWe will use this theoretical probability distribution when our DV comes in 1/0 or yes/no. This is a logistic regression."
+  },
+  {
+    "objectID": "Distributions_4.html#poisson",
+    "href": "Distributions_4.html#poisson",
+    "title": "Probability Distributions",
+    "section": "Poisson",
+    "text": "Poisson\n\nWhat if you have not single success, but counts of successes?\nCan be thought of as a binomial that has infinite trials (when p is small).\nCan think of this as the average “rate” often across time or space. E.g., Number of donkey deaths per day.\n\n\\[X \\sim \\text{Pois}(\\lambda)\\]\n\\[P(X=x) = \\frac{\\lambda^x e^{-\\lambda}}{x!}\\]"
+  },
+  {
+    "objectID": "Distributions_4.html#history-of-poisson",
+    "href": "Distributions_4.html#history-of-poisson",
+    "title": "Probability Distributions",
+    "section": "History of Poisson",
+    "text": "History of Poisson\n\nWrongful convictions and donkey deaths\nNumber of soldiers killed by being kicked by a horse each year in each of 14 cavalry corps over a 20-year period"
+  },
+  {
+    "objectID": "Distributions_4.html#negative-binomial-distribution",
+    "href": "Distributions_4.html#negative-binomial-distribution",
+    "title": "Probability Distributions",
+    "section": "Negative binomial distribution",
+    "text": "Negative binomial distribution\n\nThe poisson mean must be equal to its variance. Often with counts we get means that are much less than the variance. This is called overdispersion\nOverdispersion can happen when the rate is not constant. If soldiers get kicked in the head more on weekends than week days, there will be more variability, but it might not influence the mean.\n\n\\[X \\sim \\text{NB}(\\mu, \\theta)\\]\n\\[\\text{Var}(X) = \\mu + \\frac{\\mu^2}{\\theta}\\]"
+  },
+  {
+    "objectID": "Distributions_4.html#negative-binomial-distribution-1",
+    "href": "Distributions_4.html#negative-binomial-distribution-1",
+    "title": "Probability Distributions",
+    "section": "Negative binomial distribution",
+    "text": "Negative binomial distribution\n\nIt is actually a mixture between the poisson and another distribution, gamma. Sometimes called Gamma Poisson. It is a mixture of two theoretical probability distributions, which you will learn about later.\n\n\\[P(X=x) = \\frac{\\Gamma(x+\\theta)}{\\Gamma(x+1)\\Gamma(\\theta)} \\left(\\frac{\\theta}{\\mu+\\theta}\\right)^\\theta \\left(\\frac{\\mu}{\\mu+\\theta}\\right)^x\\]"
+  },
+  {
+    "objectID": "Distributions_4.html#normal-gaussian-distribution",
+    "href": "Distributions_4.html#normal-gaussian-distribution",
+    "title": "Probability Distributions",
+    "section": "Normal (Gaussian) distribution",
+    "text": "Normal (Gaussian) distribution\n\nx &lt;- seq(from = 30, to = 180, by = 0.05)\nnorm_dat &lt;- data.frame(x = x, pdf = dnorm(x, 100,15))\nggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle(\"PDF of Normal Distribution (100,15)\") +\n  ylab(\"Density\")"
+  },
+  {
+    "objectID": "Distributions_4.html#normal-gaussian-distribution-1",
+    "href": "Distributions_4.html#normal-gaussian-distribution-1",
+    "title": "Probability Distributions",
+    "section": "Normal (Gaussian) distribution",
+    "text": "Normal (Gaussian) distribution\n\\[X \\sim \\mathcal{N}(\\mu, \\sigma^2)\\]\n\\[f(x \\mid \\mu, \\sigma^2) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac{(x - \\mu)^2}{2\\sigma^2}\\right)\\]"
+  },
+  {
+    "objectID": "Distributions_4.html#standardized-normal",
+    "href": "Distributions_4.html#standardized-normal",
+    "title": "Probability Distributions",
+    "section": "Standardized normal",
+    "text": "Standardized normal\n\naka z-distribution as mean = 0, SD = 1\n\n\n# 1. Load the ggplot2 library\nlibrary(ggplot2)\n\n# 2. Set the parameters for the normal distribution\nmean_val &lt;- 0\nsd_val &lt;- 1\n\n# 3. Generate a sequence of x-values for the curve\nx_values &lt;- seq(mean_val - 4 * sd_val, mean_val + 4 * sd_val, length.out = 500)\n\n# 4. Calculate the probability density for each x-value\ny_values &lt;- dnorm(x_values, mean = mean_val, sd = sd_val)\n\n# 5. Create a dataframe for plotting\nnormal_df &lt;- data.frame(\n  x = x_values,\n  density = y_values\n)\n\n# 6. Create the plot with improved labels\nggplot(normal_df, aes(x = x, y = density)) +\n\n  # --- Shaded Regions for the Empirical Rule ---\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 3*sd_val & x &lt; mean_val + 3*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"lightblue\", alpha = 0.8) +\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 2*sd_val & x &lt; mean_val + 2*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"royalblue\", alpha = 0.8) +\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 1*sd_val & x &lt; mean_val + 1*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"navyblue\", alpha = 0.8) +\n\n  # --- The Curve and Mean Line ---\n  geom_line(color = \"black\", size = 1) +\n  geom_vline(xintercept = mean_val, color = \"black\", linetype = \"dashed\", size = 1) +\n  \n  # --- Text Annotations (Revised) ---\n  # Label for 68% remains inside\n  annotate(\"text\", x = mean_val, y = dnorm(mean_val, mean_val, sd_val) * 0.5, \n           label = \"68.26% within 1 SD\", size = 5, color = \"white\", fontface = \"bold\") +\n           \n  # Label for 95% is moved above the curve\n  annotate(\"text\", x = mean_val + 1.6 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.9, \n           label = \"95.44% within 2 SD\", size = 4.5, color = \"black\") +\n           \n  # Arrow for 95% label\n  geom_segment(\n    aes(x = mean_val + 1.4 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.8,\n        xend = mean_val + 1.1 * sd_val, yend = dnorm(mean_val, mean_val, sd_val) * 0.4),\n    arrow = arrow(length = unit(0.2, \"cm\"))\n  ) +\n           \n  # Label for 99.7% is moved above the curve\n  annotate(\"text\", x = mean_val + 2.7 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.4, \n           label = \"99.7% within 3 SD\", size = 4.5, color = \"black\") +\n\n  # Arrow for 99.7% label\n  geom_segment(\n    aes(x = mean_val + 2.5 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.35,\n        xend = mean_val + 2.2 * sd_val, yend = dnorm(mean_val + 1.5*sd_val, mean_val, sd_val) * 0.2),\n    arrow = arrow(length = unit(0.2, \"cm\"))\n  ) +\n\n  # --- Labels and Theme ---\n  labs(\n    title = \"Visualizing the 68 / 95.44 / 99.7\",\n    x = \"Value\",\n    y = \"Probability Density\"\n  ) +\n  theme_minimal(base_size = 14) +\n  # Remove the legend for the fill colors\n  theme(legend.position = \"none\")"
+  },
+  {
+    "objectID": "Distributions_4.html#t-distribution",
+    "href": "Distributions_4.html#t-distribution",
+    "title": "Probability Distributions",
+    "section": "t-distribution",
+    "text": "t-distribution\n\\[X \\sim \\mathcal{t}(\\nu)\\] \\[X \\sim \\mathcal{t}(\\nu, \\mu, \\sigma^2)\\] - New parameter, nu\n\nLike the normal, but with larger tails.\nIn small samples, one finds more extreme scores than expected from if we rnorm some population parameters."
+  },
+  {
+    "objectID": "Distributions_4.html#f-distribution",
+    "href": "Distributions_4.html#f-distribution",
+    "title": "Probability Distributions",
+    "section": "F-distribution",
+    "text": "F-distribution\n\\[X \\sim F(\\nu_1, \\nu_2)\\]"
+  },
+  {
+    "objectID": "Distributions_4.html#chi-square-distribution",
+    "href": "Distributions_4.html#chi-square-distribution",
+    "title": "Probability Distributions",
+    "section": "Chi-square distribution",
+    "text": "Chi-square distribution\nTake a set of independent random variables that all come from a standard normal distribution, square each of them, and then add them all up, the resulting sum follows a chi-square distribution\n\\[X \\sim \\chi^2(k)\\] \\[ \\text{F distribution} = \\frac{\\chi_{1}^2/df1}{\\chi_{2}^2/{df1}}\\]"
+  },
+  {
+    "objectID": "Distributions_4.html#chi-square-distirbution",
+    "href": "Distributions_4.html#chi-square-distirbution",
+    "title": "Probability Distributions",
+    "section": "Chi square distirbution",
+    "text": "Chi square distirbution\n\nAlso is used a lot in this class:\nGeneral/more applicable test for model comparisons\nChi-square test of association (categorical correlation)\nGoodness of fit (observed counts differ from expected)"
   }
 ]
