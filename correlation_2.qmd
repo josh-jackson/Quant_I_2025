@@ -14,6 +14,7 @@ html:
 
 
 ```{r}
+#| code-fold: true
 library(tidyverse) # for pipes and plots
 library(lsr) # for mode and maxFreq functions
 library(kableExtra) # for tables
@@ -37,11 +38,12 @@ library(MASS)
 
 Examples today are based on data from the [2015 World Happiness Report](https://worldhappiness.report/ed/2015/), which is an annual survey part of the [Gallup World Poll](https://www.gallup.com/178667/gallup-world-poll-work.aspx). 
 
-The dataset is available on our GitHub site in the `data` folder, for those who want to play along at home.
+The dataset is available on our GitHub site, for those who want to play along at home.
 
 ---
 
 ```{r}
+#| code-fold: true
 world = read.csv("world_happiness_2015.csv")
 head(world)
 ```
@@ -50,6 +52,7 @@ head(world)
 
 
 ```{r}
+#| code-fold: true
 names(world)
 ```
 
@@ -75,7 +78,7 @@ names(world)
 A **distribution** often refers to a description of the [relative] number of times a variable X will take each of its unique values. 
 
 ```{r}
-
+#| code-fold: true
 hist(world$Happiness, breaks = 30, main = "Distribution of happiness scores", 
      xlab = "Happiness")
 ```
@@ -116,6 +119,7 @@ $$\mu = \frac{\Sigma(x_i)}{N}=\frac{7+7+8+3+9+2}{6}$$
 ## Average deviation
 
 ```{r}
+#| code-fold: true
 x = c(7,7,8,3,9,2)
 mean(x)
 x - mean(x)
@@ -129,6 +133,7 @@ sum(x - mean(x))/length(x)
 Our solution is to square deviations.
 
 ```{r}
+#| code-fold: true
 x = c(7,7,8,3,9,2)
 mean(x)
 deviation = x - mean(x)
@@ -148,6 +153,7 @@ $$SS = {\sum{(x-\bar{x})^2}}$$
 We calculate the average squared deviation: this is our variance, $\sigma^2$:
 
 ```{r}
+#| code-fold: true
 sum((x - mean(x))^2)/length(x)
 ```
 
@@ -168,12 +174,14 @@ sum((x - mean(x))^2)/length(x)
 **Standard deviation $\sigma$** is the square root of the variance. 
 
 ```{r}
+#| code-fold: true
 sqrt(sum(deviation^2)/length(deviation))
 ```
 
 ---
 
 ```{r}
+#| code-fold: true
 # --- Distribution 1: Standard Normal ---
 # Mean = 0, Standard Deviation = 1
 n_samples <- 10000 # Number of data points to simulate
@@ -303,6 +311,7 @@ $$s = \hat{\sigma} = \sqrt{\frac{\Sigma(X_i-\bar{X})^2}{N-1}}$$]
 ## Simulation
 
 ```{r}
+#| code-fold: true
 set.seed(100917) #so everyone gets same random draws
 
 #function to estimate variance using population formula
@@ -359,7 +368,7 @@ Scores interpreted as distance from the mean, in standard deviations.
 ## Simulation
 
 ```{r}
-
+#| code-fold: true
 # Simulate raw data from a normal distribution
 # Let's say it's some measured variable, like "test scores"
 n_samples <- 10000
@@ -412,6 +421,7 @@ ggplot(plot_data, aes(x = value, fill = type, color = type)) +
 DOES NOT CHANGE SHAPE OF DATA
 
 ```{r}
+#| code-fold: true
 library(FamilyRank)
 n_samples <- 10000
 mean1 <- 10
@@ -551,8 +561,8 @@ Moment = variance is the second moment of a distribution
 
 ---
 
-```{r, echo = FALSE}
-
+```{r}
+#| code-fold: true
 set.seed(101019) # so we all get the same random numbers
 mu = c(50, 5)
 Sigma = matrix(c(.8, .5, .5, .7), ncol =2) #diagonals are reliabilites, off-diagonals are correlations
@@ -561,7 +571,8 @@ data = as.data.frame(data)
 colnames(data) = c("x", "y")
 ```
 
-```{r, out.width='50%'}
+```{r}
+#| code-fold: true
 data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
@@ -574,7 +585,7 @@ Correlation = `r round(cor(data$x, data$y),2)`
 ---
 
 ```{r}
-
+#| code-fold: true
 set.seed(101019) # so we all get the same random numbers
 mu = c(10, 100)
 Sigma = matrix(c(.8, -.3, -.3, .8), ncol =2) #diagonals are reliabilites, off-diagonals are correlations
@@ -584,6 +595,7 @@ colnames(data) = c("x", "y")
 ```
 
 ```{r}
+#| code-fold: true
 data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
@@ -593,6 +605,7 @@ What is the correlation between these two variables?
 ---
 
 ```{r}
+#| code-fold: true
 cor(data$x, data$y)
 ```
 
@@ -645,6 +658,7 @@ From Ozer & Funder (2019)
 
 
 ```{r}
+#| code-fold: true
 galton.data <- psychTools::galton
 ggplot(galton.data, aes(x=parent, y=child)) +
     geom_jitter(alpha = .4) +
@@ -659,6 +673,7 @@ ggplot(galton.data, aes(x=parent, y=child)) +
 ## Visualizing correlations
 
 ```{r}
+#| code-fold: true
 library(datasauRus)
 datasaurus_dozen %>%
   filter(dataset == "away") %>%
@@ -674,6 +689,7 @@ datasaurus_dozen %>%
 ---
 
 ```{r}
+#| code-fold: true
 datasaurus_dozen %>%
   filter(dataset == "h_lines") %>%
   ggplot(aes(x = x, y = y)) +
@@ -687,6 +703,7 @@ datasaurus_dozen %>%
 ---
 
 ```{r}
+#| code-fold: true
 datasaurus_dozen %>%
   filter(dataset == "x_shape") %>%
   ggplot(aes(x = x, y = y)) +
@@ -700,6 +717,7 @@ datasaurus_dozen %>%
 ---
 
 ```{r}
+#| code-fold: true
 datasaurus_dozen %>%
   filter(dataset == "circle") %>%
   ggplot(aes(x = x, y = y)) +
@@ -714,6 +732,7 @@ datasaurus_dozen %>%
 ---
 
 ```{r}
+#| code-fold: true
 datasaurus_dozen %>%
   filter(dataset == "wide_lines") %>%
   ggplot(aes(x = x, y = y)) +
@@ -728,6 +747,7 @@ datasaurus_dozen %>%
 ---
 
 ```{r}
+#| code-fold: true
 datasaurus_dozen %>%
   filter(dataset == "bullseye") %>%
   ggplot(aes(x = x, y = y)) +
@@ -741,6 +761,7 @@ datasaurus_dozen %>%
 ---
 
 ```{r}
+#| code-fold: true
 datasaurus_dozen %>%
   filter(dataset == "star") %>%
   ggplot(aes(x = x, y = y)) +
@@ -754,6 +775,7 @@ datasaurus_dozen %>%
 ---
 
 ```{r}
+#| code-fold: true
 datasaurus_dozen %>%
   filter(dataset == "dino") %>%
   ggplot(aes(x = x, y = y)) +

@@ -11,8 +11,6 @@ html:
   scrollable: true
 ---
 
-
-
 ## Thinking in terms of models
 
 -   Our DV (here forth Y) is what we are trying to understand
@@ -45,6 +43,7 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
     geom_point(size = 2) +
   geom_smooth(method = lm, se = FALSE) 
 ```
+
 ## General linear model (GLM)
 
 -   This model (equation) can be very simple as in a treatment/control experiment
@@ -55,14 +54,12 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
 
 -   Models imply our theory about how the data are generated (ie how the world works)
 
-
 ## Parts of the model
 
-$$Y_i = b_{0} + b_{1}X_i + e_i$$ 
+$$Y_i = b_{0} + b_{1}X_i + e_i$$
 
 -   Each individual has a unique Y value an X value and a residual/error term\
 -   The model only has a single $b_{0}$ and $b_{1}$ term. These are the regression parameters. $b_{0}$ is the intercept and $b_{1}$ quantifies the relationship between your model of the world and the DV.
-
 
 ## in R
 
@@ -71,20 +68,20 @@ $$Y_i = b_{0} + b_{1}X_i + e_i$$
 fit <- lm(Y ~ X, data)
 ```
 
-1. Name regression object 
-2. Use linear model function, lm
-3. Variable for your DV/Y
-4. ~ is interpretted as regressed on
-5. Variable for your IV/X
+1.  Name regression object
+2.  Use linear model function, lm
+3.  Variable for your DV/Y
+4.  \~ is interpretted as regressed on
+5.  Variable for your IV/X
 
 ## What do the estimates tell us?
 
-$$Y_i = b_{0} + b_{1}X_i + e_i$$ 
+$$Y_i = b_{0} + b_{1}X_i + e_i$$
 
 ```{r}
+#| code-fold: true
 coef(m.1)
 ```
-
 
 ## How to interpret regression estimates
 
@@ -94,41 +91,35 @@ coef(m.1)
 
 -   Regression (b1) signifies the difference for a one unit change in your X
 
-
-
-
 ## Regression coefficient
 
 **"For a one unit change in X, there is a b1 predicted change in Y."**
 
+$$\large b_{1} = \frac{cov_{XY}}{s_{x}^{2}} = r_{xy} \frac{s_{y}}{s_{x}}$$ $$\large r_{xy} = \frac{s_{xy}}{s_xs_y}$$
 
-$$\large b_{1} = \frac{cov_{XY}}{s_{x}^{2}} = r_{xy} \frac{s_{y}}{s_{x}}$$
-$$\large r_{xy} = \frac{s_{xy}}{s_xs_y}$$
-
-
---------------
+------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 d.1 |> 
 cor()
 ```
 
 ```{r}
+#| code-fold: true
 library(report)
 report_sample(d.1)
 ```
 
 ## pop quiz
 
-If I flipped the x and y variables, would I get the same regression coefficient? 
-
+If I flipped the x and y variables, would I get the same regression coefficient?
 
 ## pop quiz #2
 
-What would the regression coefficient be if I standardized (z-scored) the variables? 
+What would the regression coefficient be if I standardized (z-scored) the variables?
 
-
---------------------
+------------------------------------------------------------------------
 
 ```{r}
 d.2 <- d.1 |> 
@@ -138,7 +129,7 @@ d.2 <- d.1 |>
 d.2
 ```
 
--------------
+------------------------------------------------------------------------
 
 ```{r}
 library(easystats)
@@ -146,16 +137,15 @@ m.2 <- lm(y.z ~ x.z, data = d.2)
 model_parameters(m.2)
 ```
 
-
 ## Intercept
 
-- The intercept serves to adjust for differences in means between x and y. 
+-   The intercept serves to adjust for differences in means between x and y.
 
-- What is the intercept in a standardized regression? 
+-   What is the intercept in a standardized regression?
 
-- What happens to the intercept if I add 5 to x? 
+-   What happens to the intercept if I add 5 to x?
 
--------
+------------------------------------------------------------------------
 
 ```{r}
 d.3 <- d.1 |> 
@@ -163,17 +153,14 @@ d.3 <- d.1 |>
 d.3
 ```
 
-----------
+------------------------------------------------------------------------
 
 ```{r}
 m.3 <- lm(y.1 ~ x.5, data = d.3)
 model_parameters(m.3)
 ```
 
-
-
-
----------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -182,9 +169,7 @@ ggplot(d.3 , aes(x=x.5, y=y.1)) +
   geom_smooth(method = lm, se = FALSE) 
 ```
 
-
-
-----------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -193,24 +178,22 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_smooth(method = lm, se = FALSE) 
 ```
 
---------------
+------------------------------------------------------------------------
 
 ```{r}
 model_parameters(m.1)
 ```
 
-
 ## Centroid
 
-- The mean of X and the mean of Y must always pass through the regression line
+-   The mean of X and the mean of Y must always pass through the regression line
 
-- We will revisit this later in the semester as we discuss evaluating our models. The mean will be our baseline "guess" for using X to predict Y. 
-
+-   We will revisit this later in the semester as we discuss evaluating our models. The mean will be our baseline "guess" for using X to predict Y.
 
 ## Predictions
 
-- The regression line is made up of predictions
-- We will often call them $\hat{Y}$
+-   The regression line is made up of predictions
+-   We will often call them $\hat{Y}$
 
 ```{r}
 #| code-fold: true
@@ -219,67 +202,60 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_smooth(method = lm, se = FALSE) 
 ```
 
-## Predictions 
+## Predictions
 
-
-$$\hat{Y_i} = b_{0} + b_{1}X_i $$ 
-- People who have the same IV, get the same DV. No error in our equation. 
-
+$$\hat{Y_i} = b_{0} + b_{1}X_i $$ - People who have the same IV, get the same DV. No error in our equation.
 
 ## Predictions
 
-- $\hat{Y_i}$ are also known as fitted values
+-   $\hat{Y_i}$ are also known as fitted values
 
 ```{r}
 d1.f<- augment(m.1)
 d1.f
 ```
 
-
-
-
 ## Residuals
 
-The residuals can be thought of as what is left over in Y that is not explained by our model. ie difference between actual and predicted 
+The residuals can be thought of as what is left over in Y that is not explained by our model. ie difference between actual and predicted
 
-$$Y_i = b_{0} + b_{1}X_i + e_i$$ 
+$$Y_i = b_{0} + b_{1}X_i + e_i$$
 
 $$\hat{Y_i} = b_{0} + b_{1}X_i$$ 
 $${Y_i} - \hat{Y_i} = e_i $$
 
-
-
 ## Residuals
 
 ```{r}
+#| code-fold: true
 ggplot(d1.f , aes(x=x.1, y=y.1)) +
     geom_point(size = 2) +
   geom_smooth(method = lm, se = FALSE) 
 ```
 
----
+------------------------------------------------------------------------
 
-```{r, echo=FALSE}
+```{r}
+#| code-fold: true
 ggplot(d1.f , aes(x=x.1, y=y.1)) +
     geom_point(size = 2) +
   geom_point(aes(y = .fitted), shape = 1, size = 2) 
 ```
 
+------------------------------------------------------------------------
 
----
-
-```{r, echo=FALSE}
+```{r}
+#| code-fold: true
 ggplot(d1.f , aes(x=x.1, y=y.1)) +
     geom_point(size = 2) +
   geom_point(aes(y = .fitted), shape = 1, size = 2) +
   geom_segment(aes( xend = x.1, yend = .fitted))
 ```
 
+------------------------------------------------------------------------
 
-
----
-
-```{r, echo=FALSE, wanring = FALSE, message = FALSE}
+```{r}
+#| code-fold: true
 ggplot(d1.f , aes(x=x.1, y=y.1)) +
     geom_point(size = 2) +
   geom_smooth(method = lm, se = FALSE) +
@@ -287,12 +263,12 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_segment(aes( xend = x.1, yend = .fitted))
 ```
 
+------------------------------------------------------------------------
 
-------
+-   Thinking ahead: do we want large or small residuals?
 
-- Thinking ahead: do we want large or small residuals? 
-
-```{r, echo = F}
+```{r}
+#| code-fold: true
 new.i = 1.1
 new.slope = -0.7
 d1.f$new.fitted = 1.1 -0.7*d1.f$x.1
@@ -304,44 +280,38 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_segment(aes( xend = x.1, yend = new.fitted))
 ```
 
-
 ## Residuals
 
-- Association between $\hat{Y_i}$ and e?
+-   Association between $\hat{Y_i}$ and e?
 
 ```{r}
+#| code-fold: true
 d1.f |> 
 ggplot(aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth(se = F, method = "lm") 
 ```
 
+------------------------------------------------------------------------
 
-
--------
-
-- x and residual? 
+-   x and residual?
 
 ```{r}
+#| code-fold: true
 d1.f |> 
 ggplot(aes(x = x.1, y = .resid)) + geom_point() + geom_smooth(se = F, method = "lm") 
 ```
 
+------------------------------------------------------------------------
 
---------
-
-- x and $\hat{Y_i}$ represent the same information. We use x to create $\hat{Y_i}$
+-   x and $\hat{Y_i}$ represent the same information. We use x to create $\hat{Y_i}$
 
 ```{r}
+#| code-fold: true
 d1.f |> 
 ggplot(aes(x = x.1, y = .fitted)) + geom_point() + geom_smooth(se = F, method = "lm") 
 ```
 
-
-
 ## Sigma
 
-- How do we know whether we have a lot or a little residuals? 
+-   How do we know whether we have a lot or a little residuals?
 
-- Sigma (σ) is the SD of residuals. It can be thought of as how much left over in Y that we cannot explain by our model.
-
-
-
+-   Sigma (σ) is the SD of residuals. It can be thought of as how much left over in Y that we cannot explain by our model.

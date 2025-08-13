@@ -11,13 +11,12 @@ html:
   scrollable: true
 ---
 
-
 ## Today
 
-- Choosing the right regression model
-- Often this boils down to how you measure your variables
-- A model built on poor measures is like a statistical house on a cracked foundation, destined to crumble under the slightest scrutiny
-- These measurement choices are just the bare minimum for quality models and inferences
+-   Choosing the right regression model
+-   Often this boils down to how you measure your variables
+-   A model built on poor measures is like a statistical house on a cracked foundation, destined to crumble under the slightest scrutiny
+-   These measurement choices are just the bare minimum for quality models and inferences
 
 ## Data generating process (DGP)
 
@@ -61,6 +60,7 @@ html:
 -   The PMF gives you the probability of observing exactly a specific outcome
 
 ```{r}
+#| code-fold: true
 library(ggplot2)
 # Set the parameters
 n <- 10 ;p <- 0.5; x <- 0:n
@@ -91,13 +91,12 @@ pmf_df
 -   Probability is represented by the area under the curve over a range (density)
 
 ```{r}
+#| code-fold: true
 x <- seq(from = -5, to = 5, by = 0.05)
 norm_dat <- data.frame(x = x, pdf = dnorm(x))
 ggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle("PDF of Normal Distribution") +
   ylab("Density")
 ```
-
-
 
 ## Cumulative distribtuion function (CDF)
 
@@ -106,6 +105,7 @@ ggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle("PDF of Normal Dist
 -   Will use to calculate p-values and percentiles or quantiles
 
 ```{r}
+#| code-fold: true
 # Set the parameters
 n <- 10;p <- 0.5;x <- 0:n
 # Cumulative Distribution Function
@@ -121,6 +121,7 @@ ggplot(cdf_df, aes(x = x, y = cdf)) +
 ------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 q <- seq(from = -5, to = 5, by = 0.1)
 norm_dat <- data.frame(q = q, cdf = pnorm(q))
 ggplot(norm_dat) + geom_line(aes(x = q, y = cdf)) +  ggtitle("CDF of normal Distribution") +
@@ -139,8 +140,8 @@ First part tells you the number of ways to select k success from a set of N, whe
 
 ------------------------------------------------------------------------
 
-
 ```{r}
+#| code-fold: true
 n <- 100 ;p <- 0.5; x <- 0:n
 # Calculate the probability mass function
 pmf <- dbinom(x, n, p)
@@ -154,10 +155,10 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
 
 ------------------------------------------------------------------------
 
-
 A *family of distributions* that depends on the parameters
 
 ```{r}
+#| code-fold: true
 n <- 100 ;p <- 0.2; x <- 0:n
 # Calculate the probability mass function
 pmf <- dbinom(x, n, p)
@@ -172,6 +173,7 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
 ------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 n <- 10 ;p <- 0.75; x <- 0:n
 # Calculate the probability mass function
 pmf <- dbinom(x, n, p)
@@ -186,6 +188,7 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
 ------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 n <- 10 ;p <- 1/6; x <- 0:n
 # Calculate the probability mass function
 pmf <- dbinom(x, n, p)
@@ -199,24 +202,26 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
 
 ## History of Binomial
 
-- The foundation of probability theory based ways to win gambling! ("problem of points")
-- Built upon Pascals's triangle, which was a way to describe the binomial coefficient (the number of ways k successes can occur in n trials)
+-   The foundation of probability theory based ways to win gambling! ("problem of points")
+-   Built upon Pascals's triangle, which was a way to describe the binomial coefficient (the number of ways k successes can occur in n trials)
 
 PMF: $$\frac{N!}{X!(N-X)!} = \binom{N}{X}$$
 
-- Laid the groundwork for setting up expected values $E(x)$ which are long run averages
-- Jacob Bernoulli took Pascal's binomial coefficient and ran with it, using it to set up the Law of Large Numbers (more later)
+-   Laid the groundwork for setting up expected values $E(x)$ which are long run averages
+-   Jacob Bernoulli took Pascal's binomial coefficient and ran with it, using it to set up the Law of Large Numbers (more later)
 
-----------
+------------------------------------------------------------------------
 
 In R, we have names for a number of probability functions. *binom* for Binomial, *norm* for normal, etc. With each of these there are specific functions that provide information from that function.
 
 ```{r}
+#| code-fold: true
 #density
  dbinom(x = 2, size = 10, prob = .5)
 ```
 
 ```{r}
+#| code-fold: true
  dbinom(x = 0:10, size = 10, prob = .5)
 ```
 
@@ -233,6 +238,7 @@ Var(X) = Np(1-p)
 What proportion of outcomes in the sample space that fall at or below a given outcome, say 75%?
 
 ```{r}
+#| code-fold: true
 n <- 20 ;p <- 0.5; x <- 0:n
 # Calculate the probability mass function
 pmf <- dbinom(x, n, p)
@@ -249,6 +255,7 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
 11!
 
 ```{r}
+#| code-fold: true
 # Set the parameters
 n <- 20;p <- 0.5;x <- 0:n
 # Cumulative Distribution Function
@@ -266,6 +273,7 @@ ggplot(cdf_df, aes(x = x, y = cdf)) +
 Whereas the dbinom gives you the the value (probability) of the Probability Mass Function (PMF) for a particular X, pbinom uses the Cumulative Mass Function (CMF). It tells you the cumulative probability of getting a certain number of successes or fewer.
 
 ```{r}
+#| code-fold: true
 #probability
 pbinom(q = 11, size = 20, prob = .5)
 ```
@@ -299,7 +307,7 @@ rbinom(n = 100, size = 20, prob = .5)
 ------------------------------------------------------------------------
 
 ```{r}
-
+#| code-fold: true
 df <- replicate(100, rbinom(n = 20, size = 1, prob = 0.5))
 results_df <- as.data.frame(t(df))
 colnames(results_df) <- paste0("Trial_", 1:20)
@@ -313,13 +321,14 @@ $$X \sim \text{Bin}(n ,p)$$
 
 The binomial is of interest beyond describing the behavior of dice and coins. For example, suppose I give a 40-item multiple choice test, with each question having 4 options.
 
-I am worried that students might do well by chance alone. I would not want to pass students in the class if they were just showing up for the exams and guessing for each question. 
+I am worried that students might do well by chance alone. I would not want to pass students in the class if they were just showing up for the exams and guessing for each question.
 
 What are the parameters in the binomial distribution that will help me address this question?
 
 ------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 n <- 40 ;p <- 0.25; x <- 0:n
 # Calculate the probability mass function
 pmf <- dbinom(x, n, p)
@@ -355,13 +364,11 @@ pbinom(q = 23, size = 40, prob = .25)
 
 ## Bernoulli distribution
 
-$$X \sim \text{Bin}(n = 1,p)$$ 
+$$X \sim \text{Bin}(n = 1,p)$$
 
-$$X \sim \text{Bern}(p)$$ 
+$$X \sim \text{Bern}(p)$$
 
-- We will use this theoretical probability distribution when our DV comes in 1/0 or yes/no. This is a logistic regression.
-
-
+-   We will use this theoretical probability distribution when our DV comes in 1/0 or yes/no. This is a logistic regression.
 
 ## Poisson
 
@@ -376,7 +383,7 @@ $$P(X=x) = \frac{\lambda^x e^{-\lambda}}{x!}$$
 ------------------------------------------------------------------------
 
 ```{r}
-
+#| code-fold: true
 lambda <- 4
 k_values <- 0:15
 probabilities <- dpois(x = k_values, lambda = lambda)
@@ -404,7 +411,7 @@ dpois(x = 0:15, lambda = 8)
 ------------------------------------------------------------------------
 
 ```{r}
-
+#| code-fold: true
 lambda <- 2
 k_values <- 0:15
 probabilities <- dpois(x = k_values, lambda = lambda)
@@ -423,13 +430,11 @@ ggplot(poisson_df, aes(x = k, y = probability)) +
   ) +  scale_x_continuous(breaks = k_values)
 ```
 
-## History of Poisson 
+## History of Poisson
 
+-   Wrongful convictions and donkey deaths
 
-- Wrongful convictions and donkey deaths
-
-- Number of soldiers killed by being kicked by a horse each year in each of 14 cavalry corps over a 20-year period
-
+-   Number of soldiers killed by being kicked by a horse each year in each of 14 cavalry corps over a 20-year period
 
 ## Negative binomial distribution
 
@@ -444,6 +449,7 @@ $$\text{Var}(X) = \mu + \frac{\mu^2}{\theta}$$
 ------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 mean_val <- 5
 
 size <- 1.5 ## aka theta
@@ -471,28 +477,25 @@ ggplot(nb_df, aes(x = k, y = probability)) +
 
 ## Negative binomial distribution
 
-- It is actually a mixture between the poisson and another distribution, gamma. Sometimes called Gamma Poisson. It is a mixture of two theoretical probability distributions, which you will learn about later.  
+-   It is actually a mixture between the poisson and another distribution, gamma. Sometimes called Gamma Poisson. It is a mixture of two theoretical probability distributions, which you will learn about later.
 
 $$P(X=x) = \frac{\Gamma(x+\theta)}{\Gamma(x+1)\Gamma(\theta)} \left(\frac{\theta}{\mu+\theta}\right)^\theta \left(\frac{\mu}{\mu+\theta}\right)^x$$
 
-
 ## Normal (Gaussian) distribution
 
-
 ```{r}
+#| code-fold: true
 x <- seq(from = 30, to = 180, by = 0.05)
 norm_dat <- data.frame(x = x, pdf = dnorm(x, 100,15))
 ggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle("PDF of Normal Distribution (100,15)") +
   ylab("Density")
 ```
 
+------------------------------------------------------------------------
 
-------------
+-   As N increases, the binomial becomes more normal in appearance. This is important (historically) as calculating huge factorials (eg 500!) was time intensive. The normal is much simpler to estimate.
 
-- As N increases, the binomial becomes more normal in appearance. This is important (historically) as calculating huge factorials (eg 500!) was time intensive. The normal is much simpler to estimate.
-
-- We find it all the time. Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal. 
-
+-   We find it all the time. Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal.
 
 ## Normal (Gaussian) distribution
 
@@ -500,12 +503,12 @@ $$X \sim \mathcal{N}(\mu, \sigma^2)$$
 
 $$f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$$
 
-
 ## Standardized normal
 
-- aka z-distribution as mean = 0, SD = 1
+-   aka z-distribution as mean = 0, SD = 1
 
 ```{r}
+#| code-fold: true
 # 1. Load the ggplot2 library
 library(ggplot2)
 
@@ -578,23 +581,20 @@ ggplot(normal_df, aes(x = x, y = density)) +
   theme(legend.position = "none")
 ```
 
------------------------
+------------------------------------------------------------------------
 
-- Probabilities are defined as area under the curve
-- Historically, z-score tables were used to calculate fun things: 
-- Given any score, we can calculate the probability of getting a value greater/less than that
-- Given a probability p, we can identify the z-score (or score from any normal) at which the proportion of scores below (or above) p falls
-- Given a probability p, we can identify the z-score at which the proportion of scores that fall above −Z and below Z is equal to p
-- Instead of using a table in the back of the book we use R functions
+-   Probabilities are defined as area under the curve
+-   Historically, z-score tables were used to calculate fun things:
+-   Given any score, we can calculate the probability of getting a value greater/less than that
+-   Given a probability p, we can identify the z-score (or score from any normal) at which the proportion of scores below (or above) p falls
+-   Given a probability p, we can identify the z-score at which the proportion of scores that fall above −Z and below Z is equal to p
+-   Instead of using a table in the back of the book we use R functions
 
-----------------
-
+------------------------------------------------------------------------
 
 ```{r}
 pnorm(q = 140, mean = 100, sd = 15)
 ```
-
-
 
 ```{r}
 pnorm(q = 2.666, mean = 0, sd = 1)
@@ -604,9 +604,10 @@ pnorm(q = 2.666, mean = 0, sd = 1)
 pnorm(q = 1.96)
 ```
 
-----------
+------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 # 1. Load the ggplot2 library
 library(ggplot2)
 
@@ -660,25 +661,24 @@ ggplot(normal_df, aes(x = x, y = density)) +
   theme_minimal(base_size = 14)
 ```
 
+------------------------------------------------------------------------
 
-
------------
-
-What is dnorm referring to? 
+What is dnorm referring to?
 
 ```{r}
 dnorm(1.96)
 ```
+
 ```{r}
 dnorm(0)
 ```
 
-A density, not a probability. 
+A density, not a probability.
 
----------
+------------------------------------------------------------------------
 
 ```{r}
-
+#| code-fold: true
 library(ggplot2)
 mean_val <- 0
 sd_val <- 1
@@ -720,10 +720,10 @@ ggplot(normal_df, aes(x = x, y = density)) +
   theme_minimal(base_size = 14)
 ```
 
-------------
+------------------------------------------------------------------------
 
 ```{r}
-
+#| code-fold: true
 library(ggplot2)
 mean_val <- 0
 sd_val <- 1
@@ -764,21 +764,19 @@ ggplot(normal_df, aes(x = x, y = density)) +
   theme_minimal(base_size = 14)
 ```
 
-
------------------
-
+------------------------------------------------------------------------
 
 ```{r}
 qnorm(.95)
 ```
-What Z-score corresponds to the ___th percentile
+
+What Z-score corresponds to the \_\_\_th percentile
 
 ```{r}
 qnorm(.975)
 ```
 
-
--------------
+------------------------------------------------------------------------
 
 If I want to randomly draw from some population I can use rnorm
 
@@ -794,21 +792,18 @@ rnorm(n = 1, mean = 100, sd = 15)
 rnorm(n = 10, mean = 100, sd = 15)
 ```
 
-
 ## t-distribution
 
-$$X \sim \mathcal{t}(\nu)$$
-$$X \sim \mathcal{t}(\nu, \mu, \sigma^2)$$
-- New parameter, nu
+$$X \sim \mathcal{t}(\nu)$$ $$X \sim \mathcal{t}(\nu, \mu, \sigma^2)$$ - New parameter, nu
 
-- Like the normal, but with larger tails. 
+-   Like the normal, but with larger tails.
 
-- In small samples, one finds more extreme scores than expected from if we rnorm some population parameters.  
+-   In small samples, one finds more extreme scores than expected from if we rnorm some population parameters.
 
-
------------
+------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 # 1. Load the necessary libraries
 library(ggplot2)
 library(dplyr)
@@ -851,12 +846,12 @@ ggplot(plot_data, aes(x = x, y = density, color = distribution)) +
   theme(legend.position = "bottom")
 ```
 
-
------------
+------------------------------------------------------------------------
 
 ```{r}
 pt(1.96, df = 1)
 ```
+
 ```{r}
 pnorm(1.96)
 ```
@@ -865,9 +860,10 @@ pnorm(1.96)
 pt(1.96, df = 20)
 ```
 
-------------
+------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 # 1. Load the necessary libraries
 library(ggplot2)
 library(dplyr)
@@ -912,24 +908,24 @@ ggplot(plot_data_cdf, aes(x = x, y = cumulative_prob, color = distribution)) +
   theme(legend.position = "bottom")
 ```
 
+------------------------------------------------------------------------
 
---------
+-   We will use t-distributions a lot! It is used when we have 1) small samples and/or 2) unknown population variance. The latter is almost always true
 
-- We will use t-distributions a lot! It is used when we have 1) small samples and/or 2) unknown population variance. The latter is almost always true
+-   Almost every test of a regression coefficient uses a t-distribution.
 
-- Almost every test of a regression coefficient uses a t-distribution. 
-- t-distributions are used for calculating confidence intervals
- 
-- "t-tests" involve comparing 1 and 2 means and typically uses the t-distribution
+-   t-distributions are used for calculating confidence intervals
 
+-   "t-tests" involve comparing 1 and 2 means and typically uses the t-distribution
 
 ## F-distribution
 
-$$X \sim F(\nu_1, \nu_2)$$ 
+$$X \sim F(\nu_1, \nu_2)$$
 
------------
+------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 # 1. Load the necessary libraries
 library(ggplot2)
 library(dplyr)
@@ -968,28 +964,28 @@ ggplot(plot_data_f, aes(x = x, y = density, color = distribution)) +
   theme(legend.position = "top")
 ```
 
+------------------------------------------------------------------------
 
---------------
+-   F distribution is used a lot in this class:
 
-- F distribution is used a lot in this class:
+-   We will use it for comparing two (or more) different regression models from one another
 
-- We will use it for comparing two (or more) different regression models from one another
-- Historically, used for ANOVA (which is regression with categorical variables)
-- Overall model fit (does your model explain anything?)
-- Can be used to compare two variances
+-   Historically, used for ANOVA (which is regression with categorical variables)
 
+-   Overall model fit (does your model explain anything?)
+
+-   Can be used to compare two variances
 
 ## Chi-square distribution
 
 Take a set of independent random variables that all come from a standard normal distribution, square each of them, and then add them all up, the resulting sum follows a chi-square distribution
 
-$$X \sim \chi^2(k)$$
-$$ \text{F distribution} = \frac{\chi_{1}^2/df1}{\chi_{2}^2/{df1}}$$ 
+$$X \sim \chi^2(k)$$ $$ \text{F distribution} = \frac{\chi_{1}^2/df1}{\chi_{2}^2/{df1}}$$
 
-
---------------
+------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 # Set parameters
 num_samples <- 10000
 degrees_freedom <- 4
@@ -1017,12 +1013,10 @@ ggplot(simulated_data_from_normal, aes(x = chi_square_value)) +
   theme_minimal(base_size = 14)
 ```
 
-
-
-------------------
-
+------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 x_vals <- seq(0, 30, length.out = 500)
 plot_data_chi <- tibble(
   x = x_vals,
@@ -1052,14 +1046,14 @@ ggplot(plot_data_chi, aes(x = x, y = density, color = distribution)) +
   theme(legend.position = "top")
 ```
 
-- As df increases, the shape becomes more normal. Why?  
+-   As df increases, the shape becomes more normal. Why?
 
-------------------------
+------------------------------------------------------------------------
 
-- Create F from chi squared
+-   Create F from chi squared
 
 ```{r}
-
+#| code-fold: true
 # 1. Load the necessary library
 library(ggplot2)
 
@@ -1120,17 +1114,12 @@ ggplot() +
 
 ```
 
-
-
-
 ## Chi square distirbution
 
-- Also is used a lot in this class: 
+-   Also is used a lot in this class:
 
-- General/more applicable test for model comparisons 
-- Chi-square test of association (categorical correlation)
-- Goodness of fit (observed counts differ from expected)
+-   General/more applicable test for model comparisons
 
+-   Chi-square test of association (categorical correlation)
 
-
-
+-   Goodness of fit (observed counts differ from expected)

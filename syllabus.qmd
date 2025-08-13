@@ -24,7 +24,7 @@ format: html
 | \- | 9/4 | Probability distributions |  |  |
 | 3 | 9/9 | Probability distributions |  | HW 1 due |
 | \- | 9/11 | Estimation, Likelihood & Loss   |  |  |
-| 4 | 9/16 |  Estimation, Likelihood & Loss       |  |  |
+| 4 | 9/16 |  Estimation, Likelihood & Loss     |  |  |
 | \- | 9/18 | Simple regressions (1 predictor and t-tests) |  |  |
 | 5 | 9/23 |  **Exam 1** |  |  |
 | \- | 9/25 | Statistical inference part 1 (Sampling and NHST)  | | HW 2 due |

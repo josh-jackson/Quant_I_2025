@@ -11,16 +11,19 @@ html:
   scrollable: true
 ---
 
----
-title: What are models? 
-format: revealjs
-editor: visual
-execute:
-  echo: true
-html:
-  code-fold: true
-  code-summary: Show the code
----
+
+## This semester
+
+- Build a foundation for statistical inference (glm)
+- How to think about your analyses *before* you collect data
+- Identify common pitfalls in statistical inference
+
+## An aside on p-values
+
+- The final will have a p-value question because you will be inundated with p-values in your career
+
+- We will not touch p-values for as long as possible (after first exam)
+
 
 ## GLM
 
@@ -36,7 +39,7 @@ html:
 
 -   We try to understand our dependent variable (DV) via a linear combination predictor variables.
 
--   A linear combination a way of combining things (variables) using scalar multiplication and addition
+-   A linear combination is a way of combining things (variables) using scalar multiplication and addition
 
 ## What is a model?
 

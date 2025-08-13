@@ -14,22 +14,251 @@ html:
 ## Today
 
 -   How do I find the regression line
--   How do I evaluate the regression line
+-   How do I evaluate the regression line (model)
 
 ## How do I find the regression line?
 
 -   For any given scatter plot, you could propose an infinite number of regression lines to best describe the relationship
--   The likelihood function calculates a value for each of those potential lines and tells you which are most "likely"
+
+-  We need to find the "best fitting" line. To do that we need to use an *Estimator* to get *Estimates*, which are our best guess of the population parameters. 
+
+- The population parameters are your *Estimand* -- what you want to know but have to estimate
+
+- Picture of perfect cake (Estimand), Cake recipe (Estimator), your cake (Estimate)
+
 
 ## Ordinary least squares
 
+- Standard estimator in regression 
+
+- "Ordinary" refers to the fact that this method doesn't require any specific distributional assumptions about the data
+
+- $$min\sum{({Y_i} - \hat{Y_i)}}$$
 
 
+$$min\Sigma(Y_i - (b_0+b_{1}X_i))^2$$ 
+$$min\Sigma(e_i)^2$$
 
+
+-----------
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+set.seed(42) 
+n <- 50
+x <- 1:n
+y <- 20 + 0.5 * x + rnorm(n, mean = 0, sd = 5)
+data <- data.frame(x = x, y = y)
+
+ols_model <- lm(y ~ x, data = data)
+
+beta_0 <- coef(ols_model)[1]
+beta_1 <- coef(ols_model)[2]
+
+# Add the fitted values and residuals to our data frame
+data$fitted_y <- predict(ols_model)
+data$residuals <- residuals(ols_model)
+
+plot2 <- ggplot(data, aes(x = x, y = y)) +
+  geom_point() +
+  geom_abline(intercept = beta_0, slope = beta_1, color = "grey", size = 1) +
+  # Add the vertical lines representing the residuals
+  geom_segment(aes(xend = x, yend = fitted_y), color = "red", linetype = "dashed") +
+  labs(    subtitle = "The OLS method minimizes the sum of the squared lengths of these red segments",
+    x = "X",
+    y = "Y"
+  ) +
+  theme_minimal()
+
+print(plot2)
+```
+
+
+---------
+
+
+```{r}
+#| code-fold: true
+
+set.seed(42) 
+n <- 50
+x <- 1:n
+y <- 20 + 0.5 * x + rnorm(n, mean = 0, sd = 5)
+data <- data.frame(x = x, y = y)
+
+ols_model <- lm(y ~ x, data = data)
+
+y2 <- 40 + -0.5 * x + rnorm(n, mean = 0, sd = 5)
+ols_model2 <- lm(y2 ~ x, data = data)
+
+beta_0 <- coef(ols_model2)[1]
+beta_1 <- coef(ols_model2)[2]
+
+# Add the fitted values and residuals to our data frame
+data$fitted_y <- predict(ols_model2)
+data$residuals <- residuals(ols_model2)
+
+plot2 <- ggplot(data, aes(x = x, y = y)) +
+  geom_point() +
+  geom_abline(intercept = beta_0, slope = beta_1, color = "grey", size = 1) +
+  # Add the vertical lines representing the residuals
+  geom_segment(aes(xend = x, yend = fitted_y), color = "red", linetype = "dashed") +
+  labs(    subtitle = "greater error, worse fit",
+    x = "X",
+    y = "Y"
+  ) +
+  theme_minimal()
+
+print(plot2)
+```
 
 ## When OLS doesn't work
 
--   OLS is
+-   OLS is great conceptually. It is also great for simple problems because the math is easy. 
+
+- However, a more general framework is Maximum Likelihood (ML) which, ahem, maximizes the *likelihood* of our data. This will be necessary for anything beyond simple regressions (OLS = ML for simple regressions). 
+
+
+## Likelihoods
+
+- For probabilities, we assume a parameter(s), and then look at probabilities of various data outcomes p(data | θ ).  
+
+- For likelihoods, the data are treated as a given, and value of theta varies. L(θ | data )
+
+- As scientists we collect data (so it is a given) and we do not know our thetas (that is why we are running the experiment!)
+
+
+## Binomial revisited
+
+- We are going to run an experiment with 50 coin flips. We get thirty heads. Is this coin fair? 
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+n <- 50 ;p <- 0.5; x <- 0:n
+# Calculate the probability mass function
+pmf <- dbinom(x, n, p)
+pmf_df <- data.frame(x, pmf)
+#creates a ggplot object with pmf_df as the data source 
+ggplot(pmf_df, aes(x = x, y = pmf)) +
+  geom_bar(stat = "identity") +
+  ggtitle("PMF of Binomial Distribution, p = .5, N = 50") + xlab("Number of Successes") +
+  ylab("Probability") + scale_x_continuous(limits = c(10, 40)) 
+```
+
+---------
+
+```{r}
+pbinom(q = 30, size = 50, prob = .5)
+```
+
+```{r}
+1- pbinom(q = 30, size = 50, prob = .5)
+```
+
+-----------
+
+
+```{r}
+1 - pbinom(q = 29, size = 50, prob = .5)
+```
+
+```{r}
+#| code-fold: true
+n <- 50 ;p <- 0.5; x <- 0:n
+pmf <- 1 - pbinom(x, n, p)
+pmf_df <- data.frame(x, pmf)
+ggplot(pmf_df, aes(x = x, y = pmf)) +
+  geom_bar(stat = "identity") +
+  ggtitle("CMF of Binomial Distribution, p = .5, N = 50") + xlab("Number of Successes") +
+  ylab("Probability") + scale_x_continuous(limits = c(10, 40)) 
+```
+
+## Estimation vs falsification
+
+- Most of our science pits two hypotheses against one another. Winner take all. 
+
+- Our stats are set up similarly, but often the opponent is weak (measly nil hypothesis). This falsification view is standard. 
+
+- We sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation. 
+
+- We still can test/falsify hypotheses, but the estimation framework is more robust
+
+## Binomial likelihood
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+# Our observed data from the experiment
+n_trials <- 50
+k_successes <- 30 # Number of heads
+mle_p = .6
+
+# Create a sequence of candidate p values (from 0 to 1)
+p_values <- seq(0, 1, by = 0.001)
+
+# Calculate the likelihood for each p using dbinom()
+# dbinom(x, size, prob) calculates P(X=x) for a binomial distribution
+likelihoods <- dbinom(x = k_successes, size = n_trials, prob = p_values)
+
+# Store the results in a data frame
+likelihood_df <- data.frame(p = p_values, likelihood = likelihoods)
+
+# Load the ggplot2 library for nice plots
+library(ggplot2)
+
+ggplot(likelihood_df, aes(x = p, y = likelihood)) +
+  geom_line(color = "blue", size = 1) +
+  # Add a vertical line at the MLE to highlight the peak
+  geom_vline(xintercept = mle_p, linetype = "dashed", color = "black") +
+  labs(
+    title = "Binomial Likelihood Function for Coin Flips",
+    subtitle = "Likelihood of p given k=30 heads in n=50 flips",
+    x = "Candidate Probability of Heads (p)",
+    y = "Likelihood"
+  ) +
+  theme_minimal()
+
+
+
+
+```
+
+## Binomial loglikelihood
+
+```{r}
+#| code-fold: true
+# Calculate log-likelihoods
+log_likelihoods <- dbinom(x = k_successes, size = n_trials, prob = p_values, log = TRUE)
+
+log_likelihood_df <- data.frame(p = p_values, log_likelihood = log_likelihoods)
+
+# Plot the log-likelihood function
+ggplot(log_likelihood_df, aes(x = p, y = log_likelihood)) +
+  geom_line(color = "blue", size = 1) +
+  geom_vline(xintercept = mle_p, linetype = "dashed", color = "black") +
+  labs(
+    title = "Binomial Log-Likelihood Function",
+    x = "Candidate Probability of Heads (p)",
+    y = "Log-Likelihood"
+  ) +
+  theme_minimal()
+```
+
+
+## Likelihood estimation for linear regression
+
+- Default DGP will be normal/Gaussian
+
+$Y_i | X_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)$
+
+The probability density function (PDF) for a single data point: 
+$f(Y_i | \beta_0, \beta_1, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac {(Y_i - (\beta_0 + \beta_1 X_i))^2}{2\sigma^2}\right)$
+
+The likelihood function $\mathcal{L}(θ | data )$ is based on our model parameters $\theta =(\beta_0 + \beta_1, \sigma^2)$ such that we find that values of our parameters that maximize this function: 
+
+$$\mathcal{L}(\beta_0, \beta_1, \sigma^2) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - (\beta_0 + \beta_1 X_i))^2}{2\sigma^2}\right)$$
 
 ## Log Likelihood
 
@@ -37,17 +266,13 @@ html:
 
 -   Likelihood of observing all your data points is the product of the likelihood of each individual point. Multiplying many small probs will lead to issues. So we log them to turn it into addition.
 
--   For likelihood, the data are treated as a given, and value of theta varies. L(θ \| data )
 
-## Log Likelihood example
-
--   calculate a mean and SD
-
-## Log Likelihood example
+## Log Likelihood estimating a mean
 
 -   define what values we want to calculate log likelihood for
 
 ```{r}
+#| code-fold: true
 library(psychTools)
 library(tidyr)
 library(tidyverse)
@@ -64,6 +289,84 @@ grid
 -   Take the first line of our grid (mu = 66, sigma = 2) so we can see how likely each child (all 928) by dnorm(height, 66, 2)
 
 -   We sum the LLs across all 928 participants for each spot in the grid to get the average log-likelihood for each grid spot
+
+
+--------------
+
+40,000 grids * 928 participants = 37,120,000 calculations
+
+```{r}
+#| code-fold: true
+library(purrr)
+grid_function <- function(mu, sigma) {
+  dnorm(galton.data$child, mean = mu, sd = sigma, log = T) %>%
+    sum() 
+  }
+
+p_grid <-
+  grid %>% 
+  mutate(log_likelihood = map2(mu, sigma, grid_function)) %>%
+  unnest(log_likelihood)
+  p_grid
+```
+
+---------
+
+
+```{r}
+library(viridis)
+p_grid %>% 
+  ggplot(aes(x = mu, y = sigma, fill = log_likelihood)) + 
+  geom_raster(interpolate = T) +
+  scale_fill_viridis_c(option = "C") +
+  labs(title = "log likelihood for mean and sd",
+         x = expression(mu),
+       y = expression(sigma)) +
+  theme(panel.grid = element_blank())
+```
+
+-------------------------
+
+```{r}
+library(tidybayes)
+p_grid %>% 
+  ggplot(aes(x = mu, y = log_likelihood )) + 
+    stat_lineribbon(.width = c(0), alpha = .4) +  theme(legend.position="none")
+```
+
+---------
+
+
+```{r}
+p_grid %>% 
+  ggplot(aes(x = sigma, y = log_likelihood )) + 
+    stat_lineribbon(.width = c(0), alpha = .4) +  theme(legend.position="none")
+```
+
+
+----------
+
+```{r}
+library(report)
+report_sample(galton.data$child)
+```
+
+
+
+
+## Our best guess is still a guess
+
+- Given the data we've observed, how plausible are different values for the parameters of our model?
+
+- OLS and ML give us the "best guess". How confident are we in that guess? We always have to remember the uncertainty in estimates. This is found via our standard errors, which we will talk about later. 
+
+
+## Model fit
+
+- Once we have our model, we have to ask is at any good? 
+
+- That is, how do we evaluate our model? 
+
 
 ## Model fit
 
@@ -84,7 +387,7 @@ $\hat{Y}_{i}$ = 2.65064 + -0.48111\* $X_{i}$
 
 -   We want our predictions to be close to our actual data for each person ( $Y_{i}$ )
 -   The difference between the actual data and our our prediction ( $Y_{i} - \hat{Y}_{i} = e$ ) is the residual, how far we are "off". This tells us how good our fit is.
--   You can have the same estimates for two models but completely different fit.
+-   You can have the same parameter estimates for two models but completely different fit.
 
 ## Model fit
 
@@ -121,11 +424,11 @@ lm2 <- augment(twogroup_fun2())
 
 plot1<- ggplot(lm1) +
   aes(x = group, y = traffic) +
-  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11)
+  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11) +labs(title = "model 1")
 
 plot2<- ggplot(lm2) +
   aes(x = group, y = traffic) +
-  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11)
+  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11) + labs(title = "model 2")
 
 
 library(gridExtra)
@@ -135,6 +438,57 @@ library(gridExtra)
 ## Same plot with continuous
 
 
+```{r}
+#| code-fold: true
+library(ggplot2)
+set.seed(74) 
+n <- 500
+x <- rnorm(n, mean = 0, sd = 2)
+y1 <- 2 + 0.5 * x + rnorm(n, mean = 0, sd = 2)
+y2 <- 2 + 0.5 * x + rnorm(n, mean = 0, sd = 10)
+data <- data.frame(x = x, y1 = y1, y2 = y2)
+
+ols_model1 <- lm(y1 ~ x, data = data)
+ols_model2 <- lm(y2 ~ x, data = data)
+
+beta1_0 <- coef(ols_model1)[1]
+beta1_1 <- coef(ols_model1)[2]
+
+beta2_0 <- coef(ols_model2)[1]
+beta2_1 <- coef(ols_model2)[2]
+
+data$fitted_y1 <- predict(ols_model1)
+data$residuals1 <- residuals(ols_model1)
+
+data$fitted_y2 <- predict(ols_model2)
+data$residuals2 <- residuals(ols_model2)
+
+plot1 <- ggplot(data, aes(x = x, y = y1)) +
+  geom_point() +
+  geom_abline(intercept = beta1_0, slope = beta1_1, color = "grey", size = 1) +
+  # geom_segment(aes(xend = x, yend = fitted_y1), color = "red", linetype = "dashed") +
+  labs(
+    x = "X",
+    y = "Y"
+  ) + 
+  ylim(-20,20) + labs(title = "model 1") +
+  theme_minimal()
+
+
+plot2 <- ggplot(data, aes(x = x, y = y2)) +
+  geom_point() +
+  geom_abline(intercept = beta2_0, slope = beta2_1, color = "grey", size = 1) +
+  # geom_segment(aes(xend = x, yend = fitted_y2), color = "red", linetype = "dashed") +
+  labs(
+    x = "X",
+    y = "Y"
+  ) + 
+  ylim(-20,20) + labs(title = "model 2") +
+  theme_minimal()
+
+library(patchwork)
+(plot1 + plot2)
+```
 
 
 
@@ -142,4 +496,209 @@ library(gridExtra)
 
 $$\sum (Y - \bar{Y})^2 = \sum (\hat{Y} -\bar{Y})^2 + \sum(Y - \hat{Y})^2$$
 
+- Total variance = regression (model) variance + residual variance 
+- AKA sums of squares total = SS model + SS residual
+
+- If we are making predictions that differ from the mean then our model is doing better
+
+
+## Partitioning variance
+
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+set.seed(74) 
+n <- 50
+x <- rnorm(n, mean = 0, sd = 1)
+e <- rnorm(n, mean = 0, sd = 1)
+y1 <- 0 + 1 * x + e
+y2 <- 0 + 0 * x 
+
+data <- data.frame(x = x, y1 = y1, y2 = y2)
+
+ols_model1 <- lm(y1 ~ x, data = data)
+ols_model2 <- lm(y1 ~ 1, data = data)
+
+
+beta1_0 <- coef(ols_model1)[1]
+beta1_1 <- coef(ols_model1)[2]
+
+beta2_0 <- coef(ols_model2)[1]
+beta2_1 <- 0
+
+data$fitted_y1 <- predict(ols_model1)
+data$residuals1 <- residuals(ols_model1)
+
+data$fitted_y2 <- predict(ols_model2)
+data$residuals2 <- residuals(ols_model2)
+
+plot1 <- ggplot(data, aes(x = x, y = y1)) +
+  geom_point() +
+  geom_abline(intercept = beta1_0, slope = beta1_1, color = "grey", size = 1) +
+  geom_segment(aes(xend = x, yend = fitted_y1), color = "red", linetype = "dashed") +
+  labs(
+    x = "X",
+    y = "Y"
+  ) + 
+  ylim(-3,3) + labs(title = "regression model") +
+  theme_minimal()
+
+
+plot2 <- ggplot(data, aes(x = x, y = y1)) +
+  geom_point() +
+  geom_abline(intercept = beta2_0, slope = beta2_1, color = "grey", size = 1) +
+  geom_segment(aes(xend = x, yend = fitted_y2), color = "red", linetype = "dashed") +
+  labs(
+    x = "X",
+    y = "Y"
+  ) + 
+  ylim(-3,3) + labs(title = "intercept only model") +
+  theme_minimal()
+
+(plot1 + plot2)
+```
+
+------------
+
+
+```{r}
+
+model.1 <- lm(y1 ~ x, data = data)
+mod.1 <- augment(model.1)
+mod.1
+```
+
+```{r}
+# regression model SD of residual (sigma)
+sd(mod.1$.resid)
+```
+
+
+------------
+
+```{r}
+
+sd(data$y1)
+```
+
+
+```{r}
+# intercept only model SD of residual (sigma)
+model.2 <- lm(y1 ~ 1, data = data)
+mod.2 <- augment(model.2)
+sd(mod.2$.resid)
+```
+
 ## Sigma
+
+aka residual standard error (SD units; what R reports), sum of squared errors (variation), standard error of the estimate (SD units), Mean Squared Error (variance) 
+
+$$SSE = \sum(Y - \hat{Y})^2$$
+
+$$MSE = \frac{\sum(Y - \hat{Y})^2}{n}$$
+$$RSE = \hat{\sigma} = \sqrt{\frac{\sum(Y - \hat{Y})^2}{n}}$$
+
+
+## Sigma
+
+- If sigma is large, then our predictions are not close to the data
+
+- Thus, we want SMALL RSE/sigma/MSE
+
+- But small relative to what? What is the largest sigma can be? Smallest? 
+
+----------------
+
+
+```{r}
+model.1 <- lm(y1 ~ x, data = data)
+glance(model.1)
+
+```
+
+
+```{r}
+mod.1 <- augment(model.1)
+sd(mod.1$.resid)
+```
+
+
+## Sigma 
+
+Technically, we report the unbiased estimate: 
+
+$$RSE = \hat{\sigma} = \sqrt{\frac{\sum(Y - \hat{Y})^2}{n - k - 1}}$$
+
+```{r}
+sqrt(sum((mod.1$.resid)^2)/48) 
+```
+
+
+
+## Coefficient of Determination
+
+aka $R^2$
+
+$$\sum (Y - \bar{Y})^2 = \sum (\hat{Y} -\bar{Y})^2 + \sum(Y - \hat{Y})^2$$
+
+$$SS_{Y} = SS_{\text{Model}} + SS_{\text{Residual}}$$
+
+$$\frac{SS_{model}}{SS_Y} = R^2$$
+- Explained variation (variance) divided by total variation (variance)
+
+
+## Coefficient of Determination
+
+- Ranges from 0 - 1
+
+- Standardized, as opposed to sigma
+
+- What is considered good or bad variance explained? 
+
+
+------------
+
+```{r}
+model.1 <- lm(y1 ~ x, data = data)
+glance(model.1)
+
+```
+
+```{r}
+mod.1 <- augment(model.1)
+sum((mod.1$.fitted - mean(data$y1))^2)/sum((mod.1$y1 - mean(data$y1))^2)
+```
+
+
+## R
+
+- upper case R, not lower case r as in correlation
+
+ $$\large \sqrt{R^2} = r_{Y\hat{Y}}$$
+
+-------------
+
+```{r}
+#| code-fold: true
+model.1 <- lm(y1 ~ x, data = data)
+mod.1 <- augment(model.1)
+mod.1
+```
+
+----------
+
+```{r}
+#| code-fold: true
+library(correlation)
+library(tidyverse)
+mod.1 |> 
+  dplyr::select(y1,.fitted) |> 
+  correlation()
+```
+
+```{r}
+sqrt(0.3781187)
+```
+
+

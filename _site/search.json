@@ -2,147 +2,147 @@
   {
     "objectID": "Basics_1.html#glm",
     "href": "Basics_1.html#glm",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "GLM",
     "text": "GLM\n\nGeneral(ized) Linear Model\nA workhorse that is responsible for &gt;99% of statistical tests in psychology, as well as the building block of many machine learning models"
   },
   {
     "objectID": "Basics_1.html#what-do-we-mean-by-generalized",
     "href": "Basics_1.html#what-do-we-mean-by-generalized",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "What do we mean by General(ized)?",
     "text": "What do we mean by General(ized)?\n\nIt is general in that it refers to a broad set of similar models that can applied to almost any context"
   },
   {
     "objectID": "Basics_1.html#what-do-we-mean-by-linear",
     "href": "Basics_1.html#what-do-we-mean-by-linear",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "What do we mean by linear?",
-    "text": "What do we mean by linear?\n\nWe try to understand our dependent variable (DV) via a linear combination predictor variables.\nA linear combination a way of combining things (variables) using scalar multiplication and addition"
+    "text": "What do we mean by linear?\n\nWe try to understand our dependent variable (DV) via a linear combination predictor variables.\nA linear combination is a way of combining things (variables) using scalar multiplication and addition"
   },
   {
     "objectID": "Basics_1.html#what-is-a-model",
     "href": "Basics_1.html#what-is-a-model",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "What is a model?",
     "text": "What is a model?"
   },
   {
     "objectID": "Basics_1.html#what-is-a-model-1",
     "href": "Basics_1.html#what-is-a-model-1",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "What is a model?",
     "text": "What is a model?\n\na representation of the world\na statistical model uses math to make predictions about the world"
   },
   {
     "objectID": "Basics_1.html#middle-school-math",
     "href": "Basics_1.html#middle-school-math",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Middle School Math",
     "text": "Middle School Math\n\\[ y = mx + b \\] - what is \\(y\\)?\n\nwhat is \\(m\\)?\nwhat is \\(x\\)?\nwhat is \\(b\\)?"
   },
   {
     "objectID": "Basics_1.html#lets-rewrite-this",
     "href": "Basics_1.html#lets-rewrite-this",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Let’s rewrite this",
     "text": "Let’s rewrite this\n\\[y = b_0 + b_{1}X\\]\n\nwhat is \\(y\\)?\nwhat is \\(b_0\\)?\nwhat is \\(b_1\\)?\nwhat is \\(X\\)?"
   },
   {
     "objectID": "Basics_1.html#are-models-always-right",
     "href": "Basics_1.html#are-models-always-right",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Are models always right?",
     "text": "Are models always right?"
   },
   {
     "objectID": "Basics_1.html#models-are-flawed",
     "href": "Basics_1.html#models-are-flawed",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "MODELS ARE FLAWED",
     "text": "MODELS ARE FLAWED\n\nHow do we compensate?"
   },
   {
     "objectID": "Basics_1.html#models-are-flawed-1",
     "href": "Basics_1.html#models-are-flawed-1",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "MODELS ARE FLAWED",
     "text": "MODELS ARE FLAWED\n\nHow do we compensate?\n\n\\(y = b_0 + b_{1}X + e\\)"
   },
   {
     "objectID": "Basics_1.html#models",
     "href": "Basics_1.html#models",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Models",
     "text": "Models\n\nWhat are the goals of modeling?\nWhat do you need in order to develop a model?"
   },
   {
     "objectID": "Basics_1.html#how-do-we-know-if-a-model-is-good",
     "href": "Basics_1.html#how-do-we-know-if-a-model-is-good",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "How do we know if a model is good?",
     "text": "How do we know if a model is good?\n\nWhat makes it good?"
   },
   {
     "objectID": "Basics_1.html#how-will-we-use-models",
     "href": "Basics_1.html#how-will-we-use-models",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "How will we use models?",
     "text": "How will we use models?\n\nThis semester, we will mainly focus on classic statistical tests\nEvery single one of these is a model\nWe will also focus on developing your intuition\nWhen you face new models, come back to these basics"
   },
   {
     "objectID": "Basics_1.html#how-can-we-visualize-data-to-make-sense-of-it",
     "href": "Basics_1.html#how-can-we-visualize-data-to-make-sense-of-it",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "How can we visualize data to make sense of it?",
     "text": "How can we visualize data to make sense of it?\n\n\nCode\nlibrary(broom)\nset.seed(123)\nx.1 &lt;- rnorm(100, 0, 1)\ne.1 &lt;- rnorm(100, 0, 2)\ny.1 &lt;- .5 + .55 * x.1 + e.1\nd.1 &lt;- data.frame(x.1,y.1)\nm.1 &lt;- lm(y.1 ~ x.1, data = d.1)\nd1.f&lt;- augment(m.1)\nd.1\n\n\n             x.1         y.1\n1   -0.560475647 -1.22907473\n2   -0.230177489  0.88716980\n3    1.558708314  0.86390582\n4    0.070508391 -0.15630558\n5    0.129287735 -1.33212888\n6    1.715064987  1.35323029\n7    0.460916206 -0.81630503\n8   -1.265061235 -3.53166755\n9   -0.686852852 -0.63822211\n10  -0.445661970  2.09287913\n11   1.224081797  0.02255106\n12   0.359813827  1.91382625\n13   0.400771451 -2.51534112\n14   0.110682716  0.44975156\n15  -0.555841135  1.23310178\n16   1.786913137  2.08510895\n17   0.497850478  0.98517015\n18  -1.966617157 -1.86305145\n19   0.701355902 -0.81366295\n20  -0.472791408 -1.80829286\n21  -1.067823706  0.14799016\n22  -0.217974915 -1.51483543\n23  -1.026004448 -1.04541733\n24  -0.728891229 -0.41307456\n25  -0.625039268  3.84395241\n26  -1.686693311 -1.73158112\n27   0.837787044  1.43155602\n28   0.153373118  0.74027691\n29  -1.138136937 -2.04968858\n30   1.253814921  1.04698203\n31   0.426464221  3.62365704\n32  -0.295071483  1.24071879\n33   0.895125661  1.07478496\n34   0.878133488  0.13797975\n35   0.821581082 -3.15462485\n36   0.688640254  3.14142657\n37   0.553917654 -2.11662543\n38  -0.061911711  1.94584358\n39  -0.305962664  4.14992767\n40  -0.380471001 -2.59704537\n41  -0.694706979  1.52147983\n42  -0.207917278 -0.13874948\n43  -1.265396352 -3.34025631\n44   2.168955965 -1.33640953\n45   1.207961998 -2.03869325\n46  -1.123108583 -1.17952277\n47  -0.402884835 -2.64509783\n48  -0.466655354  1.61917310\n49   0.779965118  5.12919870\n50  -0.083369066 -2.11991394\n51   0.253318514  2.21480288\n52  -0.028546755  2.02238377\n53  -0.042870457  1.14082641\n54   1.368602284 -0.76402196\n55  -0.225770986  0.13692074\n56   1.516470604  0.77326816\n57  -1.548752804  0.77416502\n58   0.584613750  0.07666005\n59   0.123854244  2.52206661\n60   0.215941569 -0.13039385\n61   0.379639483  2.81422465\n62  -0.502323453 -1.87463191\n63  -0.333207384 -2.20357455\n64  -1.018575383  6.42186341\n65  -1.071791226 -0.92320035\n66   0.303528641  1.26339594\n67   0.448209779  2.01965473\n68   0.053004227 -0.43840893\n69   0.922267468  2.04097120\n70   2.050084686  2.36547563\n71  -0.491031166 -0.20082816\n72  -2.309168876 -0.63945681\n73   1.005738524  0.98502168\n74  -0.709200763  4.36684338\n75  -0.688008616 -1.36107693\n76   1.025571370 -1.12792828\n77  -0.284773007  0.41895164\n78  -1.220717712  0.44956676\n79   0.181303480  1.47276387\n80  -0.138891362 -0.49312091\n81   0.005764186 -1.62348197\n82   0.385280401  3.23827457\n83  -0.370660032 -0.40316379\n84   0.644376549 -0.87661862\n85  -0.220486562 -0.09382675\n86   0.331781964  0.28812829\n87   1.096839013  3.32310204\n88   0.435181491  0.90882440\n89  -0.325931586  1.82884520\n90   1.148807618  0.13326016\n91   0.993503856  1.47531774\n92   0.548396960  0.15224650\n93   0.238731735  0.82046951\n94  -0.627906076 -1.63607506\n95   1.360652449 -1.37324422\n96  -0.600259587  4.16428400\n97   2.187332993  2.90445079\n98   1.532610626 -1.15960688\n99  -0.235700359 -0.85196703\n100 -1.026420900 -2.43549166"
   },
   {
     "objectID": "Basics_1.html#how-do-we-visualize-categorical-data",
     "href": "Basics_1.html#how-do-we-visualize-categorical-data",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "How do we visualize categorical data?",
     "text": "How do we visualize categorical data?\nNominal/categorical data does not have any inherent numbers associated with it. Think control/tx, eye color, etc.\n\n\nCode\nset.seed(123)\ngroup &lt;- c(0, 1)\nx.2 &lt;- rep(group, times = 50)\ne.1 &lt;- rnorm(100, 0, 1)\ny.1 &lt;- .5 + .85 * x.2 + e.1\nd.2 &lt;- data.frame(x.2,y.1)\nm.2 &lt;- lm(y.1 ~ x.2, data = d.2)\nd2.f&lt;- augment(m.2)\nd.2\n\n\n    x.2          y.1\n1     0 -0.060475647\n2     1  1.119822511\n3     0  2.058708314\n4     1  1.420508391\n5     0  0.629287735\n6     1  3.065064987\n7     0  0.960916206\n8     1  0.084938765\n9     0 -0.186852852\n10    1  0.904338030\n11    0  1.724081797\n12    1  1.709813827\n13    0  0.900771451\n14    1  1.460682716\n15    0 -0.055841135\n16    1  3.136913137\n17    0  0.997850478\n18    1 -0.616617157\n19    0  1.201355902\n20    1  0.877208592\n21    0 -0.567823706\n22    1  1.132025085\n23    0 -0.526004448\n24    1  0.621108771\n25    0 -0.125039268\n26    1 -0.336693311\n27    0  1.337787044\n28    1  1.503373118\n29    0 -0.638136937\n30    1  2.603814921\n31    0  0.926464221\n32    1  1.054928517\n33    0  1.395125661\n34    1  2.228133488\n35    0  1.321581082\n36    1  2.038640254\n37    0  1.053917654\n38    1  1.288088289\n39    0  0.194037336\n40    1  0.969528999\n41    0 -0.194706979\n42    1  1.142082722\n43    0 -0.765396352\n44    1  3.518955965\n45    0  1.707961998\n46    1  0.226891417\n47    0  0.097115165\n48    1  0.883344646\n49    0  1.279965118\n50    1  1.266630934\n51    0  0.753318514\n52    1  1.321453245\n53    0  0.457129543\n54    1  2.718602284\n55    0  0.274229014\n56    1  2.866470604\n57    0 -1.048752804\n58    1  1.934613750\n59    0  0.623854244\n60    1  1.565941569\n61    0  0.879639483\n62    1  0.847676547\n63    0  0.166792616\n64    1  0.331424617\n65    0 -0.571791226\n66    1  1.653528641\n67    0  0.948209779\n68    1  1.403004227\n69    0  1.422267468\n70    1  3.400084686\n71    0  0.008968834\n72    1 -0.959168876\n73    0  1.505738524\n74    1  0.640799237\n75    0 -0.188008616\n76    1  2.375571370\n77    0  0.215226993\n78    1  0.129282288\n79    0  0.681303480\n80    1  1.211108638\n81    0  0.505764186\n82    1  1.735280401\n83    0  0.129339968\n84    1  1.994376549\n85    0  0.279513438\n86    1  1.681781964\n87    0  1.596839013\n88    1  1.785181491\n89    0  0.174068414\n90    1  2.498807618\n91    0  1.493503856\n92    1  1.898396960\n93    0  0.738731735\n94    1  0.722093924\n95    0  1.860652449\n96    1  0.749740413\n97    0  2.687332993\n98    1  2.882610626\n99    0  0.264299641\n100   1  0.323579100"
   },
   {
     "objectID": "Basics_1.html#what-do-these-visualizations-have-in-common",
     "href": "Basics_1.html#what-do-these-visualizations-have-in-common",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "What do these visualizations have in common?",
     "text": "What do these visualizations have in common?\n\nLINES!\nMost of what we are going to do is represent the relationship between variables with lines (or planes or hyperplanes once we get into 2 or more variables)"
   },
   {
     "objectID": "Basics_1.html#thinking-in-terms-of-models",
     "href": "Basics_1.html#thinking-in-terms-of-models",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Thinking in terms of models",
     "text": "Thinking in terms of models\n\nModels help us draw the lines\nOur DV (here forth Y) is what we are trying to understand\nWe hypothesize it has some relationship with your IV(s) (hence forth Xs), with what is left over described as error (E)\n\n\\(y = b_0 + b_{1}X + e\\)\n\n\\(b_{1}\\) describes the strength of association i.e. the line!"
   },
   {
     "objectID": "Basics_1.html#regression-equation",
     "href": "Basics_1.html#regression-equation",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Regression Equation",
     "text": "Regression Equation\n\\[Y_i = b_{0} + b_{1}X_i +e_i\\]\n\n\\(Y_i \\sim Normal(\\mu, \\sigma)\\)\nThe DV, \\(Y\\) is assumed to be distributed as a Gaussian normal, made up of \\(Y_i\\), with a mean of \\(\\mu\\) and a standard deviation of \\(\\sigma\\)"
   },
   {
     "objectID": "Basics_1.html#regression-terms",
     "href": "Basics_1.html#regression-terms",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Regression terms",
     "text": "Regression terms\n\nY / DV / Outcome / Response / Criterion\nX / IV / Predictor / Explanatory variable\nRegression coefficient (weight) / b / b* / \\(\\beta\\)\nIntercept \\(b_0\\) / \\(\\beta_{0}\\)\nError / Residuals \\(e\\)\nPredictions \\(\\hat{Y}\\)"
   },
   {
     "objectID": "Basics_1.html#regression-models",
     "href": "Basics_1.html#regression-models",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Regression models",
     "text": "Regression models\n\nThese models are a way to convey the relationship between two (or more) variables. They translate our hypotheses into math.\nWe can use these models to get information we may be interested in (e.g. means, SEs) and test hypotheses about the relationship among variables\n“All models are wrong but some are useful (and some are better than others)” - George Box"
   },
   {
     "objectID": "Basics_1.html#parts-of-the-model",
     "href": "Basics_1.html#parts-of-the-model",
-    "title": "What are models?",
+    "title": "Intro",
     "section": "Parts of the model",
     "text": "Parts of the model\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\] \\[T.risk_i = b_{0} + b_{1}TX_i + e_i\\]\n\nEach individual has a unique Y value an X value and a residual/error term\n\nThe model only has a single \\(b_{0}\\) and \\(b_{1}\\) term. These are the regression parameters. \\(b_{0}\\) is the intercept and \\(b_{1}\\) quantifies the relationship between your model of the world and the DV."
   },
@@ -165,42 +165,42 @@
     "href": "Estimation_5.html#today",
     "title": "Estimation",
     "section": "Today",
-    "text": "Today\n\nHow do I find the regression line\nHow do I evaluate the regression line"
+    "text": "Today\n\nHow do I find the regression line\nHow do I evaluate the regression line (model)"
   },
   {
     "objectID": "Estimation_5.html#how-do-i-find-the-regression-line",
     "href": "Estimation_5.html#how-do-i-find-the-regression-line",
     "title": "Estimation",
     "section": "How do I find the regression line?",
-    "text": "How do I find the regression line?\n\nFor any given scatter plot, you could propose an infinite number of regression lines to best describe the relationship\nThe likelihood function calculates a value for each of those potential lines and tells you which are most “likely”"
+    "text": "How do I find the regression line?\n\nFor any given scatter plot, you could propose an infinite number of regression lines to best describe the relationship\nWe need to find the “best fitting” line. To do that we need to use an Estimator to get Estimates, which are our best guess of the population parameters.\nThe population parameters are your Estimand – what you want to know but have to estimate\nPicture of perfect cake (Estimand), Cake recipe (Estimator), your cake (Estimate)"
   },
   {
     "objectID": "Estimation_5.html#ordinary-least-squares",
     "href": "Estimation_5.html#ordinary-least-squares",
     "title": "Estimation",
     "section": "Ordinary least squares",
-    "text": "Ordinary least squares"
+    "text": "Ordinary least squares\n\nStandard estimator in regression\n“Ordinary” refers to the fact that this method doesn’t require any specific distributional assumptions about the data\n\\[min\\sum{({Y_i} - \\hat{Y_i)}}\\]\n\n\\[min\\Sigma(Y_i - (b_0+b_{1}X_i))^2\\] \\[min\\Sigma(e_i)^2\\]"
   },
   {
     "objectID": "Estimation_5.html#when-ols-doesnt-work",
     "href": "Estimation_5.html#when-ols-doesnt-work",
     "title": "Estimation",
     "section": "When OLS doesn’t work",
-    "text": "When OLS doesn’t work\n\nOLS is"
+    "text": "When OLS doesn’t work\n\nOLS is great conceptually. It is also great for simple problems because the math is easy.\nHowever, a more general framework is Maximum Likelihood (ML) which, ahem, maximizes the likelihood of our data. This will be necessary for anything beyond simple regressions (OLS = ML for simple regressions)."
   },
   {
     "objectID": "Estimation_5.html#log-likelihood",
     "href": "Estimation_5.html#log-likelihood",
     "title": "Estimation",
     "section": "Log Likelihood",
-    "text": "Log Likelihood\n\nMaximizing the log-likelihood is the same as maximizing the likelihood, but it’s mathematically and computationally much easier.\nLikelihood of observing all your data points is the product of the likelihood of each individual point. Multiplying many small probs will lead to issues. So we log them to turn it into addition.\nFor likelihood, the data are treated as a given, and value of theta varies. L(θ | data )"
+    "text": "Log Likelihood\n\nMaximizing the log-likelihood is the same as maximizing the likelihood, but it’s mathematically and computationally much easier.\nLikelihood of observing all your data points is the product of the likelihood of each individual point. Multiplying many small probs will lead to issues. So we log them to turn it into addition."
   },
   {
     "objectID": "Estimation_5.html#log-likelihood-example",
     "href": "Estimation_5.html#log-likelihood-example",
     "title": "Estimation",
     "section": "Log Likelihood example",
-    "text": "Log Likelihood example\n\ncalculate a mean and SD"
+    "text": "Log Likelihood example\n\nNeed to calcualte the log likelihood of our data (each child’s height) assuming each part of our grid is true.\nTake the first line of our grid (mu = 66, sigma = 2) so we can see how likely each child (all 928) by dnorm(height, 66, 2)\nWe sum the LLs across all 928 participants for each spot in the grid to get the average log-likelihood for each grid spot"
   },
   {
     "objectID": "Estimation_5.html#log-likelihood-example-1",
@@ -221,49 +221,49 @@
     "href": "Estimation_5.html#model-fit",
     "title": "Estimation",
     "section": "Model fit",
-    "text": "Model fit\n\nThe way the world is = our model + error\nHow good is our model? Is it a good representation of reality? Does it “fit” the data well?\nNeed to go beyond asking if it is significant, because what does that mean? Remember, all models are wrong\nWe are going to make predictions and see if the predictions (based on our model) matches our data"
+    "text": "Model fit\n\nOnce we have our model, we have to ask is at any good?\nThat is, how do we evaluate our model?"
   },
   {
     "objectID": "Estimation_5.html#model-fit-1",
     "href": "Estimation_5.html#model-fit-1",
     "title": "Estimation",
     "section": "Model fit",
-    "text": "Model fit\n\nOur model is a prediction machine.\nThey are created by simply plugging a persons Xs into the created model\nIf you have bs and have Xs you can create a prediction\n\n\\(\\hat{Y}_{i}\\) = 2.65064 + -0.48111* \\(X_{i}\\)"
+    "text": "Model fit\n\nThe way the world is = our model + error\nHow good is our model? Is it a good representation of reality? Does it “fit” the data well?\nNeed to go beyond asking if it is significant, because what does that mean? Remember, all models are wrong\nWe are going to make predictions and see if the predictions (based on our model) matches our data"
   },
   {
     "objectID": "Estimation_5.html#model-fit-2",
     "href": "Estimation_5.html#model-fit-2",
     "title": "Estimation",
     "section": "Model fit",
-    "text": "Model fit\n\nWe want our predictions to be close to our actual data for each person ( \\(Y_{i}\\) )\nThe difference between the actual data and our our prediction ( \\(Y_{i} - \\hat{Y}_{i} = e\\) ) is the residual, how far we are “off”. This tells us how good our fit is.\nYou can have the same estimates for two models but completely different fit."
+    "text": "Model fit\n\nOur model is a prediction machine.\nThey are created by simply plugging a persons Xs into the created model\nIf you have bs and have Xs you can create a prediction\n\n\\(\\hat{Y}_{i}\\) = 2.65064 + -0.48111* \\(X_{i}\\)"
   },
   {
     "objectID": "Estimation_5.html#model-fit-3",
     "href": "Estimation_5.html#model-fit-3",
     "title": "Estimation",
     "section": "Model fit",
-    "text": "Model fit\n\nCan you point out the predictions?\n\n\n\nCode\ntwogroup_fun = function(nrep = 100, b0 = 6, b1 = -2, sigma = 1) {\n     ngroup = 2\n     group = rep( c(\"group1\", \"group2\"), each = nrep)\n     eps = rnorm(ngroup*nrep, 0, sigma)\n     traffic = b0 + b1*(group == \"group2\") + eps\n     growthfit = lm(traffic ~ group)\n     growthfit\n}\n\n\ntwogroup_fun2 = function(nrep = 100, b0 = 6, b1 = -2, sigma = 2) {\n     ngroup = 2\n     group = rep( c(\"group1\", \"group2\"), each = nrep)\n     eps = rnorm(ngroup*nrep, 0, sigma)\n     traffic = b0 + b1*(group == \"group2\") + eps\n     growthfit = lm(traffic ~ group)\n     growthfit\n}\n\nset.seed(16)\nlibrary(broom)\nlm1 &lt;- augment(twogroup_fun())\n\nset.seed(16)\nlm2 &lt;- augment(twogroup_fun2())\n\nplot1&lt;- ggplot(lm1) +\n  aes(x = group, y = traffic) +\n  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11)\n\nplot2&lt;- ggplot(lm2) +\n  aes(x = group, y = traffic) +\n  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11)\n\n\nlibrary(gridExtra)\n grid.arrange(plot1, plot2, ncol=2)"
+    "text": "Model fit\n\nWe want our predictions to be close to our actual data for each person ( \\(Y_{i}\\) )\nThe difference between the actual data and our our prediction ( \\(Y_{i} - \\hat{Y}_{i} = e\\) ) is the residual, how far we are “off”. This tells us how good our fit is.\nYou can have the same parameter estimates for two models but completely different fit."
   },
   {
     "objectID": "Estimation_5.html#same-plot-with-continuous",
     "href": "Estimation_5.html#same-plot-with-continuous",
     "title": "Estimation",
     "section": "Same plot with continuous",
-    "text": "Same plot with continuous"
+    "text": "Same plot with continuous\n\n\nCode\nlibrary(ggplot2)\nset.seed(74) \nn &lt;- 500\nx &lt;- rnorm(n, mean = 0, sd = 2)\ny1 &lt;- 2 + 0.5 * x + rnorm(n, mean = 0, sd = 2)\ny2 &lt;- 2 + 0.5 * x + rnorm(n, mean = 0, sd = 10)\ndata &lt;- data.frame(x = x, y1 = y1, y2 = y2)\n\nols_model1 &lt;- lm(y1 ~ x, data = data)\nols_model2 &lt;- lm(y2 ~ x, data = data)\n\nbeta1_0 &lt;- coef(ols_model1)[1]\nbeta1_1 &lt;- coef(ols_model1)[2]\n\nbeta2_0 &lt;- coef(ols_model2)[1]\nbeta2_1 &lt;- coef(ols_model2)[2]\n\ndata$fitted_y1 &lt;- predict(ols_model1)\ndata$residuals1 &lt;- residuals(ols_model1)\n\ndata$fitted_y2 &lt;- predict(ols_model2)\ndata$residuals2 &lt;- residuals(ols_model2)\n\nplot1 &lt;- ggplot(data, aes(x = x, y = y1)) +\n  geom_point() +\n  geom_abline(intercept = beta1_0, slope = beta1_1, color = \"grey\", size = 1) +\n  # geom_segment(aes(xend = x, yend = fitted_y1), color = \"red\", linetype = \"dashed\") +\n  labs(\n    x = \"X\",\n    y = \"Y\"\n  ) + \n  ylim(-20,20) + labs(title = \"model 1\") +\n  theme_minimal()\n\n\nplot2 &lt;- ggplot(data, aes(x = x, y = y2)) +\n  geom_point() +\n  geom_abline(intercept = beta2_0, slope = beta2_1, color = \"grey\", size = 1) +\n  # geom_segment(aes(xend = x, yend = fitted_y2), color = \"red\", linetype = \"dashed\") +\n  labs(\n    x = \"X\",\n    y = \"Y\"\n  ) + \n  ylim(-20,20) + labs(title = \"model 2\") +\n  theme_minimal()\n\nlibrary(patchwork)\n(plot1 + plot2)"
   },
   {
     "objectID": "Estimation_5.html#partitioning-variance",
     "href": "Estimation_5.html#partitioning-variance",
     "title": "Estimation",
     "section": "Partitioning variance",
-    "text": "Partitioning variance\n\\[\\sum (Y - \\bar{Y})^2 = \\sum (\\hat{Y} -\\bar{Y})^2 + \\sum(Y - \\hat{Y})^2\\]"
+    "text": "Partitioning variance\n\\[\\sum (Y - \\bar{Y})^2 = \\sum (\\hat{Y} -\\bar{Y})^2 + \\sum(Y - \\hat{Y})^2\\]\n\nTotal variance = regression (model) variance + residual variance\nAKA sums of squares total = SS model + SS residual\nIf we are making predictions that differ from the mean then our model is doing better"
   },
   {
     "objectID": "Estimation_5.html#sigma",
     "href": "Estimation_5.html#sigma",
     "title": "Estimation",
     "section": "Sigma",
-    "text": "Sigma"
+    "text": "Sigma\naka residual standard error (SD units; what R reports), sum of squared errors (variation), standard error of the estimate (SD units), Mean Squared Error (variance)\n\\[SSE = \\sum(Y - \\hat{Y})^2\\]\n\\[MSE = \\frac{\\sum(Y - \\hat{Y})^2}{n}\\] \\[RSE = \\hat{\\sigma} = \\sqrt{\\frac{\\sum(Y - \\hat{Y})^2}{n}}\\]"
   },
   {
     "objectID": "glm_3.html#thinking-in-terms-of-models",
@@ -305,7 +305,7 @@
     "href": "glm_3.html#what-do-the-estimates-tell-us",
     "title": "GLM basics",
     "section": "What do the estimates tell us?",
-    "text": "What do the estimates tell us?\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\]\n\ncoef(m.1)\n\n(Intercept)         x.1 \n  0.2943939   0.4450568"
+    "text": "What do the estimates tell us?\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\]\n\n\nCode\ncoef(m.1)\n\n\n(Intercept)         x.1 \n  0.2943939   0.4450568"
   },
   {
     "objectID": "glm_3.html#how-to-interpret-regression-estimates",
@@ -382,14 +382,14 @@
     "href": "glm_3.html#residuals-1",
     "title": "GLM basics",
     "section": "Residuals",
-    "text": "Residuals\n\nggplot(d1.f , aes(x=x.1, y=y.1)) +\n    geom_point(size = 2) +\n  geom_smooth(method = lm, se = FALSE)"
+    "text": "Residuals\n\n\nCode\nggplot(d1.f , aes(x=x.1, y=y.1)) +\n    geom_point(size = 2) +\n  geom_smooth(method = lm, se = FALSE)"
   },
   {
     "objectID": "glm_3.html#residuals-2",
     "href": "glm_3.html#residuals-2",
     "title": "GLM basics",
     "section": "Residuals",
-    "text": "Residuals\n\nAssociation between \\(\\hat{Y_i}\\) and e?\n\n\nd1.f |&gt; \nggplot(aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth(se = F, method = \"lm\")"
+    "text": "Residuals\n\nAssociation between \\(\\hat{Y_i}\\) and e?\n\n\n\nCode\nd1.f |&gt; \nggplot(aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth(se = F, method = \"lm\")"
   },
   {
     "objectID": "glm_3.html#sigma",
@@ -438,21 +438,21 @@
     "href": "Distributions_4.html#probability-mass-function-pmf",
     "title": "Probability Distributions",
     "section": "Probability Mass Function (PMF)",
-    "text": "Probability Mass Function (PMF)\n\nFor discrete variables\nThe PMF gives you the probability of observing exactly a specific outcome\n\n\nlibrary(ggplot2)\n# Set the parameters\nn &lt;- 10 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") +scale_x_continuous(breaks = seq(0, 10, by = 1))"
+    "text": "Probability Mass Function (PMF)\n\nFor discrete variables\nThe PMF gives you the probability of observing exactly a specific outcome\n\n\n\nCode\nlibrary(ggplot2)\n# Set the parameters\nn &lt;- 10 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") +scale_x_continuous(breaks = seq(0, 10, by = 1))"
   },
   {
     "objectID": "Distributions_4.html#probability-density-function-pdf",
     "href": "Distributions_4.html#probability-density-function-pdf",
     "title": "Probability Distributions",
     "section": "Probability Density Function (PDF)",
-    "text": "Probability Density Function (PDF)\n\nFor continuous variables.\nThe value of the PDF at any specific point is not a probability. The probability of observing exactly one value is zero.\nProbability is represented by the area under the curve over a range (density)\n\n\nx &lt;- seq(from = -5, to = 5, by = 0.05)\nnorm_dat &lt;- data.frame(x = x, pdf = dnorm(x))\nggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle(\"PDF of Normal Distribution\") +\n  ylab(\"Density\")"
+    "text": "Probability Density Function (PDF)\n\nFor continuous variables.\nThe value of the PDF at any specific point is not a probability. The probability of observing exactly one value is zero.\nProbability is represented by the area under the curve over a range (density)\n\n\n\nCode\nx &lt;- seq(from = -5, to = 5, by = 0.05)\nnorm_dat &lt;- data.frame(x = x, pdf = dnorm(x))\nggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle(\"PDF of Normal Distribution\") +\n  ylab(\"Density\")"
   },
   {
     "objectID": "Distributions_4.html#cumulative-distribtuion-function-cdf",
     "href": "Distributions_4.html#cumulative-distribtuion-function-cdf",
     "title": "Probability Distributions",
     "section": "Cumulative distribtuion function (CDF)",
-    "text": "Cumulative distribtuion function (CDF)\n\nThe CDF applies to both discrete and continuous variables. It gives the “running total” of probability. The CDF at a value x is the probability of observing an outcome less than or equal to x.\nWill use to calculate p-values and percentiles or quantiles\n\n\n# Set the parameters\nn &lt;- 10;p &lt;- 0.5;x &lt;- 0:n\n# Cumulative Distribution Function\ncdf &lt;- pbinom(x, n, p)\ncdf_df &lt;- data.frame(x, cdf)\n#creates a ggplot object with cdf_df as the data source\nggplot(cdf_df, aes(x = x, y = cdf)) +\n  geom_bar(stat = \"identity\") + \n  ggtitle(\"CDF of Binomial Distribution\") +\n  xlab(\"Number of Successes\") + ylab(\"Cumulative Probability\")"
+    "text": "Cumulative distribtuion function (CDF)\n\nThe CDF applies to both discrete and continuous variables. It gives the “running total” of probability. The CDF at a value x is the probability of observing an outcome less than or equal to x.\nWill use to calculate p-values and percentiles or quantiles\n\n\n\nCode\n# Set the parameters\nn &lt;- 10;p &lt;- 0.5;x &lt;- 0:n\n# Cumulative Distribution Function\ncdf &lt;- pbinom(x, n, p)\ncdf_df &lt;- data.frame(x, cdf)\n#creates a ggplot object with cdf_df as the data source\nggplot(cdf_df, aes(x = x, y = cdf)) +\n  geom_bar(stat = \"identity\") + \n  ggtitle(\"CDF of Binomial Distribution\") +\n  xlab(\"Number of Successes\") + ylab(\"Cumulative Probability\")"
   },
   {
     "objectID": "Distributions_4.html#binomial-distribution",
@@ -480,7 +480,7 @@
     "href": "Distributions_4.html#binomial-distribution-2",
     "title": "Probability Distributions",
     "section": "Binomial Distribution",
-    "text": "Binomial Distribution\nWhat proportion of outcomes in the sample space that fall at or below a given outcome, say 75%?\n\nn &lt;- 20 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution, p = .5, N = 20\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") +scale_x_continuous(breaks = seq(0, 20, by = 1))"
+    "text": "Binomial Distribution\nWhat proportion of outcomes in the sample space that fall at or below a given outcome, say 75%?\n\n\nCode\nn &lt;- 20 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution, p = .5, N = 20\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") +scale_x_continuous(breaks = seq(0, 20, by = 1))"
   },
   {
     "objectID": "Distributions_4.html#why-do-we-care",
@@ -529,7 +529,7 @@
     "href": "Distributions_4.html#normal-gaussian-distribution",
     "title": "Probability Distributions",
     "section": "Normal (Gaussian) distribution",
-    "text": "Normal (Gaussian) distribution\n\nx &lt;- seq(from = 30, to = 180, by = 0.05)\nnorm_dat &lt;- data.frame(x = x, pdf = dnorm(x, 100,15))\nggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle(\"PDF of Normal Distribution (100,15)\") +\n  ylab(\"Density\")"
+    "text": "Normal (Gaussian) distribution\n\n\nCode\nx &lt;- seq(from = 30, to = 180, by = 0.05)\nnorm_dat &lt;- data.frame(x = x, pdf = dnorm(x, 100,15))\nggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle(\"PDF of Normal Distribution (100,15)\") +\n  ylab(\"Density\")"
   },
   {
     "objectID": "Distributions_4.html#normal-gaussian-distribution-1",
@@ -543,7 +543,7 @@
     "href": "Distributions_4.html#standardized-normal",
     "title": "Probability Distributions",
     "section": "Standardized normal",
-    "text": "Standardized normal\n\naka z-distribution as mean = 0, SD = 1\n\n\n# 1. Load the ggplot2 library\nlibrary(ggplot2)\n\n# 2. Set the parameters for the normal distribution\nmean_val &lt;- 0\nsd_val &lt;- 1\n\n# 3. Generate a sequence of x-values for the curve\nx_values &lt;- seq(mean_val - 4 * sd_val, mean_val + 4 * sd_val, length.out = 500)\n\n# 4. Calculate the probability density for each x-value\ny_values &lt;- dnorm(x_values, mean = mean_val, sd = sd_val)\n\n# 5. Create a dataframe for plotting\nnormal_df &lt;- data.frame(\n  x = x_values,\n  density = y_values\n)\n\n# 6. Create the plot with improved labels\nggplot(normal_df, aes(x = x, y = density)) +\n\n  # --- Shaded Regions for the Empirical Rule ---\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 3*sd_val & x &lt; mean_val + 3*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"lightblue\", alpha = 0.8) +\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 2*sd_val & x &lt; mean_val + 2*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"royalblue\", alpha = 0.8) +\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 1*sd_val & x &lt; mean_val + 1*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"navyblue\", alpha = 0.8) +\n\n  # --- The Curve and Mean Line ---\n  geom_line(color = \"black\", size = 1) +\n  geom_vline(xintercept = mean_val, color = \"black\", linetype = \"dashed\", size = 1) +\n  \n  # --- Text Annotations (Revised) ---\n  # Label for 68% remains inside\n  annotate(\"text\", x = mean_val, y = dnorm(mean_val, mean_val, sd_val) * 0.5, \n           label = \"68.26% within 1 SD\", size = 5, color = \"white\", fontface = \"bold\") +\n           \n  # Label for 95% is moved above the curve\n  annotate(\"text\", x = mean_val + 1.6 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.9, \n           label = \"95.44% within 2 SD\", size = 4.5, color = \"black\") +\n           \n  # Arrow for 95% label\n  geom_segment(\n    aes(x = mean_val + 1.4 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.8,\n        xend = mean_val + 1.1 * sd_val, yend = dnorm(mean_val, mean_val, sd_val) * 0.4),\n    arrow = arrow(length = unit(0.2, \"cm\"))\n  ) +\n           \n  # Label for 99.7% is moved above the curve\n  annotate(\"text\", x = mean_val + 2.7 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.4, \n           label = \"99.7% within 3 SD\", size = 4.5, color = \"black\") +\n\n  # Arrow for 99.7% label\n  geom_segment(\n    aes(x = mean_val + 2.5 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.35,\n        xend = mean_val + 2.2 * sd_val, yend = dnorm(mean_val + 1.5*sd_val, mean_val, sd_val) * 0.2),\n    arrow = arrow(length = unit(0.2, \"cm\"))\n  ) +\n\n  # --- Labels and Theme ---\n  labs(\n    title = \"Visualizing the 68 / 95.44 / 99.7\",\n    x = \"Value\",\n    y = \"Probability Density\"\n  ) +\n  theme_minimal(base_size = 14) +\n  # Remove the legend for the fill colors\n  theme(legend.position = \"none\")"
+    "text": "Standardized normal\n\naka z-distribution as mean = 0, SD = 1\n\n\n\nCode\n# 1. Load the ggplot2 library\nlibrary(ggplot2)\n\n# 2. Set the parameters for the normal distribution\nmean_val &lt;- 0\nsd_val &lt;- 1\n\n# 3. Generate a sequence of x-values for the curve\nx_values &lt;- seq(mean_val - 4 * sd_val, mean_val + 4 * sd_val, length.out = 500)\n\n# 4. Calculate the probability density for each x-value\ny_values &lt;- dnorm(x_values, mean = mean_val, sd = sd_val)\n\n# 5. Create a dataframe for plotting\nnormal_df &lt;- data.frame(\n  x = x_values,\n  density = y_values\n)\n\n# 6. Create the plot with improved labels\nggplot(normal_df, aes(x = x, y = density)) +\n\n  # --- Shaded Regions for the Empirical Rule ---\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 3*sd_val & x &lt; mean_val + 3*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"lightblue\", alpha = 0.8) +\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 2*sd_val & x &lt; mean_val + 2*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"royalblue\", alpha = 0.8) +\n  geom_ribbon(data = subset(normal_df, x &gt; mean_val - 1*sd_val & x &lt; mean_val + 1*sd_val),\n              aes(ymin = 0, ymax = density), fill = \"navyblue\", alpha = 0.8) +\n\n  # --- The Curve and Mean Line ---\n  geom_line(color = \"black\", size = 1) +\n  geom_vline(xintercept = mean_val, color = \"black\", linetype = \"dashed\", size = 1) +\n  \n  # --- Text Annotations (Revised) ---\n  # Label for 68% remains inside\n  annotate(\"text\", x = mean_val, y = dnorm(mean_val, mean_val, sd_val) * 0.5, \n           label = \"68.26% within 1 SD\", size = 5, color = \"white\", fontface = \"bold\") +\n           \n  # Label for 95% is moved above the curve\n  annotate(\"text\", x = mean_val + 1.6 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.9, \n           label = \"95.44% within 2 SD\", size = 4.5, color = \"black\") +\n           \n  # Arrow for 95% label\n  geom_segment(\n    aes(x = mean_val + 1.4 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.8,\n        xend = mean_val + 1.1 * sd_val, yend = dnorm(mean_val, mean_val, sd_val) * 0.4),\n    arrow = arrow(length = unit(0.2, \"cm\"))\n  ) +\n           \n  # Label for 99.7% is moved above the curve\n  annotate(\"text\", x = mean_val + 2.7 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.4, \n           label = \"99.7% within 3 SD\", size = 4.5, color = \"black\") +\n\n  # Arrow for 99.7% label\n  geom_segment(\n    aes(x = mean_val + 2.5 * sd_val, y = dnorm(mean_val, mean_val, sd_val) * 0.35,\n        xend = mean_val + 2.2 * sd_val, yend = dnorm(mean_val + 1.5*sd_val, mean_val, sd_val) * 0.2),\n    arrow = arrow(length = unit(0.2, \"cm\"))\n  ) +\n\n  # --- Labels and Theme ---\n  labs(\n    title = \"Visualizing the 68 / 95.44 / 99.7\",\n    x = \"Value\",\n    y = \"Probability Density\"\n  ) +\n  theme_minimal(base_size = 14) +\n  # Remove the legend for the fill colors\n  theme(legend.position = \"none\")"
   },
   {
     "objectID": "Distributions_4.html#t-distribution",
@@ -585,14 +585,14 @@
     "href": "correlation_2.html#happiness",
     "title": "Data Description and Correlations",
     "section": "Happiness",
-    "text": "Happiness\nExamples today are based on data from the 2015 World Happiness Report, which is an annual survey part of the Gallup World Poll.\nThe dataset is available on our GitHub site in the data folder, for those who want to play along at home."
+    "text": "Happiness\nExamples today are based on data from the 2015 World Happiness Report, which is an annual survey part of the Gallup World Poll.\nThe dataset is available on our GitHub site, for those who want to play along at home."
   },
   {
     "objectID": "correlation_2.html#distributions",
     "href": "correlation_2.html#distributions",
     "title": "Data Description and Correlations",
     "section": "Distributions",
-    "text": "Distributions\nA distribution often refers to a description of the [relative] number of times a variable X will take each of its unique values.\n\nhist(world$Happiness, breaks = 30, main = \"Distribution of happiness scores\", \n     xlab = \"Happiness\")"
+    "text": "Distributions\nA distribution often refers to a description of the [relative] number of times a variable X will take each of its unique values.\n\n\nCode\nhist(world$Happiness, breaks = 30, main = \"Distribution of happiness scores\", \n     xlab = \"Happiness\")"
   },
   {
     "objectID": "correlation_2.html#moments-of-a-distribution",
@@ -620,21 +620,21 @@
     "href": "correlation_2.html#average-deviation",
     "title": "Data Description and Correlations",
     "section": "Average deviation",
-    "text": "Average deviation\n\nx = c(7,7,8,3,9,2)\nmean(x)\n\n[1] 6\n\nx - mean(x)\n\n[1]  1  1  2 -3  3 -4\n\nsum(x - mean(x))\n\n[1] 0\n\nsum(x - mean(x))/length(x)\n\n[1] 0"
+    "text": "Average deviation\n\n\nCode\nx = c(7,7,8,3,9,2)\nmean(x)\n\n\n[1] 6\n\n\nCode\nx - mean(x)\n\n\n[1]  1  1  2 -3  3 -4\n\n\nCode\nsum(x - mean(x))\n\n\n[1] 0\n\n\nCode\nsum(x - mean(x))/length(x)\n\n\n[1] 0"
   },
   {
     "objectID": "correlation_2.html#sums-of-squares",
     "href": "correlation_2.html#sums-of-squares",
     "title": "Data Description and Correlations",
     "section": "Sums of squares",
-    "text": "Sums of squares\nOur solution is to square deviations.\n\nx = c(7,7,8,3,9,2)\nmean(x)\n\n[1] 6\n\ndeviation = x - mean(x)\ndeviation^2\n\n[1]  1  1  4  9  9 16\n\nsum(deviation^2)\n\n[1] 40\n\n\nThe sum of squared deviations is referred variation and as the Sum of Squares (SS)\n\\[SS = {\\sum{(x-\\bar{x})^2}}\\]"
+    "text": "Sums of squares\nOur solution is to square deviations.\n\n\nCode\nx = c(7,7,8,3,9,2)\nmean(x)\n\n\n[1] 6\n\n\nCode\ndeviation = x - mean(x)\ndeviation^2\n\n\n[1]  1  1  4  9  9 16\n\n\nCode\nsum(deviation^2)\n\n\n[1] 40\n\n\nThe sum of squared deviations is referred variation and as the Sum of Squares (SS)\n\\[SS = {\\sum{(x-\\bar{x})^2}}\\]"
   },
   {
     "objectID": "correlation_2.html#variance",
     "href": "correlation_2.html#variance",
     "title": "Data Description and Correlations",
     "section": "Variance",
-    "text": "Variance\nWe calculate the average squared deviation: this is our variance, \\(\\sigma^2\\):\n\nsum((x - mean(x))^2)/length(x)\n\n[1] 6.666667"
+    "text": "Variance\nWe calculate the average squared deviation: this is our variance, \\(\\sigma^2\\):\n\n\nCode\nsum((x - mean(x))^2)/length(x)\n\n\n[1] 6.666667"
   },
   {
     "objectID": "correlation_2.html#variance-1",
@@ -648,7 +648,7 @@
     "href": "correlation_2.html#standard-deviation",
     "title": "Data Description and Correlations",
     "section": "Standard Deviation",
-    "text": "Standard Deviation\nStandard deviation \\(\\sigma\\) is the square root of the variance.\n\nsqrt(sum(deviation^2)/length(deviation))\n\n[1] 2.581989"
+    "text": "Standard Deviation\nStandard deviation \\(\\sigma\\) is the square root of the variance.\n\n\nCode\nsqrt(sum(deviation^2)/length(deviation))\n\n\n[1] 2.581989"
   },
   {
     "objectID": "correlation_2.html#skew-and-kurtosis",
@@ -690,7 +690,7 @@
     "href": "correlation_2.html#simulation",
     "title": "Data Description and Correlations",
     "section": "Simulation",
-    "text": "Simulation\n\nset.seed(100917) #so everyone gets same random draws\n\n#function to estimate variance using population formula\nsample_var = function(x){\n  sum((x - mean(x, na.rm=T))^2, na.rm=T)/length(which(!is.na(x)))\n}\n#number of samples\ndraws = 10000\n#which sample sizes to test\nsample_sizes = seq(from = 5, to = 100, by = 5)\n#data frame to store simulations\nvar_estimates = data.frame(size = sample_sizes, sample = NA, estimate = NA)\n\nfor(i in sample_sizes){ # loop through sample sizes\n  sample_est = numeric(length = draws) #create empty vectors\n  estimate = numeric(length = draws)\n  for(j in 1:draws){ # loop through draws\n    sample = rnorm(n = i, mean = 1000, sd = 10) # randomly draw sample from pop with variance 100\n    sample_est[j] = sample_var(sample) # calculate variance using population formula\n    estimate[j] = var(sample) # calculate variance using sample formula\n  }\n  row = which(var_estimates$size == i) #which row in data frame does this belong to?\n  var_estimates$sample[row] = mean(sample_est) # average of variance estimates (using pop) across draws\n  var_estimates$estimate[row] = mean(estimate) # average of variances (using sample) across draws\n}\n\nvar_estimates %&gt;%\n  mutate(population = 100) %&gt;% #add population variable\n  gather(\"var\", \"value\", -size) %&gt;% # long-form\n  mutate(var = factor(var, \n                      levels = c(\"population\",\"sample\",\"estimate\"),\n                      labels = c(\"Population Variance\",\n                                 \"Sample Variance\", \n                                 \"Sample Estimate of Population Variance\"))) %&gt;% #lovely labels\n  ggplot(aes(x = size, y = value)) +\n  geom_line(aes(color = var), size = 3) +\n  scale_x_continuous(\"Sample Size\", breaks = sample_sizes) +\n  scale_color_discrete(\"\")+\n  geom_point() + \n  theme_bw(base_size = 25)"
+    "text": "Simulation\n\n\nCode\nset.seed(100917) #so everyone gets same random draws\n\n#function to estimate variance using population formula\nsample_var = function(x){\n  sum((x - mean(x, na.rm=T))^2, na.rm=T)/length(which(!is.na(x)))\n}\n#number of samples\ndraws = 10000\n#which sample sizes to test\nsample_sizes = seq(from = 5, to = 100, by = 5)\n#data frame to store simulations\nvar_estimates = data.frame(size = sample_sizes, sample = NA, estimate = NA)\n\nfor(i in sample_sizes){ # loop through sample sizes\n  sample_est = numeric(length = draws) #create empty vectors\n  estimate = numeric(length = draws)\n  for(j in 1:draws){ # loop through draws\n    sample = rnorm(n = i, mean = 1000, sd = 10) # randomly draw sample from pop with variance 100\n    sample_est[j] = sample_var(sample) # calculate variance using population formula\n    estimate[j] = var(sample) # calculate variance using sample formula\n  }\n  row = which(var_estimates$size == i) #which row in data frame does this belong to?\n  var_estimates$sample[row] = mean(sample_est) # average of variance estimates (using pop) across draws\n  var_estimates$estimate[row] = mean(estimate) # average of variances (using sample) across draws\n}\n\nvar_estimates %&gt;%\n  mutate(population = 100) %&gt;% #add population variable\n  gather(\"var\", \"value\", -size) %&gt;% # long-form\n  mutate(var = factor(var, \n                      levels = c(\"population\",\"sample\",\"estimate\"),\n                      labels = c(\"Population Variance\",\n                                 \"Sample Variance\", \n                                 \"Sample Estimate of Population Variance\"))) %&gt;% #lovely labels\n  ggplot(aes(x = size, y = value)) +\n  geom_line(aes(color = var), size = 3) +\n  scale_x_continuous(\"Sample Size\", breaks = sample_sizes) +\n  scale_color_discrete(\"\")+\n  geom_point() + \n  theme_bw(base_size = 25)"
   },
   {
     "objectID": "correlation_2.html#standardized-scores-z-scores",
@@ -704,7 +704,7 @@
     "href": "correlation_2.html#simulation-1",
     "title": "Data Description and Correlations",
     "section": "Simulation",
-    "text": "Simulation\n\n# Simulate raw data from a normal distribution\n# Let's say it's some measured variable, like \"test scores\"\nn_samples &lt;- 10000\nraw_mean &lt;- 10  # e.g., average test score\nraw_sd &lt;- 3.5    # e.g., spread of test scores\n\nraw_data &lt;- rnorm(n_samples, mean = raw_mean, sd = raw_sd)\n\n# Calculate Z-scores for the raw data\n# Z = (X - mu) / sigma\n# Where X is an individual data point, mu is the mean, and sigma is the standard deviation\n\n# Calculate the mean and standard deviation of our *simulated* raw data\n# (It will be very close to raw_mean and raw_sd, but not exactly due to randomness)\nmean_raw_data &lt;- mean(raw_data)\nsd_raw_data &lt;- sd(raw_data)\n\nz_scored_data &lt;- (raw_data - mean_raw_data) / sd_raw_data\n\n# Create a data frame for plotting\n# We'll put both raw and z-scored values in a single 'value' column\n# and use a 'type' column to distinguish them.\nplot_data &lt;- data.frame(\n  value = c(raw_data, z_scored_data),\n  type = factor(c(rep(\"Raw Data\", n_samples), rep(\"Z-Scored Data\", n_samples)),\n                levels = c(\"Raw Data\", \"Z-Scored Data\")) # Ensure consistent order\n)\n\n# ----------------------------------------------------------------------\n# Part 2: Graphing in ggplot2\n# ----------------------------------------------------------------------\n\nggplot(plot_data, aes(x = value, fill = type, color = type)) +\n  geom_density(alpha = 0.5) + # Use alpha for transparency where distributions overlap\n  labs(\n    title = \"Density Distribution of Raw vs. Z-Scored Data\",\n    x = \"Value\",\n    y = \"Density\",\n    fill = \"Data Type\",\n    color = \"Data Type\"\n  ) +\n  theme_minimal()"
+    "text": "Simulation\n\n\nCode\n# Simulate raw data from a normal distribution\n# Let's say it's some measured variable, like \"test scores\"\nn_samples &lt;- 10000\nraw_mean &lt;- 10  # e.g., average test score\nraw_sd &lt;- 3.5    # e.g., spread of test scores\n\nraw_data &lt;- rnorm(n_samples, mean = raw_mean, sd = raw_sd)\n\n# Calculate Z-scores for the raw data\n# Z = (X - mu) / sigma\n# Where X is an individual data point, mu is the mean, and sigma is the standard deviation\n\n# Calculate the mean and standard deviation of our *simulated* raw data\n# (It will be very close to raw_mean and raw_sd, but not exactly due to randomness)\nmean_raw_data &lt;- mean(raw_data)\nsd_raw_data &lt;- sd(raw_data)\n\nz_scored_data &lt;- (raw_data - mean_raw_data) / sd_raw_data\n\n# Create a data frame for plotting\n# We'll put both raw and z-scored values in a single 'value' column\n# and use a 'type' column to distinguish them.\nplot_data &lt;- data.frame(\n  value = c(raw_data, z_scored_data),\n  type = factor(c(rep(\"Raw Data\", n_samples), rep(\"Z-Scored Data\", n_samples)),\n                levels = c(\"Raw Data\", \"Z-Scored Data\")) # Ensure consistent order\n)\n\n# ----------------------------------------------------------------------\n# Part 2: Graphing in ggplot2\n# ----------------------------------------------------------------------\n\nggplot(plot_data, aes(x = value, fill = type, color = type)) +\n  geom_density(alpha = 0.5) + # Use alpha for transparency where distributions overlap\n  labs(\n    title = \"Density Distribution of Raw vs. Z-Scored Data\",\n    x = \"Value\",\n    y = \"Density\",\n    fill = \"Data Type\",\n    color = \"Data Type\"\n  ) +\n  theme_minimal()"
   },
   {
     "objectID": "correlation_2.html#associations",
@@ -788,13 +788,139 @@
     "href": "correlation_2.html#correlations-1",
     "title": "Data Description and Correlations",
     "section": "Correlations",
-    "text": "Correlations\n\ngalton.data &lt;- psychTools::galton\nggplot(galton.data, aes(x=parent, y=child)) +\n    geom_jitter(alpha = .4) +\n    geom_smooth(method=lm,   # Add linear regression line\n                se=FALSE) +     # Don't add shaded confidence region\n    labs(x = \"parent height\", y = \"child height\")"
+    "text": "Correlations\n\n\nCode\ngalton.data &lt;- psychTools::galton\nggplot(galton.data, aes(x=parent, y=child)) +\n    geom_jitter(alpha = .4) +\n    geom_smooth(method=lm,   # Add linear regression line\n                se=FALSE) +     # Don't add shaded confidence region\n    labs(x = \"parent height\", y = \"child height\")"
   },
   {
     "objectID": "correlation_2.html#visualizing-correlations",
     "href": "correlation_2.html#visualizing-correlations",
     "title": "Data Description and Correlations",
     "section": "Visualizing correlations",
-    "text": "Visualizing correlations\n\nlibrary(datasauRus)\ndatasaurus_dozen %&gt;%\n  filter(dataset == \"away\") %&gt;%\n  ggplot(aes(x = x, y = y)) +\n  geom_point()+\n  ggtitle(expression(paste(M[X], \"= 54.3 \", S[X], \"= 16.8 \", \n                           M[Y], \"= 47.8 \", S[Y], \"= 26.9 \",\n                           \"R = -.06\"))) +\n  theme_bw(base_size = 15)"
+    "text": "Visualizing correlations\n\n\nCode\nlibrary(datasauRus)\ndatasaurus_dozen %&gt;%\n  filter(dataset == \"away\") %&gt;%\n  ggplot(aes(x = x, y = y)) +\n  geom_point()+\n  ggtitle(expression(paste(M[X], \"= 54.3 \", S[X], \"= 16.8 \", \n                           M[Y], \"= 47.8 \", S[Y], \"= 26.9 \",\n                           \"R = -.06\"))) +\n  theme_bw(base_size = 15)"
+  },
+  {
+    "objectID": "lecture.html",
+    "href": "lecture.html",
+    "title": "Lectures",
+    "section": "",
+    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation"
+  },
+  {
+    "objectID": "Estimation_5.html#likelihoods",
+    "href": "Estimation_5.html#likelihoods",
+    "title": "Estimation",
+    "section": "Likelihoods",
+    "text": "Likelihoods\n\nFor probabilities, we assume a parameter(s), and then look at probabilities of various data outcomes p(data | θ ).\nFor likelihoods, the data are treated as a given, and value of theta varies. L(θ | data )\nAs scientists we collect data (so it is a given) and we do not know our thetas (that is why we are running the experiment!)"
+  },
+  {
+    "objectID": "Estimation_5.html#binomial-revisited",
+    "href": "Estimation_5.html#binomial-revisited",
+    "title": "Estimation",
+    "section": "Binomial revisited",
+    "text": "Binomial revisited\n\nWe are going to run an experiment with 50 coin flips. We get thirty heads. Is this coin fair?\n\n\n\nCode\nlibrary(ggplot2)\nn &lt;- 50 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution, p = .5, N = 50\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") + scale_x_continuous(limits = c(10, 40))"
+  },
+  {
+    "objectID": "Estimation_5.html#estimation-vs-falsification",
+    "href": "Estimation_5.html#estimation-vs-falsification",
+    "title": "Estimation",
+    "section": "Estimation vs falsification",
+    "text": "Estimation vs falsification\n\nMost of our science pits two hypotheses against one another. Winner take all.\nOur stats are set up similarly, but often the opponent is weak (measly nil hypothesis). This falsification view is standard.\nWe sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation.\nWe still can test/falsify hypotheses, but the estimation framework is more robust"
+  },
+  {
+    "objectID": "Estimation_5.html#binomial-likelihood",
+    "href": "Estimation_5.html#binomial-likelihood",
+    "title": "Estimation",
+    "section": "Binomial likelihood",
+    "text": "Binomial likelihood\n\n\nCode\nlibrary(ggplot2)\n# Our observed data from the experiment\nn_trials &lt;- 50\nk_successes &lt;- 30 # Number of heads\nmle_p = .6\n\n# Create a sequence of candidate p values (from 0 to 1)\np_values &lt;- seq(0, 1, by = 0.001)\n\n# Calculate the likelihood for each p using dbinom()\n# dbinom(x, size, prob) calculates P(X=x) for a binomial distribution\nlikelihoods &lt;- dbinom(x = k_successes, size = n_trials, prob = p_values)\n\n# Store the results in a data frame\nlikelihood_df &lt;- data.frame(p = p_values, likelihood = likelihoods)\n\n# Load the ggplot2 library for nice plots\nlibrary(ggplot2)\n\nggplot(likelihood_df, aes(x = p, y = likelihood)) +\n  geom_line(color = \"blue\", size = 1) +\n  # Add a vertical line at the MLE to highlight the peak\n  geom_vline(xintercept = mle_p, linetype = \"dashed\", color = \"black\") +\n  labs(\n    title = \"Binomial Likelihood Function for Coin Flips\",\n    subtitle = \"Likelihood of p given k=30 heads in n=50 flips\",\n    x = \"Candidate Probability of Heads (p)\",\n    y = \"Likelihood\"\n  ) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Estimation_5.html#binomial-loglikelihood",
+    "href": "Estimation_5.html#binomial-loglikelihood",
+    "title": "Estimation",
+    "section": "Binomial loglikelihood",
+    "text": "Binomial loglikelihood\n\n\nCode\n# Calculate log-likelihoods\nlog_likelihoods &lt;- dbinom(x = k_successes, size = n_trials, prob = p_values, log = TRUE)\n\nlog_likelihood_df &lt;- data.frame(p = p_values, log_likelihood = log_likelihoods)\n\n# Plot the log-likelihood function\nggplot(log_likelihood_df, aes(x = p, y = log_likelihood)) +\n  geom_line(color = \"blue\", size = 1) +\n  geom_vline(xintercept = mle_p, linetype = \"dashed\", color = \"black\") +\n  labs(\n    title = \"Binomial Log-Likelihood Function\",\n    x = \"Candidate Probability of Heads (p)\",\n    y = \"Log-Likelihood\"\n  ) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Estimation_5.html#likelihood-estimation-for-linear-regression",
+    "href": "Estimation_5.html#likelihood-estimation-for-linear-regression",
+    "title": "Estimation",
+    "section": "Likelihood estimation for linear regression",
+    "text": "Likelihood estimation for linear regression\n\nDefault DGP will be normal/Gaussian\n\n\\(Y_i | X_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)\\)\nThe probability density function (PDF) for a single data point: \\(f(Y_i | \\beta_0, \\beta_1, \\sigma^2) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac {(Y_i - (\\beta_0 + \\beta_1 X_i))^2}{2\\sigma^2}\\right)\\)\nThe likelihood function \\(\\mathcal{L}(θ | data )\\) is based on our model parameters \\(\\theta =(\\beta_0 + \\beta_1, \\sigma^2)\\) such that we find that values of our parameters that maximize this function:\n\\[\\mathcal{L}(\\beta_0, \\beta_1, \\sigma^2) = \\prod_{i=1}^{n} \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac{(Y_i - (\\beta_0 + \\beta_1 X_i))^2}{2\\sigma^2}\\right)\\]"
+  },
+  {
+    "objectID": "Estimation_5.html#our-best-guess-is-still-a-guess",
+    "href": "Estimation_5.html#our-best-guess-is-still-a-guess",
+    "title": "Estimation",
+    "section": "Our best guess is still a guess",
+    "text": "Our best guess is still a guess\n\nGiven the data we’ve observed, how plausible are different values for the parameters of our model?\nOLS and ML give us the “best guess”. How confident are we in that guess? We always have to remember the uncertainty in estimates. This is found via our standard errors, which we will talk about later."
+  },
+  {
+    "objectID": "Estimation_5.html#log-likelihood-estimating-a-mean",
+    "href": "Estimation_5.html#log-likelihood-estimating-a-mean",
+    "title": "Estimation",
+    "section": "Log Likelihood estimating a mean",
+    "text": "Log Likelihood estimating a mean\n\ndefine what values we want to calculate log likelihood for\n\n\n\nCode\nlibrary(psychTools)\nlibrary(tidyr)\nlibrary(tidyverse)\ngalton.data &lt;- galton\ngrid &lt;-\n  crossing(mu = seq(from = 66, to = 69, length.out = 200), sigma = seq(from = 2, to = 3, length.out = 200))\ngrid\n\n\n# A tibble: 40,000 × 2\n      mu sigma\n   &lt;dbl&gt; &lt;dbl&gt;\n 1    66  2   \n 2    66  2.01\n 3    66  2.01\n 4    66  2.02\n 5    66  2.02\n 6    66  2.03\n 7    66  2.03\n 8    66  2.04\n 9    66  2.04\n10    66  2.05\n# ℹ 39,990 more rows"
+  },
+  {
+    "objectID": "Basics_1.html#this-semester",
+    "href": "Basics_1.html#this-semester",
+    "title": "Intro",
+    "section": "This semester",
+    "text": "This semester\n\nBuild a foundation for statistical inference (glm)\nHow to think about your analyses before you collect data\nIdentify common pitfalls in statistical inference"
+  },
+  {
+    "objectID": "Basics_1.html#an-aside-on-p-values",
+    "href": "Basics_1.html#an-aside-on-p-values",
+    "title": "Intro",
+    "section": "An aside on p-values",
+    "text": "An aside on p-values\n\nThe final will have a p-value question because you will be inundated with p-values in your career\nWe will not touch p-values for as long as possible (after first exam)"
+  },
+  {
+    "objectID": "Estimation_5.html#model-fit-4",
+    "href": "Estimation_5.html#model-fit-4",
+    "title": "Estimation",
+    "section": "Model fit",
+    "text": "Model fit\n\nCan you point out the predictions?\n\n\n\nCode\ntwogroup_fun = function(nrep = 100, b0 = 6, b1 = -2, sigma = 1) {\n     ngroup = 2\n     group = rep( c(\"group1\", \"group2\"), each = nrep)\n     eps = rnorm(ngroup*nrep, 0, sigma)\n     traffic = b0 + b1*(group == \"group2\") + eps\n     growthfit = lm(traffic ~ group)\n     growthfit\n}\n\n\ntwogroup_fun2 = function(nrep = 100, b0 = 6, b1 = -2, sigma = 2) {\n     ngroup = 2\n     group = rep( c(\"group1\", \"group2\"), each = nrep)\n     eps = rnorm(ngroup*nrep, 0, sigma)\n     traffic = b0 + b1*(group == \"group2\") + eps\n     growthfit = lm(traffic ~ group)\n     growthfit\n}\n\nset.seed(16)\nlibrary(broom)\nlm1 &lt;- augment(twogroup_fun())\n\nset.seed(16)\nlm2 &lt;- augment(twogroup_fun2())\n\nplot1&lt;- ggplot(lm1) +\n  aes(x = group, y = traffic) +\n  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11) +labs(title = \"model 1\")\n\nplot2&lt;- ggplot(lm2) +\n  aes(x = group, y = traffic) +\n  geom_violin() + geom_boxplot() + geom_jitter() + ylim(-1, 11) + labs(title = \"model 2\")\n\n\nlibrary(gridExtra)\n grid.arrange(plot1, plot2, ncol=2)"
+  },
+  {
+    "objectID": "Estimation_5.html#partitioning-variance-1",
+    "href": "Estimation_5.html#partitioning-variance-1",
+    "title": "Estimation",
+    "section": "Partitioning variance",
+    "text": "Partitioning variance\n\n\nCode\nlibrary(ggplot2)\nset.seed(74) \nn &lt;- 50\nx &lt;- rnorm(n, mean = 0, sd = 1)\ne &lt;- rnorm(n, mean = 0, sd = 1)\ny1 &lt;- 0 + 1 * x + e\ny2 &lt;- 0 + 0 * x \n\ndata &lt;- data.frame(x = x, y1 = y1, y2 = y2)\n\nols_model1 &lt;- lm(y1 ~ x, data = data)\nols_model2 &lt;- lm(y1 ~ 1, data = data)\n\n\nbeta1_0 &lt;- coef(ols_model1)[1]\nbeta1_1 &lt;- coef(ols_model1)[2]\n\nbeta2_0 &lt;- coef(ols_model2)[1]\nbeta2_1 &lt;- 0\n\ndata$fitted_y1 &lt;- predict(ols_model1)\ndata$residuals1 &lt;- residuals(ols_model1)\n\ndata$fitted_y2 &lt;- predict(ols_model2)\ndata$residuals2 &lt;- residuals(ols_model2)\n\nplot1 &lt;- ggplot(data, aes(x = x, y = y1)) +\n  geom_point() +\n  geom_abline(intercept = beta1_0, slope = beta1_1, color = \"grey\", size = 1) +\n  geom_segment(aes(xend = x, yend = fitted_y1), color = \"red\", linetype = \"dashed\") +\n  labs(\n    x = \"X\",\n    y = \"Y\"\n  ) + \n  ylim(-3,3) + labs(title = \"regression model\") +\n  theme_minimal()\n\n\nplot2 &lt;- ggplot(data, aes(x = x, y = y1)) +\n  geom_point() +\n  geom_abline(intercept = beta2_0, slope = beta2_1, color = \"grey\", size = 1) +\n  geom_segment(aes(xend = x, yend = fitted_y2), color = \"red\", linetype = \"dashed\") +\n  labs(\n    x = \"X\",\n    y = \"Y\"\n  ) + \n  ylim(-3,3) + labs(title = \"intercept only model\") +\n  theme_minimal()\n\n(plot1 + plot2)"
+  },
+  {
+    "objectID": "Estimation_5.html#sigma-1",
+    "href": "Estimation_5.html#sigma-1",
+    "title": "Estimation",
+    "section": "Sigma",
+    "text": "Sigma\n\nIf sigma is large, then our predictions are not close to the data\nThus, we want SMALL RSE/sigma/MSE\nBut small relative to what? What is the largest sigma can be? Smallest?"
+  },
+  {
+    "objectID": "Estimation_5.html#sigma-2",
+    "href": "Estimation_5.html#sigma-2",
+    "title": "Estimation",
+    "section": "Sigma",
+    "text": "Sigma\nTechnically, we report the unbiased estimate:\n\\[RSE = \\hat{\\sigma} = \\sqrt{\\frac{\\sum(Y - \\hat{Y})^2}{n - k - 1}}\\]\n\nsqrt(sum((mod.1$.resid)^2)/48) \n\n[1] 0.9181092"
+  },
+  {
+    "objectID": "Estimation_5.html#coefficient-of-determination",
+    "href": "Estimation_5.html#coefficient-of-determination",
+    "title": "Estimation",
+    "section": "Coefficient of Determination",
+    "text": "Coefficient of Determination\naka \\(R^2\\)\n\\[\\sum (Y - \\bar{Y})^2 = \\sum (\\hat{Y} -\\bar{Y})^2 + \\sum(Y - \\hat{Y})^2\\]\n\\[SS_{Y} = SS_{\\text{Model}} + SS_{\\text{Residual}}\\]\n\\[\\frac{SS_{model}}{SS_Y} = R^2\\] - Explained variation (variance) divided by total variation (variance)"
+  },
+  {
+    "objectID": "Estimation_5.html#coefficient-of-determination-1",
+    "href": "Estimation_5.html#coefficient-of-determination-1",
+    "title": "Estimation",
+    "section": "Coefficient of Determination",
+    "text": "Coefficient of Determination\n\nRanges from 0 - 1\nStandardized, as opposed to sigma\nWhat is considered good or bad variance explained?"
+  },
+  {
+    "objectID": "Estimation_5.html#r",
+    "href": "Estimation_5.html#r",
+    "title": "Estimation",
+    "section": "R",
+    "text": "R\n\nupper case R, not lower case r as in correlation\n\n\\[\\large \\sqrt{R^2} = r_{Y\\hat{Y}}\\]"
   }
 ]
