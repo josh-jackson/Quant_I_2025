@@ -623,6 +623,12 @@ Mean x.1 (SD) | 0.09 (0.91)
 Mean y.1 (SD) | 0.33 (1.97)</code></pre>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>.<span class="dv">2058</span> <span class="sc">*</span>(<span class="fl">1.97</span><span class="sc">/</span>.<span class="dv">91</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4455231</code></pre>
+</div>
+</div>
 </section>
 <section id="pop-quiz" class="slide level2">
 <h2>pop quiz</h2>
@@ -635,11 +641,11 @@ Mean y.1 (SD) | 0.33 (1.97)</code></pre>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>d<span class="fl">.2</span> <span class="ot">&lt;-</span> d<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">mutate</span>(<span class="at">x.z =</span> (x<span class="fl">.1</span> <span class="sc">-</span> <span class="fu">mean</span>(x<span class="fl">.1</span>))<span class="sc">/</span><span class="fu">sd</span>(x<span class="fl">.1</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">mutate</span>(<span class="at">y.z =</span> (y<span class="fl">.1</span> <span class="sc">-</span> <span class="fu">mean</span>(y<span class="fl">.1</span>))<span class="sc">/</span><span class="fu">sd</span>(y<span class="fl">.1</span>))</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a>d<span class="fl">.2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>d<span class="fl">.2</span> <span class="ot">&lt;-</span> d<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">mutate</span>(<span class="at">x.z =</span> (x<span class="fl">.1</span> <span class="sc">-</span> <span class="fu">mean</span>(x<span class="fl">.1</span>))<span class="sc">/</span><span class="fu">sd</span>(x<span class="fl">.1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">mutate</span>(<span class="at">y.z =</span> (y<span class="fl">.1</span> <span class="sc">-</span> <span class="fu">mean</span>(y<span class="fl">.1</span>))<span class="sc">/</span><span class="fu">sd</span>(y<span class="fl">.1</span>))</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a>d<span class="fl">.2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             x.1         y.1         x.z         y.z
 1   -0.560475647 -1.22907473 -0.71304802 -0.79220677
@@ -748,9 +754,9 @@ Mean y.1 (SD) | 0.33 (1.97)</code></pre>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(easystats)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>m<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y.z <span class="sc">~</span> x.z, <span class="at">data =</span> d<span class="fl">.2</span>)</span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">model_parameters</span>(m<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(easystats)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>m<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y.z <span class="sc">~</span> x.z, <span class="at">data =</span> d<span class="fl">.2</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">model_parameters</span>(m<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Parameter   | Coefficient |   SE |        95% CI |     t(98) |      p
 ---------------------------------------------------------------------
@@ -770,9 +776,9 @@ x z         |        0.21 | 0.10 | [ 0.01, 0.40] |      2.08 | 0.040 </code></pr
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>d<span class="fl">.3</span> <span class="ot">&lt;-</span> d<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">mutate</span>(<span class="at">x.5 =</span> (x<span class="fl">.1</span> <span class="sc">+</span> <span class="dv">5</span>) )</span>
-<span id="cb15-3"><a href="#cb15-3"></a>d<span class="fl">.3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>d<span class="fl">.3</span> <span class="ot">&lt;-</span> d<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">mutate</span>(<span class="at">x.5 =</span> (x<span class="fl">.1</span> <span class="sc">+</span> <span class="dv">5</span>) )</span>
+<span id="cb17-3"><a href="#cb17-3"></a>d<span class="fl">.3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             x.1         y.1      x.5
 1   -0.560475647 -1.22907473 4.439524
@@ -881,8 +887,8 @@ x z         |        0.21 | 0.10 | [ 0.01, 0.40] |      2.08 | 0.040 </code></pr
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>m<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="fl">.1</span> <span class="sc">~</span> x<span class="fl">.5</span>, <span class="at">data =</span> d<span class="fl">.3</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">model_parameters</span>(m<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>m<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="fl">.1</span> <span class="sc">~</span> x<span class="fl">.5</span>, <span class="at">data =</span> d<span class="fl">.3</span>)</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">model_parameters</span>(m<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Parameter   | Coefficient |   SE |        95% CI | t(98) |     p
 ----------------------------------------------------------------
@@ -896,21 +902,9 @@ x 5         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(d<span class="fl">.3</span> , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.5</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-
-</div>
-<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">ggplot</span>(d<span class="fl">.3</span> , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.5</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
@@ -918,7 +912,19 @@ x 5         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">model_parameters</span>(m<span class="fl">.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">model_parameters</span>(m<span class="fl">.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Parameter   | Coefficient |   SE |        95% CI | t(98) |     p
 ----------------------------------------------------------------
@@ -926,6 +932,9 @@ x 5         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 </div>
 </div>
+<ul>
+<li>Only the intercept changes. Not the slope.</li>
+</ul>
 </section>
 <section id="centroid" class="slide level2">
 <h2>Centroid</h2>
@@ -943,13 +952,13 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
 <section id="predictions-1" class="slide level2">
 <h2>Predictions</h2>
 <p><span class="math display">\[\hat{Y_i} = b_{0} + b_{1}X_i \]</span> - People who have the same IV, get the same DV. No error in our equation.</p>
@@ -960,8 +969,8 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <li><span class="math inline">\(\hat{Y_i}\)</span> are also known as fitted values</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>d1.f<span class="ot">&lt;-</span> <span class="fu">augment</span>(m<span class="fl">.1</span>)</span>
-<span id="cb24-2"><a href="#cb24-2"></a>d1.f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>d1.f<span class="ot">&lt;-</span> <span class="fu">augment</span>(m<span class="fl">.1</span>)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>d1.f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 8
       y.1     x.1 .fitted .resid   .hat .sigma   .cooksd .std.resid
@@ -991,21 +1000,9 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-
-</div>
-<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> .fitted), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
@@ -1015,10 +1012,9 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> .fitted), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb28-4"><a href="#cb28-4"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>( <span class="at">xend =</span> x<span class="fl">.1</span>, <span class="at">yend =</span> .fitted))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> .fitted), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
@@ -1028,15 +1024,28 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
-<span id="cb29-2"><a href="#cb29-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb29-4"><a href="#cb29-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> .fitted), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb29-5"><a href="#cb29-5"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>( <span class="at">xend =</span> x<span class="fl">.1</span>, <span class="at">yend =</span> .fitted))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> .fitted), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>( <span class="at">xend =</span> x<span class="fl">.1</span>, <span class="at">yend =</span> .fitted))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
 <img data-src="glm_3_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> .fitted), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>( <span class="at">xend =</span> x<span class="fl">.1</span>, <span class="at">yend =</span> .fitted))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
 <ul>
@@ -1045,19 +1054,19 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>new.i <span class="ot">=</span> <span class="fl">1.1</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a>new.slope <span class="ot">=</span> <span class="sc">-</span><span class="fl">0.7</span></span>
-<span id="cb30-3"><a href="#cb30-3"></a>d1.f<span class="sc">$</span>new.fitted <span class="ot">=</span> <span class="fl">1.1</span> <span class="sc">-</span><span class="fl">0.7</span><span class="sc">*</span>d1.f<span class="sc">$</span>x<span class="fl">.1</span></span>
-<span id="cb30-4"><a href="#cb30-4"></a></span>
-<span id="cb30-5"><a href="#cb30-5"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
-<span id="cb30-6"><a href="#cb30-6"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb30-7"><a href="#cb30-7"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> new.i, <span class="at">slope =</span> new.slope, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb30-8"><a href="#cb30-8"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> new.fitted), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb30-9"><a href="#cb30-9"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>( <span class="at">xend =</span> x<span class="fl">.1</span>, <span class="at">yend =</span> new.fitted))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>new.i <span class="ot">=</span> <span class="fl">1.1</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>new.slope <span class="ot">=</span> <span class="sc">-</span><span class="fl">0.7</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a>d1.f<span class="sc">$</span>new.fitted <span class="ot">=</span> <span class="fl">1.1</span> <span class="sc">-</span><span class="fl">0.7</span><span class="sc">*</span>d1.f<span class="sc">$</span>x<span class="fl">.1</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a></span>
+<span id="cb32-5"><a href="#cb32-5"></a><span class="fu">ggplot</span>(d1.f , <span class="fu">aes</span>(<span class="at">x=</span>x<span class="fl">.1</span>, <span class="at">y=</span>y<span class="fl">.1</span>)) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> new.i, <span class="at">slope =</span> new.slope, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> new.fitted), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>( <span class="at">xend =</span> x<span class="fl">.1</span>, <span class="at">yend =</span> new.fitted))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
 <section id="residuals-2" class="slide level2">
 <h2>Residuals</h2>
 <ul>
@@ -1066,12 +1075,12 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>d1.f <span class="sc">|&gt;</span> </span>
-<span id="cb31-2"><a href="#cb31-2"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">se =</span> F, <span class="at">method =</span> <span class="st">"lm"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>d1.f <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">se =</span> F, <span class="at">method =</span> <span class="st">"lm"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
 <ul>
@@ -1080,12 +1089,12 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>d1.f <span class="sc">|&gt;</span> </span>
-<span id="cb32-2"><a href="#cb32-2"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x<span class="fl">.1</span>, <span class="at">y =</span> .resid)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">se =</span> F, <span class="at">method =</span> <span class="st">"lm"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>d1.f <span class="sc">|&gt;</span> </span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x<span class="fl">.1</span>, <span class="at">y =</span> .resid)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">se =</span> F, <span class="at">method =</span> <span class="st">"lm"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
 <ul>
@@ -1094,12 +1103,12 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>d1.f <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x<span class="fl">.1</span>, <span class="at">y =</span> .fitted)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">se =</span> F, <span class="at">method =</span> <span class="st">"lm"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>d1.f <span class="sc">|&gt;</span> </span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x<span class="fl">.1</span>, <span class="at">y =</span> .fitted)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">se =</span> F, <span class="at">method =</span> <span class="st">"lm"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
 <section id="sigma" class="slide level2">
 <h2>Sigma</h2>
 <ul>

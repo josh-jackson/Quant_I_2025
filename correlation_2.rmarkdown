@@ -11,8 +11,6 @@ html:
   scrollable: true
 ---
 
-
-
 ```{r}
 #| code-fold: true
 library(tidyverse) # for pipes and plots
@@ -21,6 +19,7 @@ library(kableExtra) # for tables
 library(psych)
 library(MASS)
 ```
+
 
 
 ## Why do we describe data?
@@ -41,19 +40,23 @@ The dataset is available on our GitHub site, for those who want to play along at
 
 ---
 
+
 ```{r}
 #| code-fold: true
 world = read.csv("world_happiness_2015.csv")
 head(world)
 ```
 
+
 ---
+
 
 
 ```{r}
 #| code-fold: true
 names(world)
 ```
+
 
 
 **Happiness**: “Please imagine a ladder, with steps numbered from 0 at the bottom to 10 at the top. 
@@ -76,11 +79,13 @@ names(world)
 
 A **distribution** often refers to a description of the [relative] number of times a variable X will take each of its unique values. 
 
+
 ```{r}
 #| code-fold: true
 hist(world$Happiness, breaks = 30, main = "Distribution of happiness scores", 
      xlab = "Happiness")
 ```
+
 
 
 ## Moments of a distribution
@@ -108,9 +113,11 @@ $$\mu = \frac{\Sigma(x_i)}{N}=\frac{7+7+8+3+9+2}{6}$$
 --------
 
 
+
 ```{r}
 mean(world$Happiness)
 ```
+
 
 
 ## dispersion
@@ -124,6 +131,7 @@ mean(world$Happiness)
 
 ## Average deviation
 
+
 ```{r}
 #| code-fold: true
 x = c(7,7,8,3,9,2)
@@ -133,9 +141,11 @@ sum(x - mean(x))
 sum(x - mean(x))/length(x)
 ```
 
+
 ## Sums of squares
 
 Our solution is to square deviations.
+
 
 ```{r}
 #| code-fold: true
@@ -146,10 +156,12 @@ deviation^2
 sum(deviation^2)
 ```
 
+
 $$SS = {\sum{(x-\bar{x})^2}}$$
 
 
 -----------
+
 
 ```{r}
 sum((x - mean(x))^2)
@@ -161,9 +173,11 @@ sum((world$Happiness - mean(world$Happiness))^2)
 
 
 
+
 ## Variance
 
 We calculate the average squared deviation: this is our variance, $\sigma^2$:
+
 
 ```{r}
 #| code-fold: true
@@ -176,7 +190,9 @@ sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness)
 
 
 
+
 ## Variance
+
 
 ```{r}
 #| code-fold: true
@@ -186,9 +202,11 @@ ggplot(world) + geom_density(aes(x = Happiness)) +
 ```
 
 
+
 ## Standard Deviation
 
 **Standard deviation $\sigma$** is the square root of the variance. 
+
 
 ```{r}
 #| code-fold: true
@@ -200,7 +218,9 @@ sqrt(sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness))
 ```
 
 
+
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -264,6 +284,7 @@ ggplot(all_data, aes(x = value, color = distribution, fill = distribution)) +
 
 
 
+
   
 ## Skew and Kurtosis
   
@@ -281,10 +302,12 @@ ggplot(all_data, aes(x = value, color = distribution, fill = distribution)) +
 
 -----------
 
+
 ```{r}
 ggplot(world) + geom_density(aes(x = Life)) +
   ylab("Density") 
 ```
+
 
 
 
@@ -319,6 +342,7 @@ ggplot(world) + geom_density(aes(x = Life)) +
 - Variance (and standard deviation) are *biased* estimators when applied to samples. They will *underestimate* variability in the population. 
 
 
+
 ```{r}
 sqrt(sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness))
 ```
@@ -326,6 +350,7 @@ sqrt(sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness))
 ```{r}
 sd(world$Happiness)
 ```
+
 
 ----------
 
@@ -348,6 +373,7 @@ $$s = \hat{\sigma} = \sqrt{\frac{\Sigma(X_i-\bar{X})^2}{N-1}}$$]
 
 
 ## Simulation
+
 
 ```{r}
 #| code-fold: true
@@ -394,6 +420,7 @@ var_estimates %>%
 ```
 
 
+
 ## Standardized scores (z-scores)
 
 $$ z = \frac{x_i - \bar{x}}{s} $$
@@ -405,6 +432,7 @@ Scores interpreted as distance from the mean, in standard deviations.
 
 
 ## Simulation
+
 
 ```{r}
 #| code-fold: true
@@ -455,9 +483,11 @@ ggplot(plot_data, aes(x = value, fill = type, color = type)) +
 ```
 
 
+
 ------------
 
 DOES NOT CHANGE SHAPE OF DATA
+
 
 ```{r}
 #| code-fold: true
@@ -497,16 +527,19 @@ ggplot(plot_data, aes(x = value, fill = type, color = type)) +
 ```
 
 
+
 ## Associations
 
 - i.e., relationships
 - to look at how to variable relate to one another we need to think in terms of how associated they are
 - If you know one, can you make a better than chance guess at the other? 
 
+
 ```{r}
 #| code-fold: true
 world %>% ggplot(aes(x = Happiness, y = Life)) + geom_point(size = 3) + theme_bw()
 ```
+
 
 
 ## Covariation (cross products)
@@ -533,9 +566,11 @@ $$\large \sigma_{xy} = {\frac{\sum{(x-\mu_{x})(y-\mu_{y})}}{N}}$$
 
 -----------
 
+
 ```{r}
 cov(world$Happiness, world$Life,  use = "complete.obs")
 ```
+
 
 
 ## Correlation
@@ -551,9 +586,11 @@ $$\large \rho_{xy} = {\frac{\sigma_{xy}}{\sigma_{x}\sigma_{y}}}$$
 
 ## Correlation
 
+
 ```{r}
 cor(world$Happiness, world$Life,  use = "complete.obs")
 ```
+
 
 ## Correlation
 
@@ -597,19 +634,23 @@ Which variable, $Y$ or $Z$, does $X$ have greater relationship with?
 
 ## Correlation table
 
+
 ```{r}
 library(correlation)
 results <- correlation(world)
 summary(results, redundant = TRUE)
 ```
 
+
 -------------
+
 
 ```{r}
 results <- correlation(world)
 summary(results, redundant = TRUE) |> 
   plot()
 ```
+
 
 
 ## Correlation
@@ -633,6 +674,7 @@ Moment = variance is the second moment of a distribution
 
 ---
 
+
 ```{r}
 #| code-fold: true
 set.seed(101019) # so we all get the same random numbers
@@ -648,6 +690,7 @@ colnames(data) = c("x", "y")
 data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
+
 What is the correlation between these two variables?
 
 ---
@@ -655,6 +698,7 @@ What is the correlation between these two variables?
 Correlation = `r round(cor(data$x, data$y),2)`
 
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -671,15 +715,18 @@ colnames(data) = c("x", "y")
 data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
+
 What is the correlation between these two variables?
 
 
 ---
 
+
 ```{r}
 #| code-fold: true
 cor(data$x, data$y)
 ```
+
 
 
 
@@ -729,6 +776,7 @@ From Ozer & Funder (2019)
 ## Correlations
 
 
+
 ```{r}
 #| code-fold: true
 galton.data <- psychTools::galton
@@ -742,7 +790,9 @@ ggplot(galton.data, aes(x=parent, y=child)) +
 
 
 
+
 ## Visualizing correlations
+
 
 ```{r}
 #| code-fold: true
@@ -758,7 +808,9 @@ datasaurus_dozen %>%
 ```
 
 
+
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -772,7 +824,9 @@ datasaurus_dozen %>%
   theme_bw(base_size = 15)
 ```
 
+
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -786,7 +840,9 @@ datasaurus_dozen %>%
   theme_bw(base_size = 15)
 ```
 
+
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -801,7 +857,9 @@ datasaurus_dozen %>%
 ```
 
 
+
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -816,7 +874,9 @@ datasaurus_dozen %>%
 ```
 
 
+
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -830,7 +890,9 @@ datasaurus_dozen %>%
   theme_bw(base_size = 15)
 ```
 
+
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -844,7 +906,9 @@ datasaurus_dozen %>%
   theme_bw(base_size = 15)
 ```
 
+
 ---
+
 
 ```{r}
 #| code-fold: true
@@ -857,3 +921,4 @@ datasaurus_dozen %>%
                            "R = -.06"))) +
   theme_bw(base_size = 15)
 ```
+

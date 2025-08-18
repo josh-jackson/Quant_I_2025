@@ -3,14 +3,12 @@ title: "Syllabus"
 format: html
 ---
 
+
+
+
 # Text books
 
 - LSR readings can be found in the free, online textbook, [*Learning Statistics with R*](https://learningstatisticswithr-bookdown.netlify.com/index.html) by Danielle Navarro.
-
-
-- Statistical thinking for the 21st century. By Russell A. Poldrack
-[Statistical thinking for the 21st century](https://statsthinking21.github.io/statsthinking21-core-site/) 
-
 
 
 
@@ -18,33 +16,33 @@ format: html
 
 | Week | Date | Topic | Readings | HW Due |
 |:--:|:--:|:--:|:--:|:--:|
-| 1 | 8/26 | Models |  |  |
-| \- | 8/28 | Describing data  |  |  |
-| 2 | 9/2 |  GLM basics  |  |  |
-| \- | 9/4 | Probability distributions |  |  |
+| 1 | 8/26 | Models | ST 5 - 5.4; LSR 1-4,7 skim/review |  |
+| \- | 8/28 | Describing data  | LSR 5 |  |
+| 2 | 9/2 |  GLM basics  | LSR 15 - 15.2|  |
+| \- | 9/4 | Probability distributions |LSR 9 |  |
 | 3 | 9/9 | Probability distributions |  | HW 1 due |
-| \- | 9/11 | Estimation, Likelihood & Loss   |  |  |
+| \- | 9/11 | Estimation, Likelihood & Loss   | 15.4 -  |  |
 | 4 | 9/16 |  Estimation, Likelihood & Loss     |  |  |
-| \- | 9/18 | Simple regressions (1 predictor and t-tests) |  |  |
+| \- | 9/18 | Simple regressions (1 predictor and t-tests) | LSR 13 |  |
 | 5 | 9/23 |  **Exam 1** |  |  |
-| \- | 9/25 | Statistical inference part 1 (Sampling and NHST)  | | HW 2 due |
-| 6 | 9/30 |  Statistical inference part 2 (Estimation) |  |  |
-| \- | 10/2 | Statistical inference part 3 (Model comparisons)  |  |  |
+| \- | 9/25 | Statistical inference part 1 (Sampling and NHST)  | LSR 10 & 11 | HW 2 due |
+| 6 | 9/30 |  Statistical inference part 2 (Estimation) | LSR 15.5 - 15.7 |  |
+| \- | 10/2 | Statistical inference part 3 (Model comparisons)  | LSR 15.10 |  |
 | 7 | 10/7 | *No Class - Fall Break!* |  |  |
 | \- | 10/9 | Simulation and prediction  | |  |
 | 8 | 10/14 |  What can go wrong (Transparency and Open science)|  | |  
-| \- | 10/16 | Assumptions |  |  |
+| \- | 10/16 | Assumptions | LSR 15.8  |  |
 | 9 | 10/21  | Power   |  |  |
-| \- | 10/23 | Visualizing Data   |  |  |
+| \- | 10/23 | Visualizing Data   |LSR 6 |  |
 | 10 | 10/28 | Threats to Validity   |  |  |
 | \- | 10/30 | **Exam 2** |  | HW 3 due |
-| 11 | 11/4 |  3 or more means (ANOVA) |  |
+| 11 | 11/4 |  3 or more means (ANOVA) | LSR 14 |
 | \- | 11/6 |  Multiple comparisons & contrasts |  |  |
-| 12 | 11/11 | Interactions  | |  |
+| 12 | 11/11 | Interactions  | LSR 16 |  |
 | \- | 11/13 | ANCOVA  | |  |
 | 13 | 11/18 | Within-subjects designs |  |  |
 | \- | 11/20 | Binomial and logistic regression   |  | |
-| 14 | 11/25 | Chi-Square test  |  |  |
+| 14 | 11/25 | Chi-Square test  | LSR 12 |  |
 | \- | 11/27 | *No Class – Happy Thanksgiving!* |  |  |
 | 15 | 12/2  | Estimation revisited |  | HW 5 due |
 | \- | 12/4  | **Exam 3** |  |  |
@@ -55,7 +53,14 @@ This course is the first in a two-course sequence that introduces necessary skil
 
 ### Textbook
 
-We will primarily be referring to chapters in [*Learning Statistics with R*](https://learningstatisticswithr-bookdown.netlify.com/index.html) by Danielle Navarro. This textbook is available for free online. You may choose to purchase a paper copy if you wish, but it is not required. Additional readings assignments will be posted here.
+We will primarily be referring to chapters in [*Learning Statistics with R*](https://learningstatisticswithr.com/book/) by Danielle Navarro. [pdf version](https://learningstatisticswithr.com/lsr-0.6.pdf)
+
+- Statistical thinking for the 21st century. By Russell A. Poldrack
+[Statistical thinking for the 21st century](https://statsthinking21.github.io/statsthinking21-core-site/)
+
+
+
+
 
 ### R and RStudio
 
