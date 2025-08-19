@@ -3,15 +3,6 @@ title: "Syllabus"
 format: html
 ---
 
-
-
-
-# Text books
-
-- LSR readings can be found in the free, online textbook, [*Learning Statistics with R*](https://learningstatisticswithr-bookdown.netlify.com/index.html) by Danielle Navarro.
-
-
-
 # Weekly schedule
 
 | Week | Date | Topic | Readings | HW Due |
@@ -55,10 +46,8 @@ This course is the first in a two-course sequence that introduces necessary skil
 
 We will primarily be referring to chapters in [*Learning Statistics with R*](https://learningstatisticswithr.com/book/) by Danielle Navarro. [pdf version](https://learningstatisticswithr.com/lsr-0.6.pdf)
 
-- Statistical thinking for the 21st century. By Russell A. Poldrack
+- Statistical thinking for the 21st century is another good intro book to cover all bases. By Russell A. Poldrack
 [Statistical thinking for the 21st century](https://statsthinking21.github.io/statsthinking21-core-site/)
-
-
 
 
 
@@ -70,8 +59,6 @@ Students must have the latest version of R, which can be downloaded [here](https
 
 While we will be covering the use of R and RStudio extensively, one of the key skills required to use R is the ability to find answers on the Internet. The R community (sometimes referred to as the `useR` or `rstats` community) tends to be friendly and helpful and enjoys solving R-related problems in their spare time. For that reason, many common questions or problems have been posted to spaces online and answered by smart people. Finding and deciphering those answers is the key skill you should seek to hone this year. It's much more important than remembering function names.
 
-**Here's a [resource page](data/resources2021.pdf) to get you going.**
-
 # Graded materials
 
 Your final grade is comprised of three components:
@@ -81,14 +68,14 @@ Your final grade is comprised of three components:
 
 ### Homework assignments
 
-Homework assignments are intended to gauge your ability to apply the topics covered in class to the practice of data analysis. Homework assignments are to be done using R and RMarkdown; completed assignments should be submitted to Canvas. Please submit BOTH your .Rmd and .html file. Please do not use PDF or Word documents. There will be 5 assignments in total, each worth 6% of your grade.
+Homework assignments are intended to gauge your ability to apply the topics covered in class to the practice of data analysis. Homework assignments are to be done using R and Quarto/RMarkdown; completed assignments should be submitted to Canvas. Please submit BOTH your .qmd/.Rmd and an .html file. Please do not use PDF or Word documents. There will be 5 assignments in total, each worth 6% of your grade.
 
-HWs are due at their due date by 9:30am. Grading will go by the following rubric:
+HWs are due at their due date by 12:00am. Grading will go by the following rubric:
 
 -   6/6: Completed all parts of the assignment, and results/interpretations were mostly correct (with maybe a few minor errors along the way)
--   5/6: Completed all parts of the assignment, and \~25% of the results/interpretations are incorrect
--   4/6: Completed all parts of the assignment, however \~50% of the results/interpretations are incorrect
--   4/6: Either parts of the assignment are missing but what is there is correct, OR all parts have been completed but there are substantial issues with the results/interpretation
+-   5/6: Completed all parts of the assignment, and \~5-25% of the results/interpretations are incorrect
+-   4/6: Completed all parts of the assignment, however \~26-40% of the results/interpretations are incorrect
+-   3/6: Either parts of the assignment are missing but what is there is correct, OR all parts have been completed but there are substantial issues with the results/interpretation >40%
 -   2/6: Parts of the assignment are missing, and there are substantial issues with the results/interpretation
 -   1/6: Nearly all of the assignment is missing, but something was turned in
 -   0/6: No assignment submitted
@@ -96,6 +83,7 @@ HWs are due at their due date by 9:30am. Grading will go by the following rubric
 You may work with your peers on homework assignments, with the following caveats:
 
 1.  Your code cannot be 100% identical to your peer's code (trust me, we can tell). It's one thing to work together and consult, but it's another thing to copy someone's assignment. If it is determined that someone copied an entire homework assignment, both parties will be given automatic zero.
+
 2.  If you work with someone, you *must* acknowledge them in the assignment itself.
 
 ### Exams
@@ -125,7 +113,7 @@ All assignments and examinations are mandatory. If you need to miss an exam you 
 & \text{67% - 69.99% = D+} \\
 & \text{63% - 66.99% = D} \\
 & \text{60% - 62.99% = D-} \\
-&\text{< 50% = F}
+&\text{< 60% = F}
 
 \end{split}
 \end{equation}
@@ -133,32 +121,37 @@ All assignments and examinations are mandatory. If you need to miss an exam you 
 
 ### Staying Connected
 
--   We will have a dedicated class Slack work space (see upper right corner of website for link). You can post questions that everyone can see, or make use of direct messaging. Shelly or the AIs will respond to your questions on Slack (if your peers don't respond first!). This is really great for one-off questions, or if you need some quick clarification on something. We will also have a dedicated channel for silly programming and stats memes, because humor is important when you're learning a skill like coding, in which you'll repeatedly fail. Slack is not required *per se*, but it is **highly encouraged**.
-
--   We will occasionally have group discussions. Please engage with those around you.
+-   We will have a dedicated class Slack work space (see upper right corner of website for link). You can post questions that everyone can see, or make use of direct messaging. Josh or the AIs will respond to your questions on Slack (if your peers don't respond first!). This is really great for one-off questions, or if you need some quick clarification on something. We will also have a dedicated channel for silly programming and stats memes, because humor is important when you're learning a skill like coding, in which you'll repeatedly fail. Slack is not required *per se*, but it is **highly encouraged**.
 
 ### Be Considerate and Kind
 
 -   It is OK to not be OK. If you tell me you're having trouble, I'm not going to judge you or think less of you. I hope you will do the same for me. I will work with you to make sure we have a reasonable plan in place should something come up. *However*, this does require you telling me "hey, I'm not OK".
+
 -   You are always welcome to come talk to me about things that you're going through. If I can't help you, I usually know someone who can help -- or I can at least give you some resources and point you in the right direction.
+
 -   If you are struggling or need extra help, please just ask. I promise I will work with you.
 
 ### Attendance & In-person Etiquette
 
 -   I expect all students to be in class if they are able (not sick, not at a conference etc.). The best way to succeed is to come to class. Your chosen profession requires mastery of these skills! Come to class!
-    -   You are adults. Come to class when you can. Let me know when you can't (quick email or Slack is OK).
+
+-   You are adults. Come to class when you can. Let me know when you can't (quick email is OK).
+    
 -   **If you are not feeling well, don't come to class!!** You have access to the slides and you can ask a friend for notes.
+
 -   Most people will have electronics with them in class. Drinks should have a lid on them so that if they spill, we hopefully aren't ruining yours or another person's laptop/tablet/phone etc. Be careful!
 
 
 ### Online Etiquette
 
-There will be a lot of online communication with the instructor, the AI, and your peers. You are expected to maintain a polite and respectful tone in their online discourse. Some things to consider:
+- There will be a lot of online communication with the instructor, the AIs, and your peers. You are expected to maintain a polite and respectful tone in their online discourse. Some things to consider:
 
 -   Any communication shared privately may become public, so be mindful of what you share in discussion boards or chats. This is especially true for sharing any personal and/or identifying information about you or someone else. Do not share any passwords or divulge any personal information (yours or others) that can be used in a malicious manner (phone numbers, addresses etc.).
+
 -   Humor doesn't always translate in an online forum. If you want to make a joke or a sarcastic remark, be 100% sure that it is clear you are joking.
--   Your comments must be readable to everyone. Very common acronyms are OK ("lol" or "haha"). But please refrain from acronyms that are not as well-known ("fwiw" etc.).
+
 -   Treat your classmates, professor, and AIs with kindness and respect. Any indication of online harassment or bullying will not be tolerated and will be reported. This is especially pertinent when giving constructive feedback in code reviews.
+
 -   Please avoid using ALL CAPS because it can be interpreted as yelling.
 
 # Policies & Resources

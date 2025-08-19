@@ -11,6 +11,9 @@ html:
   scrollable: true
 ---
 
+
+
+
 ## Thinking in terms of models
 
 -   Our DV (here forth Y) is what we are trying to understand
@@ -120,6 +123,7 @@ report_sample(d.1)
 ## pop quiz
 
 If I flipped the x and y variables, would I get the same regression coefficient?
+
 
 ## pop quiz #2
 
