@@ -14,7 +14,7 @@ html:
 
 ## This semester
 
-- Build a foundation for statistical inference (glm)
+- Build a foundation for statistical inference (linear regression)
 - How to think about your analyses *before* you collect data
 - Identify common pitfalls in statistical inference
 
@@ -24,16 +24,32 @@ html:
 
 - We will not touch p-values for as long as possible (after first exam)
 
+## Framework for understanding
+
+- People struggle with stats and the analysis of data for two main reasons: 
+ 
+ 1. Jargon. There is no way to avoid that stats is like a second language. 
+ 2. Translation of theory to analysis. This necessitates the integration of experimental design, data collection, and an analytic framework.  
+
 
 ## GLM
 
--   General(ized) Linear Model
+-   General(ized) Linear Model aka linear regression
 
 -   A workhorse that is responsible for \>99% of statistical tests in psychology, as well as the building block of many machine learning models
+
+-   We will use the GLM equation to describe all of our analyses. Basis for communication to others. 
+
 
 ## What do we mean by General(ized)?
 
 -   It is *general* in that it refers to a broad set of similar models that can applied to almost any context
+
+- Serves as the default
+
+## {background-video="https://packaged-media.redd.it/8uql22tz6mb81/pb/m2-res_480p.mp4?m=DASHPlaylist.mpd&v=1&e=1755630000&s=64d199dca3fbecf869a5253e95f6ab5734c5439b"}
+
+
 
 ## What do we mean by linear?
 
@@ -41,20 +57,29 @@ html:
 
 -   A linear combination is a way of combining things (variables) using scalar multiplication and addition
 
-## What is a model?
 
 ## What is a model?
 
--   a representation of the world
--   a **statistical** model uses math to make predictions about the world
 
-------------------------------------------------------------------------
+## What is a model?
 
-**YOU DEFINE THE MODEL**
+-   A representation of the world
+-   A **statistical** model uses math to make predictions and thus learn about the world
+
+
+## YOU DEFINE THE MODEL
+
+- For the DV you care about, what do you think impacts it? What is your theory? 
+
+- We need to collect data to have those variables to put into your model
+
+- Need to then describe how those variables relate to one another
 
 ## Middle School Math
 
-$$ y = mx + b $$ - what is $y$?
+$$ y = mx + b $$ 
+
+-  what is $y$?
 
 -   what is $m$?
 
@@ -64,9 +89,9 @@ $$ y = mx + b $$ - what is $y$?
 
 ## Let's rewrite this
 
-$$y = b_0 + b_{1}X$$
+$$Y = b_0 + b_{1}X$$
 
--   what is $y$?
+-   what is $Y$?
 
 -   what is $b_0$?
 
@@ -76,20 +101,15 @@ $$y = b_0 + b_{1}X$$
 
 ## Are models always right?
 
+![](antmodel.jpg)
+
+
 ## MODELS ARE FLAWED
 
 -   How do we compensate?
 
-## MODELS ARE FLAWED
+$Y = b_0 + b_{1}X + e$
 
--   How do we compensate?
-
-$y = b_0 + b_{1}X + e$
-
-## Models
-
--   What are the goals of modeling?
--   What do you need in order to develop a model?
 
 ## How do we know if a model is good?
 
@@ -97,13 +117,11 @@ $y = b_0 + b_{1}X + e$
 
 ## How will we use models?
 
--   This semester, we will mainly focus on classic statistical tests
+-   This semester, we will mainly focus on classic statistical tests. Every single one of these is a model.
 
--   Every single one of these is a model
+-   Think of a model before you design your experiment. 
 
--   We will also focus on developing your intuition
-
--   When you face new models, come back to these basics
+-   Scaffolding for more complex models. 
 
 ## How can we visualize data to make sense of it?
 
@@ -129,7 +147,7 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
     geom_point(size = 2)
 ```
 
-------------------------------------------------------------------------
+## Models are lines
 
 ```{r}
 #| code-fold: true

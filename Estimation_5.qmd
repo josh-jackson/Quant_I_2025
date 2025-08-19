@@ -196,6 +196,7 @@ k_successes <- 30 # Number of heads
 mle_p = .6
 
 # Create a sequence of candidate p values (from 0 to 1)
+# THIS IS WHAT WE ARE TRYING TO ESTIMATE
 p_values <- seq(0, 1, by = 0.001)
 
 # Calculate the likelihood for each p using dbinom()

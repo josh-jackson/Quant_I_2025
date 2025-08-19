@@ -398,7 +398,7 @@
 <section id="this-semester" class="slide level2">
 <h2>This semester</h2>
 <ul>
-<li>Build a foundation for statistical inference (glm)</li>
+<li>Build a foundation for statistical inference (linear regression)</li>
 <li>How to think about your analyses <em>before</em> you collect data</li>
 <li>Identify common pitfalls in statistical inference</li>
 </ul>
@@ -410,18 +410,33 @@
 <li><p>We will not touch p-values for as long as possible (after first exam)</p></li>
 </ul>
 </section>
+<section id="framework-for-understanding" class="slide level2">
+<h2>Framework for understanding</h2>
+<ul>
+<li>People struggle with stats and the analysis of data for two main reasons:</li>
+</ul>
+<ol type="1">
+<li>Jargon. There is no way to avoid that stats is like a second language.</li>
+<li>Translation of theory to analysis. This necessitates the integration of experimental design, data collection, and an analytic framework.</li>
+</ol>
+</section>
 <section id="glm" class="slide level2">
 <h2>GLM</h2>
 <ul>
-<li><p>General(ized) Linear Model</p></li>
+<li><p>General(ized) Linear Model aka linear regression</p></li>
 <li><p>A workhorse that is responsible for &gt;99% of statistical tests in psychology, as well as the building block of many machine learning models</p></li>
+<li><p>We will use the GLM equation to describe all of our analyses. Basis for communication to others.</p></li>
 </ul>
 </section>
 <section id="what-do-we-mean-by-generalized" class="slide level2">
 <h2>What do we mean by General(ized)?</h2>
 <ul>
-<li>It is <em>general</em> in that it refers to a broad set of similar models that can applied to almost any context</li>
+<li><p>It is <em>general</em> in that it refers to a broad set of similar models that can applied to almost any context</p></li>
+<li><p>Serves as the default</p></li>
 </ul>
+</section>
+<section id="section" class="slide level2" data-background-video="https://packaged-media.redd.it/8uql22tz6mb81/pb/m2-res_480p.mp4?m=DASHPlaylist.mpd&amp;v=1&amp;e=1755630000&amp;s=64d199dca3fbecf869a5253e95f6ab5734c5439b">
+<h2></h2>
 </section>
 <section id="what-do-we-mean-by-linear" class="slide level2">
 <h2>What do we mean by linear?</h2>
@@ -436,18 +451,23 @@
 <section id="what-is-a-model-1" class="slide level2">
 <h2>What is a model?</h2>
 <ul>
-<li>a representation of the world</li>
-<li>a <strong>statistical</strong> model uses math to make predictions about the world</li>
+<li>A representation of the world</li>
+<li>A <strong>statistical</strong> model uses math to make predictions and thus learn about the world</li>
 </ul>
 </section>
-<section class="slide level2">
-
-<p><strong>YOU DEFINE THE MODEL</strong></p>
+<section id="you-define-the-model" class="slide level2">
+<h2>YOU DEFINE THE MODEL</h2>
+<ul>
+<li><p>For the DV you care about, what do you think impacts it? What is your theory?</p></li>
+<li><p>We need to collect data to have those variables to put into your model</p></li>
+<li><p>Need to then describe how those variables relate to one another</p></li>
+</ul>
 </section>
 <section id="middle-school-math" class="slide level2">
 <h2>Middle School Math</h2>
-<p><span class="math display">\[ y = mx + b \]</span> - what is <span class="math inline">\(y\)</span>?</p>
+<p><span class="math display">\[ y = mx + b \]</span></p>
 <ul>
+<li><p>what is <span class="math inline">\(y\)</span>?</p></li>
 <li><p>what is <span class="math inline">\(m\)</span>?</p></li>
 <li><p>what is <span class="math inline">\(x\)</span>?</p></li>
 <li><p>what is <span class="math inline">\(b\)</span>?</p></li>
@@ -455,9 +475,9 @@
 </section>
 <section id="lets-rewrite-this" class="slide level2">
 <h2>Let’s rewrite this</h2>
-<p><span class="math display">\[y = b_0 + b_{1}X\]</span></p>
+<p><span class="math display">\[Y = b_0 + b_{1}X\]</span></p>
 <ul>
-<li><p>what is <span class="math inline">\(y\)</span>?</p></li>
+<li><p>what is <span class="math inline">\(Y\)</span>?</p></li>
 <li><p>what is <span class="math inline">\(b_0\)</span>?</p></li>
 <li><p>what is <span class="math inline">\(b_1\)</span>?</p></li>
 <li><p>what is <span class="math inline">\(X\)</span>?</p></li>
@@ -465,26 +485,14 @@
 </section>
 <section id="are-models-always-right" class="slide level2">
 <h2>Are models always right?</h2>
-</section>
+
+<img data-src="antmodel.jpg" class="r-stretch"></section>
 <section id="models-are-flawed" class="slide level2">
 <h2>MODELS ARE FLAWED</h2>
 <ul>
 <li>How do we compensate?</li>
 </ul>
-</section>
-<section id="models-are-flawed-1" class="slide level2">
-<h2>MODELS ARE FLAWED</h2>
-<ul>
-<li>How do we compensate?</li>
-</ul>
-<p><span class="math inline">\(y = b_0 + b_{1}X + e\)</span></p>
-</section>
-<section id="models" class="slide level2">
-<h2>Models</h2>
-<ul>
-<li>What are the goals of modeling?</li>
-<li>What do you need in order to develop a model?</li>
-</ul>
+<p><span class="math inline">\(Y = b_0 + b_{1}X + e\)</span></p>
 </section>
 <section id="how-do-we-know-if-a-model-is-good" class="slide level2">
 <h2>How do we know if a model is good?</h2>
@@ -495,10 +503,9 @@
 <section id="how-will-we-use-models" class="slide level2">
 <h2>How will we use models?</h2>
 <ul>
-<li><p>This semester, we will mainly focus on classic statistical tests</p></li>
-<li><p>Every single one of these is a model</p></li>
-<li><p>We will also focus on developing your intuition</p></li>
-<li><p>When you face new models, come back to these basics</p></li>
+<li><p>This semester, we will mainly focus on classic statistical tests. Every single one of these is a model.</p></li>
+<li><p>Think of a model before you design your experiment.</p></li>
+<li><p>Scaffolding for more complex models.</p></li>
 </ul>
 </section>
 <section id="how-can-we-visualize-data-to-make-sense-of-it" class="slide level2">
@@ -633,8 +640,8 @@
 
 </div>
 <img data-src="Basics_1_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
+<section id="models-are-lines" class="slide level2">
+<h2>Models are lines</h2>
 <div class="cell">
 <details>
 <summary>Code</summary>

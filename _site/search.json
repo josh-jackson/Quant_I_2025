@@ -4,14 +4,14 @@
     "href": "Basics_1.html#glm",
     "title": "Intro",
     "section": "GLM",
-    "text": "GLM\n\nGeneral(ized) Linear Model\nA workhorse that is responsible for &gt;99% of statistical tests in psychology, as well as the building block of many machine learning models"
+    "text": "GLM\n\nGeneral(ized) Linear Model aka linear regression\nA workhorse that is responsible for &gt;99% of statistical tests in psychology, as well as the building block of many machine learning models\nWe will use the GLM equation to describe all of our analyses. Basis for communication to others."
   },
   {
     "objectID": "Basics_1.html#what-do-we-mean-by-generalized",
     "href": "Basics_1.html#what-do-we-mean-by-generalized",
     "title": "Intro",
     "section": "What do we mean by General(ized)?",
-    "text": "What do we mean by General(ized)?\n\nIt is general in that it refers to a broad set of similar models that can applied to almost any context"
+    "text": "What do we mean by General(ized)?\n\nIt is general in that it refers to a broad set of similar models that can applied to almost any context\nServes as the default"
   },
   {
     "objectID": "Basics_1.html#what-do-we-mean-by-linear",
@@ -32,21 +32,21 @@
     "href": "Basics_1.html#what-is-a-model-1",
     "title": "Intro",
     "section": "What is a model?",
-    "text": "What is a model?\n\na representation of the world\na statistical model uses math to make predictions about the world"
+    "text": "What is a model?\n\nA representation of the world\nA statistical model uses math to make predictions and thus learn about the world"
   },
   {
     "objectID": "Basics_1.html#middle-school-math",
     "href": "Basics_1.html#middle-school-math",
     "title": "Intro",
     "section": "Middle School Math",
-    "text": "Middle School Math\n\\[ y = mx + b \\] - what is \\(y\\)?\n\nwhat is \\(m\\)?\nwhat is \\(x\\)?\nwhat is \\(b\\)?"
+    "text": "Middle School Math\n\\[ y = mx + b \\]\n\nwhat is \\(y\\)?\nwhat is \\(m\\)?\nwhat is \\(x\\)?\nwhat is \\(b\\)?"
   },
   {
     "objectID": "Basics_1.html#lets-rewrite-this",
     "href": "Basics_1.html#lets-rewrite-this",
     "title": "Intro",
     "section": "Let’s rewrite this",
-    "text": "Let’s rewrite this\n\\[y = b_0 + b_{1}X\\]\n\nwhat is \\(y\\)?\nwhat is \\(b_0\\)?\nwhat is \\(b_1\\)?\nwhat is \\(X\\)?"
+    "text": "Let’s rewrite this\n\\[Y = b_0 + b_{1}X\\]\n\nwhat is \\(Y\\)?\nwhat is \\(b_0\\)?\nwhat is \\(b_1\\)?\nwhat is \\(X\\)?"
   },
   {
     "objectID": "Basics_1.html#are-models-always-right",
@@ -60,7 +60,7 @@
     "href": "Basics_1.html#models-are-flawed",
     "title": "Intro",
     "section": "MODELS ARE FLAWED",
-    "text": "MODELS ARE FLAWED\n\nHow do we compensate?"
+    "text": "MODELS ARE FLAWED\n\nHow do we compensate?\n\n\\(Y = b_0 + b_{1}X + e\\)"
   },
   {
     "objectID": "Basics_1.html#models-are-flawed-1",
@@ -88,7 +88,7 @@
     "href": "Basics_1.html#how-will-we-use-models",
     "title": "Intro",
     "section": "How will we use models?",
-    "text": "How will we use models?\n\nThis semester, we will mainly focus on classic statistical tests\nEvery single one of these is a model\nWe will also focus on developing your intuition\nWhen you face new models, come back to these basics"
+    "text": "How will we use models?\n\nThis semester, we will mainly focus on classic statistical tests. Every single one of these is a model.\nThink of a model before you design your experiment.\nScaffolding for more complex models."
   },
   {
     "objectID": "Basics_1.html#how-can-we-visualize-data-to-make-sense-of-it",
@@ -830,7 +830,7 @@
     "href": "Estimation_5.html#binomial-likelihood",
     "title": "Estimation",
     "section": "Binomial likelihood",
-    "text": "Binomial likelihood\n\n\nCode\nlibrary(ggplot2)\n# Our observed data from the experiment\nn_trials &lt;- 50\nk_successes &lt;- 30 # Number of heads\nmle_p = .6\n\n# Create a sequence of candidate p values (from 0 to 1)\np_values &lt;- seq(0, 1, by = 0.001)\n\n# Calculate the likelihood for each p using dbinom()\n# dbinom(x, size, prob) calculates P(X=x) for a binomial distribution\nlikelihoods &lt;- dbinom(x = k_successes, size = n_trials, prob = p_values)\n\n# Store the results in a data frame\nlikelihood_df &lt;- data.frame(p = p_values, likelihood = likelihoods)\n\n# Load the ggplot2 library for nice plots\nlibrary(ggplot2)\n\nggplot(likelihood_df, aes(x = p, y = likelihood)) +\n  geom_line(color = \"blue\", size = 1) +\n  # Add a vertical line at the MLE to highlight the peak\n  geom_vline(xintercept = mle_p, linetype = \"dashed\", color = \"black\") +\n  labs(\n    title = \"Binomial Likelihood Function for Coin Flips\",\n    subtitle = \"Likelihood of p given k=30 heads in n=50 flips\",\n    x = \"Candidate Probability of Heads (p)\",\n    y = \"Likelihood\"\n  ) +\n  theme_minimal()"
+    "text": "Binomial likelihood\n\n\nCode\nlibrary(ggplot2)\n# Our observed data from the experiment\nn_trials &lt;- 50\nk_successes &lt;- 30 # Number of heads\nmle_p = .6\n\n# Create a sequence of candidate p values (from 0 to 1)\n# THIS IS WHAT WE ARE TRYING TO ESTIMATE\np_values &lt;- seq(0, 1, by = 0.001)\n\n# Calculate the likelihood for each p using dbinom()\n# dbinom(x, size, prob) calculates P(X=x) for a binomial distribution\nlikelihoods &lt;- dbinom(x = k_successes, size = n_trials, prob = p_values)\n\n# Store the results in a data frame\nlikelihood_df &lt;- data.frame(p = p_values, likelihood = likelihoods)\n\n# Load the ggplot2 library for nice plots\nlibrary(ggplot2)\n\nggplot(likelihood_df, aes(x = p, y = likelihood)) +\n  geom_line(color = \"blue\", size = 1) +\n  # Add a vertical line at the MLE to highlight the peak\n  geom_vline(xintercept = mle_p, linetype = \"dashed\", color = \"black\") +\n  labs(\n    title = \"Binomial Likelihood Function for Coin Flips\",\n    subtitle = \"Likelihood of p given k=30 heads in n=50 flips\",\n    x = \"Candidate Probability of Heads (p)\",\n    y = \"Likelihood\"\n  ) +\n  theme_minimal()"
   },
   {
     "objectID": "Estimation_5.html#binomial-loglikelihood",
@@ -865,7 +865,7 @@
     "href": "Basics_1.html#this-semester",
     "title": "Intro",
     "section": "This semester",
-    "text": "This semester\n\nBuild a foundation for statistical inference (glm)\nHow to think about your analyses before you collect data\nIdentify common pitfalls in statistical inference"
+    "text": "This semester\n\nBuild a foundation for statistical inference (linear regression)\nHow to think about your analyses before you collect data\nIdentify common pitfalls in statistical inference"
   },
   {
     "objectID": "Basics_1.html#an-aside-on-p-values",
@@ -943,5 +943,26 @@
     "title": "Data Description and Correlations",
     "section": "Correlation",
     "text": "Correlation\nPearson product moment correlation\nPopulation\n\\[\\rho_{XY} = \\frac{\\Sigma z_Xz_Y}{N} = \\frac{Cov_{xy}}{\\sqrt{SS_X}\\sqrt{SS_Y}} = \\frac{\\sigma_{XY}}{\\sigma_X \\sigma_Y}\\] Sample \\[r_{XY} = \\frac{\\Sigma z_Xz_Y}{n-1} = \\frac{SP}{\\sqrt{SS_X}\\sqrt{SS_Y}} = \\frac{s_{XY}}{s_X s_Y}\\]"
+  },
+  {
+    "objectID": "Basics_1.html#framework-for-understanding",
+    "href": "Basics_1.html#framework-for-understanding",
+    "title": "Intro",
+    "section": "Framework for understanding",
+    "text": "Framework for understanding\n\nPeople struggle with stats and the analysis of data for two main reasons:\n\n\nJargon. There is no way to avoid that stats is like a second language.\nTranslation of theory to analysis. This necessitates the integration of experimental design, data collection, and an analytic framework."
+  },
+  {
+    "objectID": "Basics_1.html#you-define-the-model",
+    "href": "Basics_1.html#you-define-the-model",
+    "title": "Intro",
+    "section": "YOU DEFINE THE MODEL",
+    "text": "YOU DEFINE THE MODEL\n\nFor the DV you care about, what do you think impacts it? What is your theory?\nWe need to collect data to have those variables to put into your model\nNeed to then describe how those variables relate to one another"
+  },
+  {
+    "objectID": "Basics_1.html#models-are-lines",
+    "href": "Basics_1.html#models-are-lines",
+    "title": "Intro",
+    "section": "Models are lines",
+    "text": "Models are lines\n\n\nCode\nggplot(d1.f , aes(x=x.1, y=y.1)) +\n    geom_point(size = 2) +\n  geom_smooth(method = lm, se = FALSE)"
   }
 ]
