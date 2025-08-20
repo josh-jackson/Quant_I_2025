@@ -7,7 +7,7 @@ format: html
 
 | Week | Date | Topic | Readings | HW Due |
 |:--:|:--:|:--:|:--:|:--:|
-| 1 | 8/26 | Models | ST 5 - 5.4; LSR 1-4,7 skim/review |  |
+| 1 | 8/26 | Models | ST 5 - 5.4; LSR 1-4,7|  |
 | \- | 8/28 | Describing data  | LSR 5 |  |
 | 2 | 9/2 |  GLM basics  | LSR 15 - 15.2|  |
 | \- | 9/4 | Probability distributions |LSR 9 |  |
@@ -31,7 +31,7 @@ format: html
 | \- | 11/6 |  Multiple comparisons & contrasts |  |  |
 | 12 | 11/11 | Interactions  | LSR 16 |  |
 | \- | 11/13 | ANCOVA  | |  |
-| 13 | 11/18 | Within-subjects designs |  |  |
+| 13 | 11/18 | Within-subjects designs |  | HW 4 due |
 | \- | 11/20 | Binomial and logistic regression   |  | |
 | 14 | 11/25 | Chi-Square test  | LSR 12 |  |
 | \- | 11/27 | *No Class – Happy Thanksgiving!* |  |  |
@@ -95,28 +95,30 @@ There will be 3 exams. They will test both your theoretical understanding of con
 
 All assignments and examinations are mandatory. If you need to miss an exam you must get in touch with me as soon as possible. Rescheduling of exams will be considered on a case by case basis, but I am *not* required to approve a rescheduled exam.
 
-\begin{equation}
-\begin{split}
 
-& \text{93% >=  A} \\
-& \text{90% - 92.99% = A-} \\
-& \text{87% - 89.99% = B+} \\
-& \text{83% - 86.99% = B} \\
-& \text{80% - 82.99% = B-} \\
-& \text{77% - 79.99% = C+} \\
+ $$\text{93 >=  A}$$ 
+ $$\text{90 - 92.99 = A-}  $$
+ 
+ $$\text{87 - 89.99 = B+} $$
 
-\end{split}
+ $$\text{83 - 86.99 = B} $$
 
-\begin{split}
-& \text{73% - 76.99% = C} \\
-& \text{70% - 72.99% = C-} \\
-& \text{67% - 69.99% = D+} \\
-& \text{63% - 66.99% = D} \\
-& \text{60% - 62.99% = D-} \\
-&\text{< 60% = F}
+$$\text{80 - 82.99 = B-} $$
 
-\end{split}
-\end{equation}
+$$\text{77 - 79.99 = C+}$$
+
+$$\text{73 - 76.99 = C} $$
+
+$$\text{70 - 72.99 = C-}$$
+
+$$\text{67 - 69.99 = D+}$$
+
+$$\text{63 - 66.99 = D}$$
+
+ $$\text{60 - 62.99 = D-}$$
+
+$$\text{< 60 = F}$$
+
 
 
 ### Staying Connected
