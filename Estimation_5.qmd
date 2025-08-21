@@ -285,7 +285,7 @@ grid
 
 ## Log Likelihood example
 
--   Need to calcualte the log likelihood of our data (each child’s height) assuming each part of our grid is true.
+-   Need to calculate the log likelihood of our data (each child’s height) assuming each part of our grid is true.
 
 -   Take the first line of our grid (mu = 66, sigma = 2) so we can see how likely each child (all 928) by dnorm(height, 66, 2)
 
@@ -315,6 +315,7 @@ p_grid <-
 
 
 ```{r}
+#| code-fold: true
 library(viridis)
 p_grid %>% 
   ggplot(aes(x = mu, y = sigma, fill = log_likelihood)) + 
@@ -329,6 +330,7 @@ p_grid %>%
 -------------------------
 
 ```{r}
+#| code-fold: true
 library(tidybayes)
 p_grid %>% 
   ggplot(aes(x = mu, y = log_likelihood )) + 
@@ -339,6 +341,7 @@ p_grid %>%
 
 
 ```{r}
+#| code-fold: true
 p_grid %>% 
   ggplot(aes(x = sigma, y = log_likelihood )) + 
     stat_lineribbon(.width = c(0), alpha = .4) +  theme(legend.position="none")
@@ -348,18 +351,274 @@ p_grid %>%
 ----------
 
 ```{r}
+#| code-fold: true
 library(report)
 report_sample(galton.data$child)
 ```
 
+## Maximum Likelihood
 
+```{r}
+#| code-fold: true
+# Load the ggplot2 library for plotting
+library(ggplot2)
+
+# --- 1. Generate Sample Data ---
+set.seed(42) # For reproducibility
+n <- 100
+true_beta0 <- 10  # True intercept
+true_beta1 <- 2   # True slope
+true_sigma <- 5   # True standard deviation of the error
+
+x <- 1:n
+errors <- rnorm(n, mean = 0, sd = true_sigma)
+y <- true_beta0 + true_beta1 * x + errors
+
+# --- 2. Define the Log-Likelihood Function ---
+# This function calculates the total log-likelihood for a given set of parameters.
+# params is a vector: c(beta0, beta1, sigma)
+log_likelihood <- function(params, x, y) {
+  beta0 <- params[1]
+  beta1 <- params[2]
+  sigma <- params[3]
+  
+  # Ensure sigma is positive, otherwise, the density is undefined
+  if (sigma <= 0) return(-Inf)
+
+  # Calculate the predicted values for y
+  y_pred <- beta0 + beta1 * x
+
+  # Calculate the log-likelihood using the normal distribution's PDF.
+  # dnorm() with log = TRUE calculates the log-probability density of each residual.
+  ll <- sum(dnorm(y, mean = y_pred, sd = sigma, log = TRUE))
+  
+  return(ll)
+}
+
+# --- 3. Set Up and Run the Grid Search ---
+# To make sure our grid is in the right area, we can center it around the OLS estimates.
+ols_fit <- lm(y ~ x)
+
+# Define a range of plausible values for each parameter
+beta0_grid <- seq(coef(ols_fit)[1] - 2, coef(ols_fit)[1] + 2, length.out = 50)
+beta1_grid <- seq(coef(ols_fit)[2] - 0.1, coef(ols_fit)[2] + 0.1, length.out = 50)
+sigma_grid <- seq(sigma(ols_fit) - 2, sigma(ols_fit) + 2, length.out = 50)
+
+# Create a data frame containing every combination of parameters
+param_grid <- expand.grid(beta0 = beta0_grid, beta1 = beta1_grid, sigma = sigma_grid)
+
+# Calculate the log-likelihood for each combination in the grid. This may take a moment.
+log_likelihood_values <- apply(param_grid, 1, log_likelihood, x = x, y = y)
+param_grid$ll <- log_likelihood_values
+
+# Find the row in the grid with the maximum log-likelihood
+mle_grid_estimate <- param_grid[which.max(param_grid$ll), ]
+
+param_grid
+```
+
+## magic is here
+
+```{r, eval = F}
+dnorm(y, mean = y_pred, sd = sigma, log = TRUE)
+```
+
+- Our data are fixed as we collected them. We test out which ones make better predictions by trying out different parameters, which will change the y_pred. Asks: How likely is y, using different parameters L($\theta$|d). 
+
+```{r}
+#better guess! 
+dnorm(20, mean = 25, sd = 3.23, log = TRUE)
+```
+
+```{r}
+dnorm(20, mean = 40, sd = 3.23, log = TRUE)
+```
+
+---------
+
+```{r}
+print(mle_grid_estimate)
+```
+
+```{r}
+coef(ols_fit)
+```
+
+```{r}
+sigma(ols_fit)
+```
+
+
+---------
+
+```{r}
+#| code-fold: true
+# Filter the grid to only include the slice with the best sigma value
+surface_data <- subset(param_grid, sigma == mle_grid_estimate$sigma)
+
+ggplot(surface_data, aes(x = beta0, y = beta1, fill = ll)) +
+  geom_tile() + # Creates the heatmap
+  scale_fill_viridis_c() + # A visually appealing color scale
+  # Add a point to mark the maximum
+  geom_point(data = mle_grid_estimate, aes(x = beta0, y = beta1), 
+             color = "red", size = 4, shape = 4, stroke = 1.5) +
+  labs(
+    title = "Log-Likelihood Surface",
+    subtitle = "Red 'X' marks the Maximum Likelihood Estimate from the grid search",
+    x = "Intercept (beta0)",
+    y = "Slope (beta1)",
+    fill = "Log-Likelihood"
+  ) +
+  theme_minimal()
+```
+
+
+
+
+
+## The importance of probability distributions
+
+- Regardless of the complexity of the model, we are going to use probability distributions to calculate estimates like these. 
+
+- We define our parameter estimates as the ones that are most "likely," which is a direct consequence of our assumed probability distribution. 
 
 
 ## Our best guess is still a guess
 
 - Given the data we've observed, how plausible are different values for the parameters of our model?
 
-- OLS and ML give us the "best guess". How confident are we in that guess? We always have to remember the uncertainty in estimates. This is found via our standard errors, which we will talk about later. 
+- OLS and ML give us the "best guess". How confident are we in that guess? We always have to remember uncertainty in estimates. This is found via our standard error. 
+
+-------
+
+```{r}
+#| code-fold: true
+# For each parameter, group by its values and find the max log-likelihood
+profile_beta0 <- param_grid %>%
+  group_by(beta0) %>%
+  summarize(max_ll = max(ll))
+
+profile_beta1 <- param_grid %>%
+  group_by(beta1) %>%
+  summarize(max_ll = max(ll))
+
+profile_sigma <- param_grid %>%
+  group_by(sigma) %>%
+  summarize(max_ll = max(ll))
+
+# --- 5. Create the Individual Plots ---
+
+# Plot for beta0
+plot_b0 <- ggplot(profile_beta0, aes(x = beta0, y = max_ll)) +
+  geom_line() +
+  geom_vline(xintercept = mle_grid_estimate$beta0, linetype = "dashed") +
+  labs(title = "Profile Likelihood for Intercept (β₀)", x = "Intercept Value", y = "Max Log-Likelihood") +
+  theme_minimal()
+
+# Plot for beta1
+plot_b1 <- ggplot(profile_beta1, aes(x = beta1, y = max_ll)) +
+  geom_line() +
+  geom_vline(xintercept = mle_grid_estimate$beta1,  linetype = "dashed") +
+  labs(title = "Likelihood for Slope (β)", x = "Slope Value", y = "Max Log-Likelihood") +
+  theme_minimal()
+
+# Plot for sigma
+plot_sigma <- ggplot(profile_sigma, aes(x = sigma, y = max_ll)) +
+  geom_line() +
+  geom_vline(xintercept = mle_grid_estimate$sigma, linetype = "dashed") +
+  labs(title = "Profile Likelihood for Error (σ)", x = "Sigma Value", y = "Max Log-Likelihood") +
+  theme_minimal()
+
+# --- 6. Combine the plots with patchwork ---
+plot_b1 
+```
+
+## Standard error
+
+- Indexes how much credence we should put into our estimate. Provides an estimate of precision. 
+
+- For regression coefficients, three components matter: 
+
+1. Sigma. If the data are tightly clustered along the regression line, the line's position is well-defined. If they are widely scattered, many different lines could fit reasonably well. 
+
+
+
+------
+
+2. Variance of X provides stability
+
+```{r}
+#| code-fold: true
+library(patchwork)
+
+# Define the True Parameters 
+n <- 100                 # Number of observations
+true_beta0 <- 5         # True intercept
+true_beta1 <- 2.5        # True slope 
+true_sigma <- 5          # True standard deviation of the error
+
+# Generate the Data
+x1 <- runif(n, min = 0, max = 10)
+x2 <- runif(n, min = 4, max = 7)
+errors <- rnorm(n, mean = 0, sd = true_sigma)
+y1 <- true_beta0 + true_beta1 * x1 + errors
+y2 <- true_beta0 + true_beta1 * x2 + errors
+
+
+# Combine into a data frame
+simulated_data <- data.frame(Y = y1, X1 = x1, x2 = x2, y2 = y2)
+
+
+
+p1 <- ggplot(simulated_data, aes(x = x1, y = y1)) +
+  geom_point() +
+  geom_smooth(method='lm', se = F, formula= y~x) +xlim(0,10)
+
+p2 <- ggplot(simulated_data, aes(x = x2, y = y2)) +
+  geom_point() +
+  geom_smooth(method='lm', se = F, , fullrange = TRUE, formula= y~x)+xlim(0,10)
+
+p1/p2
+
+```
+
+## Standard error
+
+$$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
+
+
+- Reminder: residual standard error is our estimate of sigma
+
+- Smaller sigma and/or greater variability in X means more precision in our estimate
+
+## Standard error
+
+```{r}
+#| code-fold: true
+library(easystats)
+s1 <- lm(Y ~ x1, simulated_data)
+model_parameters(s1)
+```
+
+
+```{r}
+#| code-fold: true
+# ignore code
+library(brms)
+library(tidybayes)
+b1 <-brm(Y ~ X1, data = simulated_data, file = "b1")
+b1 %>%
+  spread_draws(b_X1) %>%
+  ggplot(aes(x = b_X1)) +
+  stat_halfeye(.width = c(0.95)) + theme(
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+```
+
+
+
 
 
 ## Model fit

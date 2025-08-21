@@ -395,13 +395,21 @@
 </div>
 
 </section>
+<section id="this-time" class="slide level2">
+<h2>This time</h2>
+<ul>
+<li>Getting comformatable with regression/glm</li>
+<li>More in depth on each component of the model</li>
+</ul>
+</section>
 <section id="thinking-in-terms-of-models" class="slide level2">
 <h2>Thinking in terms of models</h2>
 <ul>
 <li><p>Our DV (here forth Y) is what we are trying to understand</p></li>
 <li><p>We hypothesize it has some relationship with your IV(s) (here forth Xs), with what is left over described as error (E)</p></li>
 </ul>
-<p><span class="math inline">\(y = b_0 + b_{1}X + e\)</span></p>
+<p><span class="math inline">\(Y = b_0 + b_{1}X + e\)</span></p>
+<p><em>- Your model is how you think the world works</em></p>
 </section>
 <section id="how-can-we-visualize-data-to-make-sense-of-it" class="slide level2">
 <h2>How can we visualize data to make sense of it?</h2>
@@ -580,6 +588,9 @@
   0.2943939   0.4450568 </code></pre>
 </div>
 </div>
+<ul>
+<li>Estimates are specific values for our coefficients (B or <span class="math inline">\(\hat{\beta}\)</span>) which represent our best <em>guess</em> of the true population parameter (<span class="math inline">\(\beta\)</span>)</li>
+</ul>
 </section>
 <section id="how-to-interpret-regression-estimates" class="slide level2">
 <h2>How to interpret regression estimates</h2>
@@ -636,16 +647,17 @@ Mean y.1 (SD) | 0.33 (1.97)</code></pre>
 </section>
 <section id="pop-quiz-2" class="slide level2">
 <h2>pop quiz #2</h2>
-<p>What would the regression coefficient be if I standardized (z-scored) the variables?</p>
+<p>What would the regression coefficient be if I standardized (z-scored) the variables? The intercept?</p>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>d<span class="fl">.2</span> <span class="ot">&lt;-</span> d<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">mutate</span>(<span class="at">x.z =</span> (x<span class="fl">.1</span> <span class="sc">-</span> <span class="fu">mean</span>(x<span class="fl">.1</span>))<span class="sc">/</span><span class="fu">sd</span>(x<span class="fl">.1</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">mutate</span>(<span class="at">y.z =</span> (y<span class="fl">.1</span> <span class="sc">-</span> <span class="fu">mean</span>(y<span class="fl">.1</span>))<span class="sc">/</span><span class="fu">sd</span>(y<span class="fl">.1</span>))</span>
-<span id="cb13-4"><a href="#cb13-4"></a></span>
-<span id="cb13-5"><a href="#cb13-5"></a>d<span class="fl">.2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#standardized by hand</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>d<span class="fl">.2</span> <span class="ot">&lt;-</span> d<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">mutate</span>(<span class="at">x.z =</span> (x<span class="fl">.1</span> <span class="sc">-</span> <span class="fu">mean</span>(x<span class="fl">.1</span>))<span class="sc">/</span><span class="fu">sd</span>(x<span class="fl">.1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">mutate</span>(<span class="at">y.z =</span> (y<span class="fl">.1</span> <span class="sc">-</span> <span class="fu">mean</span>(y<span class="fl">.1</span>))<span class="sc">/</span><span class="fu">sd</span>(y<span class="fl">.1</span>))</span>
+<span id="cb13-5"><a href="#cb13-5"></a></span>
+<span id="cb13-6"><a href="#cb13-6"></a>d<span class="fl">.2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             x.1         y.1         x.z         y.z
 1   -0.560475647 -1.22907473 -0.71304802 -0.79220677
@@ -777,7 +789,7 @@ x z         |        0.21 | 0.10 | [ 0.01, 0.40] |      2.08 | 0.040 </code></pr
 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>d<span class="fl">.3</span> <span class="ot">&lt;-</span> d<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">mutate</span>(<span class="at">x.5 =</span> (x<span class="fl">.1</span> <span class="sc">+</span> <span class="dv">5</span>) )</span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">mutate</span>(<span class="at">x.5 =</span> (x<span class="fl">.1</span> <span class="sc">+</span> <span class="dv">5</span>) ) </span>
 <span id="cb17-3"><a href="#cb17-3"></a>d<span class="fl">.3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             x.1         y.1      x.5
@@ -934,6 +946,7 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 </div>
 <ul>
 <li>Only the intercept changes. Not the slope.</li>
+<li>What happens if we add 5 to Y variable?</li>
 </ul>
 </section>
 <section id="centroid" class="slide level2">
@@ -948,6 +961,7 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <ul>
 <li>The regression line is made up of predictions</li>
 <li>We will often call them <span class="math inline">\(\hat{Y}\)</span></li>
+<li>“Best guess of Y, given some X”</li>
 </ul>
 <div class="cell">
 <details>
@@ -969,8 +983,9 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <li><span class="math inline">\(\hat{Y_i}\)</span> are also known as fitted values</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>d1.f<span class="ot">&lt;-</span> <span class="fu">augment</span>(m<span class="fl">.1</span>)</span>
-<span id="cb26-2"><a href="#cb26-2"></a>d1.f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>d1.f<span class="ot">&lt;-</span> <span class="fu">augment</span>(m<span class="fl">.1</span>)</span>
+<span id="cb26-3"><a href="#cb26-3"></a>d1.f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 8
       y.1     x.1 .fitted .resid   .hat .sigma   .cooksd .std.resid
@@ -989,9 +1004,16 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 </div>
 </div>
 </section>
+<section id="predictions-3" class="slide level2">
+<h2>Predictions</h2>
+<ul>
+<li><p>A regression model can be best thought of as prediction machine. Add hypothetical Xs in, get <span class="math inline">\(\hat{Y}\)</span> in return</p></li>
+<li><p>Regression can be thought of as telling us E(Y|X)</p></li>
+</ul>
+</section>
 <section id="residuals" class="slide level2">
 <h2>Residuals</h2>
-<p>The residuals can be thought of as what is left over in Y that is not explained by our model. ie difference between actual and predicted</p>
+<p>The residuals can be thought of as how far off we are in our predictions. What is left over in Y that is not explained by our model (i.e.&nbsp;Xs).</p>
 <p><span class="math display">\[Y_i = b_{0} + b_{1}X_i + e_i\]</span></p>
 <p><span class="math display">\[\hat{Y_i} = b_{0} + b_{1}X_i\]</span> <span class="math display">\[{Y_i} - \hat{Y_i} = e_i \]</span></p>
 </section>
@@ -1109,11 +1131,130 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 
 </div>
 <img data-src="glm_3_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
+<section id="error-vs-residual" class="slide level2">
+<h2>Error vs residual</h2>
+<ul>
+<li><p>Much like we have sample statistics and population parameters with <span class="math inline">\(\bar{X}, \mu\)</span></p></li>
+<li><p>Residual (e or <span class="math inline">\(\hat{\epsilon}\)</span>)is the difference between our estimated regression line and our observed data.</p></li>
+<li><p>Error (<span class="math inline">\(\epsilon\)</span>) is unknown parameter we estimate via the residual. It is the difference between our observed scores and our true population line.</p></li>
+</ul>
+</section>
 <section id="sigma" class="slide level2">
 <h2>Sigma</h2>
 <ul>
-<li><p>How do we know whether we have a lot or a little residuals?</p></li>
-<li><p>Sigma (σ) is the SD of residuals. It can be thought of as how much left over in Y that we cannot explain by our model.</p></li>
+<li>How do we know whether we have a lot or a little error in our model?</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>d1.f<span class="ot">&lt;-</span> <span class="fu">augment</span>(m<span class="fl">.1</span>)</span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="fu">mean</span>(d1.f<span class="sc">$</span>.resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1.776357e-17</code></pre>
+</div>
+</div>
+<ul>
+<li><p>Dispersion estimates!</p></li>
+<li><p>Sigma (σ) is a population parameter that represents the spread of error around the regression line. In our sample it reflects the SD of residuals.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Load the ggplot2 library for plotting</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb38-3"><a href="#cb38-3"></a></span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="co"># --- 1. Generate Sample Data ---</span></span>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb38-6"><a href="#cb38-6"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb38-7"><a href="#cb38-7"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">50</span>)</span>
+<span id="cb38-8"><a href="#cb38-8"></a>y <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb38-9"><a href="#cb38-9"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb38-10"><a href="#cb38-10"></a></span>
+<span id="cb38-11"><a href="#cb38-11"></a><span class="co"># --- 2. Fit the OLS Model ---</span></span>
+<span id="cb38-12"><a href="#cb38-12"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
+<span id="cb38-13"><a href="#cb38-13"></a>data<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(model)</span>
+<span id="cb38-14"><a href="#cb38-14"></a>residual_sd <span class="ot">&lt;-</span> <span class="fu">sigma</span>(model) <span class="co"># Get the residual standard deviation</span></span>
+<span id="cb38-15"><a href="#cb38-15"></a></span>
+<span id="cb38-16"><a href="#cb38-16"></a><span class="co"># --- 3. Create the Base Plot ---</span></span>
+<span id="cb38-17"><a href="#cb38-17"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb38-18"><a href="#cb38-18"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"gray50"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb38-19"><a href="#cb38-19"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"black"</span>,<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb38-20"><a href="#cb38-20"></a>  <span class="fu">labs</span>(</span>
+<span id="cb38-21"><a href="#cb38-21"></a>    <span class="at">title =</span> <span class="st">"Regression Line with Residual Distributions"</span>,</span>
+<span id="cb38-22"><a href="#cb38-22"></a>    <span class="at">x =</span> <span class="st">"X"</span>,</span>
+<span id="cb38-23"><a href="#cb38-23"></a>    <span class="at">y =</span> <span class="st">"Y"</span></span>
+<span id="cb38-24"><a href="#cb38-24"></a>  ) </span>
+<span id="cb38-25"><a href="#cb38-25"></a></span>
+<span id="cb38-26"><a href="#cb38-26"></a><span class="co"># --- 4. Function to Generate Density Curve Data ---</span></span>
+<span id="cb38-27"><a href="#cb38-27"></a><span class="co"># This function creates the points needed to draw a normal curve at a specific point</span></span>
+<span id="cb38-28"><a href="#cb38-28"></a><span class="co"># on the regression line.</span></span>
+<span id="cb38-29"><a href="#cb38-29"></a>generate_density_data <span class="ot">&lt;-</span> <span class="cf">function</span>(x_val, model, sd, <span class="at">scale =</span> <span class="dv">5</span>) {</span>
+<span id="cb38-30"><a href="#cb38-30"></a>  <span class="co"># Predict the y-value on the regression line</span></span>
+<span id="cb38-31"><a href="#cb38-31"></a>  y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_val))</span>
+<span id="cb38-32"><a href="#cb38-32"></a>  </span>
+<span id="cb38-33"><a href="#cb38-33"></a>  <span class="co"># Generate points for a normal distribution curve</span></span>
+<span id="cb38-34"><a href="#cb38-34"></a>  y_curve <span class="ot">&lt;-</span> <span class="fu">seq</span>(y_hat <span class="sc">-</span> <span class="dv">3</span> <span class="sc">*</span> sd, y_hat <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> sd, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb38-35"><a href="#cb38-35"></a>  density <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(y_curve, <span class="at">mean =</span> y_hat, <span class="at">sd =</span> sd)</span>
+<span id="cb38-36"><a href="#cb38-36"></a>  </span>
+<span id="cb38-37"><a href="#cb38-37"></a>  <span class="co"># Return a data frame with coordinates for the polygon</span></span>
+<span id="cb38-38"><a href="#cb38-38"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb38-39"><a href="#cb38-39"></a>    <span class="at">x_poly =</span> x_val <span class="sc">+</span> density <span class="sc">*</span> scale, <span class="co"># Offset x by the density value</span></span>
+<span id="cb38-40"><a href="#cb38-40"></a>    <span class="at">y_poly =</span> y_curve</span>
+<span id="cb38-41"><a href="#cb38-41"></a>  )</span>
+<span id="cb38-42"><a href="#cb38-42"></a>}</span>
+<span id="cb38-43"><a href="#cb38-43"></a></span>
+<span id="cb38-44"><a href="#cb38-44"></a><span class="co"># --- 5. Add Density Curves to the Plot ---</span></span>
+<span id="cb38-45"><a href="#cb38-45"></a><span class="co"># Choose a few x-values where you want to show the distributions</span></span>
+<span id="cb38-46"><a href="#cb38-46"></a>x_locations <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">35</span>)</span>
+<span id="cb38-47"><a href="#cb38-47"></a></span>
+<span id="cb38-48"><a href="#cb38-48"></a><span class="co"># Generate the data for each density curve</span></span>
+<span id="cb38-49"><a href="#cb38-49"></a>density_df1 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">1</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-50"><a href="#cb38-50"></a>density_df2 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">2</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-51"><a href="#cb38-51"></a>density_df3 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">3</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-52"><a href="#cb38-52"></a>density_df4 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">4</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-53"><a href="#cb38-53"></a>density_df5 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">5</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-54"><a href="#cb38-54"></a>density_df6 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">6</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-55"><a href="#cb38-55"></a></span>
+<span id="cb38-56"><a href="#cb38-56"></a><span class="co"># Add the polygons to the plot</span></span>
+<span id="cb38-57"><a href="#cb38-57"></a>p <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df1, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df2, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df3, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df4, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df5, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df6, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
+<section id="sigma-1" class="slide level2">
+<h2>Sigma</h2>
+<ul>
+<li>Can be thought of as how much left over in Y that we cannot explain by our model. Often discussed in terms of Sums of Squares or variance (for math simplicity).</li>
+</ul>
+<p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2\]</span></p>
+<ul>
+<li>Total variation = regression (model) variation + residual variation</li>
+</ul>
+</section>
+<section id="sum-of-squared-errors-sse" class="slide level2">
+<h2>Sum of Squared Errors (SSE)</h2>
+<ul>
+<li><p>Reflects the “total” error in our model</p></li>
+<li><p>SSE = <span class="math inline">\(\sum(Y_i - \hat{Y_i})^2\)</span></p></li>
+<li><p>To the extent that our actual values are close to the predicted values our model is doing better</p></li>
+</ul>
+</section>
+<section id="mse-rse" class="slide level2">
+<h2>MSE &amp; RSE</h2>
+<ul>
+<li><p>Mean squared error is the “average” error in our model. RSE/sigma is our average error in original units.</p></li>
+<li><p>Our estimate of sigma (<span class="math inline">\(\hat{\sigma}\)</span>) is also known as Residual Standard Error (RSE), which is equal to the square root of the Mean Square Error (MSE).</p></li>
+<li><p><span class="math inline">\(\hat{\sigma}\)</span> = <span class="math inline">\(\sqrt{MSE}\)</span> = <span class="math inline">\(\sqrt{\frac{\sum(Y_i - \hat{Y_i})^2}{n-k-1}}\)</span></p></li>
+</ul>
+</section>
+<section id="wrap-up" class="slide level2">
+<h2>Wrap-up</h2>
+<ul>
+<li>Interpretation of coefficients</li>
+<li>The line is made up of predictions</li>
+<li>Predictions</li>
+<li>Residuals</li>
 </ul>
 
 <div class="footer footer-default">

@@ -23,6 +23,14 @@ library(MASS)
 ```
 
 
+## This time
+
+- How do we talk about and describe data?
+
+- Descriptive stats as the machinery of our regression models
+
+- "Fancy models are just fancy correlations"
+
 ## Why do we describe data?
 
 - Understand your data
@@ -30,7 +38,6 @@ library(MASS)
 - Basis of regression models
 
 - Find errors in data entry or collection
-
 
 
 ## Happiness
@@ -135,7 +142,7 @@ sum(x - mean(x))/length(x)
 
 ## Sums of squares
 
-Our solution is to square deviations.
+- Our solution is to square deviations.
 
 ```{r}
 #| code-fold: true
@@ -146,7 +153,13 @@ deviation^2
 sum(deviation^2)
 ```
 
-$$SS = {\sum{(x-\bar{x})^2}}$$
+$$SS = {\sum{(X-\bar{X})^2}}$$
+## Sum of Squares
+
+- Also called variation
+
+- We are interested in variation (and other measures of dispersion) because we want to understand why someone has higher or lower scores  
+
 
 
 -----------
@@ -857,3 +870,14 @@ datasaurus_dozen %>%
                            "R = -.06"))) +
   theme_bw(base_size = 15)
 ```
+
+
+## Wrap-up
+
+- Variation/SS, Variance, SD
+
+- Covariance, correlation
+
+- Sample statistics vs population parameters
+
+

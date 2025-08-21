@@ -11,7 +11,7 @@ html:
   scrollable: true
 ---
 
-## Today
+## This time
 
 -   Choosing the right regression model
 -   Often this boils down to how you measure your variables

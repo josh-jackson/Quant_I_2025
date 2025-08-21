@@ -245,7 +245,9 @@ $$Y_i = b_{0} + b_{1}X_i +e_i$$
 
 -   *"All models are wrong but some are useful (and some are better than others)"* - George Box
 
-## Parts of the model
+## Wrap-up
+
+- Make sure you can interpret this equation: 
 
 $$Y_i = b_{0} + b_{1}X_i + e_i$$ $$T.risk_i = b_{0} + b_{1}TX_i + e_i$$
 

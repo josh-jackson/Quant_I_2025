@@ -12,6 +12,7 @@ html:
 ---
 
 
+
 ## This time
 
 - Getting comformatable with regression/glm 
@@ -29,6 +30,7 @@ $Y = b_0 + b_{1}X + e$
 
 ## How can we visualize data to make sense of it?
 
+
 ```{r}
 #| code-fold: true
 library(broom)
@@ -43,7 +45,9 @@ d1.f<- augment(m.1)
 d.1
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 #| code-fold: true
@@ -51,6 +55,7 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
     geom_point(size = 2) +
   geom_smooth(method = lm, se = FALSE) 
 ```
+
 
 ## General linear model (GLM)
 
@@ -71,10 +76,12 @@ $$Y_i = b_{0} + b_{1}X_i + e_i$$
 
 ## in R
 
+
 ```{r, eval = FALSE}
 
 fit <- lm(Y ~ X, data)
 ```
+
 
 1.  Name regression object
 2.  Use linear model function, lm
@@ -86,10 +93,12 @@ fit <- lm(Y ~ X, data)
 
 $$Y_i = b_{0} + b_{1}X_i + e_i$$
 
+
 ```{r}
 #| code-fold: true
 coef(m.1)
 ```
+
 
 - Estimates are specific values for our coefficients (B or $\hat{\beta}$) which represent our best *guess* of the true population parameter ($\beta$) 
 
@@ -109,6 +118,7 @@ $$\large b_{1} = \frac{cov_{XY}}{s_{x}^{2}} = r_{xy} \frac{s_{y}}{s_{x}}$$ $$\la
 
 ------------------------------------------------------------------------
 
+
 ```{r}
 #| code-fold: true
 d.1 |> 
@@ -127,6 +137,7 @@ report_sample(d.1)
 ```
 
 
+
 ## pop quiz
 
 If I flipped the x and y variables, would I get the same regression coefficient?
@@ -138,6 +149,7 @@ What would the regression coefficient be if I standardized (z-scored) the variab
 
 ------------------------------------------------------------------------
 
+
 ```{r}
 #standardized by hand
 d.2 <- d.1 |> 
@@ -147,13 +159,16 @@ d.2 <- d.1 |>
 d.2
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 library(easystats)
 m.2 <- lm(y.z ~ x.z, data = d.2)
 model_parameters(m.2)
 ```
+
 
 ## Intercept
 
@@ -165,20 +180,25 @@ model_parameters(m.2)
 
 ------------------------------------------------------------------------
 
+
 ```{r}
 d.3 <- d.1 |> 
   mutate(x.5 = (x.1 + 5) ) 
 d.3
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 m.3 <- lm(y.1 ~ x.5, data = d.3)
 model_parameters(m.3)
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 #| code-fold: true
@@ -187,7 +207,9 @@ ggplot(d.3 , aes(x=x.5, y=y.1)) +
   geom_smooth(method = lm, se = FALSE) 
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 #| code-fold: true
@@ -196,11 +218,14 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_smooth(method = lm, se = FALSE) 
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 model_parameters(m.1)
 ```
+
 
 - Only the intercept changes. Not the slope. 
 - What happens if we add 5 to Y variable? 
@@ -217,12 +242,14 @@ model_parameters(m.1)
 -   We will often call them $\hat{Y}$
 -   "Best guess of Y, given some X"
 
+
 ```{r}
 #| code-fold: true
 ggplot(d1.f , aes(x=x.1, y=y.1)) +
     geom_point(size = 2) +
   geom_smooth(method = lm, se = FALSE) 
 ```
+
 
 ## Predictions
 
@@ -234,11 +261,13 @@ $$\hat{Y_i} = b_{0} + b_{1}X_i $$
 
 -   $\hat{Y_i}$ are also known as fitted values
 
+
 ```{r}
 library(broom)
 d1.f<- augment(m.1)
 d1.f
 ```
+
 
 ## Predictions
 
@@ -257,6 +286,7 @@ $${Y_i} - \hat{Y_i} = e_i $$
 
 ## Residuals
 
+
 ```{r}
 #| code-fold: true
 ggplot(d1.f , aes(x=x.1, y=y.1)) +
@@ -264,7 +294,9 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_smooth(method = lm, se = FALSE) 
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 #| code-fold: true
@@ -273,7 +305,9 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_point(aes(y = .fitted), shape = 1, size = 2) 
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 #| code-fold: true
@@ -283,7 +317,9 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_segment(aes( xend = x.1, yend = .fitted))
 ```
 
+
 ------------------------------------------------------------------------
+
 
 ```{r}
 #| code-fold: true
@@ -294,9 +330,11 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_segment(aes( xend = x.1, yend = .fitted))
 ```
 
+
 ------------------------------------------------------------------------
 
 -   Thinking ahead: do we want large or small residuals?
+
 
 ```{r}
 #| code-fold: true
@@ -311,9 +349,11 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
   geom_segment(aes( xend = x.1, yend = new.fitted))
 ```
 
+
 ## Residuals
 
 -   Association between $\hat{Y_i}$ and e?
+
 
 ```{r}
 #| code-fold: true
@@ -321,9 +361,11 @@ d1.f |>
 ggplot(aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth(se = F, method = "lm") 
 ```
 
+
 ------------------------------------------------------------------------
 
 -   x and residual?
+
 
 ```{r}
 #| code-fold: true
@@ -331,15 +373,18 @@ d1.f |>
 ggplot(aes(x = x.1, y = .resid)) + geom_point() + geom_smooth(se = F, method = "lm") 
 ```
 
+
 ------------------------------------------------------------------------
 
 -   x and $\hat{Y_i}$ represent the same information. We use x to create $\hat{Y_i}$
+
 
 ```{r}
 #| code-fold: true
 d1.f |> 
 ggplot(aes(x = x.1, y = .fitted)) + geom_point() + geom_smooth(se = F, method = "lm") 
 ```
+
 
 
 ## Error vs residual
@@ -354,17 +399,20 @@ ggplot(aes(x = x.1, y = .fitted)) + geom_point() + geom_smooth(se = F, method = 
 
 -   How do we know whether we have a lot or a little error in our model? 
 
+
 ```{r}
 #| code-fold: true
 d1.f<- augment(m.1)
 mean(d1.f$.resid)
 ```
+
 - Dispersion estimates! 
 
 -   Sigma (σ) is a population parameter that represents the spread of error around the regression line. In our sample it reflects the SD of residuals. 
 
 
 ----------
+
 
 ```{r}
 # Load the ggplot2 library for plotting
@@ -427,6 +475,7 @@ p + geom_polygon(data = density_df1, aes(x = x_poly, y = y_poly), alpha = 0.2) +
 
 ```
 
+
 ## Sigma
 
 - Can be thought of as how much left over in Y that we cannot explain by our model. Often discussed in terms of Sums of Squares or variance (for math simplicity). 
@@ -460,6 +509,7 @@ $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2
 - Predictions
 - Residuals
 - Sigma/SSE/MSE/RSE
+
 
 
 
