@@ -40,11 +40,11 @@ format: html
 
 # Overview
 
-This course is the first in a two-course sequence that introduces necessary skills and knowledge for carrying out statistical analyses in the social sciences. The course has an applied focus for psychological research, but theoretical details will be emphasized when they facilitate understanding of key concepts. In other words, we will strike a balance between learning how to do statistics and knowing why we are doing it a particular way. Mastering both will facilitate generalization to new problems and techniques. Topics to be covered this semester include theoretical probability distributions (e.g., binomial, $t$, $F$, $\chi^2$), general linear model basics, inferences about population means, confidence intervals, the pros and cons of null hypothesis testing, power, and effect sizes, and ANOVA.
+This course is the first in a two-course sequence that introduces necessary skills and knowledge for carrying out statistical analyses in the social sciences. The course has an applied focus for psychological research, but theoretical details will be emphasized when they facilitate understanding of key concepts. In other words, we will strike a balance between learning how to do statistics and knowing why we are doing it a particular way. Mastering both will facilitate generalization to new problems and techniques. Topics to be covered this semester include theoretical probability distributions (e.g., binomial, $t$, $F$, $\chi^2$), general linear model(GLM) basics, inferences about population means, confidence intervals, the pros and cons of null hypothesis testing, power, and effect sizes.
 
 ### Textbook
 
-We will primarily be referring to chapters in [*Learning Statistics with R*](https://learningstatisticswithr.com/book/) by Danielle Navarro. [pdf version](https://learningstatisticswithr.com/lsr-0.6.pdf)
+- We will primarily be referring to chapters in [*Learning Statistics with R*](https://learningstatisticswithr.com/book/) by Danielle Navarro. [pdf version](https://learningstatisticswithr.com/lsr-0.6.pdf)
 
 - Statistical thinking for the 21st century is another good intro book to cover all bases. By Russell A. Poldrack
 [Statistical thinking for the 21st century](https://statsthinking21.github.io/statsthinking21-core-site/)
