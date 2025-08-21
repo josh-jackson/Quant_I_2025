@@ -450,7 +450,6 @@ $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2
 
 - Our estimate of sigma ($\hat{\sigma}$) is also known as Residual Standard Error (RSE), which is equal to the square root of the Mean Square Error (MSE).
 
-
 - $\hat{\sigma}$ = $\sqrt{MSE}$ = $\sqrt{\frac{\sum(Y_i - \hat{Y_i})^2}{n-k-1}}$
 
 ## Wrap-up

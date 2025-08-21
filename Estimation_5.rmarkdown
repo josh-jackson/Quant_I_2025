@@ -11,6 +11,7 @@ html:
   scrollable: true
 ---
 
+
 ## Today
 
 -   How do I find the regression line
@@ -41,6 +42,7 @@ $$min\Sigma(e_i)^2$$
 
 
 -----------
+
 
 ```{r}
 #| code-fold: true
@@ -75,7 +77,9 @@ print(plot2)
 ```
 
 
+
 ---------
+
 
 
 ```{r}
@@ -113,6 +117,7 @@ plot2 <- ggplot(data, aes(x = x, y = y)) +
 print(plot2)
 ```
 
+
 ## When OLS doesn't work
 
 -   OLS is great conceptually. It is also great for simple problems because the math is easy. 
@@ -133,6 +138,7 @@ print(plot2)
 
 - We are going to run an experiment with 50 coin flips. We get thirty heads. Is this coin fair? 
 
+
 ```{r}
 #| code-fold: true
 library(ggplot2)
@@ -147,7 +153,9 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
   ylab("Probability") + scale_x_continuous(limits = c(10, 40)) 
 ```
 
+
 ---------
+
 
 ```{r}
 pbinom(q = 30, size = 50, prob = .5)
@@ -157,7 +165,9 @@ pbinom(q = 30, size = 50, prob = .5)
 1- pbinom(q = 30, size = 50, prob = .5)
 ```
 
+
 -----------
+
 
 
 ```{r}
@@ -175,6 +185,7 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
   ylab("Probability") + scale_x_continuous(limits = c(10, 40)) 
 ```
 
+
 ## Estimation vs falsification
 
 - Most of our science pits two hypotheses against one another. Winner take all. 
@@ -186,6 +197,7 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
 - We still can test/falsify hypotheses, but the estimation framework is more robust
 
 ## Binomial likelihood
+
 
 ```{r}
 #| code-fold: true
@@ -226,7 +238,9 @@ ggplot(likelihood_df, aes(x = p, y = likelihood)) +
 
 ```
 
+
 ## Binomial loglikelihood
+
 
 ```{r}
 #| code-fold: true
@@ -246,6 +260,7 @@ ggplot(log_likelihood_df, aes(x = p, y = log_likelihood)) +
   ) +
   theme_minimal()
 ```
+
 
 
 ## Likelihood estimation for linear regression
@@ -272,6 +287,7 @@ $$\mathcal{L}(\beta_0, \beta_1, \sigma^2) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\
 
 -   define what values we want to calculate log likelihood for
 
+
 ```{r}
 #| code-fold: true
 library(psychTools)
@@ -282,6 +298,7 @@ grid <-
   crossing(mu = seq(from = 66, to = 69, length.out = 200), sigma = seq(from = 2, to = 3, length.out = 200))
 grid
 ```
+
 
 ## Log Likelihood example
 
@@ -295,6 +312,7 @@ grid
 --------------
 
 40,000 grids * 928 participants = 37,120,000 calculations
+
 
 ```{r}
 #| code-fold: true
@@ -311,7 +329,9 @@ p_grid <-
   p_grid
 ```
 
+
 ---------
+
 
 
 ```{r}
@@ -327,7 +347,9 @@ p_grid %>%
   theme(panel.grid = element_blank())
 ```
 
+
 -------------------------
+
 
 ```{r}
 #| code-fold: true
@@ -337,7 +359,9 @@ p_grid %>%
     stat_lineribbon(.width = c(0), alpha = .4) +  theme(legend.position="none")
 ```
 
+
 ---------
+
 
 
 ```{r}
@@ -348,7 +372,9 @@ p_grid %>%
 ```
 
 
+
 ----------
+
 
 ```{r}
 #| code-fold: true
@@ -356,7 +382,9 @@ library(report)
 report_sample(galton.data$child)
 ```
 
+
 ## Maximum Likelihood
+
 
 ```{r}
 #| code-fold: true
@@ -417,13 +445,17 @@ mle_grid_estimate <- param_grid[which.max(param_grid$ll), ]
 param_grid
 ```
 
+
 ## magic is here
+
 
 ```{r, eval = F}
 dnorm(y, mean = y_pred, sd = sigma, log = TRUE)
 ```
 
+
 - Our data are fixed as we collected them. We test out which ones make better predictions by trying out different parameters, which will change the y_pred. Asks: How likely is y, using different parameters L($\theta$|d). 
+
 
 ```{r}
 #better guess! 
@@ -434,7 +466,9 @@ dnorm(20, mean = 25, sd = 3.23, log = TRUE)
 dnorm(20, mean = 40, sd = 3.23, log = TRUE)
 ```
 
+
 ---------
+
 
 ```{r}
 print(mle_grid_estimate)
@@ -449,7 +483,9 @@ sigma(ols_fit)
 ```
 
 
+
 ---------
+
 
 ```{r}
 #| code-fold: true
@@ -476,6 +512,7 @@ ggplot(surface_data, aes(x = beta0, y = beta1, fill = ll)) +
 
 
 
+
 ## The importance of probability distributions
 
 - Regardless of the complexity of the model, we are going to use probability distributions to calculate estimates like these. 
@@ -490,6 +527,7 @@ ggplot(surface_data, aes(x = beta0, y = beta1, fill = ll)) +
 - OLS and ML give us the "best guess". How confident are we in that guess? We always have to remember uncertainty in estimates. This is found via our standard error. 
 
 -------
+
 
 ```{r}
 #| code-fold: true
@@ -533,6 +571,7 @@ plot_sigma <- ggplot(profile_sigma, aes(x = sigma, y = max_ll)) +
 plot_b1 
 ```
 
+
 ## Standard error
 
 - Indexes how much credence we should put into our estimate. Provides an estimate of precision. 
@@ -546,6 +585,7 @@ plot_b1
 ------
 
 2. Variance of X provides stability
+
 
 ```{r}
 #| code-fold: true
@@ -582,6 +622,7 @@ p1/p2
 
 ```
 
+
 ## Standard error
 
 $$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
@@ -593,13 +634,13 @@ $$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
 
 ## Standard error
 
+
 ```{r}
 #| code-fold: true
 library(easystats)
 s1 <- lm(Y ~ x1, simulated_data)
 model_parameters(s1)
 ```
-
 
 ```{r}
 #| code-fold: true
@@ -616,6 +657,7 @@ b1 %>%
     axis.ticks.y = element_blank()
   )
 ```
+
 
 ## Standard error
 
@@ -650,6 +692,7 @@ $$
 ## Model fit
 
 -   Which has better fit? 
+
 
 ```{r}
 #| code-fold: true
@@ -693,7 +736,9 @@ library(gridExtra)
  grid.arrange(plot1, plot2, ncol=2)
 ```
 
+
 ## Model fit
+
 
 
 ```{r}
@@ -750,6 +795,7 @@ library(patchwork)
 
 
 
+
 ## Partitioning variation
 
 $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
@@ -770,6 +816,7 @@ $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2
 
 
 ## Partitioning variance
+
 
 
 ```{r}
@@ -826,7 +873,9 @@ plot2 <- ggplot(data, aes(x = x, y = y1)) +
 (plot1 + plot2)
 ```
 
+
 ------------
+
 
 
 ```{r}
@@ -842,13 +891,14 @@ sd(mod.1$.resid)
 ```
 
 
+
 ------------
+
 
 ```{r}
 
 sd(data$y1)
 ```
-
 
 ```{r}
 # intercept only model SD of residual (sigma)
@@ -856,6 +906,7 @@ model.2 <- lm(y1 ~ 1, data = data)
 mod.2 <- augment(model.2)
 sd(mod.2$.resid)
 ```
+
 
 
 
@@ -889,6 +940,7 @@ $$\frac{SS_{model}}{SS_Y} = R^2$$
 
 
 ---------
+
 
 ```{r}
 #| code-fold: true
@@ -928,6 +980,7 @@ grid.text(title_text, y = 0.95, gp = gpar(fontsize = 14, fontface = "bold"))
 
 
 
+
 ## Coefficient of Determination
 
 - Ranges from 0 - 1
@@ -938,6 +991,7 @@ grid.text(title_text, y = 0.95, gp = gpar(fontsize = 14, fontface = "bold"))
 
 
 ------------
+
 
 ```{r}
 model.1 <- lm(y1 ~ x, data = data)
@@ -951,6 +1005,7 @@ sum((mod.1$.fitted - mean(data$y1))^2)/sum((mod.1$y1 - mean(data$y1))^2)
 ```
 
 
+
 ## R
 
 - upper case R, not lower case r as in correlation
@@ -959,6 +1014,7 @@ sum((mod.1$.fitted - mean(data$y1))^2)/sum((mod.1$y1 - mean(data$y1))^2)
 
 -------------
 
+
 ```{r}
 #| code-fold: true
 model.1 <- lm(y1 ~ x, data = data)
@@ -966,7 +1022,9 @@ mod.1 <- augment(model.1)
 mod.1
 ```
 
+
 ----------
+
 
 ```{r}
 #| code-fold: true
@@ -980,5 +1038,4 @@ mod.1 |>
 ```{r}
 sqrt(0.3781187)
 ```
-
 

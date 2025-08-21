@@ -998,7 +998,7 @@
     "href": "glm_3.html#wrap-up",
     "title": "GLM basics",
     "section": "Wrap-up",
-    "text": "Wrap-up\n\nInterpretation of coefficients\nThe line is made up of predictions\nPredictions\nResiduals"
+    "text": "Wrap-up\n\nInterpretation of coefficients\nThe line is made up of predictions\nPredictions\nResiduals\nSigma/SSE/MSE/RSE"
   },
   {
     "objectID": "glm_3.html#predictions-3",
