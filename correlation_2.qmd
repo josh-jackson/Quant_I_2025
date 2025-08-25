@@ -98,7 +98,7 @@ hist(world$Happiness, breaks = 30, main = "Distribution of happiness scores",
 4. Kurtosis
 
 
----
+
 
 ## Mean, $\mu$
 
@@ -154,6 +154,7 @@ sum(deviation^2)
 ```
 
 $$SS = {\sum{(X-\bar{X})^2}}$$
+
 ## Sum of Squares
 
 - Also called variation

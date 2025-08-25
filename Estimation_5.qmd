@@ -113,12 +113,27 @@ plot2 <- ggplot(data, aes(x = x, y = y)) +
 print(plot2)
 ```
 
+## Loss functions
+
+- Loss function is a way to evaluate your parameter estimates.  It is a function that describes the difference between the model predictions and your actual data (error).
+
+- MSE is a common loss function, which is proportional to sigma/RSE/SSE, and thus what OLS uses. 
+
+- Other functions include Mean Absolute Error (MAE), Binary Cross-Entropy, hinge, Kullback-Leibler (KL) Divergence, etc. 
+
+## Estimators
+
+- Estimators are our functions used to estimate our parameters. Estimators find the parameters that make the value of their loss function as small as possible
+
+- OLS, WLS, maximum likelihood (+ variants: FIML, PML, REML, QMLE), MCMC variants (Hamiltonian; Gibbs; metropolis), variational inference, etc. 
+
 ## When OLS doesn't work
 
 -   OLS is great conceptually. It is also great for simple problems because the math is easy. 
 
-- However, a more general framework is Maximum Likelihood (ML) which, ahem, maximizes the *likelihood* of our data. This will be necessary for anything beyond simple regressions (OLS = ML for simple regressions). 
+- However, a more general framework frequently used in psychology is Maximum Likelihood (ML) which, ahem, maximizes the *likelihood* of our data. This will be necessary for anything beyond simple regressions (OLS = ML for simple regressions). 
 
+- ML Loss function is the "negative log-likelihood"
 
 ## Likelihoods
 
@@ -181,7 +196,7 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
 
 - Our stats are set up similarly, but often the opponent is weak (measly nil hypothesis). This falsification view is standard. 
 
-- We sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation. 
+- We sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation (note, not an estimator). 
 
 - We still can test/falsify hypotheses, but the estimation framework is more robust
 
@@ -358,6 +373,7 @@ report_sample(galton.data$child)
 
 ## Maximum Likelihood
 
+- regression example 
 ```{r}
 #| code-fold: true
 # Load the ggplot2 library for plotting
@@ -474,13 +490,12 @@ ggplot(surface_data, aes(x = beta0, y = beta1, fill = ll)) +
 
 
 
-
-
 ## The importance of probability distributions
 
 - Regardless of the complexity of the model, we are going to use probability distributions to calculate estimates like these. 
 
 - We define our parameter estimates as the ones that are most "likely," which is a direct consequence of our assumed probability distribution. 
+
 
 
 ## Our best guess is still a guess
@@ -980,5 +995,10 @@ mod.1 |>
 ```{r}
 sqrt(0.3781187)
 ```
+
+## Wrap-up
+
+
+
 
 

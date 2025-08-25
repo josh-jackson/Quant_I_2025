@@ -13,10 +13,8 @@ html:
 
 ## This time
 
--   Choosing the right regression model
--   Often this boils down to how you measure your variables
--   A model built on poor measures is like a statistical house on a cracked foundation, destined to crumble under the slightest scrutiny
--   These measurement choices are just the bare minimum for quality models and inferences
+-   Choosing the right regression model. Often this boils down to how you measure your variables
+-   Probability distributions
 
 ## Data generating process (DGP)
 
@@ -1123,3 +1121,9 @@ ggplot() +
 -   Chi-square test of association (categorical correlation)
 
 -   Goodness of fit (observed counts differ from expected)
+
+## Wrap up
+
+- PMF, PDF, CDF
+- r functions
+- Binomial, Bernoulli, Poisson, negative Binomial, Normal, t, F, Chi-square.

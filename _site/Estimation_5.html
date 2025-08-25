@@ -496,11 +496,27 @@
 
 </div>
 <img data-src="Estimation_5_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
+<section id="loss-functions" class="slide level2">
+<h2>Loss functions</h2>
+<ul>
+<li><p>Loss function is a way to evaluate your parameter estimates. It is a function that describes the difference between the model predictions and your actual data (error).</p></li>
+<li><p>MSE is a common loss function, which is proportional to sigma/RSE/SSE, and thus what OLS uses.</p></li>
+<li><p>Other functions include Mean Absolute Error (MAE), Binary Cross-Entropy, hinge, Kullback-Leibler (KL) Divergence, etc.</p></li>
+</ul>
+</section>
+<section id="estimators" class="slide level2">
+<h2>Estimators</h2>
+<ul>
+<li><p>Estimators are our functions used to estimate our parameters. Estimators find the parameters that make the value of their loss function as small as possible</p></li>
+<li><p>OLS, WLS, maximum likelihood (+ variants: FIML, PML, REML, QMLE), MCMC variants (Hamiltonian; Gibbs; metropolis), variational inference, etc.</p></li>
+</ul>
+</section>
 <section id="when-ols-doesnt-work" class="slide level2">
 <h2>When OLS doesn’t work</h2>
 <ul>
 <li><p>OLS is great conceptually. It is also great for simple problems because the math is easy.</p></li>
-<li><p>However, a more general framework is Maximum Likelihood (ML) which, ahem, maximizes the <em>likelihood</em> of our data. This will be necessary for anything beyond simple regressions (OLS = ML for simple regressions).</p></li>
+<li><p>However, a more general framework frequently used in psychology is Maximum Likelihood (ML) which, ahem, maximizes the <em>likelihood</em> of our data. This will be necessary for anything beyond simple regressions (OLS = ML for simple regressions).</p></li>
+<li><p>ML Loss function is the “negative log-likelihood”</p></li>
 </ul>
 </section>
 <section id="likelihoods" class="slide level2">
@@ -575,7 +591,7 @@
 <ul>
 <li><p>Most of our science pits two hypotheses against one another. Winner take all.</p></li>
 <li><p>Our stats are set up similarly, but often the opponent is weak (measly nil hypothesis). This falsification view is standard.</p></li>
-<li><p>We sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation.</p></li>
+<li><p>We sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation (note, not an estimator).</p></li>
 <li><p>We still can test/falsify hypotheses, but the estimation framework is more robust</p></li>
 </ul>
 </section>
@@ -800,6 +816,9 @@ Mean data (SD) | 68.09 (2.52)</code></pre>
 </section>
 <section id="maximum-likelihood" class="slide level2">
 <h2>Maximum Likelihood</h2>
+<ul>
+<li>regression example</li>
+</ul>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -26091,6 +26110,16 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 
 </div>
 <img data-src="Estimation_5_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
+<section id="standard-error-3" class="slide level2">
+<h2>Standard error</h2>
+<ul>
+<li><p>We have standard errors for all statistics we estimate. Each of them provide precision on the estimate of a population parameter. Or how confident we are in the estimate.</p></li>
+<li><p>We will use these to develop, ahem, confidence intervals.</p></li>
+</ul>
+<p><span class="math display">\[
+\text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{\frac{1}{n} + \frac{\bar{X}^2}{\sum(X_i - \bar{X})^2}}
+\]</span></p>
+</section>
 <section id="model-fit" class="slide level2">
 <h2>Model fit</h2>
 <ul>
@@ -26111,23 +26140,14 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 <h2>Model fit</h2>
 <ul>
 <li>Our model is a prediction machine.</li>
-<li>They are created by simply plugging a persons Xs into the created model</li>
-<li>If you have bs and have Xs you can create a prediction</li>
-</ul>
-<p><span class="math inline">\(\hat{Y}_{i}\)</span> = 2.65064 + -0.48111* <span class="math inline">\(X_{i}\)</span></p>
-</section>
-<section id="model-fit-3" class="slide level2">
-<h2>Model fit</h2>
-<ul>
-<li>We want our predictions to be close to our actual data for each person ( <span class="math inline">\(Y_{i}\)</span> )</li>
 <li>The difference between the actual data and our our prediction ( <span class="math inline">\(Y_{i} - \hat{Y}_{i} = e\)</span> ) is the residual, how far we are “off”. This tells us how good our fit is.</li>
 <li>You can have the same parameter estimates for two models but completely different fit.</li>
 </ul>
 </section>
-<section id="model-fit-4" class="slide level2">
+<section id="model-fit-3" class="slide level2">
 <h2>Model fit</h2>
 <ul>
-<li>Can you point out the predictions?</li>
+<li>Which has better fit?</li>
 </ul>
 <div class="cell">
 <details>
@@ -26173,8 +26193,8 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 
 </div>
 <img data-src="Estimation_5_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
-<section id="same-plot-with-continuous" class="slide level2">
-<h2>Same plot with continuous</h2>
+<section id="model-fit-4" class="slide level2">
+<h2>Model fit</h2>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -26230,16 +26250,24 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 
 </div>
 <img data-src="Estimation_5_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
-<section id="partitioning-variance" class="slide level2">
-<h2>Partitioning variance</h2>
-<p><span class="math display">\[\sum (Y - \bar{Y})^2 = \sum (\hat{Y} -\bar{Y})^2 + \sum(Y - \hat{Y})^2\]</span></p>
+<section id="partitioning-variation" class="slide level2">
+<h2>Partitioning variation</h2>
+<p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2\]</span></p>
 <ul>
-<li><p>Total variance = regression (model) variance + residual variance</p></li>
-<li><p>AKA sums of squares total = SS model + SS residual</p></li>
-<li><p>If we are making predictions that differ from the mean then our model is doing better</p></li>
+<li>Total variation = regression (model) variation + residual variation</li>
+<li>AKA sums of squares total = SS model + SS error</li>
 </ul>
 </section>
-<section id="partitioning-variance-1" class="slide level2">
+<section id="partitioning-variation-1" class="slide level2">
+<h2>Partitioning variation</h2>
+<ul>
+<li><p>The mean is our default prediction. If we are making predictions that differ from the mean then our model is doing well</p></li>
+<li><p>What happens SSE to when our predictions are the same as the mean?</p></li>
+<li><p>What happens SS model when our predictions are the same as the mean?</p></li>
+</ul>
+<p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2\]</span></p>
+</section>
+<section id="partitioning-variance" class="slide level2">
 <h2>Partitioning variance</h2>
 <div class="cell">
 <details>
@@ -26322,7 +26350,7 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># regression model SD of residual (sigma)</span></span>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># regression model SD of residual (RSE;sigma)</span></span>
 <span id="cb46-2"><a href="#cb46-2"></a><span class="fu">sd</span>(mod<span class="fl">.1</span><span class="sc">$</span>.resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9086924</code></pre>
@@ -26349,70 +26377,77 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 </section>
 <section id="sigma" class="slide level2">
 <h2>Sigma</h2>
-<p>aka residual standard error (SD units; what R reports), sum of squared errors (variation), standard error of the estimate (SD units), Mean Squared Error (variance)</p>
 <p><span class="math display">\[SSE = \sum(Y - \hat{Y})^2\]</span></p>
-<p><span class="math display">\[MSE = \frac{\sum(Y - \hat{Y})^2}{n}\]</span> <span class="math display">\[RSE = \hat{\sigma} = \sqrt{\frac{\sum(Y - \hat{Y})^2}{n}}\]</span></p>
+<p><span class="math display">\[MSE = \frac{\sum(Y_i - \hat{Y_i})^2}{n-k-1}\]</span> <span class="math display">\[RSE = \hat{\sigma} = \sqrt{\frac{\sum(Y_i - \hat{Y_i})^2}{n-k-1}}\]</span></p>
 </section>
 <section id="sigma-1" class="slide level2">
 <h2>Sigma</h2>
 <ul>
-<li><p>If sigma is large, then our predictions are not close to the data</p></li>
-<li><p>Thus, we want SMALL RSE/sigma/MSE</p></li>
-<li><p>But small relative to what? What is the largest sigma can be? Smallest?</p></li>
+<li><p>If sigma is large, then our predictions are not close to the data. Thus, we want SMALL sigma/RSE/MSE.</p></li>
+<li><p>But small relative to what? What is the smallest sigma can be? Largest?</p></li>
 </ul>
-</section>
-<section class="slide level2">
-
-<div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>model<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1 <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
-<span id="cb52-2"><a href="#cb52-2"></a><span class="fu">glance</span>(model<span class="fl">.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 12
-  r.squared adj.r.squared sigma statistic    p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.378         0.365 0.918      29.2 0.00000202     1  -65.7  137.  143.
-# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>mod<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">augment</span>(model<span class="fl">.1</span>)</span>
-<span id="cb54-2"><a href="#cb54-2"></a><span class="fu">sd</span>(mod<span class="fl">.1</span><span class="sc">$</span>.resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9086924</code></pre>
-</div>
-</div>
-</section>
-<section id="sigma-2" class="slide level2">
-<h2>Sigma</h2>
-<p>Technically, we report the unbiased estimate:</p>
-<p><span class="math display">\[RSE = \hat{\sigma} = \sqrt{\frac{\sum(Y - \hat{Y})^2}{n - k - 1}}\]</span></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>((mod<span class="fl">.1</span><span class="sc">$</span>.resid)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">48</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9181092</code></pre>
-</div>
-</div>
 </section>
 <section id="coefficient-of-determination" class="slide level2">
 <h2>Coefficient of Determination</h2>
 <p>aka <span class="math inline">\(R^2\)</span></p>
-<p><span class="math display">\[\sum (Y - \bar{Y})^2 = \sum (\hat{Y} -\bar{Y})^2 + \sum(Y - \hat{Y})^2\]</span></p>
+<p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2\]</span></p>
 <p><span class="math display">\[SS_{Y} = SS_{\text{Model}} + SS_{\text{Residual}}\]</span></p>
 <p><span class="math display">\[\frac{SS_{model}}{SS_Y} = R^2\]</span> - Explained variation (variance) divided by total variation (variance)</p>
 </section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="fu">library</span>(VennDiagram)</span>
+<span id="cb52-2"><a href="#cb52-2"></a></span>
+<span id="cb52-3"><a href="#cb52-3"></a><span class="co"># We want to visualize a correlation of r = 0.6</span></span>
+<span id="cb52-4"><a href="#cb52-4"></a>correlation <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb52-5"><a href="#cb52-5"></a>r_squared <span class="ot">&lt;-</span> correlation<span class="sc">^</span><span class="dv">2</span> <span class="co"># This is the proportion of shared variance</span></span>
+<span id="cb52-6"><a href="#cb52-6"></a></span>
+<span id="cb52-7"><a href="#cb52-7"></a>area1 <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb52-8"><a href="#cb52-8"></a>area2 <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb52-9"><a href="#cb52-9"></a>cross_area <span class="ot">&lt;-</span> r_squared <span class="sc">*</span> <span class="dv">100</span> <span class="co"># Convert proportion to percentage</span></span>
+<span id="cb52-10"><a href="#cb52-10"></a></span>
+<span id="cb52-11"><a href="#cb52-11"></a><span class="co"># Define labels and colors</span></span>
+<span id="cb52-12"><a href="#cb52-12"></a>category_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Variance in X"</span>, <span class="st">"Variance in Y"</span>)</span>
+<span id="cb52-13"><a href="#cb52-13"></a>fill_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"skyblue"</span>, <span class="st">"salmon"</span>)</span>
+<span id="cb52-14"><a href="#cb52-14"></a></span>
+<span id="cb52-15"><a href="#cb52-15"></a><span class="fu">grid.newpage</span>()</span>
+<span id="cb52-16"><a href="#cb52-16"></a></span>
+<span id="cb52-17"><a href="#cb52-17"></a></span>
+<span id="cb52-18"><a href="#cb52-18"></a>venn.plot <span class="ot">&lt;-</span> <span class="fu">draw.pairwise.venn</span>(</span>
+<span id="cb52-19"><a href="#cb52-19"></a>  <span class="at">area1 =</span> area1,</span>
+<span id="cb52-20"><a href="#cb52-20"></a>  <span class="at">area2 =</span> area2,</span>
+<span id="cb52-21"><a href="#cb52-21"></a>  <span class="at">cross.area =</span> cross_area,</span>
+<span id="cb52-22"><a href="#cb52-22"></a>  <span class="at">category =</span> category_names,</span>
+<span id="cb52-23"><a href="#cb52-23"></a>  <span class="at">fill =</span> fill_colors,</span>
+<span id="cb52-24"><a href="#cb52-24"></a>  <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb52-25"><a href="#cb52-25"></a>  <span class="at">cex =</span> <span class="fl">1.5</span>,</span>
+<span id="cb52-26"><a href="#cb52-26"></a>  <span class="at">cat.cex =</span> <span class="fl">1.2</span>,</span>
+<span id="cb52-27"><a href="#cb52-27"></a>  <span class="at">margin =</span> <span class="fl">0.05</span></span>
+<span id="cb52-28"><a href="#cb52-28"></a>)</span>
+<span id="cb52-29"><a href="#cb52-29"></a></span>
+<span id="cb52-30"><a href="#cb52-30"></a></span>
+<span id="cb52-31"><a href="#cb52-31"></a>title_text <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Variance explained (R-squared = "</span>, r_squared, <span class="st">") for a correlation of "</span>, correlation)</span>
+<span id="cb52-32"><a href="#cb52-32"></a><span class="fu">grid.text</span>(title_text, <span class="at">y =</span> <span class="fl">0.95</span>, <span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">14</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Estimation_5_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
 <section id="coefficient-of-determination-1" class="slide level2">
 <h2>Coefficient of Determination</h2>
 <ul>
 <li><p>Ranges from 0 - 1</p></li>
-<li><p>Standardized, as opposed to sigma</p></li>
+<li><p>Standardized, as opposed to sigma/RSE</p></li>
 <li><p>What is considered good or bad variance explained?</p></li>
 </ul>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>model<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1 <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
-<span id="cb58-2"><a href="#cb58-2"></a><span class="fu">glance</span>(model<span class="fl">.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>model<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1 <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
+<span id="cb53-2"><a href="#cb53-2"></a><span class="fu">glance</span>(model<span class="fl">.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 12
   r.squared adj.r.squared sigma statistic    p.value    df logLik   AIC   BIC
@@ -26422,8 +26457,8 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>mod<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">augment</span>(model<span class="fl">.1</span>)</span>
-<span id="cb60-2"><a href="#cb60-2"></a><span class="fu">sum</span>((mod<span class="fl">.1</span><span class="sc">$</span>.fitted <span class="sc">-</span> <span class="fu">mean</span>(data<span class="sc">$</span>y1))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>((mod<span class="fl">.1</span><span class="sc">$</span>y1 <span class="sc">-</span> <span class="fu">mean</span>(data<span class="sc">$</span>y1))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>mod<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">augment</span>(model<span class="fl">.1</span>)</span>
+<span id="cb55-2"><a href="#cb55-2"></a><span class="fu">sum</span>((mod<span class="fl">.1</span><span class="sc">$</span>.fitted <span class="sc">-</span> <span class="fu">mean</span>(data<span class="sc">$</span>y1))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>((mod<span class="fl">.1</span><span class="sc">$</span>y1 <span class="sc">-</span> <span class="fu">mean</span>(data<span class="sc">$</span>y1))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.3781187</code></pre>
 </div>
@@ -26441,9 +26476,9 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>model<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1 <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
-<span id="cb62-2"><a href="#cb62-2"></a>mod<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">augment</span>(model<span class="fl">.1</span>)</span>
-<span id="cb62-3"><a href="#cb62-3"></a>mod<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>model<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1 <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
+<span id="cb57-2"><a href="#cb57-2"></a>mod<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">augment</span>(model<span class="fl">.1</span>)</span>
+<span id="cb57-3"><a href="#cb57-3"></a>mod<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 50 × 8
@@ -26468,11 +26503,11 @@ x1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a><span class="fu">library</span>(correlation)</span>
-<span id="cb64-2"><a href="#cb64-2"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb64-3"><a href="#cb64-3"></a>mod<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
-<span id="cb64-4"><a href="#cb64-4"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(y1,.fitted) <span class="sc">|&gt;</span> </span>
-<span id="cb64-5"><a href="#cb64-5"></a>  <span class="fu">correlation</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="fu">library</span>(correlation)</span>
+<span id="cb59-2"><a href="#cb59-2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb59-3"><a href="#cb59-3"></a>mod<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
+<span id="cb59-4"><a href="#cb59-4"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(y1,.fitted) <span class="sc">|&gt;</span> </span>
+<span id="cb59-5"><a href="#cb59-5"></a>  <span class="fu">correlation</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># Correlation Matrix (pearson-method)
@@ -26486,11 +26521,14 @@ Observations: 50</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="fu">sqrt</span>(<span class="fl">0.3781187</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="fu">sqrt</span>(<span class="fl">0.3781187</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.6149136</code></pre>
 </div>
 </div>
+</section>
+<section id="wrap-up" class="slide level2">
+<h2>Wrap-up</h2>
 
 <div class="footer footer-default">
 
