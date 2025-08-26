@@ -398,7 +398,7 @@
 <section id="this-time" class="slide level2">
 <h2>This time</h2>
 <ul>
-<li>Getting comformatable with regression/glm</li>
+<li>Getting comfortable with regression/glm</li>
 <li>More in depth on each component of the model</li>
 </ul>
 </section>
@@ -409,7 +409,9 @@
 <li><p>We hypothesize it has some relationship with your IV(s) (here forth Xs), with what is left over described as error (E)</p></li>
 </ul>
 <p><span class="math inline">\(Y = b_0 + b_{1}X + e\)</span></p>
-<p><em>- Your model is how you think the world works</em></p>
+<ul>
+<li>Your model is how you think the world works</li>
+</ul>
 </section>
 <section id="how-can-we-visualize-data-to-make-sense-of-it" class="slide level2">
 <h2>How can we visualize data to make sense of it?</h2>
@@ -1162,63 +1164,63 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Load the ggplot2 library for plotting</span></span>
-<span id="cb38-2"><a href="#cb38-2"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb38-3"><a href="#cb38-3"></a></span>
-<span id="cb38-4"><a href="#cb38-4"></a><span class="co"># --- 1. Generate Sample Data ---</span></span>
-<span id="cb38-5"><a href="#cb38-5"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
-<span id="cb38-6"><a href="#cb38-6"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb38-7"><a href="#cb38-7"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">50</span>)</span>
-<span id="cb38-8"><a href="#cb38-8"></a>y <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
-<span id="cb38-9"><a href="#cb38-9"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
-<span id="cb38-10"><a href="#cb38-10"></a></span>
-<span id="cb38-11"><a href="#cb38-11"></a><span class="co"># --- 2. Fit the OLS Model ---</span></span>
-<span id="cb38-12"><a href="#cb38-12"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
-<span id="cb38-13"><a href="#cb38-13"></a>data<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(model)</span>
-<span id="cb38-14"><a href="#cb38-14"></a>residual_sd <span class="ot">&lt;-</span> <span class="fu">sigma</span>(model) <span class="co"># Get the residual standard deviation</span></span>
-<span id="cb38-15"><a href="#cb38-15"></a></span>
-<span id="cb38-16"><a href="#cb38-16"></a><span class="co"># --- 3. Create the Base Plot ---</span></span>
-<span id="cb38-17"><a href="#cb38-17"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb38-18"><a href="#cb38-18"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"gray50"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb38-19"><a href="#cb38-19"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"black"</span>,<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb38-20"><a href="#cb38-20"></a>  <span class="fu">labs</span>(</span>
-<span id="cb38-21"><a href="#cb38-21"></a>    <span class="at">title =</span> <span class="st">"Regression Line with Residual Distributions"</span>,</span>
-<span id="cb38-22"><a href="#cb38-22"></a>    <span class="at">x =</span> <span class="st">"X"</span>,</span>
-<span id="cb38-23"><a href="#cb38-23"></a>    <span class="at">y =</span> <span class="st">"Y"</span></span>
-<span id="cb38-24"><a href="#cb38-24"></a>  ) </span>
-<span id="cb38-25"><a href="#cb38-25"></a></span>
-<span id="cb38-26"><a href="#cb38-26"></a><span class="co"># --- 4. Function to Generate Density Curve Data ---</span></span>
-<span id="cb38-27"><a href="#cb38-27"></a><span class="co"># This function creates the points needed to draw a normal curve at a specific point</span></span>
-<span id="cb38-28"><a href="#cb38-28"></a><span class="co"># on the regression line.</span></span>
-<span id="cb38-29"><a href="#cb38-29"></a>generate_density_data <span class="ot">&lt;-</span> <span class="cf">function</span>(x_val, model, sd, <span class="at">scale =</span> <span class="dv">5</span>) {</span>
-<span id="cb38-30"><a href="#cb38-30"></a>  <span class="co"># Predict the y-value on the regression line</span></span>
-<span id="cb38-31"><a href="#cb38-31"></a>  y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_val))</span>
-<span id="cb38-32"><a href="#cb38-32"></a>  </span>
-<span id="cb38-33"><a href="#cb38-33"></a>  <span class="co"># Generate points for a normal distribution curve</span></span>
-<span id="cb38-34"><a href="#cb38-34"></a>  y_curve <span class="ot">&lt;-</span> <span class="fu">seq</span>(y_hat <span class="sc">-</span> <span class="dv">3</span> <span class="sc">*</span> sd, y_hat <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> sd, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
-<span id="cb38-35"><a href="#cb38-35"></a>  density <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(y_curve, <span class="at">mean =</span> y_hat, <span class="at">sd =</span> sd)</span>
-<span id="cb38-36"><a href="#cb38-36"></a>  </span>
-<span id="cb38-37"><a href="#cb38-37"></a>  <span class="co"># Return a data frame with coordinates for the polygon</span></span>
-<span id="cb38-38"><a href="#cb38-38"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb38-39"><a href="#cb38-39"></a>    <span class="at">x_poly =</span> x_val <span class="sc">+</span> density <span class="sc">*</span> scale, <span class="co"># Offset x by the density value</span></span>
-<span id="cb38-40"><a href="#cb38-40"></a>    <span class="at">y_poly =</span> y_curve</span>
-<span id="cb38-41"><a href="#cb38-41"></a>  )</span>
-<span id="cb38-42"><a href="#cb38-42"></a>}</span>
-<span id="cb38-43"><a href="#cb38-43"></a></span>
-<span id="cb38-44"><a href="#cb38-44"></a><span class="co"># --- 5. Add Density Curves to the Plot ---</span></span>
-<span id="cb38-45"><a href="#cb38-45"></a><span class="co"># Choose a few x-values where you want to show the distributions</span></span>
-<span id="cb38-46"><a href="#cb38-46"></a>x_locations <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">35</span>)</span>
-<span id="cb38-47"><a href="#cb38-47"></a></span>
-<span id="cb38-48"><a href="#cb38-48"></a><span class="co"># Generate the data for each density curve</span></span>
-<span id="cb38-49"><a href="#cb38-49"></a>density_df1 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">1</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
-<span id="cb38-50"><a href="#cb38-50"></a>density_df2 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">2</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
-<span id="cb38-51"><a href="#cb38-51"></a>density_df3 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">3</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
-<span id="cb38-52"><a href="#cb38-52"></a>density_df4 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">4</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
-<span id="cb38-53"><a href="#cb38-53"></a>density_df5 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">5</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
-<span id="cb38-54"><a href="#cb38-54"></a>density_df6 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">6</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
-<span id="cb38-55"><a href="#cb38-55"></a></span>
-<span id="cb38-56"><a href="#cb38-56"></a><span class="co"># Add the polygons to the plot</span></span>
-<span id="cb38-57"><a href="#cb38-57"></a>p <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df1, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df2, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df3, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df4, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df5, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df6, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># --- 1. Generate Sample Data ---</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb38-3"><a href="#cb38-3"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">50</span>)</span>
+<span id="cb38-5"><a href="#cb38-5"></a>y <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb38-6"><a href="#cb38-6"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb38-7"><a href="#cb38-7"></a></span>
+<span id="cb38-8"><a href="#cb38-8"></a><span class="co"># --- 2. Fit the OLS Model ---</span></span>
+<span id="cb38-9"><a href="#cb38-9"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
+<span id="cb38-10"><a href="#cb38-10"></a>data<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(model)</span>
+<span id="cb38-11"><a href="#cb38-11"></a>residual_sd <span class="ot">&lt;-</span> <span class="fu">sigma</span>(model) <span class="co"># Get the residual standard deviation</span></span>
+<span id="cb38-12"><a href="#cb38-12"></a></span>
+<span id="cb38-13"><a href="#cb38-13"></a><span class="co"># --- 3. Create the Base Plot ---</span></span>
+<span id="cb38-14"><a href="#cb38-14"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb38-15"><a href="#cb38-15"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"gray50"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb38-16"><a href="#cb38-16"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"black"</span>,<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb38-17"><a href="#cb38-17"></a>  <span class="fu">labs</span>(</span>
+<span id="cb38-18"><a href="#cb38-18"></a>    <span class="at">title =</span> <span class="st">"Regression Line with Residual Distributions"</span>,</span>
+<span id="cb38-19"><a href="#cb38-19"></a>    <span class="at">x =</span> <span class="st">"X"</span>,</span>
+<span id="cb38-20"><a href="#cb38-20"></a>    <span class="at">y =</span> <span class="st">"Y"</span></span>
+<span id="cb38-21"><a href="#cb38-21"></a>  ) </span>
+<span id="cb38-22"><a href="#cb38-22"></a></span>
+<span id="cb38-23"><a href="#cb38-23"></a><span class="co"># --- 4. Function to Generate Density Curve Data ---</span></span>
+<span id="cb38-24"><a href="#cb38-24"></a><span class="co"># This function creates the points needed to draw a normal curve at a specific point</span></span>
+<span id="cb38-25"><a href="#cb38-25"></a><span class="co"># on the regression line.</span></span>
+<span id="cb38-26"><a href="#cb38-26"></a>generate_density_data <span class="ot">&lt;-</span> <span class="cf">function</span>(x_val, model, sd, <span class="at">scale =</span> <span class="dv">5</span>) {</span>
+<span id="cb38-27"><a href="#cb38-27"></a>  <span class="co"># Predict the y-value on the regression line</span></span>
+<span id="cb38-28"><a href="#cb38-28"></a>  y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_val))</span>
+<span id="cb38-29"><a href="#cb38-29"></a>  </span>
+<span id="cb38-30"><a href="#cb38-30"></a>  <span class="co"># Generate points for a normal distribution curve</span></span>
+<span id="cb38-31"><a href="#cb38-31"></a>  y_curve <span class="ot">&lt;-</span> <span class="fu">seq</span>(y_hat <span class="sc">-</span> <span class="dv">3</span> <span class="sc">*</span> sd, y_hat <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> sd, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb38-32"><a href="#cb38-32"></a>  density <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(y_curve, <span class="at">mean =</span> y_hat, <span class="at">sd =</span> sd)</span>
+<span id="cb38-33"><a href="#cb38-33"></a>  </span>
+<span id="cb38-34"><a href="#cb38-34"></a>  <span class="co"># Return a data frame with coordinates for the polygon</span></span>
+<span id="cb38-35"><a href="#cb38-35"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb38-36"><a href="#cb38-36"></a>    <span class="at">x_poly =</span> x_val <span class="sc">+</span> density <span class="sc">*</span> scale, <span class="co"># Offset x by the density value</span></span>
+<span id="cb38-37"><a href="#cb38-37"></a>    <span class="at">y_poly =</span> y_curve</span>
+<span id="cb38-38"><a href="#cb38-38"></a>  )</span>
+<span id="cb38-39"><a href="#cb38-39"></a>}</span>
+<span id="cb38-40"><a href="#cb38-40"></a></span>
+<span id="cb38-41"><a href="#cb38-41"></a><span class="co"># --- 5. Add Density Curves to the Plot ---</span></span>
+<span id="cb38-42"><a href="#cb38-42"></a><span class="co"># Choose a few x-values where you want to show the distributions</span></span>
+<span id="cb38-43"><a href="#cb38-43"></a>x_locations <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">35</span>)</span>
+<span id="cb38-44"><a href="#cb38-44"></a></span>
+<span id="cb38-45"><a href="#cb38-45"></a><span class="co"># Generate the data for each density curve</span></span>
+<span id="cb38-46"><a href="#cb38-46"></a>density_df1 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">1</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-47"><a href="#cb38-47"></a>density_df2 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">2</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-48"><a href="#cb38-48"></a>density_df3 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">3</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-49"><a href="#cb38-49"></a>density_df4 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">4</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-50"><a href="#cb38-50"></a>density_df5 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">5</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-51"><a href="#cb38-51"></a>density_df6 <span class="ot">&lt;-</span> <span class="fu">generate_density_data</span>(x_locations[<span class="dv">6</span>], model, residual_sd, <span class="at">scale =</span> <span class="dv">80</span>)</span>
+<span id="cb38-52"><a href="#cb38-52"></a></span>
+<span id="cb38-53"><a href="#cb38-53"></a><span class="co"># Add the polygons to the plot</span></span>
+<span id="cb38-54"><a href="#cb38-54"></a>p <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df1, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df2, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df3, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df4, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df5, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="at">data =</span> density_df6, <span class="fu">aes</span>(<span class="at">x =</span> x_poly, <span class="at">y =</span> y_poly), <span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 
 </div>
 <img data-src="glm_3_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
@@ -1248,6 +1250,188 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <li><p><span class="math inline">\(\hat{\sigma}\)</span> = <span class="math inline">\(\sqrt{MSE}\)</span> = <span class="math inline">\(\sqrt{\frac{\sum(Y_i - \hat{Y_i})^2}{n-k-1}}\)</span></p></li>
 </ul>
 </section>
+<section id="from-population-to-sample" class="slide level2">
+<h2>From population to sample</h2>
+<p><span class="math display">\[Y_i \sim Normal(\mu, \sigma)\]</span></p>
+<ul>
+<li>The DV, <span class="math inline">\(Y\)</span> is assumed to be distributed as a Gaussian normal, made up of <span class="math inline">\(Y_i\)</span>, with a mean of <span class="math inline">\(\mu\)</span> and a standard deviation of <span class="math inline">\(\sigma\)</span></li>
+</ul>
+<p><span class="math display">\[Y_i = b_{0} + b_{1}X_i + e_i\]</span></p>
+<p><span class="math display">\[Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)\]</span></p>
+</section>
+<section id="from-population-to-sample-1" class="slide level2">
+<h2>From population to sample</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># Load the ggplot2 library for plotting</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb39-3"><a href="#cb39-3"></a></span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="co"># --- 1. Define the True Population Model ---</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="co"># These are the "true" parameters that we are trying to discover.</span></span>
+<span id="cb39-6"><a href="#cb39-6"></a>true_beta0 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb39-7"><a href="#cb39-7"></a>true_beta1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb39-8"><a href="#cb39-8"></a>true_sigma <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb39-9"><a href="#cb39-9"></a>population_size <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb39-10"><a href="#cb39-10"></a></span>
+<span id="cb39-11"><a href="#cb39-11"></a><span class="co"># Create the entire population based on the true model</span></span>
+<span id="cb39-12"><a href="#cb39-12"></a>population <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb39-13"><a href="#cb39-13"></a>  <span class="at">x =</span> <span class="fu">runif</span>(population_size, <span class="dv">0</span>, <span class="dv">50</span>)</span>
+<span id="cb39-14"><a href="#cb39-14"></a>)</span>
+<span id="cb39-15"><a href="#cb39-15"></a>population<span class="sc">$</span>y <span class="ot">&lt;-</span> true_beta0 <span class="sc">+</span> true_beta1 <span class="sc">*</span> population<span class="sc">$</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> true_sigma)</span>
+<span id="cb39-16"><a href="#cb39-16"></a></span>
+<span id="cb39-17"><a href="#cb39-17"></a><span class="co"># --- 2. Draw a Random Sample from the Population ---</span></span>
+<span id="cb39-18"><a href="#cb39-18"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb39-19"><a href="#cb39-19"></a>sample_data <span class="ot">&lt;-</span> population[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>population_size, sample_size), ]</span>
+<span id="cb39-20"><a href="#cb39-20"></a></span>
+<span id="cb39-21"><a href="#cb39-21"></a><span class="co"># --- 3. Fit a Regression Model to the SAMPLE ---</span></span>
+<span id="cb39-22"><a href="#cb39-22"></a>sample_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sample_data)</span>
+<span id="cb39-23"><a href="#cb39-23"></a>sample_beta0_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model)[<span class="dv">1</span>]</span>
+<span id="cb39-24"><a href="#cb39-24"></a>sample_beta1_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model)[<span class="dv">2</span>]</span>
+<span id="cb39-25"><a href="#cb39-25"></a></span>
+<span id="cb39-26"><a href="#cb39-26"></a><span class="co"># --- 4. Visualize the Relationship ---</span></span>
+<span id="cb39-27"><a href="#cb39-27"></a></span>
+<span id="cb39-28"><a href="#cb39-28"></a>pop <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(population, <span class="fu">aes</span>(<span class="at">x =</span> y)) <span class="sc">+</span></span>
+<span id="cb39-29"><a href="#cb39-29"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb39-30"><a href="#cb39-30"></a>  <span class="fu">labs</span>(</span>
+<span id="cb39-31"><a href="#cb39-31"></a>    <span class="at">title =</span> <span class="st">"Distribution of the Outcome Variable (Y) in the Population"</span>,</span>
+<span id="cb39-32"><a href="#cb39-32"></a>    <span class="at">subtitle =</span> <span class="st">"The overall distribution is approximately normal"</span>,</span>
+<span id="cb39-33"><a href="#cb39-33"></a>    <span class="at">x =</span> <span class="st">"Outcome (Y)"</span>,</span>
+<span id="cb39-34"><a href="#cb39-34"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb39-35"><a href="#cb39-35"></a>  ) <span class="sc">+</span></span>
+<span id="cb39-36"><a href="#cb39-36"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span>
+<span id="cb39-37"><a href="#cb39-37"></a></span>
+<span id="cb39-38"><a href="#cb39-38"></a></span>
+<span id="cb39-39"><a href="#cb39-39"></a>pop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">ggplot</span>(population, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="co"># Plot the entire population as faint gray points</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a><span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"gray80"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4"></a><span class="co"># Add the TRUE population regression line in red</span></span>
+<span id="cb40-5"><a href="#cb40-5"></a><span class="fu">geom_abline</span>(</span>
+<span id="cb40-6"><a href="#cb40-6"></a><span class="at">intercept =</span> true_beta0,</span>
+<span id="cb40-7"><a href="#cb40-7"></a><span class="at">slope =</span> true_beta1,</span>
+<span id="cb40-8"><a href="#cb40-8"></a><span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb40-9"><a href="#cb40-9"></a><span class="at">size =</span> <span class="fl">1.5</span>,</span>
+<span id="cb40-10"><a href="#cb40-10"></a><span class="at">linetype =</span> <span class="st">"dashed"</span></span>
+<span id="cb40-11"><a href="#cb40-11"></a>) <span class="sc">+</span></span>
+<span id="cb40-12"><a href="#cb40-12"></a><span class="co"># Highlight the points from our random sample in blue</span></span>
+<span id="cb40-13"><a href="#cb40-13"></a><span class="fu">geom_point</span>(<span class="at">data =</span> sample_data, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb40-14"><a href="#cb40-14"></a><span class="co"># Add the ESTIMATED sample regression line in blue</span></span>
+<span id="cb40-15"><a href="#cb40-15"></a><span class="fu">geom_abline</span>(</span>
+<span id="cb40-16"><a href="#cb40-16"></a><span class="at">intercept =</span> sample_beta0_hat,</span>
+<span id="cb40-17"><a href="#cb40-17"></a><span class="at">slope =</span> sample_beta1_hat,</span>
+<span id="cb40-18"><a href="#cb40-18"></a><span class="at">color =</span> <span class="st">"green"</span>,</span>
+<span id="cb40-19"><a href="#cb40-19"></a><span class="at">size =</span> <span class="fl">1.5</span></span>
+<span id="cb40-20"><a href="#cb40-20"></a>) <span class="sc">+</span></span>
+<span id="cb40-21"><a href="#cb40-21"></a><span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"The green line is our sample estimate of the population (black)"</span>,</span>
+<span id="cb40-22"><a href="#cb40-22"></a><span class="at">x =</span> <span class="st">"Predictor (X)"</span>,</span>
+<span id="cb40-23"><a href="#cb40-23"></a><span class="at">y =</span> <span class="st">"Outcome (Y)"</span></span>
+<span id="cb40-24"><a href="#cb40-24"></a>) <span class="sc">+</span></span>
+<span id="cb40-25"><a href="#cb40-25"></a><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
+<section id="from-population-to-sample-2" class="slide level2">
+<h2>From population to sample</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># Load the ggplot2 library for plotting</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="fu">library</span>(dplyr) <span class="co"># For data manipulation</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a></span>
+<span id="cb41-5"><a href="#cb41-5"></a><span class="co"># --- 1. Define the True Population Model ---</span></span>
+<span id="cb41-6"><a href="#cb41-6"></a><span class="co"># These are the "true" parameters.</span></span>
+<span id="cb41-7"><a href="#cb41-7"></a>true_beta0 <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># Mean of the group where X=0</span></span>
+<span id="cb41-8"><a href="#cb41-8"></a>true_beta1 <span class="ot">&lt;-</span> <span class="dv">20</span>  <span class="co"># The true DIFFERENCE between the group means</span></span>
+<span id="cb41-9"><a href="#cb41-9"></a>true_sigma <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb41-10"><a href="#cb41-10"></a>population_size <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb41-11"><a href="#cb41-11"></a></span>
+<span id="cb41-12"><a href="#cb41-12"></a><span class="co"># Create the population</span></span>
+<span id="cb41-13"><a href="#cb41-13"></a>population <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb41-14"><a href="#cb41-14"></a>  <span class="co"># Create a binary predictor variable (0 or 1)</span></span>
+<span id="cb41-15"><a href="#cb41-15"></a>  <span class="at">x =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), population_size, <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb41-16"><a href="#cb41-16"></a>)</span>
+<span id="cb41-17"><a href="#cb41-17"></a><span class="co"># The model Y = b0 + b1*X + error still works.</span></span>
+<span id="cb41-18"><a href="#cb41-18"></a><span class="co"># If X=0, Y = b0. If X=1, Y = b0 + b1.</span></span>
+<span id="cb41-19"><a href="#cb41-19"></a>population<span class="sc">$</span>y <span class="ot">&lt;-</span> true_beta0 <span class="sc">+</span> true_beta1 <span class="sc">*</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(population<span class="sc">$</span>x)) <span class="sc">+</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> true_sigma)</span>
+<span id="cb41-20"><a href="#cb41-20"></a></span>
+<span id="cb41-21"><a href="#cb41-21"></a><span class="co"># --- 2. Draw a Random Sample from the Population ---</span></span>
+<span id="cb41-22"><a href="#cb41-22"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb41-23"><a href="#cb41-23"></a>sample_data <span class="ot">&lt;-</span> population[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>population_size, sample_size), ]</span>
+<span id="cb41-24"><a href="#cb41-24"></a></span>
+<span id="cb41-25"><a href="#cb41-25"></a><span class="co"># --- 3. Fit a Regression Model to the SAMPLE ---</span></span>
+<span id="cb41-26"><a href="#cb41-26"></a>sample_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sample_data)</span>
+<span id="cb41-27"><a href="#cb41-27"></a><span class="co"># Get the estimated intercept and slope (difference)</span></span>
+<span id="cb41-28"><a href="#cb41-28"></a>sample_beta0_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model)[<span class="dv">1</span>]</span>
+<span id="cb41-29"><a href="#cb41-29"></a>sample_beta1_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model)[<span class="dv">2</span>]</span>
+<span id="cb41-30"><a href="#cb41-30"></a></span>
+<span id="cb41-31"><a href="#cb41-31"></a><span class="co"># --- 4. Calculate True and Estimated Group Means ---</span></span>
+<span id="cb41-32"><a href="#cb41-32"></a><span class="co"># True population means</span></span>
+<span id="cb41-33"><a href="#cb41-33"></a>true_means <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb41-34"><a href="#cb41-34"></a>  <span class="at">x =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)),</span>
+<span id="cb41-35"><a href="#cb41-35"></a>  <span class="at">mean_y =</span> <span class="fu">c</span>(true_beta0, true_beta0 <span class="sc">+</span> true_beta1)</span>
+<span id="cb41-36"><a href="#cb41-36"></a>)</span>
+<span id="cb41-37"><a href="#cb41-37"></a><span class="co"># Estimated means from our sample</span></span>
+<span id="cb41-38"><a href="#cb41-38"></a>estimated_means <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb41-39"><a href="#cb41-39"></a>  <span class="at">x =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)),</span>
+<span id="cb41-40"><a href="#cb41-40"></a>  <span class="at">mean_y =</span> <span class="fu">c</span>(sample_beta0_hat, sample_beta0_hat <span class="sc">+</span> sample_beta1_hat)</span>
+<span id="cb41-41"><a href="#cb41-41"></a>)</span>
+<span id="cb41-42"><a href="#cb41-42"></a></span>
+<span id="cb41-43"><a href="#cb41-43"></a><span class="co"># --- 5. Visualize  </span></span>
+<span id="cb41-44"><a href="#cb41-44"></a></span>
+<span id="cb41-45"><a href="#cb41-45"></a><span class="fu">ggplot</span>(population, <span class="fu">aes</span>(<span class="at">x =</span> y)) <span class="sc">+</span></span>
+<span id="cb41-46"><a href="#cb41-46"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb41-47"><a href="#cb41-47"></a>  <span class="fu">labs</span>(</span>
+<span id="cb41-48"><a href="#cb41-48"></a>    <span class="at">title =</span> <span class="st">"Distribution of the Outcome Variable (Y) in the Population"</span>,</span>
+<span id="cb41-49"><a href="#cb41-49"></a>    <span class="at">subtitle =</span> <span class="st">"The overall distribution is approximately normal"</span>,</span>
+<span id="cb41-50"><a href="#cb41-50"></a>    <span class="at">x =</span> <span class="st">"Outcome (Y)"</span>,</span>
+<span id="cb41-51"><a href="#cb41-51"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb41-52"><a href="#cb41-52"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-53"><a href="#cb41-53"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">ggplot</span>(population, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a>  <span class="co"># Jitter plot of the entire population</span></span>
+<span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">geom_jitter</span>(<span class="at">color =</span> <span class="st">"gray80"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="#cb42-4"></a>  </span>
+<span id="cb42-5"><a href="#cb42-5"></a>  <span class="co"># Highlight the points from our random sample</span></span>
+<span id="cb42-6"><a href="#cb42-6"></a>  <span class="fu">geom_jitter</span>(<span class="at">data =</span> sample_data, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb42-7"><a href="#cb42-7"></a>  </span>
+<span id="cb42-8"><a href="#cb42-8"></a>  <span class="co"># Add the TRUE population means in black</span></span>
+<span id="cb42-9"><a href="#cb42-9"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> true_means, <span class="fu">aes</span>(<span class="at">y =</span> mean_y), <span class="at">color =</span> <span class="st">"Black"</span>, <span class="at">size =</span> <span class="dv">28</span>, <span class="at">shape =</span> <span class="dv">95</span>) <span class="sc">+</span></span>
+<span id="cb42-10"><a href="#cb42-10"></a>  </span>
+<span id="cb42-11"><a href="#cb42-11"></a>  <span class="co"># Add the ESTIMATED sample means in blue</span></span>
+<span id="cb42-12"><a href="#cb42-12"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> estimated_means, <span class="fu">aes</span>(<span class="at">y =</span> mean_y), <span class="at">color =</span> <span class="st">"green"</span>, <span class="at">size =</span> <span class="dv">28</span>, <span class="at">shape =</span> <span class="dv">95</span>) <span class="sc">+</span></span>
+<span id="cb42-13"><a href="#cb42-13"></a>  </span>
+<span id="cb42-14"><a href="#cb42-14"></a>  <span class="fu">labs</span>(</span>
+<span id="cb42-15"><a href="#cb42-15"></a>    <span class="at">title =</span> <span class="st">"Regression with a Dichotomous Predictor"</span>,</span>
+<span id="cb42-16"><a href="#cb42-16"></a>    <span class="at">subtitle =</span> <span class="st">"Sample estimates (green bars) are close to the population black bars"</span>,</span>
+<span id="cb42-17"><a href="#cb42-17"></a>    <span class="at">x =</span> <span class="st">"Group (Predictor X)"</span>,</span>
+<span id="cb42-18"><a href="#cb42-18"></a>    <span class="at">y =</span> <span class="st">"Outcome (Y)"</span></span>
+<span id="cb42-19"><a href="#cb42-19"></a>  ) <span class="sc">+</span></span>
+<span id="cb42-20"><a href="#cb42-20"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
 <section id="wrap-up" class="slide level2">
 <h2>Wrap-up</h2>
 <ul>

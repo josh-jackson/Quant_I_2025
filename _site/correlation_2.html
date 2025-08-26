@@ -615,10 +615,7 @@
 <h2>Variance</h2>
 <p>We calculate the average squared deviation: this is our variance, <span class="math inline">\(\sigma^2\)</span>:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">sum</span>((x <span class="sc">-</span> <span class="fu">mean</span>(x))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 6.666667</code></pre>
 </div>
@@ -629,34 +626,46 @@
 <pre><code>[1] 1.21991</code></pre>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">var</span>(world<span class="sc">$</span>Happiness)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.228946</code></pre>
+</div>
+</div>
 </section>
 <section id="variance-1" class="slide level2">
 <h2>Variance</h2>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(world) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> Happiness)) <span class="sc">+</span></span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">1</span>,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">ggplot</span>(world) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> Happiness)) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">1</span>,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
 <section id="standard-deviation" class="slide level2">
 <h2>Standard Deviation</h2>
 <p><strong>Standard deviation <span class="math inline">\(\sigma\)</span></strong> is the square root of the variance.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>(deviation<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(deviation))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>(deviation<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(deviation))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2.581989</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>((world<span class="sc">$</span>Happiness <span class="sc">-</span> <span class="fu">mean</span>(world<span class="sc">$</span>Happiness))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(world<span class="sc">$</span>Happiness))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>((world<span class="sc">$</span>Happiness <span class="sc">-</span> <span class="fu">mean</span>(world<span class="sc">$</span>Happiness))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(world<span class="sc">$</span>Happiness))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.104495</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">sd</span>(world<span class="sc">$</span>Happiness)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.108579</code></pre>
 </div>
 </div>
 </section>
@@ -665,66 +674,66 @@
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># --- Distribution 1: Standard Normal ---</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="co"># Mean = 0, Standard Deviation = 1</span></span>
-<span id="cb36-3"><a href="#cb36-3"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># Number of data points to simulate</span></span>
-<span id="cb36-4"><a href="#cb36-4"></a>data_dist1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb36-5"><a href="#cb36-5"></a>  <span class="at">value =</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>),</span>
-<span id="cb36-6"><a href="#cb36-6"></a>  <span class="at">distribution =</span> <span class="st">"Mean = 0, SD = 1"</span></span>
-<span id="cb36-7"><a href="#cb36-7"></a>)</span>
-<span id="cb36-8"><a href="#cb36-8"></a></span>
-<span id="cb36-9"><a href="#cb36-9"></a><span class="co"># --- Distribution 2: Shifted Mean ---</span></span>
-<span id="cb36-10"><a href="#cb36-10"></a><span class="co"># Mean = 5, Standard Deviation = 1 (same spread, shifted right)</span></span>
-<span id="cb36-11"><a href="#cb36-11"></a>data_dist2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb36-12"><a href="#cb36-12"></a>  <span class="at">value =</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">1</span>),</span>
-<span id="cb36-13"><a href="#cb36-13"></a>  <span class="at">distribution =</span> <span class="st">"Mean = 5, SD = 1"</span></span>
-<span id="cb36-14"><a href="#cb36-14"></a>)</span>
-<span id="cb36-15"><a href="#cb36-15"></a></span>
-<span id="cb36-16"><a href="#cb36-16"></a><span class="co"># --- Distribution 3: Larger Standard Deviation ---</span></span>
-<span id="cb36-17"><a href="#cb36-17"></a><span class="co"># Mean = 0, Standard Deviation = 2 (wider spread, centered at 0)</span></span>
-<span id="cb36-18"><a href="#cb36-18"></a>data_dist3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb36-19"><a href="#cb36-19"></a>  <span class="at">value =</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">2</span>),</span>
-<span id="cb36-20"><a href="#cb36-20"></a>  <span class="at">distribution =</span> <span class="st">"Mean = 0, SD = 2"</span></span>
-<span id="cb36-21"><a href="#cb36-21"></a>)</span>
-<span id="cb36-22"><a href="#cb36-22"></a></span>
-<span id="cb36-23"><a href="#cb36-23"></a><span class="co"># --- Distribution 4: Different Mean and SD ---</span></span>
-<span id="cb36-24"><a href="#cb36-24"></a><span class="co"># Mean = -3, Standard Deviation = 0.5 (narrower, shifted left)</span></span>
-<span id="cb36-25"><a href="#cb36-25"></a>data_dist4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb36-26"><a href="#cb36-26"></a>  <span class="at">value =</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> <span class="sc">-</span><span class="dv">3</span>, <span class="at">sd =</span> <span class="fl">0.5</span>),</span>
-<span id="cb36-27"><a href="#cb36-27"></a>  <span class="at">distribution =</span> <span class="st">"Mean = -3, SD = 0.5"</span></span>
-<span id="cb36-28"><a href="#cb36-28"></a>)</span>
-<span id="cb36-29"><a href="#cb36-29"></a></span>
-<span id="cb36-30"><a href="#cb36-30"></a><span class="co"># Combine all data into a single data frame for ggplot</span></span>
-<span id="cb36-31"><a href="#cb36-31"></a>all_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(data_dist1, data_dist2, data_dist3, data_dist4)</span>
-<span id="cb36-32"><a href="#cb36-32"></a></span>
-<span id="cb36-33"><a href="#cb36-33"></a><span class="co"># Convert 'distribution' to a factor for proper ordering and discrete coloring</span></span>
-<span id="cb36-34"><a href="#cb36-34"></a>all_data<span class="sc">$</span>distribution <span class="ot">&lt;-</span> <span class="fu">factor</span>(all_data<span class="sc">$</span>distribution,</span>
-<span id="cb36-35"><a href="#cb36-35"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Mean = 0, SD = 1"</span>,</span>
-<span id="cb36-36"><a href="#cb36-36"></a>                                           <span class="st">"Mean = 5, SD = 1"</span>,</span>
-<span id="cb36-37"><a href="#cb36-37"></a>                                           <span class="st">"Mean = 0, SD = 2"</span>,</span>
-<span id="cb36-38"><a href="#cb36-38"></a>                                           <span class="st">"Mean = -3, SD = 0.5"</span>))</span>
-<span id="cb36-39"><a href="#cb36-39"></a></span>
-<span id="cb36-40"><a href="#cb36-40"></a><span class="co"># ----------------------------------------------------------------------</span></span>
-<span id="cb36-41"><a href="#cb36-41"></a><span class="co"># Part 2: Graphing in ggplot2</span></span>
-<span id="cb36-42"><a href="#cb36-42"></a><span class="co"># ----------------------------------------------------------------------</span></span>
-<span id="cb36-43"><a href="#cb36-43"></a></span>
-<span id="cb36-44"><a href="#cb36-44"></a><span class="co"># Using geom_density to show the smooth distribution</span></span>
-<span id="cb36-45"><a href="#cb36-45"></a><span class="fu">ggplot</span>(all_data, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">color =</span> distribution, <span class="at">fill =</span> distribution)) <span class="sc">+</span></span>
-<span id="cb36-46"><a href="#cb36-46"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> <span class="co"># alpha for transparency of fill</span></span>
-<span id="cb36-47"><a href="#cb36-47"></a>  <span class="fu">labs</span>(</span>
-<span id="cb36-48"><a href="#cb36-48"></a>    <span class="at">title =</span> <span class="st">"Comparison of Different Distributions"</span>,</span>
-<span id="cb36-49"><a href="#cb36-49"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
-<span id="cb36-50"><a href="#cb36-50"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb36-51"><a href="#cb36-51"></a>    <span class="at">color =</span> <span class="st">"Distribution Parameters"</span>,</span>
-<span id="cb36-52"><a href="#cb36-52"></a>    <span class="at">fill =</span> <span class="st">"Distribution Parameters"</span></span>
-<span id="cb36-53"><a href="#cb36-53"></a>  ) <span class="sc">+</span></span>
-<span id="cb36-54"><a href="#cb36-54"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="co"># A clean theme</span></span>
-<span id="cb36-55"><a href="#cb36-55"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>) <span class="sc">+</span> <span class="co"># Choose a color palette</span></span>
-<span id="cb36-56"><a href="#cb36-56"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>) <span class="co"># Match fill color palette</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># --- Distribution 1: Standard Normal ---</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="co"># Mean = 0, Standard Deviation = 1</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># Number of data points to simulate</span></span>
+<span id="cb40-4"><a href="#cb40-4"></a>data_dist1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb40-5"><a href="#cb40-5"></a>  <span class="at">value =</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>),</span>
+<span id="cb40-6"><a href="#cb40-6"></a>  <span class="at">distribution =</span> <span class="st">"Mean = 0, SD = 1"</span></span>
+<span id="cb40-7"><a href="#cb40-7"></a>)</span>
+<span id="cb40-8"><a href="#cb40-8"></a></span>
+<span id="cb40-9"><a href="#cb40-9"></a><span class="co"># --- Distribution 2: Shifted Mean ---</span></span>
+<span id="cb40-10"><a href="#cb40-10"></a><span class="co"># Mean = 5, Standard Deviation = 1 (same spread, shifted right)</span></span>
+<span id="cb40-11"><a href="#cb40-11"></a>data_dist2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb40-12"><a href="#cb40-12"></a>  <span class="at">value =</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">1</span>),</span>
+<span id="cb40-13"><a href="#cb40-13"></a>  <span class="at">distribution =</span> <span class="st">"Mean = 5, SD = 1"</span></span>
+<span id="cb40-14"><a href="#cb40-14"></a>)</span>
+<span id="cb40-15"><a href="#cb40-15"></a></span>
+<span id="cb40-16"><a href="#cb40-16"></a><span class="co"># --- Distribution 3: Larger Standard Deviation ---</span></span>
+<span id="cb40-17"><a href="#cb40-17"></a><span class="co"># Mean = 0, Standard Deviation = 2 (wider spread, centered at 0)</span></span>
+<span id="cb40-18"><a href="#cb40-18"></a>data_dist3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb40-19"><a href="#cb40-19"></a>  <span class="at">value =</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">2</span>),</span>
+<span id="cb40-20"><a href="#cb40-20"></a>  <span class="at">distribution =</span> <span class="st">"Mean = 0, SD = 2"</span></span>
+<span id="cb40-21"><a href="#cb40-21"></a>)</span>
+<span id="cb40-22"><a href="#cb40-22"></a></span>
+<span id="cb40-23"><a href="#cb40-23"></a><span class="co"># --- Distribution 4: Different Mean and SD ---</span></span>
+<span id="cb40-24"><a href="#cb40-24"></a><span class="co"># Mean = -3, Standard Deviation = 0.5 (narrower, shifted left)</span></span>
+<span id="cb40-25"><a href="#cb40-25"></a>data_dist4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb40-26"><a href="#cb40-26"></a>  <span class="at">value =</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> <span class="sc">-</span><span class="dv">3</span>, <span class="at">sd =</span> <span class="fl">0.5</span>),</span>
+<span id="cb40-27"><a href="#cb40-27"></a>  <span class="at">distribution =</span> <span class="st">"Mean = -3, SD = 0.5"</span></span>
+<span id="cb40-28"><a href="#cb40-28"></a>)</span>
+<span id="cb40-29"><a href="#cb40-29"></a></span>
+<span id="cb40-30"><a href="#cb40-30"></a><span class="co"># Combine all data into a single data frame for ggplot</span></span>
+<span id="cb40-31"><a href="#cb40-31"></a>all_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(data_dist1, data_dist2, data_dist3, data_dist4)</span>
+<span id="cb40-32"><a href="#cb40-32"></a></span>
+<span id="cb40-33"><a href="#cb40-33"></a><span class="co"># Convert 'distribution' to a factor for proper ordering and discrete coloring</span></span>
+<span id="cb40-34"><a href="#cb40-34"></a>all_data<span class="sc">$</span>distribution <span class="ot">&lt;-</span> <span class="fu">factor</span>(all_data<span class="sc">$</span>distribution,</span>
+<span id="cb40-35"><a href="#cb40-35"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Mean = 0, SD = 1"</span>,</span>
+<span id="cb40-36"><a href="#cb40-36"></a>                                           <span class="st">"Mean = 5, SD = 1"</span>,</span>
+<span id="cb40-37"><a href="#cb40-37"></a>                                           <span class="st">"Mean = 0, SD = 2"</span>,</span>
+<span id="cb40-38"><a href="#cb40-38"></a>                                           <span class="st">"Mean = -3, SD = 0.5"</span>))</span>
+<span id="cb40-39"><a href="#cb40-39"></a></span>
+<span id="cb40-40"><a href="#cb40-40"></a><span class="co"># ----------------------------------------------------------------------</span></span>
+<span id="cb40-41"><a href="#cb40-41"></a><span class="co"># Part 2: Graphing in ggplot2</span></span>
+<span id="cb40-42"><a href="#cb40-42"></a><span class="co"># ----------------------------------------------------------------------</span></span>
+<span id="cb40-43"><a href="#cb40-43"></a></span>
+<span id="cb40-44"><a href="#cb40-44"></a><span class="co"># Using geom_density to show the smooth distribution</span></span>
+<span id="cb40-45"><a href="#cb40-45"></a><span class="fu">ggplot</span>(all_data, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">color =</span> distribution, <span class="at">fill =</span> distribution)) <span class="sc">+</span></span>
+<span id="cb40-46"><a href="#cb40-46"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> <span class="co"># alpha for transparency of fill</span></span>
+<span id="cb40-47"><a href="#cb40-47"></a>  <span class="fu">labs</span>(</span>
+<span id="cb40-48"><a href="#cb40-48"></a>    <span class="at">title =</span> <span class="st">"Comparison of Different Distributions"</span>,</span>
+<span id="cb40-49"><a href="#cb40-49"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
+<span id="cb40-50"><a href="#cb40-50"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb40-51"><a href="#cb40-51"></a>    <span class="at">color =</span> <span class="st">"Distribution Parameters"</span>,</span>
+<span id="cb40-52"><a href="#cb40-52"></a>    <span class="at">fill =</span> <span class="st">"Distribution Parameters"</span></span>
+<span id="cb40-53"><a href="#cb40-53"></a>  ) <span class="sc">+</span></span>
+<span id="cb40-54"><a href="#cb40-54"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="co"># A clean theme</span></span>
+<span id="cb40-55"><a href="#cb40-55"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>) <span class="sc">+</span> <span class="co"># Choose a color palette</span></span>
+<span id="cb40-56"><a href="#cb40-56"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>) <span class="co"># Match fill color palette</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
 <section id="skew-and-kurtosis" class="slide level2">
 <h2>Skew and Kurtosis</h2>
 <p>Moments 3 and 4 of a distribution are <strong>skew</strong> and <strong>kurtosis</strong>.</p>
@@ -745,11 +754,11 @@
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">ggplot</span>(world) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> Life)) <span class="sc">+</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">ggplot</span>(world) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> Life)) <span class="sc">+</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
 <section id="population-versus-sample" class="slide level2">
 <h2>Population versus sample</h2>
 <ul>
@@ -764,88 +773,95 @@
 <section id="bias-and-efficiency" class="slide level2">
 <h2>Bias and efficiency</h2>
 <ul>
-<li><p>In deciding about different ways to estimate a parameter (e.g., central tendency), it is important to consider bias and efficiency (and sometimes consistency).</p></li>
-<li><p><strong>Bias</strong>: An estimator is biased if its expected value and the true value of the parameter are different.</p></li>
-<li><p><strong>Efficiency</strong>: Of two alternative estimators, the more efficient one will estimate the parameter with less error for the same sample size.</p></li>
+<li><p>In deciding about different ways to estimate a parameter (e.g., <span class="math inline">\(\mu\)</span>), it is important to consider bias and efficiency.</p></li>
+<li><p><strong>Bias</strong>: An estimator is biased if its expected value and the true value of the parameter are different. If we sample means multiple times we will eventually converge with the population mean (e.g,. picking marbles with replacement).</p></li>
+<li><p><strong>Efficiency</strong>: Of two alternative estimators (how we get our estimates), the more efficient one will estimate the parameter with less error for the same sample size. (For regression with outliers we may want to use WLS, LAD, or Bayesian)</p></li>
 </ul>
 </section>
-<section id="bias-and-efficiency-1" class="slide level2">
-<h2>Bias and efficiency</h2>
+<section id="bias" class="slide level2">
+<h2>Bias</h2>
 <ul>
 <li>Variance (and standard deviation) are <em>biased</em> estimators when applied to samples. They will <em>underestimate</em> variability in the population.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>((world<span class="sc">$</span>Happiness <span class="sc">-</span> <span class="fu">mean</span>(world<span class="sc">$</span>Happiness))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(world<span class="sc">$</span>Happiness))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>((world<span class="sc">$</span>Happiness <span class="sc">-</span> <span class="fu">mean</span>(world<span class="sc">$</span>Happiness))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(world<span class="sc">$</span>Happiness))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.104495</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">sd</span>(world<span class="sc">$</span>Happiness)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">sd</span>(world<span class="sc">$</span>Happiness)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.108579</code></pre>
 </div>
 </div>
+<ul>
+<li>Default of most statistical packages is sample variance/SD, as one is usually working with sample data</li>
+</ul>
 </section>
 <section class="slide level2">
 
-<p><em>Population</em> <span class="math display">\[\sigma^2 = \frac{\Sigma(X_i-\mu)^2}{N}\]</span></p>
-<p><em>Sample</em> <span class="math display">\[s^2 = \hat{\sigma}^2 = \frac{\Sigma(X_i-\bar{X})^2}{N-1}\]</span>]</p>
+<p><em>Population</em></p>
+<p><span class="math display">\[\sigma^2 = \frac{\Sigma(X_i-\mu)^2}{N}\]</span></p>
+<p><em>Sample</em> <span class="math display">\[s^2 = \hat{\sigma}^2 = \frac{\Sigma(X_i-\bar{X})^2}{N-1}\]</span></p>
 </section>
 <section id="standard-deviation-1" class="slide level2">
 <h2>Standard Deviation</h2>
 <p><em>Population</em> <span class="math display">\[\sigma = \sqrt{\frac{\Sigma(X_i-\mu)^2}{N}}\]</span></p>
-<p><em>Sample</em> <span class="math display">\[s = \hat{\sigma} = \sqrt{\frac{\Sigma(X_i-\bar{X})^2}{N-1}}\]</span>]</p>
+<p><em>Sample</em> <span class="math display">\[s = \hat{\sigma} = \sqrt{\frac{\Sigma(X_i-\bar{X})^2}{N-1}}\]</span></p>
 </section>
 <section id="simulation" class="slide level2">
 <h2>Simulation</h2>
+<ul>
+<li>Map example</li>
+</ul>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">set.seed</span>(<span class="dv">100917</span>) <span class="co">#so everyone gets same random draws</span></span>
-<span id="cb42-2"><a href="#cb42-2"></a></span>
-<span id="cb42-3"><a href="#cb42-3"></a><span class="co">#function to estimate variance using population formula</span></span>
-<span id="cb42-4"><a href="#cb42-4"></a>sample_var <span class="ot">=</span> <span class="cf">function</span>(x){</span>
-<span id="cb42-5"><a href="#cb42-5"></a>  <span class="fu">sum</span>((x <span class="sc">-</span> <span class="fu">mean</span>(x, <span class="at">na.rm=</span>T))<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)<span class="sc">/</span><span class="fu">length</span>(<span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(x)))</span>
-<span id="cb42-6"><a href="#cb42-6"></a>}</span>
-<span id="cb42-7"><a href="#cb42-7"></a><span class="co">#number of samples</span></span>
-<span id="cb42-8"><a href="#cb42-8"></a>draws <span class="ot">=</span> <span class="dv">10000</span></span>
-<span id="cb42-9"><a href="#cb42-9"></a><span class="co">#which sample sizes to test</span></span>
-<span id="cb42-10"><a href="#cb42-10"></a>sample_sizes <span class="ot">=</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">5</span>, <span class="at">to =</span> <span class="dv">100</span>, <span class="at">by =</span> <span class="dv">5</span>)</span>
-<span id="cb42-11"><a href="#cb42-11"></a><span class="co">#data frame to store simulations</span></span>
-<span id="cb42-12"><a href="#cb42-12"></a>var_estimates <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">size =</span> sample_sizes, <span class="at">sample =</span> <span class="cn">NA</span>, <span class="at">estimate =</span> <span class="cn">NA</span>)</span>
-<span id="cb42-13"><a href="#cb42-13"></a></span>
-<span id="cb42-14"><a href="#cb42-14"></a><span class="cf">for</span>(i <span class="cf">in</span> sample_sizes){ <span class="co"># loop through sample sizes</span></span>
-<span id="cb42-15"><a href="#cb42-15"></a>  sample_est <span class="ot">=</span> <span class="fu">numeric</span>(<span class="at">length =</span> draws) <span class="co">#create empty vectors</span></span>
-<span id="cb42-16"><a href="#cb42-16"></a>  estimate <span class="ot">=</span> <span class="fu">numeric</span>(<span class="at">length =</span> draws)</span>
-<span id="cb42-17"><a href="#cb42-17"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>draws){ <span class="co"># loop through draws</span></span>
-<span id="cb42-18"><a href="#cb42-18"></a>    sample <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="at">n =</span> i, <span class="at">mean =</span> <span class="dv">1000</span>, <span class="at">sd =</span> <span class="dv">10</span>) <span class="co"># randomly draw sample from pop with variance 100</span></span>
-<span id="cb42-19"><a href="#cb42-19"></a>    sample_est[j] <span class="ot">=</span> <span class="fu">sample_var</span>(sample) <span class="co"># calculate variance using population formula</span></span>
-<span id="cb42-20"><a href="#cb42-20"></a>    estimate[j] <span class="ot">=</span> <span class="fu">var</span>(sample) <span class="co"># calculate variance using sample formula</span></span>
-<span id="cb42-21"><a href="#cb42-21"></a>  }</span>
-<span id="cb42-22"><a href="#cb42-22"></a>  row <span class="ot">=</span> <span class="fu">which</span>(var_estimates<span class="sc">$</span>size <span class="sc">==</span> i) <span class="co">#which row in data frame does this belong to?</span></span>
-<span id="cb42-23"><a href="#cb42-23"></a>  var_estimates<span class="sc">$</span>sample[row] <span class="ot">=</span> <span class="fu">mean</span>(sample_est) <span class="co"># average of variance estimates (using pop) across draws</span></span>
-<span id="cb42-24"><a href="#cb42-24"></a>  var_estimates<span class="sc">$</span>estimate[row] <span class="ot">=</span> <span class="fu">mean</span>(estimate) <span class="co"># average of variances (using sample) across draws</span></span>
-<span id="cb42-25"><a href="#cb42-25"></a>}</span>
-<span id="cb42-26"><a href="#cb42-26"></a></span>
-<span id="cb42-27"><a href="#cb42-27"></a>var_estimates <span class="sc">%&gt;%</span></span>
-<span id="cb42-28"><a href="#cb42-28"></a>  <span class="fu">mutate</span>(<span class="at">population =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> <span class="co">#add population variable</span></span>
-<span id="cb42-29"><a href="#cb42-29"></a>  <span class="fu">gather</span>(<span class="st">"var"</span>, <span class="st">"value"</span>, <span class="sc">-</span>size) <span class="sc">%&gt;%</span> <span class="co"># long-form</span></span>
-<span id="cb42-30"><a href="#cb42-30"></a>  <span class="fu">mutate</span>(<span class="at">var =</span> <span class="fu">factor</span>(var, </span>
-<span id="cb42-31"><a href="#cb42-31"></a>                      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"population"</span>,<span class="st">"sample"</span>,<span class="st">"estimate"</span>),</span>
-<span id="cb42-32"><a href="#cb42-32"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Population Variance"</span>,</span>
-<span id="cb42-33"><a href="#cb42-33"></a>                                 <span class="st">"Sample Variance"</span>, </span>
-<span id="cb42-34"><a href="#cb42-34"></a>                                 <span class="st">"Estimate of Population Variance"</span>))) <span class="sc">%&gt;%</span> <span class="co">#lovely labels</span></span>
-<span id="cb42-35"><a href="#cb42-35"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> size, <span class="at">y =</span> value)) <span class="sc">+</span></span>
-<span id="cb42-36"><a href="#cb42-36"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color =</span> var), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb42-37"><a href="#cb42-37"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"Sample Size"</span>, <span class="at">breaks =</span> sample_sizes) <span class="sc">+</span></span>
-<span id="cb42-38"><a href="#cb42-38"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">""</span>)<span class="sc">+</span></span>
-<span id="cb42-39"><a href="#cb42-39"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb42-40"><a href="#cb42-40"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">set.seed</span>(<span class="dv">100917</span>) <span class="co">#so everyone gets same random draws</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a></span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="co">#function to estimate variance using population formula</span></span>
+<span id="cb46-4"><a href="#cb46-4"></a>sample_var <span class="ot">=</span> <span class="cf">function</span>(x){</span>
+<span id="cb46-5"><a href="#cb46-5"></a>  <span class="fu">sum</span>((x <span class="sc">-</span> <span class="fu">mean</span>(x, <span class="at">na.rm=</span>T))<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)<span class="sc">/</span><span class="fu">length</span>(<span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(x)))</span>
+<span id="cb46-6"><a href="#cb46-6"></a>}</span>
+<span id="cb46-7"><a href="#cb46-7"></a><span class="co">#number of samples</span></span>
+<span id="cb46-8"><a href="#cb46-8"></a>draws <span class="ot">=</span> <span class="dv">10000</span></span>
+<span id="cb46-9"><a href="#cb46-9"></a><span class="co">#which sample sizes to test</span></span>
+<span id="cb46-10"><a href="#cb46-10"></a>sample_sizes <span class="ot">=</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">5</span>, <span class="at">to =</span> <span class="dv">100</span>, <span class="at">by =</span> <span class="dv">5</span>)</span>
+<span id="cb46-11"><a href="#cb46-11"></a><span class="co">#data frame to store simulations</span></span>
+<span id="cb46-12"><a href="#cb46-12"></a>var_estimates <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">size =</span> sample_sizes, <span class="at">sample =</span> <span class="cn">NA</span>, <span class="at">estimate =</span> <span class="cn">NA</span>)</span>
+<span id="cb46-13"><a href="#cb46-13"></a></span>
+<span id="cb46-14"><a href="#cb46-14"></a><span class="cf">for</span>(i <span class="cf">in</span> sample_sizes){ <span class="co"># loop through sample sizes</span></span>
+<span id="cb46-15"><a href="#cb46-15"></a>  sample_est <span class="ot">=</span> <span class="fu">numeric</span>(<span class="at">length =</span> draws) <span class="co">#create empty vectors</span></span>
+<span id="cb46-16"><a href="#cb46-16"></a>  estimate <span class="ot">=</span> <span class="fu">numeric</span>(<span class="at">length =</span> draws)</span>
+<span id="cb46-17"><a href="#cb46-17"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>draws){ <span class="co"># loop through draws</span></span>
+<span id="cb46-18"><a href="#cb46-18"></a>    sample <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="at">n =</span> i, <span class="at">mean =</span> <span class="dv">1000</span>, <span class="at">sd =</span> <span class="dv">10</span>) <span class="co"># randomly draw sample from pop with variance 100</span></span>
+<span id="cb46-19"><a href="#cb46-19"></a>    sample_est[j] <span class="ot">=</span> <span class="fu">sample_var</span>(sample) <span class="co"># calculate variance using population formula</span></span>
+<span id="cb46-20"><a href="#cb46-20"></a>    estimate[j] <span class="ot">=</span> <span class="fu">var</span>(sample) <span class="co"># calculate variance using sample formula</span></span>
+<span id="cb46-21"><a href="#cb46-21"></a>  }</span>
+<span id="cb46-22"><a href="#cb46-22"></a>  row <span class="ot">=</span> <span class="fu">which</span>(var_estimates<span class="sc">$</span>size <span class="sc">==</span> i) <span class="co">#which row in data frame does this belong to?</span></span>
+<span id="cb46-23"><a href="#cb46-23"></a>  var_estimates<span class="sc">$</span>sample[row] <span class="ot">=</span> <span class="fu">mean</span>(sample_est) <span class="co"># average of variance estimates (using pop) across draws</span></span>
+<span id="cb46-24"><a href="#cb46-24"></a>  var_estimates<span class="sc">$</span>estimate[row] <span class="ot">=</span> <span class="fu">mean</span>(estimate) <span class="co"># average of variances (using sample) across draws</span></span>
+<span id="cb46-25"><a href="#cb46-25"></a>}</span>
+<span id="cb46-26"><a href="#cb46-26"></a></span>
+<span id="cb46-27"><a href="#cb46-27"></a>var_estimates <span class="sc">%&gt;%</span></span>
+<span id="cb46-28"><a href="#cb46-28"></a>  <span class="fu">mutate</span>(<span class="at">population =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> <span class="co">#add population variable</span></span>
+<span id="cb46-29"><a href="#cb46-29"></a>  <span class="fu">gather</span>(<span class="st">"var"</span>, <span class="st">"value"</span>, <span class="sc">-</span>size) <span class="sc">%&gt;%</span> <span class="co"># long-form</span></span>
+<span id="cb46-30"><a href="#cb46-30"></a>  <span class="fu">mutate</span>(<span class="at">var =</span> <span class="fu">factor</span>(var, </span>
+<span id="cb46-31"><a href="#cb46-31"></a>                      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"population"</span>,<span class="st">"sample"</span>,<span class="st">"estimate"</span>),</span>
+<span id="cb46-32"><a href="#cb46-32"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Population Variance"</span>,</span>
+<span id="cb46-33"><a href="#cb46-33"></a>                                 <span class="st">"Sample Variance"</span>, </span>
+<span id="cb46-34"><a href="#cb46-34"></a>                                 <span class="st">"Estimate of Population Variance"</span>))) <span class="sc">%&gt;%</span> <span class="co">#lovely labels</span></span>
+<span id="cb46-35"><a href="#cb46-35"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> size, <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb46-36"><a href="#cb46-36"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color =</span> var), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb46-37"><a href="#cb46-37"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"Sample Size"</span>, <span class="at">breaks =</span> sample_sizes) <span class="sc">+</span></span>
+<span id="cb46-38"><a href="#cb46-38"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb46-39"><a href="#cb46-39"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb46-40"><a href="#cb46-40"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
 <section id="standardized-scores-z-scores" class="slide level2">
 <h2>Standardized scores (z-scores)</h2>
 <p><span class="math display">\[ z = \frac{x_i - \bar{x}}{s} \]</span> Scores interpreted as distance from the mean, in standard deviations.</p>
@@ -860,115 +876,145 @@
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># Simulate raw data from a normal distribution</span></span>
-<span id="cb43-2"><a href="#cb43-2"></a><span class="co"># Let's say it's some measured variable, like "test scores"</span></span>
-<span id="cb43-3"><a href="#cb43-3"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb43-4"><a href="#cb43-4"></a>raw_mean <span class="ot">&lt;-</span> <span class="dv">10</span>  <span class="co"># e.g., average test score</span></span>
-<span id="cb43-5"><a href="#cb43-5"></a>raw_sd <span class="ot">&lt;-</span> <span class="fl">3.5</span>    <span class="co"># e.g., spread of test scores</span></span>
-<span id="cb43-6"><a href="#cb43-6"></a></span>
-<span id="cb43-7"><a href="#cb43-7"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> raw_mean, <span class="at">sd =</span> raw_sd)</span>
-<span id="cb43-8"><a href="#cb43-8"></a></span>
-<span id="cb43-9"><a href="#cb43-9"></a><span class="co"># Calculate Z-scores for the raw data</span></span>
-<span id="cb43-10"><a href="#cb43-10"></a><span class="co"># Z = (X - mu) / sigma</span></span>
-<span id="cb43-11"><a href="#cb43-11"></a><span class="co"># Where X is an individual data point, mu is the mean, and sigma is the standard deviation</span></span>
-<span id="cb43-12"><a href="#cb43-12"></a></span>
-<span id="cb43-13"><a href="#cb43-13"></a><span class="co"># Calculate the mean and standard deviation of our *simulated* raw data</span></span>
-<span id="cb43-14"><a href="#cb43-14"></a><span class="co"># (It will be very close to raw_mean and raw_sd, but not exactly due to randomness)</span></span>
-<span id="cb43-15"><a href="#cb43-15"></a>mean_raw_data <span class="ot">&lt;-</span> <span class="fu">mean</span>(raw_data)</span>
-<span id="cb43-16"><a href="#cb43-16"></a>sd_raw_data <span class="ot">&lt;-</span> <span class="fu">sd</span>(raw_data)</span>
-<span id="cb43-17"><a href="#cb43-17"></a></span>
-<span id="cb43-18"><a href="#cb43-18"></a>z_scored_data <span class="ot">&lt;-</span> (raw_data <span class="sc">-</span> mean_raw_data) <span class="sc">/</span> sd_raw_data</span>
-<span id="cb43-19"><a href="#cb43-19"></a></span>
-<span id="cb43-20"><a href="#cb43-20"></a><span class="co"># Create a data frame for plotting</span></span>
-<span id="cb43-21"><a href="#cb43-21"></a><span class="co"># We'll put both raw and z-scored values in a single 'value' column</span></span>
-<span id="cb43-22"><a href="#cb43-22"></a><span class="co"># and use a 'type' column to distinguish them.</span></span>
-<span id="cb43-23"><a href="#cb43-23"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb43-24"><a href="#cb43-24"></a>  <span class="at">value =</span> <span class="fu">c</span>(raw_data, z_scored_data),</span>
-<span id="cb43-25"><a href="#cb43-25"></a>  <span class="at">type =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Raw Data"</span>, n_samples), <span class="fu">rep</span>(<span class="st">"Z-Scored Data"</span>, n_samples)),</span>
-<span id="cb43-26"><a href="#cb43-26"></a>                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Raw Data"</span>, <span class="st">"Z-Scored Data"</span>)) <span class="co"># Ensure consistent order</span></span>
-<span id="cb43-27"><a href="#cb43-27"></a>)</span>
-<span id="cb43-28"><a href="#cb43-28"></a></span>
-<span id="cb43-29"><a href="#cb43-29"></a><span class="co"># ----------------------------------------------------------------------</span></span>
-<span id="cb43-30"><a href="#cb43-30"></a><span class="co"># Part 2: Graphing in ggplot2</span></span>
-<span id="cb43-31"><a href="#cb43-31"></a><span class="co"># ----------------------------------------------------------------------</span></span>
-<span id="cb43-32"><a href="#cb43-32"></a></span>
-<span id="cb43-33"><a href="#cb43-33"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">fill =</span> type, <span class="at">color =</span> type)) <span class="sc">+</span></span>
-<span id="cb43-34"><a href="#cb43-34"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="co"># Use alpha for transparency where distributions overlap</span></span>
-<span id="cb43-35"><a href="#cb43-35"></a>  <span class="fu">labs</span>(</span>
-<span id="cb43-36"><a href="#cb43-36"></a>    <span class="at">title =</span> <span class="st">"Density Distribution of Raw vs. Z-Scored Data"</span>,</span>
-<span id="cb43-37"><a href="#cb43-37"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
-<span id="cb43-38"><a href="#cb43-38"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb43-39"><a href="#cb43-39"></a>    <span class="at">fill =</span> <span class="st">"Data Type"</span>,</span>
-<span id="cb43-40"><a href="#cb43-40"></a>    <span class="at">color =</span> <span class="st">"Data Type"</span></span>
-<span id="cb43-41"><a href="#cb43-41"></a>  ) <span class="sc">+</span></span>
-<span id="cb43-42"><a href="#cb43-42"></a>  <span class="fu">theme_minimal</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># Simulate raw data from a normal distribution</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a><span class="co"># Let's say it's some measured variable, like "test scores"</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a>raw_mean <span class="ot">&lt;-</span> <span class="dv">10</span>  <span class="co"># e.g., average test score</span></span>
+<span id="cb47-5"><a href="#cb47-5"></a>raw_sd <span class="ot">&lt;-</span> <span class="fl">3.5</span>    <span class="co"># e.g., spread of test scores</span></span>
+<span id="cb47-6"><a href="#cb47-6"></a></span>
+<span id="cb47-7"><a href="#cb47-7"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_samples, <span class="at">mean =</span> raw_mean, <span class="at">sd =</span> raw_sd)</span>
+<span id="cb47-8"><a href="#cb47-8"></a></span>
+<span id="cb47-9"><a href="#cb47-9"></a><span class="co"># Calculate Z-scores for the raw data</span></span>
+<span id="cb47-10"><a href="#cb47-10"></a><span class="co"># Z = (X - mu) / sigma</span></span>
+<span id="cb47-11"><a href="#cb47-11"></a><span class="co"># Where X is an individual data point, mu is the mean, and sigma is the standard deviation</span></span>
+<span id="cb47-12"><a href="#cb47-12"></a></span>
+<span id="cb47-13"><a href="#cb47-13"></a><span class="co"># Calculate the mean and standard deviation of our *simulated* raw data</span></span>
+<span id="cb47-14"><a href="#cb47-14"></a><span class="co"># (It will be very close to raw_mean and raw_sd, but not exactly due to randomness)</span></span>
+<span id="cb47-15"><a href="#cb47-15"></a>mean_raw_data <span class="ot">&lt;-</span> <span class="fu">mean</span>(raw_data)</span>
+<span id="cb47-16"><a href="#cb47-16"></a>sd_raw_data <span class="ot">&lt;-</span> <span class="fu">sd</span>(raw_data)</span>
+<span id="cb47-17"><a href="#cb47-17"></a></span>
+<span id="cb47-18"><a href="#cb47-18"></a>z_scored_data <span class="ot">&lt;-</span> (raw_data <span class="sc">-</span> mean_raw_data) <span class="sc">/</span> sd_raw_data</span>
+<span id="cb47-19"><a href="#cb47-19"></a></span>
+<span id="cb47-20"><a href="#cb47-20"></a><span class="co"># Create a data frame for plotting</span></span>
+<span id="cb47-21"><a href="#cb47-21"></a><span class="co"># We'll put both raw and z-scored values in a single 'value' column</span></span>
+<span id="cb47-22"><a href="#cb47-22"></a><span class="co"># and use a 'type' column to distinguish them.</span></span>
+<span id="cb47-23"><a href="#cb47-23"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb47-24"><a href="#cb47-24"></a>  <span class="at">value =</span> <span class="fu">c</span>(raw_data, z_scored_data),</span>
+<span id="cb47-25"><a href="#cb47-25"></a>  <span class="at">type =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Raw Data"</span>, n_samples), <span class="fu">rep</span>(<span class="st">"Z-Scored Data"</span>, n_samples)),</span>
+<span id="cb47-26"><a href="#cb47-26"></a>                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Raw Data"</span>, <span class="st">"Z-Scored Data"</span>)) <span class="co"># Ensure consistent order</span></span>
+<span id="cb47-27"><a href="#cb47-27"></a>)</span>
+<span id="cb47-28"><a href="#cb47-28"></a></span>
+<span id="cb47-29"><a href="#cb47-29"></a><span class="co"># ----------------------------------------------------------------------</span></span>
+<span id="cb47-30"><a href="#cb47-30"></a><span class="co"># Part 2: Graphing in ggplot2</span></span>
+<span id="cb47-31"><a href="#cb47-31"></a><span class="co"># ----------------------------------------------------------------------</span></span>
+<span id="cb47-32"><a href="#cb47-32"></a></span>
+<span id="cb47-33"><a href="#cb47-33"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">fill =</span> type, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb47-34"><a href="#cb47-34"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="co"># Use alpha for transparency where distributions overlap</span></span>
+<span id="cb47-35"><a href="#cb47-35"></a>  <span class="fu">labs</span>(</span>
+<span id="cb47-36"><a href="#cb47-36"></a>    <span class="at">title =</span> <span class="st">"Density Distribution of Raw vs. Z-Scored Data"</span>,</span>
+<span id="cb47-37"><a href="#cb47-37"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
+<span id="cb47-38"><a href="#cb47-38"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb47-39"><a href="#cb47-39"></a>    <span class="at">fill =</span> <span class="st">"Data Type"</span>,</span>
+<span id="cb47-40"><a href="#cb47-40"></a>    <span class="at">color =</span> <span class="st">"Data Type"</span></span>
+<span id="cb47-41"><a href="#cb47-41"></a>  ) <span class="sc">+</span></span>
+<span id="cb47-42"><a href="#cb47-42"></a>  <span class="fu">theme_minimal</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
 <p>DOES NOT CHANGE SHAPE OF DATA</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">library</span>(FamilyRank)</span>
-<span id="cb44-2"><a href="#cb44-2"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb44-3"><a href="#cb44-3"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb44-4"><a href="#cb44-4"></a>mean2 <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="co"># e.g., average test score</span></span>
-<span id="cb44-5"><a href="#cb44-5"></a>sd1 <span class="ot">&lt;-</span> <span class="fl">1.5</span>    <span class="co"># e.g., spread of test scores</span></span>
-<span id="cb44-6"><a href="#cb44-6"></a>sd2 <span class="ot">&lt;-</span> <span class="fl">1.5</span>   </span>
-<span id="cb44-7"><a href="#cb44-7"></a></span>
-<span id="cb44-8"><a href="#cb44-8"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">rbinorm</span>(n_samples, mean1, mean2, sd1, sd2, <span class="at">prop =</span> .<span class="dv">5</span>)</span>
-<span id="cb44-9"><a href="#cb44-9"></a></span>
-<span id="cb44-10"><a href="#cb44-10"></a>mean_raw_data <span class="ot">&lt;-</span> <span class="fu">mean</span>(raw_data)</span>
-<span id="cb44-11"><a href="#cb44-11"></a>sd_raw_data <span class="ot">&lt;-</span> <span class="fu">sd</span>(raw_data)</span>
-<span id="cb44-12"><a href="#cb44-12"></a></span>
-<span id="cb44-13"><a href="#cb44-13"></a>z_scored_data <span class="ot">&lt;-</span> (raw_data <span class="sc">-</span> mean_raw_data) <span class="sc">/</span> sd_raw_data</span>
-<span id="cb44-14"><a href="#cb44-14"></a></span>
-<span id="cb44-15"><a href="#cb44-15"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb44-16"><a href="#cb44-16"></a>  <span class="at">value =</span> <span class="fu">c</span>(raw_data, z_scored_data),</span>
-<span id="cb44-17"><a href="#cb44-17"></a>  <span class="at">type =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Raw Data"</span>, n_samples), <span class="fu">rep</span>(<span class="st">"Z-Scored Data"</span>, n_samples)),</span>
-<span id="cb44-18"><a href="#cb44-18"></a>                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Raw Data"</span>, <span class="st">"Z-Scored Data"</span>)) <span class="co"># Ensure consistent order</span></span>
-<span id="cb44-19"><a href="#cb44-19"></a>)</span>
-<span id="cb44-20"><a href="#cb44-20"></a></span>
-<span id="cb44-21"><a href="#cb44-21"></a></span>
-<span id="cb44-22"><a href="#cb44-22"></a></span>
-<span id="cb44-23"><a href="#cb44-23"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">fill =</span> type, <span class="at">color =</span> type)) <span class="sc">+</span></span>
-<span id="cb44-24"><a href="#cb44-24"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
-<span id="cb44-25"><a href="#cb44-25"></a>  <span class="fu">labs</span>(</span>
-<span id="cb44-26"><a href="#cb44-26"></a>    <span class="at">title =</span> <span class="st">"Density Distribution of Raw vs. Z-Scored Data"</span>,</span>
-<span id="cb44-27"><a href="#cb44-27"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
-<span id="cb44-28"><a href="#cb44-28"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb44-29"><a href="#cb44-29"></a>    <span class="at">fill =</span> <span class="st">"Data Type"</span>,</span>
-<span id="cb44-30"><a href="#cb44-30"></a>    <span class="at">color =</span> <span class="st">"Data Type"</span></span>
-<span id="cb44-31"><a href="#cb44-31"></a>  ) <span class="sc">+</span></span>
-<span id="cb44-32"><a href="#cb44-32"></a>  <span class="fu">theme_minimal</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">library</span>(FamilyRank)</span>
+<span id="cb48-2"><a href="#cb48-2"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb48-3"><a href="#cb48-3"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a>mean2 <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="co"># e.g., average test score</span></span>
+<span id="cb48-5"><a href="#cb48-5"></a>sd1 <span class="ot">&lt;-</span> <span class="fl">1.5</span>    <span class="co"># e.g., spread of test scores</span></span>
+<span id="cb48-6"><a href="#cb48-6"></a>sd2 <span class="ot">&lt;-</span> <span class="fl">1.5</span>   </span>
+<span id="cb48-7"><a href="#cb48-7"></a></span>
+<span id="cb48-8"><a href="#cb48-8"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">rbinorm</span>(n_samples, mean1, mean2, sd1, sd2, <span class="at">prop =</span> .<span class="dv">5</span>)</span>
+<span id="cb48-9"><a href="#cb48-9"></a></span>
+<span id="cb48-10"><a href="#cb48-10"></a>mean_raw_data <span class="ot">&lt;-</span> <span class="fu">mean</span>(raw_data)</span>
+<span id="cb48-11"><a href="#cb48-11"></a>sd_raw_data <span class="ot">&lt;-</span> <span class="fu">sd</span>(raw_data)</span>
+<span id="cb48-12"><a href="#cb48-12"></a></span>
+<span id="cb48-13"><a href="#cb48-13"></a>z_scored_data <span class="ot">&lt;-</span> (raw_data <span class="sc">-</span> mean_raw_data) <span class="sc">/</span> sd_raw_data</span>
+<span id="cb48-14"><a href="#cb48-14"></a></span>
+<span id="cb48-15"><a href="#cb48-15"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb48-16"><a href="#cb48-16"></a>  <span class="at">value =</span> <span class="fu">c</span>(raw_data, z_scored_data),</span>
+<span id="cb48-17"><a href="#cb48-17"></a>  <span class="at">type =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Raw Data"</span>, n_samples), <span class="fu">rep</span>(<span class="st">"Z-Scored Data"</span>, n_samples)),</span>
+<span id="cb48-18"><a href="#cb48-18"></a>                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Raw Data"</span>, <span class="st">"Z-Scored Data"</span>)) <span class="co"># Ensure consistent order</span></span>
+<span id="cb48-19"><a href="#cb48-19"></a>)</span>
+<span id="cb48-20"><a href="#cb48-20"></a></span>
+<span id="cb48-21"><a href="#cb48-21"></a></span>
+<span id="cb48-22"><a href="#cb48-22"></a></span>
+<span id="cb48-23"><a href="#cb48-23"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">fill =</span> type, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb48-24"><a href="#cb48-24"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb48-25"><a href="#cb48-25"></a>  <span class="fu">labs</span>(</span>
+<span id="cb48-26"><a href="#cb48-26"></a>    <span class="at">title =</span> <span class="st">"Density Distribution of Raw vs. Z-Scored Data"</span>,</span>
+<span id="cb48-27"><a href="#cb48-27"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
+<span id="cb48-28"><a href="#cb48-28"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb48-29"><a href="#cb48-29"></a>    <span class="at">fill =</span> <span class="st">"Data Type"</span>,</span>
+<span id="cb48-30"><a href="#cb48-30"></a>    <span class="at">color =</span> <span class="st">"Data Type"</span></span>
+<span id="cb48-31"><a href="#cb48-31"></a>  ) <span class="sc">+</span></span>
+<span id="cb48-32"><a href="#cb48-32"></a>  <span class="fu">theme_minimal</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
 <section id="associations" class="slide level2">
 <h2>Associations</h2>
 <ul>
-<li>i.e., relationships</li>
-<li>to look at how to variable relate to one another we need to think in terms of how associated they are</li>
-<li>If you know one, can you make a better than chance guess at the other?</li>
+<li><p>i.e., relationships</p></li>
+<li><p>to look at how one variable relates to another we need to think in terms of how associated they are</p></li>
+<li><p>If you know one, can you make a better than chance guess at the other?</p></li>
+<li><p>Basis of scientific inquery</p></li>
 </ul>
+</section>
+<section class="slide level2">
+
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>world <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Happiness, <span class="at">y =</span> Life)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>world <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Happiness, <span class="at">y =</span> Life)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
 <section id="covariation-cross-products" class="slide level2">
 <h2>Covariation (cross products)</h2>
+<ul>
+<li>Sum of the products</li>
+</ul>
 <p><strong>Sample:</strong></p>
-<p><span class="math display">\[\large SS = {\sum{(x-\bar{x})(y-\bar{y})}}\]</span></p>
+<p><span class="math display">\[\large SP = {\sum{(x-\bar{x})(y-\bar{y})}}\]</span></p>
 <p><strong>Population:</strong></p>
-<p><span class="math display">\[SS = {\sum{{(x-\mu_{x}})(y-\mu_{y})}}\]</span></p>
+<p><span class="math display">\[SP = {\sum{{(x-\mu_{x}})(y-\mu_{y})}}\]</span></p>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">sum</span>((world<span class="sc">$</span>Happiness <span class="sc">-</span> <span class="fu">mean</span>(world<span class="sc">$</span>Happiness))<span class="sc">*</span>(world<span class="sc">$</span>Life <span class="sc">-</span> <span class="fu">mean</span>(world<span class="sc">$</span>Life)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>world2 <span class="ot">&lt;-</span> world[<span class="sc">-</span><span class="dv">90</span>, ]</span>
+<span id="cb52-2"><a href="#cb52-2"></a></span>
+<span id="cb52-3"><a href="#cb52-3"></a><span class="fu">sum</span>((world2<span class="sc">$</span>Happiness <span class="sc">-</span> <span class="fu">mean</span>(world2<span class="sc">$</span>Happiness))<span class="sc">*</span>(world2<span class="sc">$</span>Life <span class="sc">-</span> <span class="fu">mean</span>(world2<span class="sc">$</span>Life)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 817.5076</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="fu">cov</span>(world2<span class="sc">$</span>Happiness, world2<span class="sc">$</span>Life,  <span class="at">use =</span> <span class="st">"complete.obs"</span>) <span class="sc">*</span>(<span class="fu">nrow</span>(world2) <span class="sc">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 817.5076</code></pre>
+</div>
+</div>
 </section>
 <section id="covariance" class="slide level2">
 <h2>Covariance</h2>
@@ -980,7 +1026,7 @@
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">cov</span>(world<span class="sc">$</span>Happiness, world<span class="sc">$</span>Life,  <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="fu">cov</span>(world<span class="sc">$</span>Happiness, world<span class="sc">$</span>Life,  <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 6.100803</code></pre>
 </div>
@@ -996,7 +1042,7 @@
 <section id="correlation-1" class="slide level2">
 <h2>Correlation</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">cor</span>(world<span class="sc">$</span>Happiness, world<span class="sc">$</span>Life,  <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="fu">cor</span>(world<span class="sc">$</span>Happiness, world<span class="sc">$</span>Life,  <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7349084</code></pre>
 </div>
@@ -1014,7 +1060,7 @@
 </section>
 <section id="covariance-table" class="slide level2">
 <h2>Covariance table</h2>
-<p><span class="math display">\[\mathbf{K_{XX}} = \left[\begin{array}
+<p><span class="math display">\[\mathbf{K_{XYZ}} = \left[\begin{array}
 {rrr}
 \sigma^2_X &amp; cov_{XY} &amp; cov_{XZ} \\
 cov_{YX} &amp; \sigma^2_Y &amp; cov_{YZ} \\
@@ -1023,7 +1069,7 @@ cov_{ZX} &amp; cov_{ZY} &amp; \sigma^2_Z
 </section>
 <section id="covariance-table-1" class="slide level2">
 <h2>Covariance table</h2>
-<p><span class="math display">\[\mathbf{K_{XX}} = \left[\begin{array}
+<p><span class="math display">\[\mathbf{K_{XYZ}} = \left[\begin{array}
 {rrr}
 \sigma^2_X &amp; 126.5 &amp; 5.2 \\
 126.5 &amp; \sigma^2_Y &amp; cov_{YZ} \\
@@ -1034,9 +1080,9 @@ cov_{ZX} &amp; cov_{ZY} &amp; \sigma^2_Z
 <section id="correlation-table" class="slide level2">
 <h2>Correlation table</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">library</span>(correlation)</span>
-<span id="cb50-2"><a href="#cb50-2"></a>results <span class="ot">&lt;-</span> <span class="fu">correlation</span>(world)</span>
-<span id="cb50-3"><a href="#cb50-3"></a><span class="fu">summary</span>(results, <span class="at">redundant =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a><span class="fu">library</span>(correlation)</span>
+<span id="cb60-2"><a href="#cb60-2"></a>results <span class="ot">&lt;-</span> <span class="fu">correlation</span>(world)</span>
+<span id="cb60-3"><a href="#cb60-3"></a><span class="fu">summary</span>(results, <span class="at">redundant =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># Correlation Matrix (pearson-method)
 
@@ -1057,12 +1103,12 @@ p-value adjustment method: Holm (1979)</code></pre>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>results <span class="ot">&lt;-</span> <span class="fu">correlation</span>(world)</span>
-<span id="cb52-2"><a href="#cb52-2"></a><span class="fu">summary</span>(results, <span class="at">redundant =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb52-3"><a href="#cb52-3"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>results <span class="ot">&lt;-</span> <span class="fu">correlation</span>(world)</span>
+<span id="cb62-2"><a href="#cb62-2"></a><span class="fu">summary</span>(results, <span class="at">redundant =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb62-3"><a href="#cb62-3"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section>
 <section id="correlation-3" class="slide level2">
 <h2>Correlation</h2>
 <p>Pearson product moment correlation</p>
@@ -1080,22 +1126,22 @@ p-value adjustment method: Holm (1979)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a><span class="fu">set.seed</span>(<span class="dv">101019</span>) <span class="co"># so we all get the same random numbers</span></span>
-<span id="cb53-2"><a href="#cb53-2"></a>mu <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">5</span>)</span>
-<span id="cb53-3"><a href="#cb53-3"></a>Sigma <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">8</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, .<span class="dv">7</span>), <span class="at">ncol =</span><span class="dv">2</span>) <span class="co">#diagonals are reliabilites, off-diagonals are correlations</span></span>
-<span id="cb53-4"><a href="#cb53-4"></a>data <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">150</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma)</span>
-<span id="cb53-5"><a href="#cb53-5"></a>data <span class="ot">=</span> <span class="fu">as.data.frame</span>(data)</span>
-<span id="cb53-6"><a href="#cb53-6"></a><span class="fu">colnames</span>(data) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="fu">set.seed</span>(<span class="dv">101019</span>) <span class="co"># so we all get the same random numbers</span></span>
+<span id="cb63-2"><a href="#cb63-2"></a>mu <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">5</span>)</span>
+<span id="cb63-3"><a href="#cb63-3"></a>Sigma <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">8</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, .<span class="dv">7</span>), <span class="at">ncol =</span><span class="dv">2</span>) <span class="co">#diagonals are reliabilites, off-diagonals are correlations</span></span>
+<span id="cb63-4"><a href="#cb63-4"></a>data <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">150</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma)</span>
+<span id="cb63-5"><a href="#cb63-5"></a>data <span class="ot">=</span> <span class="fu">as.data.frame</span>(data)</span>
+<span id="cb63-6"><a href="#cb63-6"></a><span class="fu">colnames</span>(data) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"><p>What is the correlation between these two variables?</p>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-33-1.png" width="960" class="r-stretch"><p>What is the correlation between these two variables?</p>
 </section>
 <section class="slide level2">
 
@@ -1106,29 +1152,29 @@ p-value adjustment method: Holm (1979)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a><span class="fu">set.seed</span>(<span class="dv">101019</span>) <span class="co"># so we all get the same random numbers</span></span>
-<span id="cb55-2"><a href="#cb55-2"></a>mu <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">100</span>)</span>
-<span id="cb55-3"><a href="#cb55-3"></a>Sigma <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">8</span>, <span class="sc">-</span>.<span class="dv">3</span>, <span class="sc">-</span>.<span class="dv">3</span>, .<span class="dv">8</span>), <span class="at">ncol =</span><span class="dv">2</span>) <span class="co">#diagonals are reliabilites, off-diagonals are correlations</span></span>
-<span id="cb55-4"><a href="#cb55-4"></a>data <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">150</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma)</span>
-<span id="cb55-5"><a href="#cb55-5"></a>data <span class="ot">=</span> <span class="fu">as.data.frame</span>(data)</span>
-<span id="cb55-6"><a href="#cb55-6"></a><span class="fu">colnames</span>(data) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a><span class="fu">set.seed</span>(<span class="dv">101019</span>) <span class="co"># so we all get the same random numbers</span></span>
+<span id="cb65-2"><a href="#cb65-2"></a>mu <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">100</span>)</span>
+<span id="cb65-3"><a href="#cb65-3"></a>Sigma <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">8</span>, <span class="sc">-</span>.<span class="dv">3</span>, <span class="sc">-</span>.<span class="dv">3</span>, .<span class="dv">8</span>), <span class="at">ncol =</span><span class="dv">2</span>) <span class="co">#diagonals are reliabilites, off-diagonals are correlations</span></span>
+<span id="cb65-4"><a href="#cb65-4"></a>data <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">150</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma)</span>
+<span id="cb65-5"><a href="#cb65-5"></a>data <span class="ot">=</span> <span class="fu">as.data.frame</span>(data)</span>
+<span id="cb65-6"><a href="#cb65-6"></a><span class="fu">colnames</span>(data) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"><p>What is the correlation between these two variables?</p>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"><p>What is the correlation between these two variables?</p>
 </section>
 <section class="slide level2">
 
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="fu">cor</span>(data<span class="sc">$</span>x, data<span class="sc">$</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a><span class="fu">cor</span>(data<span class="sc">$</span>x, data<span class="sc">$</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.387545</code></pre>
@@ -1180,115 +1226,30 @@ p-value adjustment method: Holm (1979)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>galton.data <span class="ot">&lt;-</span> psychTools<span class="sc">::</span>galton</span>
-<span id="cb59-2"><a href="#cb59-2"></a><span class="fu">ggplot</span>(galton.data, <span class="fu">aes</span>(<span class="at">x=</span>parent, <span class="at">y=</span>child)) <span class="sc">+</span></span>
-<span id="cb59-3"><a href="#cb59-3"></a>    <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> .<span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb59-4"><a href="#cb59-4"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm,   <span class="co"># Add linear regression line</span></span>
-<span id="cb59-5"><a href="#cb59-5"></a>                <span class="at">se=</span><span class="cn">FALSE</span>) <span class="sc">+</span>     <span class="co"># Don't add shaded confidence region</span></span>
-<span id="cb59-6"><a href="#cb59-6"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"parent height"</span>, <span class="at">y =</span> <span class="st">"child height"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a>galton.data <span class="ot">&lt;-</span> psychTools<span class="sc">::</span>galton</span>
+<span id="cb69-2"><a href="#cb69-2"></a><span class="fu">ggplot</span>(galton.data, <span class="fu">aes</span>(<span class="at">x=</span>parent, <span class="at">y=</span>child)) <span class="sc">+</span></span>
+<span id="cb69-3"><a href="#cb69-3"></a>    <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> .<span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb69-4"><a href="#cb69-4"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm,   <span class="co"># Add linear regression line</span></span>
+<span id="cb69-5"><a href="#cb69-5"></a>                <span class="at">se=</span><span class="cn">FALSE</span>) <span class="sc">+</span>     <span class="co"># Don't add shaded confidence region</span></span>
+<span id="cb69-6"><a href="#cb69-6"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"parent height"</span>, <span class="at">y =</span> <span class="st">"child height"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-32-1.png" width="960" class="r-stretch"></section>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-37-1.png" width="960" class="r-stretch"></section>
 <section id="visualizing-correlations" class="slide level2">
 <h2>Visualizing correlations</h2>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a><span class="fu">library</span>(datasauRus)</span>
-<span id="cb60-2"><a href="#cb60-2"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
-<span id="cb60-3"><a href="#cb60-3"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"away"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb60-4"><a href="#cb60-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb60-5"><a href="#cb60-5"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb60-6"><a href="#cb60-6"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
-<span id="cb60-7"><a href="#cb60-7"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
-<span id="cb60-8"><a href="#cb60-8"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
-<span id="cb60-9"><a href="#cb60-9"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-
-</div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-33-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
-<span id="cb61-2"><a href="#cb61-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"h_lines"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb61-3"><a href="#cb61-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb61-4"><a href="#cb61-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb61-5"><a href="#cb61-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
-<span id="cb61-6"><a href="#cb61-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
-<span id="cb61-7"><a href="#cb61-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
-<span id="cb61-8"><a href="#cb61-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-
-</div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-34-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
-<span id="cb62-2"><a href="#cb62-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"x_shape"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb62-3"><a href="#cb62-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb62-4"><a href="#cb62-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb62-5"><a href="#cb62-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
-<span id="cb62-6"><a href="#cb62-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
-<span id="cb62-7"><a href="#cb62-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
-<span id="cb62-8"><a href="#cb62-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-
-</div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
-<span id="cb63-2"><a href="#cb63-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"circle"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb63-3"><a href="#cb63-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb63-4"><a href="#cb63-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb63-5"><a href="#cb63-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
-<span id="cb63-6"><a href="#cb63-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
-<span id="cb63-7"><a href="#cb63-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
-<span id="cb63-8"><a href="#cb63-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-
-</div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-36-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
-<span id="cb64-2"><a href="#cb64-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"wide_lines"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb64-3"><a href="#cb64-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb64-4"><a href="#cb64-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb64-5"><a href="#cb64-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
-<span id="cb64-6"><a href="#cb64-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
-<span id="cb64-7"><a href="#cb64-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
-<span id="cb64-8"><a href="#cb64-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-
-</div>
-<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-37-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
-<span id="cb65-2"><a href="#cb65-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"bullseye"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb65-3"><a href="#cb65-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb65-4"><a href="#cb65-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb65-5"><a href="#cb65-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
-<span id="cb65-6"><a href="#cb65-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
-<span id="cb65-7"><a href="#cb65-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
-<span id="cb65-8"><a href="#cb65-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="fu">library</span>(datasauRus)</span>
+<span id="cb70-2"><a href="#cb70-2"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb70-3"><a href="#cb70-3"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"away"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb70-4"><a href="#cb70-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb70-5"><a href="#cb70-5"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb70-6"><a href="#cb70-6"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
+<span id="cb70-7"><a href="#cb70-7"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
+<span id="cb70-8"><a href="#cb70-8"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
+<span id="cb70-9"><a href="#cb70-9"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
@@ -1298,14 +1259,14 @@ p-value adjustment method: Holm (1979)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
-<span id="cb66-2"><a href="#cb66-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"star"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb66-3"><a href="#cb66-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb66-4"><a href="#cb66-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
-<span id="cb66-5"><a href="#cb66-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
-<span id="cb66-6"><a href="#cb66-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
-<span id="cb66-7"><a href="#cb66-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
-<span id="cb66-8"><a href="#cb66-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb71-2"><a href="#cb71-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"h_lines"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb71-3"><a href="#cb71-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb71-4"><a href="#cb71-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb71-5"><a href="#cb71-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
+<span id="cb71-6"><a href="#cb71-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
+<span id="cb71-7"><a href="#cb71-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
+<span id="cb71-8"><a href="#cb71-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
@@ -1315,18 +1276,103 @@ p-value adjustment method: Holm (1979)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
-<span id="cb67-2"><a href="#cb67-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"dino"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb67-3"><a href="#cb67-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb67-4"><a href="#cb67-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
-<span id="cb67-5"><a href="#cb67-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
-<span id="cb67-6"><a href="#cb67-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
-<span id="cb67-7"><a href="#cb67-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
-<span id="cb67-8"><a href="#cb67-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb72-2"><a href="#cb72-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"x_shape"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb72-3"><a href="#cb72-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb72-4"><a href="#cb72-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb72-5"><a href="#cb72-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
+<span id="cb72-6"><a href="#cb72-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
+<span id="cb72-7"><a href="#cb72-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
+<span id="cb72-8"><a href="#cb72-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
 <img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-40-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb73-2"><a href="#cb73-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"circle"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb73-3"><a href="#cb73-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb73-4"><a href="#cb73-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb73-5"><a href="#cb73-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
+<span id="cb73-6"><a href="#cb73-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
+<span id="cb73-7"><a href="#cb73-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
+<span id="cb73-8"><a href="#cb73-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-41-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb74-2"><a href="#cb74-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"wide_lines"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb74-3"><a href="#cb74-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb74-4"><a href="#cb74-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb74-5"><a href="#cb74-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
+<span id="cb74-6"><a href="#cb74-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
+<span id="cb74-7"><a href="#cb74-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
+<span id="cb74-8"><a href="#cb74-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-42-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb75-2"><a href="#cb75-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"bullseye"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb75-3"><a href="#cb75-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb75-4"><a href="#cb75-4"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb75-5"><a href="#cb75-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
+<span id="cb75-6"><a href="#cb75-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
+<span id="cb75-7"><a href="#cb75-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
+<span id="cb75-8"><a href="#cb75-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-43-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb76-2"><a href="#cb76-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"star"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb76-3"><a href="#cb76-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb76-4"><a href="#cb76-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb76-5"><a href="#cb76-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
+<span id="cb76-6"><a href="#cb76-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
+<span id="cb76-7"><a href="#cb76-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
+<span id="cb76-8"><a href="#cb76-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-44-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb77-2"><a href="#cb77-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"dino"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb77-3"><a href="#cb77-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb77-4"><a href="#cb77-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb77-5"><a href="#cb77-5"></a>  <span class="fu">ggtitle</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(M[X], <span class="st">"= 54.3 "</span>, S[X], <span class="st">"= 16.8 "</span>, </span>
+<span id="cb77-6"><a href="#cb77-6"></a>                           M[Y], <span class="st">"= 47.8 "</span>, S[Y], <span class="st">"= 26.9 "</span>,</span>
+<span id="cb77-7"><a href="#cb77-7"></a>                           <span class="st">"R = -.06"</span>))) <span class="sc">+</span></span>
+<span id="cb77-8"><a href="#cb77-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="correlation_2_files/figure-revealjs/unnamed-chunk-45-1.png" width="960" class="r-stretch"></section>
 <section id="wrap-up" class="slide level2">
 <h2>Wrap-up</h2>
 <ul>

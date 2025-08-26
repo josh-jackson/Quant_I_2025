@@ -180,7 +180,6 @@ sum((world$Happiness - mean(world$Happiness))^2)
 We calculate the average squared deviation: this is our variance, $\sigma^2$:
 
 ```{r}
-#| code-fold: true
 sum((x - mean(x))^2)/length(x)
 ```
 
@@ -188,6 +187,9 @@ sum((x - mean(x))^2)/length(x)
 sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness)
 ```
 
+```{r}
+var(world$Happiness)
+```
 
 
 ## Variance
@@ -211,6 +213,10 @@ sqrt(sum(deviation^2)/length(deviation))
 
 ```{r}
 sqrt(sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness))
+```
+
+```{r}
+sd(world$Happiness)
 ```
 
 
@@ -320,15 +326,15 @@ ggplot(world) + geom_density(aes(x = Life)) +
 
 ## Bias and efficiency
 
-- In deciding about different ways to estimate a parameter (e.g., central tendency), it is important to consider bias and efficiency (and sometimes consistency).
+- In deciding about different ways to estimate a parameter (e.g., $\mu$), it is important to consider bias and efficiency.
 
-- **Bias**: An estimator is biased if its expected value and the true value of the parameter are different. 
+- **Bias**: An estimator is biased if its expected value and the true value of the parameter are different. If we sample means multiple times we will eventually converge with the population mean (e.g,. picking marbles with replacement). 
 
-- **Efficiency**: Of two alternative estimators, the more efficient one will estimate the parameter with less error for the same sample size.
+- **Efficiency**: Of two alternative estimators (how we get our estimates), the more efficient one will estimate the parameter with less error for the same sample size. (For regression with outliers we may want to use WLS, LAD, or Bayesian)
 
 
 
-## Bias and efficiency
+## Bias 
 
 - Variance (and standard deviation) are *biased* estimators when applied to samples. They will *underestimate* variability in the population. 
 
@@ -337,17 +343,22 @@ ggplot(world) + geom_density(aes(x = Life)) +
 sqrt(sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness))
 ```
 
+
 ```{r}
 sd(world$Happiness)
 ```
 
+- Default of most statistical packages is sample variance/SD, as one is usually working with sample data 
+
 ----------
 
+
 *Population*
+
 $$\sigma^2 = \frac{\Sigma(X_i-\mu)^2}{N}$$
 
 *Sample*
-$$s^2 = \hat{\sigma}^2 = \frac{\Sigma(X_i-\bar{X})^2}{N-1}$$]
+$$s^2 = \hat{\sigma}^2 = \frac{\Sigma(X_i-\bar{X})^2}{N-1}$$
 
 
 ## Standard Deviation
@@ -356,12 +367,14 @@ $$s^2 = \hat{\sigma}^2 = \frac{\Sigma(X_i-\bar{X})^2}{N-1}$$]
 $$\sigma = \sqrt{\frac{\Sigma(X_i-\mu)^2}{N}}$$
 
 *Sample*
-$$s = \hat{\sigma} = \sqrt{\frac{\Sigma(X_i-\bar{X})^2}{N-1}}$$]
+$$s = \hat{\sigma} = \sqrt{\frac{\Sigma(X_i-\bar{X})^2}{N-1}}$$
 
 
 
 
 ## Simulation
+
+- Map example
 
 ```{r}
 #| code-fold: true
@@ -514,8 +527,14 @@ ggplot(plot_data, aes(x = value, fill = type, color = type)) +
 ## Associations
 
 - i.e., relationships
-- to look at how to variable relate to one another we need to think in terms of how associated they are
-- If you know one, can you make a better than chance guess at the other? 
+
+- to look at how one variable relates to another we need to think in terms of how associated they are
+
+- If you know one, can you make a better than chance guess at the other?
+
+- Basis of scientific inquery
+
+-------------
 
 ```{r}
 #| code-fold: true
@@ -525,14 +544,37 @@ world %>% ggplot(aes(x = Happiness, y = Life)) + geom_point(size = 3) + theme_bw
 
 ## Covariation (cross products)
 
+- Sum of the products
 
 **Sample:**
 
-$$\large SS = {\sum{(x-\bar{x})(y-\bar{y})}}$$
+$$\large SP = {\sum{(x-\bar{x})(y-\bar{y})}}$$
 
 **Population:**
 
-$$SS = {\sum{{(x-\mu_{x}})(y-\mu_{y})}}$$
+$$SP = {\sum{{(x-\mu_{x}})(y-\mu_{y})}}$$
+
+
+--------------
+
+
+```{r}
+
+sum((world$Happiness - mean(world$Happiness))*(world$Life - mean(world$Life)))
+
+```
+
+
+```{r}
+world2 <- world[-90, ]
+
+sum((world2$Happiness - mean(world2$Happiness))*(world2$Life - mean(world2$Life)))
+
+```
+
+```{r}
+cov(world2$Happiness, world2$Life,  use = "complete.obs") *(nrow(world2) - 1)
+```
 
 
 ## Covariance
@@ -550,6 +592,7 @@ $$\large \sigma_{xy} = {\frac{\sum{(x-\mu_{x})(y-\mu_{y})}}{N}}$$
 ```{r}
 cov(world$Happiness, world$Life,  use = "complete.obs")
 ```
+
 
 
 ## Correlation
@@ -585,7 +628,7 @@ cor(world$Happiness, world$Life,  use = "complete.obs")
 
 ## Covariance table
 
-$$\mathbf{K_{XX}} = \left[\begin{array}
+$$\mathbf{K_{XYZ}} = \left[\begin{array}
 {rrr}
 \sigma^2_X & cov_{XY} & cov_{XZ} \\
 cov_{YX} & \sigma^2_Y & cov_{YZ} \\
@@ -598,7 +641,7 @@ cov_{ZX} & cov_{ZY} & \sigma^2_Z
 
 
 
-$$\mathbf{K_{XX}} = \left[\begin{array}
+$$\mathbf{K_{XYZ}} = \left[\begin{array}
 {rrr}
 \sigma^2_X & 126.5 & 5.2 \\
 126.5 & \sigma^2_Y & cov_{YZ} \\

@@ -14,7 +14,7 @@ html:
 
 ## This time
 
-- Getting comformatable with regression/glm 
+- Getting comfortable with regression/glm 
 - More in depth on each component of the model
 
 ## Thinking in terms of models
@@ -25,7 +25,7 @@ html:
 
 $Y = b_0 + b_{1}X + e$
 
-*- Your model is how you think the world works*
+- Your model is how you think the world works
 
 ## How can we visualize data to make sense of it?
 
@@ -68,6 +68,8 @@ $$Y_i = b_{0} + b_{1}X_i + e_i$$
 
 -   Each individual has a unique Y value an X value and a residual/error term\
 -   The model only has a single $b_{0}$ and $b_{1}$ term. These are the regression parameters. $b_{0}$ is the intercept and $b_{1}$ quantifies the relationship between your model of the world and the DV.
+
+
 
 ## in R
 
@@ -367,8 +369,8 @@ mean(d1.f$.resid)
 ----------
 
 ```{r}
-# Load the ggplot2 library for plotting
-library(ggplot2)
+#| code-fold: true
+
 
 # --- 1. Generate Sample Data ---
 set.seed(123) # For reproducibility
@@ -451,6 +453,188 @@ $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2
 - Our estimate of sigma ($\hat{\sigma}$) is also known as Residual Standard Error (RSE), which is equal to the square root of the Mean Square Error (MSE).
 
 - $\hat{\sigma}$ = $\sqrt{MSE}$ = $\sqrt{\frac{\sum(Y_i - \hat{Y_i})^2}{n-k-1}}$
+
+
+## From population to sample
+
+$$Y_i \sim Normal(\mu, \sigma)$$
+
+-   The DV, $Y$ is assumed to be distributed as a Gaussian normal, made up of $Y_i$, with a mean of $\mu$ and a standard deviation of $\sigma$
+
+$$Y_i = b_{0} + b_{1}X_i + e_i$$
+
+$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$
+
+## From population to sample
+
+```{r}
+#| code-fold: true
+# Load the ggplot2 library for plotting
+library(ggplot2)
+
+# --- 1. Define the True Population Model ---
+# These are the "true" parameters that we are trying to discover.
+true_beta0 <- 10
+true_beta1 <- 2
+true_sigma <- 15
+population_size <- 10000
+
+# Create the entire population based on the true model
+population <- data.frame(
+  x = runif(population_size, 0, 50)
+)
+population$y <- true_beta0 + true_beta1 * population$x + rnorm(population_size, mean = 0, sd = true_sigma)
+
+# --- 2. Draw a Random Sample from the Population ---
+sample_size <- 50
+sample_data <- population[sample(1:population_size, sample_size), ]
+
+# --- 3. Fit a Regression Model to the SAMPLE ---
+sample_model <- lm(y ~ x, data = sample_data)
+sample_beta0_hat <- coef(sample_model)[1]
+sample_beta1_hat <- coef(sample_model)[2]
+
+# --- 4. Visualize the Relationship ---
+
+pop <- ggplot(population, aes(x = y)) +
+  geom_density(fill = "lightblue", alpha = 0.8, color = "black") +
+  labs(
+    title = "Distribution of the Outcome Variable (Y) in the Population",
+    subtitle = "The overall distribution is approximately normal",
+    x = "Outcome (Y)",
+    y = "Density"
+  ) +
+  theme_minimal(base_size = 14)
+
+
+pop
+
+```
+
+-------------
+
+```{r}
+#| code-fold: true
+ggplot(population, aes(x = x, y = y)) +
+# Plot the entire population as faint gray points
+geom_point(color = "gray80", alpha = 0.5) +
+# Add the TRUE population regression line in red
+geom_abline(
+intercept = true_beta0,
+slope = true_beta1,
+color = "black",
+size = 1.5,
+linetype = "dashed"
+) +
+# Highlight the points from our random sample in blue
+geom_point(data = sample_data, color = "blue", size = 2.5) +
+# Add the ESTIMATED sample regression line in blue
+geom_abline(
+intercept = sample_beta0_hat,
+slope = sample_beta1_hat,
+color = "green",
+size = 1.5
+) +
+labs(subtitle = "The green line is our sample estimate of the population (black)",
+x = "Predictor (X)",
+y = "Outcome (Y)"
+) +
+theme_minimal(base_size = 14)
+```
+
+
+
+
+## From population to sample
+
+```{r}
+#| code-fold: true
+# Load the ggplot2 library for plotting
+library(ggplot2)
+library(dplyr) # For data manipulation
+
+# --- 1. Define the True Population Model ---
+# These are the "true" parameters.
+true_beta0 <- 50  # Mean of the group where X=0
+true_beta1 <- 20  # The true DIFFERENCE between the group means
+true_sigma <- 15
+population_size <- 20000
+
+# Create the population
+population <- data.frame(
+  # Create a binary predictor variable (0 or 1)
+  x = factor(sample(c(0, 1), population_size, replace = TRUE))
+)
+# The model Y = b0 + b1*X + error still works.
+# If X=0, Y = b0. If X=1, Y = b0 + b1.
+population$y <- true_beta0 + true_beta1 * as.numeric(as.character(population$x)) + rnorm(population_size, mean = 0, sd = true_sigma)
+
+# --- 2. Draw a Random Sample from the Population ---
+sample_size <- 60
+sample_data <- population[sample(1:population_size, sample_size), ]
+
+# --- 3. Fit a Regression Model to the SAMPLE ---
+sample_model <- lm(y ~ x, data = sample_data)
+# Get the estimated intercept and slope (difference)
+sample_beta0_hat <- coef(sample_model)[1]
+sample_beta1_hat <- coef(sample_model)[2]
+
+# --- 4. Calculate True and Estimated Group Means ---
+# True population means
+true_means <- data.frame(
+  x = factor(c(0, 1)),
+  mean_y = c(true_beta0, true_beta0 + true_beta1)
+)
+# Estimated means from our sample
+estimated_means <- data.frame(
+  x = factor(c(0, 1)),
+  mean_y = c(sample_beta0_hat, sample_beta0_hat + sample_beta1_hat)
+)
+
+# --- 5. Visualize  
+
+ggplot(population, aes(x = y)) +
+  geom_density(fill = "lightblue", alpha = 0.8, color = "black") +
+  labs(
+    title = "Distribution of the Outcome Variable (Y) in the Population",
+    subtitle = "The overall distribution is approximately normal",
+    x = "Outcome (Y)",
+    y = "Density"
+  ) +
+  theme_minimal(base_size = 14)
+
+
+
+```
+
+
+-----------------
+
+```{r}
+#| code-fold: true
+ggplot(population, aes(x = x, y = y)) +
+  # Jitter plot of the entire population
+  geom_jitter(color = "gray80", alpha = 0.3, width = 0.2) +
+  
+  # Highlight the points from our random sample
+  geom_jitter(data = sample_data, color = "blue", width = 0.2, size = 2) +
+  
+  # Add the TRUE population means in black
+  geom_point(data = true_means, aes(y = mean_y), color = "Black", size = 28, shape = 95) +
+  
+  # Add the ESTIMATED sample means in blue
+  geom_point(data = estimated_means, aes(y = mean_y), color = "green", size = 28, shape = 95) +
+  
+  labs(
+    title = "Regression with a Dichotomous Predictor",
+    subtitle = "Sample estimates (green bars) are close to the population black bars",
+    x = "Group (Predictor X)",
+    y = "Outcome (Y)"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+
 
 ## Wrap-up
 

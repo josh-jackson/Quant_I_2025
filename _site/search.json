@@ -270,7 +270,7 @@
     "href": "glm_3.html#thinking-in-terms-of-models",
     "title": "GLM basics",
     "section": "Thinking in terms of models",
-    "text": "Thinking in terms of models\n\nOur DV (here forth Y) is what we are trying to understand\nWe hypothesize it has some relationship with your IV(s) (here forth Xs), with what is left over described as error (E)\n\n\\(Y = b_0 + b_{1}X + e\\)\n- Your model is how you think the world works"
+    "text": "Thinking in terms of models\n\nOur DV (here forth Y) is what we are trying to understand\nWe hypothesize it has some relationship with your IV(s) (here forth Xs), with what is left over described as error (E)\n\n\\(Y = b_0 + b_{1}X + e\\)\n\nYour model is how you think the world works"
   },
   {
     "objectID": "glm_3.html#how-can-we-visualize-data-to-make-sense-of-it",
@@ -634,7 +634,7 @@
     "href": "correlation_2.html#variance",
     "title": "Data Description and Correlations",
     "section": "Variance",
-    "text": "Variance\nWe calculate the average squared deviation: this is our variance, \\(\\sigma^2\\):\n\n\nCode\nsum((x - mean(x))^2)/length(x)\n\n\n[1] 6.666667\n\n\n\nsum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness)\n\n[1] 1.21991"
+    "text": "Variance\nWe calculate the average squared deviation: this is our variance, \\(\\sigma^2\\):\n\nsum((x - mean(x))^2)/length(x)\n\n[1] 6.666667\n\n\n\nsum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness)\n\n[1] 1.21991\n\n\n\nvar(world$Happiness)\n\n[1] 1.228946"
   },
   {
     "objectID": "correlation_2.html#variance-1",
@@ -648,7 +648,7 @@
     "href": "correlation_2.html#standard-deviation",
     "title": "Data Description and Correlations",
     "section": "Standard Deviation",
-    "text": "Standard Deviation\nStandard deviation \\(\\sigma\\) is the square root of the variance.\n\n\nCode\nsqrt(sum(deviation^2)/length(deviation))\n\n\n[1] 2.581989\n\n\n\nsqrt(sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness))\n\n[1] 1.104495"
+    "text": "Standard Deviation\nStandard deviation \\(\\sigma\\) is the square root of the variance.\n\n\nCode\nsqrt(sum(deviation^2)/length(deviation))\n\n\n[1] 2.581989\n\n\n\nsqrt(sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness))\n\n[1] 1.104495\n\n\n\nsd(world$Happiness)\n\n[1] 1.108579"
   },
   {
     "objectID": "correlation_2.html#skew-and-kurtosis",
@@ -669,7 +669,7 @@
     "href": "correlation_2.html#bias-and-efficiency",
     "title": "Data Description and Correlations",
     "section": "Bias and efficiency",
-    "text": "Bias and efficiency\n\nIn deciding about different ways to estimate a parameter (e.g., central tendency), it is important to consider bias and efficiency (and sometimes consistency).\nBias: An estimator is biased if its expected value and the true value of the parameter are different.\nEfficiency: Of two alternative estimators, the more efficient one will estimate the parameter with less error for the same sample size."
+    "text": "Bias and efficiency\n\nIn deciding about different ways to estimate a parameter (e.g., \\(\\mu\\)), it is important to consider bias and efficiency.\nBias: An estimator is biased if its expected value and the true value of the parameter are different. If we sample means multiple times we will eventually converge with the population mean (e.g,. picking marbles with replacement).\nEfficiency: Of two alternative estimators (how we get our estimates), the more efficient one will estimate the parameter with less error for the same sample size. (For regression with outliers we may want to use WLS, LAD, or Bayesian)"
   },
   {
     "objectID": "correlation_2.html#bias-and-efficiency-1",
@@ -683,14 +683,14 @@
     "href": "correlation_2.html#standard-deviation-1",
     "title": "Data Description and Correlations",
     "section": "Standard Deviation",
-    "text": "Standard Deviation\nPopulation \\[\\sigma = \\sqrt{\\frac{\\Sigma(X_i-\\mu)^2}{N}}\\]\nSample \\[s = \\hat{\\sigma} = \\sqrt{\\frac{\\Sigma(X_i-\\bar{X})^2}{N-1}}\\]]"
+    "text": "Standard Deviation\nPopulation \\[\\sigma = \\sqrt{\\frac{\\Sigma(X_i-\\mu)^2}{N}}\\]\nSample \\[s = \\hat{\\sigma} = \\sqrt{\\frac{\\Sigma(X_i-\\bar{X})^2}{N-1}}\\]"
   },
   {
     "objectID": "correlation_2.html#simulation",
     "href": "correlation_2.html#simulation",
     "title": "Data Description and Correlations",
     "section": "Simulation",
-    "text": "Simulation\n\n\nCode\nset.seed(100917) #so everyone gets same random draws\n\n#function to estimate variance using population formula\nsample_var = function(x){\n  sum((x - mean(x, na.rm=T))^2, na.rm=T)/length(which(!is.na(x)))\n}\n#number of samples\ndraws = 10000\n#which sample sizes to test\nsample_sizes = seq(from = 5, to = 100, by = 5)\n#data frame to store simulations\nvar_estimates = data.frame(size = sample_sizes, sample = NA, estimate = NA)\n\nfor(i in sample_sizes){ # loop through sample sizes\n  sample_est = numeric(length = draws) #create empty vectors\n  estimate = numeric(length = draws)\n  for(j in 1:draws){ # loop through draws\n    sample = rnorm(n = i, mean = 1000, sd = 10) # randomly draw sample from pop with variance 100\n    sample_est[j] = sample_var(sample) # calculate variance using population formula\n    estimate[j] = var(sample) # calculate variance using sample formula\n  }\n  row = which(var_estimates$size == i) #which row in data frame does this belong to?\n  var_estimates$sample[row] = mean(sample_est) # average of variance estimates (using pop) across draws\n  var_estimates$estimate[row] = mean(estimate) # average of variances (using sample) across draws\n}\n\nvar_estimates %&gt;%\n  mutate(population = 100) %&gt;% #add population variable\n  gather(\"var\", \"value\", -size) %&gt;% # long-form\n  mutate(var = factor(var, \n                      levels = c(\"population\",\"sample\",\"estimate\"),\n                      labels = c(\"Population Variance\",\n                                 \"Sample Variance\", \n                                 \"Estimate of Population Variance\"))) %&gt;% #lovely labels\n  ggplot(aes(x = size, y = value)) +\n  geom_line(aes(color = var), size = 3) +\n  scale_x_continuous(\"Sample Size\", breaks = sample_sizes) +\n  scale_color_discrete(\"\")+\n  geom_point() + \n  theme(legend.position = \"bottom\")"
+    "text": "Simulation\n\nMap example\n\n\n\nCode\nset.seed(100917) #so everyone gets same random draws\n\n#function to estimate variance using population formula\nsample_var = function(x){\n  sum((x - mean(x, na.rm=T))^2, na.rm=T)/length(which(!is.na(x)))\n}\n#number of samples\ndraws = 10000\n#which sample sizes to test\nsample_sizes = seq(from = 5, to = 100, by = 5)\n#data frame to store simulations\nvar_estimates = data.frame(size = sample_sizes, sample = NA, estimate = NA)\n\nfor(i in sample_sizes){ # loop through sample sizes\n  sample_est = numeric(length = draws) #create empty vectors\n  estimate = numeric(length = draws)\n  for(j in 1:draws){ # loop through draws\n    sample = rnorm(n = i, mean = 1000, sd = 10) # randomly draw sample from pop with variance 100\n    sample_est[j] = sample_var(sample) # calculate variance using population formula\n    estimate[j] = var(sample) # calculate variance using sample formula\n  }\n  row = which(var_estimates$size == i) #which row in data frame does this belong to?\n  var_estimates$sample[row] = mean(sample_est) # average of variance estimates (using pop) across draws\n  var_estimates$estimate[row] = mean(estimate) # average of variances (using sample) across draws\n}\n\nvar_estimates %&gt;%\n  mutate(population = 100) %&gt;% #add population variable\n  gather(\"var\", \"value\", -size) %&gt;% # long-form\n  mutate(var = factor(var, \n                      levels = c(\"population\",\"sample\",\"estimate\"),\n                      labels = c(\"Population Variance\",\n                                 \"Sample Variance\", \n                                 \"Estimate of Population Variance\"))) %&gt;% #lovely labels\n  ggplot(aes(x = size, y = value)) +\n  geom_line(aes(color = var), size = 3) +\n  scale_x_continuous(\"Sample Size\", breaks = sample_sizes) +\n  scale_color_discrete(\"\")+\n  geom_point() + \n  theme(legend.position = \"bottom\")"
   },
   {
     "objectID": "correlation_2.html#standardized-scores-z-scores",
@@ -711,14 +711,14 @@
     "href": "correlation_2.html#associations",
     "title": "Data Description and Correlations",
     "section": "Associations",
-    "text": "Associations\n\ni.e., relationships\nto look at how to variable relate to one another we need to think in terms of how associated they are\nIf you know one, can you make a better than chance guess at the other?\n\n\n\nCode\nworld %&gt;% ggplot(aes(x = Happiness, y = Life)) + geom_point(size = 3) + theme_bw()"
+    "text": "Associations\n\ni.e., relationships\nto look at how one variable relates to another we need to think in terms of how associated they are\nIf you know one, can you make a better than chance guess at the other?\nBasis of scientific inquery"
   },
   {
     "objectID": "correlation_2.html#covariation-cross-products",
     "href": "correlation_2.html#covariation-cross-products",
     "title": "Data Description and Correlations",
     "section": "Covariation (cross products)",
-    "text": "Covariation (cross products)\nSample:\n\\[\\large SS = {\\sum{(x-\\bar{x})(y-\\bar{y})}}\\]\nPopulation:\n\\[SS = {\\sum{{(x-\\mu_{x}})(y-\\mu_{y})}}\\]"
+    "text": "Covariation (cross products)\n\nSum of the products\n\nSample:\n\\[\\large SP = {\\sum{(x-\\bar{x})(y-\\bar{y})}}\\]\nPopulation:\n\\[SP = {\\sum{{(x-\\mu_{x}})(y-\\mu_{y})}}\\]"
   },
   {
     "objectID": "correlation_2.html#covariance",
@@ -746,14 +746,14 @@
     "href": "correlation_2.html#covariance-table",
     "title": "Data Description and Correlations",
     "section": "Covariance table",
-    "text": "Covariance table\n\\[\\mathbf{K_{XX}} = \\left[\\begin{array}\n{rrr}\n\\sigma^2_X & cov_{XY} & cov_{XZ} \\\\\ncov_{YX} & \\sigma^2_Y & cov_{YZ} \\\\\ncov_{ZX} & cov_{ZY} & \\sigma^2_Z\n\\end{array}\\right]\\]"
+    "text": "Covariance table\n\\[\\mathbf{K_{XYZ}} = \\left[\\begin{array}\n{rrr}\n\\sigma^2_X & cov_{XY} & cov_{XZ} \\\\\ncov_{YX} & \\sigma^2_Y & cov_{YZ} \\\\\ncov_{ZX} & cov_{ZY} & \\sigma^2_Z\n\\end{array}\\right]\\]"
   },
   {
     "objectID": "correlation_2.html#covariance-table-1",
     "href": "correlation_2.html#covariance-table-1",
     "title": "Data Description and Correlations",
     "section": "Covariance table",
-    "text": "Covariance table\n\\[\\mathbf{K_{XX}} = \\left[\\begin{array}\n{rrr}\n\\sigma^2_X & 126.5 & 5.2 \\\\\n126.5 & \\sigma^2_Y & cov_{YZ} \\\\\n5.2 & cov_{ZY} & \\sigma^2_Z\n\\end{array}\\right]\\]\nWhich variable, \\(Y\\) or \\(Z\\), does \\(X\\) have greater relationship with?"
+    "text": "Covariance table\n\\[\\mathbf{K_{XYZ}} = \\left[\\begin{array}\n{rrr}\n\\sigma^2_X & 126.5 & 5.2 \\\\\n126.5 & \\sigma^2_Y & cov_{YZ} \\\\\n5.2 & cov_{ZY} & \\sigma^2_Z\n\\end{array}\\right]\\]\nWhich variable, \\(Y\\) or \\(Z\\), does \\(X\\) have greater relationship with?"
   },
   {
     "objectID": "correlation_2.html#correlation-1",
@@ -984,7 +984,7 @@
     "href": "glm_3.html#this-time",
     "title": "GLM basics",
     "section": "This time",
-    "text": "This time\n\nGetting comformatable with regression/glm\nMore in depth on each component of the model"
+    "text": "This time\n\nGetting comfortable with regression/glm\nMore in depth on each component of the model"
   },
   {
     "objectID": "glm_3.html#error-vs-residual",
@@ -1153,5 +1153,33 @@
     "title": "Syllabus",
     "section": "LLMs and our AI overlords",
     "text": "LLMs and our AI overlords\n\nVery useful for stats, especially basic stats. Use them! But do not be like me in terms of spellcheck and my subsequent spelling abilities. Have a discussion to understand the material at a deeper level. Do not use them just for efficiency.\n\n\nBe Considerate and Kind\n\nIt is OK to not be OK. If you tell me you’re having trouble, I’m not going to judge you or think less of you. I hope you will do the same for me. I will work with you to make sure we have a reasonable plan in place should something come up. However, this does require you telling me “hey, I’m not OK”.\nYou are always welcome to come talk to me about things that you’re going through. If I can’t help you, I usually know someone who can help – or I can at least give you some resources and point you in the right direction.\nIf you are struggling or need extra help, please just ask. I promise I will work with you.\n\n\n\nAttendance & In-person Etiquette\n\nI expect all students to be in class if they are able (not sick, not at a conference etc.). The best way to succeed is to come to class. Your chosen profession requires mastery of these skills! Come to class!\nYou are adults. Come to class when you can. Let me know when you can’t (quick email is OK).\nIf you are not feeling well, don’t come to class!! You have access to the slides and you can ask a friend for notes.\nMost people will have electronics with them in class. Drinks should have a lid on them so that if they spill, we hopefully aren’t ruining yours or another person’s laptop/tablet/phone etc. Be careful!\n\n\n\nOnline Etiquette\n\nThere will be a lot of online communication with the instructor, the AIs, and your peers. You are expected to maintain a polite and respectful tone in their online discourse. Some things to consider:\nAny communication shared privately may become public, so be mindful of what you share in discussion boards or chats. This is especially true for sharing any personal and/or identifying information about you or someone else. Do not share any passwords or divulge any personal information (yours or others) that can be used in a malicious manner (phone numbers, addresses etc.).\nHumor doesn’t always translate in an online forum. If you want to make a joke or a sarcastic remark, be 100% sure that it is clear you are joking.\nTreat your classmates, professor, and AIs with kindness and respect. Any indication of online harassment or bullying will not be tolerated and will be reported. This is especially pertinent when giving constructive feedback in code reviews.\nPlease avoid using ALL CAPS because it can be interpreted as yelling."
+  },
+  {
+    "objectID": "correlation_2.html#bias",
+    "href": "correlation_2.html#bias",
+    "title": "Data Description and Correlations",
+    "section": "Bias",
+    "text": "Bias\n\nVariance (and standard deviation) are biased estimators when applied to samples. They will underestimate variability in the population.\n\n\nsqrt(sum((world$Happiness - mean(world$Happiness))^2)/length(world$Happiness))\n\n[1] 1.104495\n\n\n\nsd(world$Happiness)\n\n[1] 1.108579\n\n\n\nDefault of most statistical packages is sample variance/SD, as one is usually working with sample data"
+  },
+  {
+    "objectID": "glm_3.html#from-population-to-sample",
+    "href": "glm_3.html#from-population-to-sample",
+    "title": "GLM basics",
+    "section": "From population to sample",
+    "text": "From population to sample\n\\[Y_i \\sim Normal(\\mu, \\sigma)\\]\n\nThe DV, \\(Y\\) is assumed to be distributed as a Gaussian normal, made up of \\(Y_i\\), with a mean of \\(\\mu\\) and a standard deviation of \\(\\sigma\\)\n\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\]\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma)\\]"
+  },
+  {
+    "objectID": "glm_3.html#from-population-to-sample-1",
+    "href": "glm_3.html#from-population-to-sample-1",
+    "title": "GLM basics",
+    "section": "From population to sample",
+    "text": "From population to sample\n\n\nCode\n# Load the ggplot2 library for plotting\nlibrary(ggplot2)\n\n# --- 1. Define the True Population Model ---\n# These are the \"true\" parameters that we are trying to discover.\ntrue_beta0 &lt;- 10\ntrue_beta1 &lt;- 2\ntrue_sigma &lt;- 15\npopulation_size &lt;- 10000\n\n# Create the entire population based on the true model\npopulation &lt;- data.frame(\n  x = runif(population_size, 0, 50)\n)\npopulation$y &lt;- true_beta0 + true_beta1 * population$x + rnorm(population_size, mean = 0, sd = true_sigma)\n\n# --- 2. Draw a Random Sample from the Population ---\nsample_size &lt;- 50\nsample_data &lt;- population[sample(1:population_size, sample_size), ]\n\n# --- 3. Fit a Regression Model to the SAMPLE ---\nsample_model &lt;- lm(y ~ x, data = sample_data)\nsample_beta0_hat &lt;- coef(sample_model)[1]\nsample_beta1_hat &lt;- coef(sample_model)[2]\n\n# --- 4. Visualize the Relationship ---\n\npop &lt;- ggplot(population, aes(x = y)) +\n  geom_density(fill = \"lightblue\", alpha = 0.8, color = \"black\") +\n  labs(\n    title = \"Distribution of the Outcome Variable (Y) in the Population\",\n    subtitle = \"The overall distribution is approximately normal\",\n    x = \"Outcome (Y)\",\n    y = \"Density\"\n  ) +\n  theme_minimal(base_size = 14)\n\n\npop"
+  },
+  {
+    "objectID": "glm_3.html#from-population-to-sample-2",
+    "href": "glm_3.html#from-population-to-sample-2",
+    "title": "GLM basics",
+    "section": "From population to sample",
+    "text": "From population to sample\n\n\nCode\n# Load the ggplot2 library for plotting\nlibrary(ggplot2)\nlibrary(dplyr) # For data manipulation\n\n# --- 1. Define the True Population Model ---\n# These are the \"true\" parameters.\ntrue_beta0 &lt;- 50  # Mean of the group where X=0\ntrue_beta1 &lt;- 20  # The true DIFFERENCE between the group means\ntrue_sigma &lt;- 15\npopulation_size &lt;- 20000\n\n# Create the population\npopulation &lt;- data.frame(\n  # Create a binary predictor variable (0 or 1)\n  x = factor(sample(c(0, 1), population_size, replace = TRUE))\n)\n# The model Y = b0 + b1*X + error still works.\n# If X=0, Y = b0. If X=1, Y = b0 + b1.\npopulation$y &lt;- true_beta0 + true_beta1 * as.numeric(as.character(population$x)) + rnorm(population_size, mean = 0, sd = true_sigma)\n\n# --- 2. Draw a Random Sample from the Population ---\nsample_size &lt;- 60\nsample_data &lt;- population[sample(1:population_size, sample_size), ]\n\n# --- 3. Fit a Regression Model to the SAMPLE ---\nsample_model &lt;- lm(y ~ x, data = sample_data)\n# Get the estimated intercept and slope (difference)\nsample_beta0_hat &lt;- coef(sample_model)[1]\nsample_beta1_hat &lt;- coef(sample_model)[2]\n\n# --- 4. Calculate True and Estimated Group Means ---\n# True population means\ntrue_means &lt;- data.frame(\n  x = factor(c(0, 1)),\n  mean_y = c(true_beta0, true_beta0 + true_beta1)\n)\n# Estimated means from our sample\nestimated_means &lt;- data.frame(\n  x = factor(c(0, 1)),\n  mean_y = c(sample_beta0_hat, sample_beta0_hat + sample_beta1_hat)\n)\n\n# --- 5. Visualize  \n\nggplot(population, aes(x = y)) +\n  geom_density(fill = \"lightblue\", alpha = 0.8, color = \"black\") +\n  labs(\n    title = \"Distribution of the Outcome Variable (Y) in the Population\",\n    subtitle = \"The overall distribution is approximately normal\",\n    x = \"Outcome (Y)\",\n    y = \"Density\"\n  ) +\n  theme_minimal(base_size = 14)"
   }
 ]
