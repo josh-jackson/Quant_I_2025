@@ -136,6 +136,10 @@ $$\text{< 60 = F}$$
 
 -   We will (likely) have a dedicated class Slack work space. You can post questions that everyone can see, or make use of direct messaging. Josh or the AIs will respond to your questions on Slack (if your peers don't respond first!). This is really great for one-off questions, or if you need some quick clarification on something. We will also have a dedicated channel for silly programming and stats memes, because humor is important when you're learning a skill like coding, in which you'll repeatedly fail. Slack is not required *per se*, but it is **highly encouraged**.
 
+## LLMs and our AI overlords
+
+- Very useful for stats, especially basic stats. Use them! But do not be like me in terms of spellcheck and my subsequent spelling abilities. Have a discussion to understand the material at a deeper level. Do not use them just for efficiency. 
+
 ### Be Considerate and Kind
 
 -   It is OK to not be OK. If you tell me you're having trouble, I'm not going to judge you or think less of you. I hope you will do the same for me. I will work with you to make sure we have a reasonable plan in place should something come up. *However*, this does require you telling me "hey, I'm not OK".
