@@ -67,7 +67,7 @@ html:
 -   A **statistical** model uses math to make predictions and thus learn about the world
 
 
-## YOU DEFINE THE MODEL
+## You Define the model
 
 - For the DV you care about, what do you think impacts it? What is your theory? 
 
