@@ -457,7 +457,7 @@ $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2
 
 ## From population to sample
 
-$$Y_i \sim Normal(\mu, \sigma)$$
+$$Y_i \sim \mathcal{N}(\mu, \sigma)$$
 
 -   The DV, $Y$ is assumed to be distributed as a Gaussian normal, made up of $Y_i$, with a mean of $\mu$ and a standard deviation of $\sigma$
 

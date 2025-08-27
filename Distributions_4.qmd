@@ -22,7 +22,17 @@ html:
 
 -   Most of the time we have no idea (this is why we are doing the experiment), but it is helpful to think about a simplified approximation of the true, unknown DGP
 
--   The goal of fitting a regression model is to use your sample data to estimate the parameters of a chosen probability distribution that represent this DGP.
+-   The goal of fitting a regression model is to use your sample data to estimate the *parameters* (what defines the shape) of a chosen probability distribution that represent this DGP.
+
+## Saw this last time
+
+$$Y_i \sim \mathcal{N}(\mu, \sigma)$$
+
+-   We assume the DV, $Y$ has a DGP that is Gaussian normal, made up of $Y_i$, with a mean of $\mu$ and a standard deviation of $\sigma$
+
+$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$
+- Almost all the time we will never and can never know what the true DPG looks like. Normal typically serves as our default (based on how we measure or DV). 
+
 
 ## What are probability distributions?
 
@@ -37,8 +47,7 @@ html:
 -   Normal Distribution
 -   t-Distribution
 -   F-Distribution
--   Bernoulli Distribution
--   Binomial Distribution
+-   Bernoulli/Binomial Distribution
 -   Negative Binomial
 -   Chi-square distribution
 -   Poisson Distribution
@@ -84,10 +93,6 @@ pmf_df
 
 -   For continuous variables.
 
--   The value of the PDF at any specific point is not a probability. The probability of observing exactly one value is zero.
-
--   Probability is represented by the area under the curve over a range (density)
-
 ```{r}
 #| code-fold: true
 x <- seq(from = -5, to = 5, by = 0.05)
@@ -96,11 +101,17 @@ ggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle("PDF of Normal Dist
   ylab("Density")
 ```
 
+
+## Probability Density Function (PDF)
+
+
+-   The value of the PDF at any specific point is not a probability. The probability of observing exactly one value is zero.
+
+-   Probability is represented by the area under the curve over a range (density)
+
+
 ## Cumulative distribtuion function (CDF)
 
--   The CDF applies to both discrete and continuous variables. It gives the "running total" of probability. The CDF at a value x is the probability of observing an outcome less than or equal to x.
-
--   Will use to calculate p-values and percentiles or quantiles
 
 ```{r}
 #| code-fold: true
@@ -116,6 +127,13 @@ ggplot(cdf_df, aes(x = x, y = cdf)) +
   xlab("Number of Successes") + ylab("Cumulative Probability")
 ```
 
+----------
+
+-   The CDF applies to both discrete and continuous variables. It gives the "running total" of probability. The CDF at a value x is the probability of observing an outcome less than or equal to x.
+
+-   Will use to calculate p-values and percentiles or quantiles
+
+
 ------------------------------------------------------------------------
 
 ```{r}
@@ -128,15 +146,39 @@ ggplot(norm_dat) + geom_line(aes(x = q, y = cdf)) +  ggtitle("CDF of normal Dist
 
 ## Binomial Distribution
 
-Theoretical probability distribution appropriate when modeling the expected *binary* outcomes, X, across N trials, with the same probability of success (p) across independent trials.
+- Theoretical probability distribution appropriate when modeling the expected *binary* outcomes, X, across N trials, with the same probability of success (p) across independent trials.
 
 PMF: $$P(X = x|n,p) = \frac{N!}{X!(N-X)!}p^X(1-p)^{N-X}$$
 
-X = Number of successes p = probability of success n = number of trials
+- X = Number of successes p = probability of success n = number of trials
 
-First part tells you the number of ways to select k success from a set of N, where order doesn't matter. Second tells you the probability of any given sequence. By multiplying the number of ways an event can happen by the probability of any single one of those ways, you get the total overall probability.
+
+## Binomial Distribution
+
+- First part of equation tells you the number of ways to select k success from a set of N, where order doesn't matter. Second tells you the probability of any given sequence. By multiplying the number of ways an event can happen by the probability of any single one of those ways, you get the total overall probability.
+
+
+- 3 ways of flipping 1 success with fair coin out of three trials (001,010,100) * .125  = .375
 
 ------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+n <- 3 ;p <- 0.5; x <- 0:n
+# Calculate the probability mass function
+pmf <- dbinom(x, n, p)
+pmf_df <- data.frame(x, pmf)
+#creates a ggplot object with pmf_df as the data source 
+ggplot(pmf_df, aes(x = x, y = pmf)) +
+  geom_bar(stat = "identity") +
+  ggtitle("PMF of Binomial Distribution, p = .5, N = 100") + xlab("Number of Successes") +
+  ylab("Probability")
+```
+
+
+
+
+---------
 
 ```{r}
 #| code-fold: true
@@ -198,17 +240,27 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
   ylab("Probability") +scale_x_continuous(breaks = seq(0, 10, by = 1))
 ```
 
+
+## Binomial Distribution
+
+-   Our mean and variance are related in the binomial distribution
+
+E(X) = Np
+
+Var(X) = Np(1-p)
+
+- This will have consequences when we use the binomial as our DGP
+
 ## History of Binomial
 
 -   The foundation of probability theory based ways to win gambling! ("problem of points")
 -   Built upon Pascals's triangle, which was a way to describe the binomial coefficient (the number of ways k successes can occur in n trials)
 
-PMF: $$\frac{N!}{X!(N-X)!} = \binom{N}{X}$$
 
 -   Laid the groundwork for setting up expected values $E(x)$ which are long run averages
--   Jacob Bernoulli took Pascal's binomial coefficient and ran with it, using it to set up the Law of Large Numbers (more later)
+-   Jacob Bernoulli took Pascal's binomial coefficient and ran with it, using it to set up the Law of Large Numbers (more later; as you increase the size of a random sample, its average will get closer and closer to the population)
 
-------------------------------------------------------------------------
+## R functions
 
 In R, we have names for a number of probability functions. *binom* for Binomial, *norm* for normal, etc. With each of these there are specific functions that provide information from that function.
 
@@ -220,16 +272,8 @@ In R, we have names for a number of probability functions. *binom* for Binomial,
 
 ```{r}
 #| code-fold: true
- dbinom(x = 0:10, size = 10, prob = .5)
+ dbinom(x = 1:10, size = 10, prob = .5)
 ```
-
-## Binomial Distribution
-
--   Our mean and variance are related in the binomial distribution
-
-E(X) = Np
-
-Var(X) = Np(1-p)
 
 ## Binomial Distribution
 
@@ -273,14 +317,16 @@ Whereas the dbinom gives you the the value (probability) of the Probability Mass
 ```{r}
 #| code-fold: true
 #probability
-pbinom(q = 11, size = 20, prob = .5)
+pbinom(11, size = 20, prob = .5)
 ```
 
 dbinom asks: What is the probability of getting exactly X successes (uses PMF)? pbinom asks: What is the probability of getting X successes or fewer (uses CMF)?
 
 ------------------------------------------------------------------------
 
-How many successes (or fewer) is associated with the 75% percentile?
+- qbinom is similar but instead of number of success given, the percent/quantiles are provided. Th
+
+- How many successes (or fewer) is associated with the 75% percentile?
 
 ```{r}
 #quantile
@@ -297,12 +343,16 @@ qbinom(p = 0.7482, size = 20, prob = 0.5)
 
 ------------------------------------------------------------------------
 
+- rbinom does random draws from the probability distribution. You pick the binomial distribution Size(N) and p, and then how many draws you want from it, n. 
+
 ```{r}
 #random
 rbinom(n = 100, size = 20, prob = .5)
 ```
 
 ------------------------------------------------------------------------
+
+- What if we want 20 samples of 100 people from some distribution to mimic what it would be like if we repeated our experiment multiple times?
 
 ```{r}
 #| code-fold: true
@@ -368,11 +418,29 @@ $$X \sim \text{Bern}(p)$$
 
 -   We will use this theoretical probability distribution when our DV comes in 1/0 or yes/no. This is a logistic regression.
 
+$$X \sim \text{Bin}(1, p =  \beta_0 + \beta_1 X_i)$$
+
+--------------
+
+```{r}
+#| code-fold: true
+n <- 1 ;p <- 0.3; x <- 0:n
+# Calculate the probability mass function
+pmf <- dbinom(x, n, p)
+pmf_df <- data.frame(x, pmf)
+#creates a ggplot object with pmf_df as the data source 
+ggplot(pmf_df, aes(x = x, y = pmf)) +
+  geom_bar(stat = "identity") +
+  ggtitle("PMF of Bernoulli Distribution, p = .3") + xlab("Number of Successes") +
+  ylab("Probability") +scale_x_continuous(breaks = seq(0, 20, by = 1)) 
+```
+
+
 ## Poisson
 
 -   What if you have not single success, but *counts* of successes?
--   Can be thought of as a binomial that has infinite trials (when p is small).
--   Can think of this as the average "rate" often across time or space. E.g., Number of donkey deaths per day.
+-   Can be thought of as a binomial that has infinite trials and when occurrence/success is rare (i.e. p is small).
+-   Can think of this as the average "rate" often across time or space. 
 
 $$X \sim \text{Pois}(\lambda)$$
 
@@ -430,9 +498,9 @@ ggplot(poisson_df, aes(x = k, y = probability)) +
 
 ## History of Poisson
 
--   Wrongful convictions and donkey deaths
+-   How many wrongful convictions in France. One of the first instances of social science 
 
--   Number of soldiers killed by being kicked by a horse each year in each of 14 cavalry corps over a 20-year period
+-   Popularized via Prussian soldier donkey deaths. Number of soldiers killed by being kicked by a horse each year in each of 14 cavalry corps over a 20-year period
 
 ## Negative binomial distribution
 
@@ -475,7 +543,9 @@ ggplot(nb_df, aes(x = k, y = probability)) +
 
 ## Negative binomial distribution
 
--   It is actually a mixture between the poisson and another distribution, gamma. Sometimes called Gamma Poisson. It is a mixture of two theoretical probability distributions, which you will learn about later.
+-   Sometimes called Gamma Poisson.
+-   Negative binomial distribution is a mixture between the poisson and another distribution, gamma. 
+- Lambda (λ), is not treated as a fixed number but is itself a random variable that follows a Gamma distribution
 
 $$P(X=x) = \frac{\Gamma(x+\theta)}{\Gamma(x+1)\Gamma(\theta)} \left(\frac{\theta}{\mu+\theta}\right)^\theta \left(\frac{\mu}{\mu+\theta}\right)^x$$
 
@@ -493,13 +563,81 @@ ggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle("PDF of Normal Dist
 
 -   As N increases, the binomial becomes more normal in appearance. This is important (historically) as calculating huge factorials (eg 500!) was time intensive. The normal is much simpler to estimate.
 
--   We find it all the time. Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal.
+$$f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$$
+
+- Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal.
+
+## Central limit theorm, take 1
+
+```{r}
+# Load the required libraries
+library(ggplot2)
+library(patchwork)
+
+# --- 1. Create a Skewed Population ---
+# We'll use an exponential distribution, which is very non-normal.
+population_size <- 100000
+population <- data.frame(value = rexp(population_size, rate = 0.5))
+
+# --- 2. Set Simulation Parameters ---
+sample_size <- 40       # The size of each sample we draw from the population
+n_simulations <- 5000  # The number of samples we will take
+
+# Create a vector to store the mean of each sample
+sample_means <- numeric(n_simulations)
+
+# --- 3. Run the Simulation ---
+for (i in 1:n_simulations) {
+  # Draw a random sample from the population
+  my_sample <- sample(population$value, size = sample_size)
+  
+  # Calculate the mean of that sample and store it
+  sample_means[i] <- mean(my_sample)
+}
+
+# Create a data frame of the results
+sampling_dist_data <- data.frame(mean = sample_means)
+
+# --- 4. Visualize the Results ---
+
+# Plot 1: The original, skewed population distribution
+plot_population <- ggplot(population, aes(x = value)) +
+  geom_density(fill = "lightcoral", alpha = 0.8) +
+  labs(title = "1. Population Distribution",
+       subtitle = "Highly skewed (Exponential)",
+       x = "Value", y = "Density") +
+  theme_minimal(base_size = 14)
+
+# Plot 2: The distribution of sample means 
+plot_sampling_dist <- ggplot(sampling_dist_data, aes(x = mean)) +
+  geom_density(fill = "skyblue", alpha = 0.8) +
+  # Overlay a perfect normal curve for comparison
+  stat_function(fun = dnorm, args = list(mean = mean(sample_means), sd = sd(sample_means)),
+                color = "red", size = 1) +
+  labs(title = "2. Distribution of Means from samples",
+       x = "Sample Mean", y = "Density") +
+  theme_minimal(base_size = 14)
+
+# Combine the plots side-by-side
+plot_population + plot_sampling_dist
+```
+
+## Normal (Gaussian) distrbution
+
+- One of the many reasons we like it is because it shows up all the time in nature. Randomness + More randomness leads to normal distribution. 
+
+- The CLT allows the use of normal distribution methods for statistical inference (like confidence intervals and hypothesis tests), regardless of the underlying population's shape
+
+
 
 ## Normal (Gaussian) distribution
 
 $$X \sim \mathcal{N}(\mu, \sigma^2)$$
 
 $$f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$$
+
+$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)$$
+
 
 ## Standardized normal
 
@@ -659,6 +797,68 @@ ggplot(normal_df, aes(x = x, y = density)) +
   theme_minimal(base_size = 14)
 ```
 
+
+----------------
+
+```{r}
+#| code-fold: true
+# 1. Load the ggplot2 library
+library(ggplot2)
+
+# 2. Define the parameters for the Standard Normal distribution
+mean_val <- 0
+sd_val <- 1
+cutoff_z <- 2.666
+
+# 3. Generate a sequence of x-values for the curve
+x_values <- seq(mean_val - 4 * sd_val, mean_val + 4 * sd_val, length.out = 500)
+y_values <- dnorm(x_values, mean = mean_val, sd = sd_val)
+normal_df <- data.frame(x = x_values, density = y_values)
+
+# 4. Calculate the exact probability for the label
+prob_area <- pnorm(cutoff_z, mean = mean_val, sd = sd_val)
+
+# 5. Create the plot
+ggplot(normal_df, aes(x = x, y = density)) +
+  # Draw the full bell curve
+  geom_line(color = "black", size = 1) +
+  
+  # Add the shaded region corresponding to pnorm(1.96)
+  geom_ribbon(
+    data = subset(normal_df, x < cutoff_z),
+    aes(ymin = 0, ymax = density),
+    fill = "royalblue",
+    alpha = 0.8
+  ) +
+  
+  # Add a vertical line marking the cutoff point
+  geom_vline(xintercept = cutoff_z, color = "firebrick", linetype = "dashed", size = 1) +
+  
+  # Add text to display the calculated area/probability
+  annotate(
+    "text",
+    x = 0, 
+    y = dnorm(0, mean_val, sd_val) * 0.5,
+    label = paste0("Area = ", round(prob_area, 4)),
+    size = 6,
+    color = "white",
+    fontface = "bold"
+  ) +
+  
+  # Add titles and labels
+  labs(
+    title = "Visualization of pnorm(2.666)",
+    subtitle = "Area under the Standard Normal Curve to the left of Z = 2.666",
+    x = "Z-score",
+    y = "Probability Density"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+
+
+
+
 ------------------------------------------------------------------------
 
 What is dnorm referring to?
@@ -764,15 +964,26 @@ ggplot(normal_df, aes(x = x, y = density)) +
 
 ------------------------------------------------------------------------
 
+What Z-score corresponds to the \_\_\_th percentile?
+
+
 ```{r}
 qnorm(.95)
 ```
 
-What Z-score corresponds to the \_\_\_th percentile
-
 ```{r}
 qnorm(.975)
 ```
+
+
+```{r}
+qnorm(.025)
+```
+
+```{r}
+qnorm(.999999) # one in a million
+```
+
 
 ------------------------------------------------------------------------
 
@@ -792,7 +1003,8 @@ rnorm(n = 10, mean = 100, sd = 15)
 
 ## t-distribution
 
-$$X \sim \mathcal{t}(\nu)$$ $$X \sim \mathcal{t}(\nu, \mu, \sigma^2)$$ - New parameter, nu
+$$X \sim \mathcal{t}(\nu)$$ 
+$$X \sim \mathcal{t}(\nu, \mu, \sigma^2)$$ - New parameter, nu
 
 -   Like the normal, but with larger tails.
 
@@ -845,6 +1057,76 @@ ggplot(plot_data, aes(x = x, y = density, color = distribution)) +
 ```
 
 ------------------------------------------------------------------------
+
+```{r}
+# Load the ggplot2 library for plotting
+library(ggplot2)
+
+# --- 1. Define the Population ---
+# We'll create a large, normally distributed population.
+population_mean <- 0
+population_sd <- 1
+population_size <- 100000
+population <- data.frame(value = rnorm(population_size, mean = population_mean, sd = population_sd))
+
+# --- 2. Set Simulation Parameters ---
+sample_size <- 5       # A small sample size
+n_simulations <- 10000 # Number of samples to draw
+
+# Create a vector to store the t-statistic from each sample
+t_statistics <- numeric(n_simulations)
+
+# --- 3. Run the Simulation ---
+for (i in 1:n_simulations) {
+  # Draw a random sample from the population
+  my_sample <- sample(population$value, size = sample_size)
+  
+  # Calculate the sample mean and sample standard deviation
+  sample_mean <- mean(my_sample)
+  sample_sd <- sd(my_sample)
+  
+  # Calculate the t-statistic for this sample
+  # This measures how many standard errors the sample mean is from the population mean.
+  t_stat <- (sample_mean - population_mean) / (sample_sd / sqrt(sample_size))
+  
+  # Store the result
+  t_statistics[i] <- t_stat
+}
+
+# Create a data frame of the results
+simulation_results <- data.frame(t_stat = t_statistics)
+
+# --- 4. Visualize the Results ---
+ggplot(simulation_results, aes(x = t_stat)) +
+  # Plot the density of our simulated t-statistics
+  geom_density(aes(color = "Simulated t-stats"), fill = "skyblue", alpha = 0.5, size = 1) +
+  # Overlay the standard NORMAL distribution for comparison
+  stat_function(
+    fun = dnorm,
+    args = list(mean = 0, sd = 1),
+    aes(color = "Normal Distribution"),
+    linetype = "dashed",
+    size = 1.2
+  ) +
+  
+  scale_color_manual(
+    name = "Distribution",
+    values = c("Simulated means" = "black", "Theoretical t-dist (df=4)" = "red", "Normal Distribution" = "darkgreen")
+  ) +
+  
+  labs(
+    title = "The t-distribution, not the normal.",
+    x = "standardized estimates",
+    y = "Density"
+  ) + xlim(-4,4) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "top")
+```
+
+
+
+--------------
+
 
 ```{r}
 pt(1.96, df = 1)
@@ -908,13 +1190,17 @@ ggplot(plot_data_cdf, aes(x = x, y = cumulative_prob, color = distribution)) +
 
 ------------------------------------------------------------------------
 
--   We will use t-distributions a lot! It is used when we have 1) small samples and/or 2) unknown population variance. The latter is almost always true
+-   We will use t-distributions a lot (coefs, CIs)! It is used when we have 1) small samples and/or 2) unknown population variance. The latter is almost always true.
 
--   Almost every test of a regression coefficient uses a t-distribution.
+- The sample SD can be (s) can be a  poor estimate of the true SD (σ). Just by random chance, you can get a sample where the data points are unusually close together, resulting in an s that is much smaller than the true σ.
 
--   t-distributions are used for calculating confidence intervals
+- When this happens, the denominator of the standardized score becomes very small, and thus produces a very large value
 
--   "t-tests" involve comparing 1 and 2 means and typically uses the t-distribution
+
+## History of the t-distribution
+
+- Gosset, Guinness, and Student 
+
 
 ## F-distribution
 
@@ -1121,6 +1407,11 @@ ggplot() +
 -   Chi-square test of association (categorical correlation)
 
 -   Goodness of fit (observed counts differ from expected)
+
+------------
+
+![](dist.png)
+
 
 ## Wrap up
 

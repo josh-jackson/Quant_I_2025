@@ -410,7 +410,7 @@
     "href": "Distributions_4.html#data-generating-process-dgp",
     "title": "Probability Distributions",
     "section": "Data generating process (DGP)",
-    "text": "Data generating process (DGP)\n\nFor every DV we are interested in, we have to think about what produces it (i.e. the rules)\nMost of the time we have no idea (this is why we are doing the experiment), but it is helpful to think about a simplified approximation of the true, unknown DGP\nThe goal of fitting a regression model is to use your sample data to estimate the parameters of a chosen probability distribution that represent this DGP."
+    "text": "Data generating process (DGP)\n\nFor every DV we are interested in, we have to think about what produces it (i.e. the rules)\nMost of the time we have no idea (this is why we are doing the experiment), but it is helpful to think about a simplified approximation of the true, unknown DGP\nThe goal of fitting a regression model is to use your sample data to estimate the parameters (what defines the shape) of a chosen probability distribution that represent this DGP."
   },
   {
     "objectID": "Distributions_4.html#what-are-probability-distributions",
@@ -424,7 +424,7 @@
     "href": "Distributions_4.html#common-theoretical-probability-distributions",
     "title": "Probability Distributions",
     "section": "Common theoretical probability distributions",
-    "text": "Common theoretical probability distributions\n\nNormal Distribution\nt-Distribution\nF-Distribution\nBernoulli Distribution\nBinomial Distribution\nNegative Binomial\nChi-square distribution\nPoisson Distribution\nMultinomial (categorical)"
+    "text": "Common theoretical probability distributions\n\nNormal Distribution\nt-Distribution\nF-Distribution\nBernoulli/Binomial Distribution\nNegative Binomial\nChi-square distribution\nPoisson Distribution\nMultinomial (categorical)"
   },
   {
     "objectID": "Distributions_4.html#parameters",
@@ -445,42 +445,42 @@
     "href": "Distributions_4.html#probability-density-function-pdf",
     "title": "Probability Distributions",
     "section": "Probability Density Function (PDF)",
-    "text": "Probability Density Function (PDF)\n\nFor continuous variables.\nThe value of the PDF at any specific point is not a probability. The probability of observing exactly one value is zero.\nProbability is represented by the area under the curve over a range (density)\n\n\n\nCode\nx &lt;- seq(from = -5, to = 5, by = 0.05)\nnorm_dat &lt;- data.frame(x = x, pdf = dnorm(x))\nggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle(\"PDF of Normal Distribution\") +\n  ylab(\"Density\")"
+    "text": "Probability Density Function (PDF)\n\nFor continuous variables.\n\n\n\nCode\nx &lt;- seq(from = -5, to = 5, by = 0.05)\nnorm_dat &lt;- data.frame(x = x, pdf = dnorm(x))\nggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle(\"PDF of Normal Distribution\") +\n  ylab(\"Density\")"
   },
   {
     "objectID": "Distributions_4.html#cumulative-distribtuion-function-cdf",
     "href": "Distributions_4.html#cumulative-distribtuion-function-cdf",
     "title": "Probability Distributions",
     "section": "Cumulative distribtuion function (CDF)",
-    "text": "Cumulative distribtuion function (CDF)\n\nThe CDF applies to both discrete and continuous variables. It gives the “running total” of probability. The CDF at a value x is the probability of observing an outcome less than or equal to x.\nWill use to calculate p-values and percentiles or quantiles\n\n\n\nCode\n# Set the parameters\nn &lt;- 10;p &lt;- 0.5;x &lt;- 0:n\n# Cumulative Distribution Function\ncdf &lt;- pbinom(x, n, p)\ncdf_df &lt;- data.frame(x, cdf)\n#creates a ggplot object with cdf_df as the data source\nggplot(cdf_df, aes(x = x, y = cdf)) +\n  geom_bar(stat = \"identity\") + \n  ggtitle(\"CDF of Binomial Distribution\") +\n  xlab(\"Number of Successes\") + ylab(\"Cumulative Probability\")"
+    "text": "Cumulative distribtuion function (CDF)\n\n\nCode\n# Set the parameters\nn &lt;- 10;p &lt;- 0.5;x &lt;- 0:n\n# Cumulative Distribution Function\ncdf &lt;- pbinom(x, n, p)\ncdf_df &lt;- data.frame(x, cdf)\n#creates a ggplot object with cdf_df as the data source\nggplot(cdf_df, aes(x = x, y = cdf)) +\n  geom_bar(stat = \"identity\") + \n  ggtitle(\"CDF of Binomial Distribution\") +\n  xlab(\"Number of Successes\") + ylab(\"Cumulative Probability\")"
   },
   {
     "objectID": "Distributions_4.html#binomial-distribution",
     "href": "Distributions_4.html#binomial-distribution",
     "title": "Probability Distributions",
     "section": "Binomial Distribution",
-    "text": "Binomial Distribution\nTheoretical probability distribution appropriate when modeling the expected binary outcomes, X, across N trials, with the same probability of success (p) across independent trials.\nPMF: \\[P(X = x|n,p) = \\frac{N!}{X!(N-X)!}p^X(1-p)^{N-X}\\]\nX = Number of successes p = probability of success n = number of trials\nFirst part tells you the number of ways to select k success from a set of N, where order doesn’t matter. Second tells you the probability of any given sequence. By multiplying the number of ways an event can happen by the probability of any single one of those ways, you get the total overall probability."
+    "text": "Binomial Distribution\n\nTheoretical probability distribution appropriate when modeling the expected binary outcomes, X, across N trials, with the same probability of success (p) across independent trials.\n\nPMF: \\[P(X = x|n,p) = \\frac{N!}{X!(N-X)!}p^X(1-p)^{N-X}\\]\n\nX = Number of successes p = probability of success n = number of trials"
   },
   {
     "objectID": "Distributions_4.html#history-of-binomial",
     "href": "Distributions_4.html#history-of-binomial",
     "title": "Probability Distributions",
     "section": "History of Binomial",
-    "text": "History of Binomial\n\nThe foundation of probability theory based ways to win gambling! (“problem of points”)\nBuilt upon Pascals’s triangle, which was a way to describe the binomial coefficient (the number of ways k successes can occur in n trials)\n\nPMF: \\[\\frac{N!}{X!(N-X)!} = \\binom{N}{X}\\]\n\nLaid the groundwork for setting up expected values \\(E(x)\\) which are long run averages\nJacob Bernoulli took Pascal’s binomial coefficient and ran with it, using it to set up the Law of Large Numbers (more later)"
+    "text": "History of Binomial\n\nThe foundation of probability theory based ways to win gambling! (“problem of points”)\nBuilt upon Pascals’s triangle, which was a way to describe the binomial coefficient (the number of ways k successes can occur in n trials)\nLaid the groundwork for setting up expected values \\(E(x)\\) which are long run averages\nJacob Bernoulli took Pascal’s binomial coefficient and ran with it, using it to set up the Law of Large Numbers (more later; as you increase the size of a random sample, its average will get closer and closer to the population)"
   },
   {
     "objectID": "Distributions_4.html#binomial-distribution-1",
     "href": "Distributions_4.html#binomial-distribution-1",
     "title": "Probability Distributions",
     "section": "Binomial Distribution",
-    "text": "Binomial Distribution\n\nOur mean and variance are related in the binomial distribution\n\nE(X) = Np\nVar(X) = Np(1-p)"
+    "text": "Binomial Distribution\n\nFirst part of equation tells you the number of ways to select k success from a set of N, where order doesn’t matter. Second tells you the probability of any given sequence. By multiplying the number of ways an event can happen by the probability of any single one of those ways, you get the total overall probability.\n3 ways of flipping 1 success with fair coin out of three trials (001,010,100) * .125 = .375"
   },
   {
     "objectID": "Distributions_4.html#binomial-distribution-2",
     "href": "Distributions_4.html#binomial-distribution-2",
     "title": "Probability Distributions",
     "section": "Binomial Distribution",
-    "text": "Binomial Distribution\nWhat proportion of outcomes in the sample space that fall at or below a given outcome, say 75%?\n\n\nCode\nn &lt;- 20 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution, p = .5, N = 20\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") +scale_x_continuous(breaks = seq(0, 20, by = 1))"
+    "text": "Binomial Distribution\n\nOur mean and variance are related in the binomial distribution\n\nE(X) = Np\nVar(X) = Np(1-p)\n\nThis will have consequences when we use the binomial as our DGP"
   },
   {
     "objectID": "Distributions_4.html#why-do-we-care",
@@ -494,21 +494,21 @@
     "href": "Distributions_4.html#bernoulli-distribution",
     "title": "Probability Distributions",
     "section": "Bernoulli distribution",
-    "text": "Bernoulli distribution\n\\[X \\sim \\text{Bin}(n = 1,p)\\]\n\\[X \\sim \\text{Bern}(p)\\]\n\nWe will use this theoretical probability distribution when our DV comes in 1/0 or yes/no. This is a logistic regression."
+    "text": "Bernoulli distribution\n\\[X \\sim \\text{Bin}(n = 1,p)\\]\n\\[X \\sim \\text{Bern}(p)\\]\n\nWe will use this theoretical probability distribution when our DV comes in 1/0 or yes/no. This is a logistic regression.\n\n\\[X \\sim \\text{Bin}(1, p =  \\beta_0 + \\beta_1 X_i)\\]"
   },
   {
     "objectID": "Distributions_4.html#poisson",
     "href": "Distributions_4.html#poisson",
     "title": "Probability Distributions",
     "section": "Poisson",
-    "text": "Poisson\n\nWhat if you have not single success, but counts of successes?\nCan be thought of as a binomial that has infinite trials (when p is small).\nCan think of this as the average “rate” often across time or space. E.g., Number of donkey deaths per day.\n\n\\[X \\sim \\text{Pois}(\\lambda)\\]\n\\[P(X=x) = \\frac{\\lambda^x e^{-\\lambda}}{x!}\\]"
+    "text": "Poisson\n\nWhat if you have not single success, but counts of successes?\nCan be thought of as a binomial that has infinite trials and when occurrence/success is rare (i.e. p is small).\nCan think of this as the average “rate” often across time or space.\n\n\\[X \\sim \\text{Pois}(\\lambda)\\]\n\\[P(X=x) = \\frac{\\lambda^x e^{-\\lambda}}{x!}\\]"
   },
   {
     "objectID": "Distributions_4.html#history-of-poisson",
     "href": "Distributions_4.html#history-of-poisson",
     "title": "Probability Distributions",
     "section": "History of Poisson",
-    "text": "History of Poisson\n\nWrongful convictions and donkey deaths\nNumber of soldiers killed by being kicked by a horse each year in each of 14 cavalry corps over a 20-year period"
+    "text": "History of Poisson\n\nHow many wrongful convictions in France. One of the first instances of social science\nPopularized via Prussian soldier donkey deaths. Number of soldiers killed by being kicked by a horse each year in each of 14 cavalry corps over a 20-year period"
   },
   {
     "objectID": "Distributions_4.html#negative-binomial-distribution",
@@ -522,7 +522,7 @@
     "href": "Distributions_4.html#negative-binomial-distribution-1",
     "title": "Probability Distributions",
     "section": "Negative binomial distribution",
-    "text": "Negative binomial distribution\n\nIt is actually a mixture between the poisson and another distribution, gamma. Sometimes called Gamma Poisson. It is a mixture of two theoretical probability distributions, which you will learn about later.\n\n\\[P(X=x) = \\frac{\\Gamma(x+\\theta)}{\\Gamma(x+1)\\Gamma(\\theta)} \\left(\\frac{\\theta}{\\mu+\\theta}\\right)^\\theta \\left(\\frac{\\mu}{\\mu+\\theta}\\right)^x\\]"
+    "text": "Negative binomial distribution\n\nSometimes called Gamma Poisson.\nNegative binomial distribution is a mixture between the poisson and another distribution, gamma.\nLambda (λ), is not treated as a fixed number but is itself a random variable that follows a Gamma distribution\n\n\\[P(X=x) = \\frac{\\Gamma(x+\\theta)}{\\Gamma(x+1)\\Gamma(\\theta)} \\left(\\frac{\\theta}{\\mu+\\theta}\\right)^\\theta \\left(\\frac{\\mu}{\\mu+\\theta}\\right)^x\\]"
   },
   {
     "objectID": "Distributions_4.html#normal-gaussian-distribution",
@@ -536,7 +536,7 @@
     "href": "Distributions_4.html#normal-gaussian-distribution-1",
     "title": "Probability Distributions",
     "section": "Normal (Gaussian) distribution",
-    "text": "Normal (Gaussian) distribution\n\\[X \\sim \\mathcal{N}(\\mu, \\sigma^2)\\]\n\\[f(x \\mid \\mu, \\sigma^2) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac{(x - \\mu)^2}{2\\sigma^2}\\right)\\]"
+    "text": "Normal (Gaussian) distribution\n\\[X \\sim \\mathcal{N}(\\mu, \\sigma^2)\\]\n\\[f(x \\mid \\mu, \\sigma^2) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac{(x - \\mu)^2}{2\\sigma^2}\\right)\\]\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)\\]"
   },
   {
     "objectID": "Distributions_4.html#standardized-normal",
@@ -1166,7 +1166,7 @@
     "href": "glm_3.html#from-population-to-sample",
     "title": "GLM basics",
     "section": "From population to sample",
-    "text": "From population to sample\n\\[Y_i \\sim Normal(\\mu, \\sigma)\\]\n\nThe DV, \\(Y\\) is assumed to be distributed as a Gaussian normal, made up of \\(Y_i\\), with a mean of \\(\\mu\\) and a standard deviation of \\(\\sigma\\)\n\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\]\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma)\\]"
+    "text": "From population to sample\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\nThe DV, \\(Y\\) is assumed to be distributed as a Gaussian normal, made up of \\(Y_i\\), with a mean of \\(\\mu\\) and a standard deviation of \\(\\sigma\\)\n\n\\[Y_i = b_{0} + b_{1}X_i + e_i\\]\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma)\\]"
   },
   {
     "objectID": "glm_3.html#from-population-to-sample-1",
@@ -1181,5 +1181,54 @@
     "title": "GLM basics",
     "section": "From population to sample",
     "text": "From population to sample\n\n\nCode\n# Load the ggplot2 library for plotting\nlibrary(ggplot2)\nlibrary(dplyr) # For data manipulation\n\n# --- 1. Define the True Population Model ---\n# These are the \"true\" parameters.\ntrue_beta0 &lt;- 50  # Mean of the group where X=0\ntrue_beta1 &lt;- 20  # The true DIFFERENCE between the group means\ntrue_sigma &lt;- 15\npopulation_size &lt;- 20000\n\n# Create the population\npopulation &lt;- data.frame(\n  # Create a binary predictor variable (0 or 1)\n  x = factor(sample(c(0, 1), population_size, replace = TRUE))\n)\n# The model Y = b0 + b1*X + error still works.\n# If X=0, Y = b0. If X=1, Y = b0 + b1.\npopulation$y &lt;- true_beta0 + true_beta1 * as.numeric(as.character(population$x)) + rnorm(population_size, mean = 0, sd = true_sigma)\n\n# --- 2. Draw a Random Sample from the Population ---\nsample_size &lt;- 60\nsample_data &lt;- population[sample(1:population_size, sample_size), ]\n\n# --- 3. Fit a Regression Model to the SAMPLE ---\nsample_model &lt;- lm(y ~ x, data = sample_data)\n# Get the estimated intercept and slope (difference)\nsample_beta0_hat &lt;- coef(sample_model)[1]\nsample_beta1_hat &lt;- coef(sample_model)[2]\n\n# --- 4. Calculate True and Estimated Group Means ---\n# True population means\ntrue_means &lt;- data.frame(\n  x = factor(c(0, 1)),\n  mean_y = c(true_beta0, true_beta0 + true_beta1)\n)\n# Estimated means from our sample\nestimated_means &lt;- data.frame(\n  x = factor(c(0, 1)),\n  mean_y = c(sample_beta0_hat, sample_beta0_hat + sample_beta1_hat)\n)\n\n# --- 5. Visualize  \n\nggplot(population, aes(x = y)) +\n  geom_density(fill = \"lightblue\", alpha = 0.8, color = \"black\") +\n  labs(\n    title = \"Distribution of the Outcome Variable (Y) in the Population\",\n    subtitle = \"The overall distribution is approximately normal\",\n    x = \"Outcome (Y)\",\n    y = \"Density\"\n  ) +\n  theme_minimal(base_size = 14)"
+  },
+  {
+    "objectID": "Distributions_4.html#saw-this-last-time",
+    "href": "Distributions_4.html#saw-this-last-time",
+    "title": "Probability Distributions",
+    "section": "Saw this last time",
+    "text": "Saw this last time\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\nWe assume the DV, \\(Y\\) has a DGP that is Gaussian normal, made up of \\(Y_i\\), with a mean of \\(\\mu\\) and a standard deviation of \\(\\sigma\\)\n\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma)\\] - Almost all the time we will never and can never know what the true DPG looks like. Normal typically serves as our default (based on how we measure or DV)."
+  },
+  {
+    "objectID": "Distributions_4.html#probability-density-function-pdf-1",
+    "href": "Distributions_4.html#probability-density-function-pdf-1",
+    "title": "Probability Distributions",
+    "section": "Probability Density Function (PDF)",
+    "text": "Probability Density Function (PDF)\n\nThe value of the PDF at any specific point is not a probability. The probability of observing exactly one value is zero.\nProbability is represented by the area under the curve over a range (density)"
+  },
+  {
+    "objectID": "Distributions_4.html#r-functions",
+    "href": "Distributions_4.html#r-functions",
+    "title": "Probability Distributions",
+    "section": "R functions",
+    "text": "R functions\nIn R, we have names for a number of probability functions. binom for Binomial, norm for normal, etc. With each of these there are specific functions that provide information from that function.\n\n\nCode\n#density\n dbinom(x = 2, size = 10, prob = .5)\n\n\n[1] 0.04394531\n\n\n\n\nCode\n dbinom(x = 1:10, size = 10, prob = .5)\n\n\n [1] 0.0097656250 0.0439453125 0.1171875000 0.2050781250 0.2460937500\n [6] 0.2050781250 0.1171875000 0.0439453125 0.0097656250 0.0009765625"
+  },
+  {
+    "objectID": "Distributions_4.html#binomial-distribution-3",
+    "href": "Distributions_4.html#binomial-distribution-3",
+    "title": "Probability Distributions",
+    "section": "Binomial Distribution",
+    "text": "Binomial Distribution\nWhat proportion of outcomes in the sample space that fall at or below a given outcome, say 75%?\n\n\nCode\nn &lt;- 20 ;p &lt;- 0.5; x &lt;- 0:n\n# Calculate the probability mass function\npmf &lt;- dbinom(x, n, p)\npmf_df &lt;- data.frame(x, pmf)\n#creates a ggplot object with pmf_df as the data source \nggplot(pmf_df, aes(x = x, y = pmf)) +\n  geom_bar(stat = \"identity\") +\n  ggtitle(\"PMF of Binomial Distribution, p = .5, N = 20\") + xlab(\"Number of Successes\") +\n  ylab(\"Probability\") +scale_x_continuous(breaks = seq(0, 20, by = 1))"
+  },
+  {
+    "objectID": "Distributions_4.html#central-limit-theorm-take-1",
+    "href": "Distributions_4.html#central-limit-theorm-take-1",
+    "title": "Probability Distributions",
+    "section": "Central limit theorm, take 1",
+    "text": "Central limit theorm, take 1\n\n# Load the required libraries\nlibrary(ggplot2)\nlibrary(patchwork)\n\n# --- 1. Create a Skewed Population ---\n# We'll use an exponential distribution, which is very non-normal.\npopulation_size &lt;- 100000\npopulation &lt;- data.frame(value = rexp(population_size, rate = 0.5))\n\n# --- 2. Set Simulation Parameters ---\nsample_size &lt;- 40       # The size of each sample we draw from the population\nn_simulations &lt;- 5000  # The number of samples we will take\n\n# Create a vector to store the mean of each sample\nsample_means &lt;- numeric(n_simulations)\n\n# --- 3. Run the Simulation ---\nfor (i in 1:n_simulations) {\n  # Draw a random sample from the population\n  my_sample &lt;- sample(population$value, size = sample_size)\n  \n  # Calculate the mean of that sample and store it\n  sample_means[i] &lt;- mean(my_sample)\n}\n\n# Create a data frame of the results\nsampling_dist_data &lt;- data.frame(mean = sample_means)\n\n# --- 4. Visualize the Results ---\n\n# Plot 1: The original, skewed population distribution\nplot_population &lt;- ggplot(population, aes(x = value)) +\n  geom_density(fill = \"lightcoral\", alpha = 0.8) +\n  labs(title = \"1. Population Distribution\",\n       subtitle = \"Highly skewed (Exponential)\",\n       x = \"Value\", y = \"Density\") +\n  theme_minimal(base_size = 14)\n\n# Plot 2: The distribution of sample means \nplot_sampling_dist &lt;- ggplot(sampling_dist_data, aes(x = mean)) +\n  geom_density(fill = \"skyblue\", alpha = 0.8) +\n  # Overlay a perfect normal curve for comparison\n  stat_function(fun = dnorm, args = list(mean = mean(sample_means), sd = sd(sample_means)),\n                color = \"red\", size = 1) +\n  labs(title = \"2. Distribution of Means from samples\",\n       x = \"Sample Mean\", y = \"Density\") +\n  theme_minimal(base_size = 14)\n\n# Combine the plots side-by-side\nplot_population + plot_sampling_dist"
+  },
+  {
+    "objectID": "Distributions_4.html#normal-gaussian-distrbution",
+    "href": "Distributions_4.html#normal-gaussian-distrbution",
+    "title": "Probability Distributions",
+    "section": "Normal (Gaussian) distrbution",
+    "text": "Normal (Gaussian) distrbution\n\nOne of the many reasons we like it is because it shows up all the time in nature. Randomness + More randomness leads to normal distribution.\nThe CLT allows the use of normal distribution methods for statistical inference (like confidence intervals and hypothesis tests), regardless of the underlying population’s shape"
+  },
+  {
+    "objectID": "Distributions_4.html#history-of-the-t-distribution",
+    "href": "Distributions_4.html#history-of-the-t-distribution",
+    "title": "Probability Distributions",
+    "section": "History of the t-distribution",
+    "text": "History of the t-distribution\n\nGosset, Guinness, and Student"
   }
 ]
