@@ -1173,7 +1173,7 @@
     "href": "glm_3.html#from-population-to-sample-1",
     "title": "GLM basics",
     "section": "From population to sample",
-    "text": "From population to sample\n\n\nCode\n# Load the ggplot2 library for plotting\nlibrary(ggplot2)\n\n# --- 1. Define the True Population Model ---\n# These are the \"true\" parameters that we are trying to discover.\ntrue_beta0 &lt;- 10\ntrue_beta1 &lt;- 2\ntrue_sigma &lt;- 15\npopulation_size &lt;- 10000\n\n# Create the entire population based on the true model\npopulation &lt;- data.frame(\n  x = runif(population_size, 0, 50)\n)\npopulation$y &lt;- true_beta0 + true_beta1 * population$x + rnorm(population_size, mean = 0, sd = true_sigma)\n\n# --- 2. Draw a Random Sample from the Population ---\nsample_size &lt;- 50\nsample_data &lt;- population[sample(1:population_size, sample_size), ]\n\n# --- 3. Fit a Regression Model to the SAMPLE ---\nsample_model &lt;- lm(y ~ x, data = sample_data)\nsample_beta0_hat &lt;- coef(sample_model)[1]\nsample_beta1_hat &lt;- coef(sample_model)[2]\n\n# --- 4. Visualize the Relationship ---\n\npop &lt;- ggplot(population, aes(x = y)) +\n  geom_density(fill = \"lightblue\", alpha = 0.8, color = \"black\") +\n  labs(\n    title = \"Distribution of the Outcome Variable (Y) in the Population\",\n    subtitle = \"The overall distribution is approximately normal\",\n    x = \"Outcome (Y)\",\n    y = \"Density\"\n  ) +\n  theme_minimal(base_size = 14)\n\n\npop"
+    "text": "From population to sample\n\n\nCode\n# Load the ggplot2 library for plotting\nlibrary(ggplot2)\n\n# --- 1. Define the True Population Model ---\n# These are the \"true\" parameters that we are trying to discover.\ntrue_beta0 &lt;- 10\ntrue_beta1 &lt;- 2\ntrue_sigma &lt;- 15\npopulation_size &lt;- 10000\n\n# Create the entire population based on the true model\npopulation &lt;- data.frame(\n  x = runif(population_size, 0, 50)\n)\npopulation$y &lt;- true_beta0 + true_beta1 * population$x + rnorm(population_size, mean = 0, sd = true_sigma)\n\n# --- 2. Draw a Random Sample from the Population ---\nsample_size &lt;- 50\nsample_data &lt;- population[sample(1:population_size, sample_size), ]\n\n# --- 3. Fit a Regression Model to the SAMPLE ---\nsample_model1 &lt;- lm(y ~ x, data = sample_data)\nsample_beta0_hat &lt;- coef(sample_model1)[1]\nsample_beta1_hat &lt;- coef(sample_model1)[2]\n\n# --- 4. Visualize the Relationship ---\n\npop &lt;- ggplot(population, aes(x = y)) +\n  geom_density(fill = \"lightblue\", alpha = 0.8, color = \"black\") +\n  labs(\n    title = \"Distribution of the Outcome Variable (Y) in the Population\",\n    subtitle = \"The overall distribution is approximately normal\",\n    x = \"Outcome (Y)\",\n    y = \"Density\"\n  ) +\n  theme_minimal(base_size = 14)\n\n\npop"
   },
   {
     "objectID": "glm_3.html#from-population-to-sample-2",
@@ -1230,5 +1230,26 @@
     "title": "Probability Distributions",
     "section": "History of the t-distribution",
     "text": "History of the t-distribution\n\nGosset, Guinness, and Student"
+  },
+  {
+    "objectID": "glm_3.html#sigma-2",
+    "href": "glm_3.html#sigma-2",
+    "title": "GLM basics",
+    "section": "Sigma",
+    "text": "Sigma\n\nOur sigma reflects the conditional spread in the population. If there is low sigma there is low noise. We can estimate the population relatively easy with less sample size. (signal vs noise)\nSlope estimate is noisier and less precise with larger sigma, but not biased! If we sampled an infinite number of times the average slope would be correct"
+  },
+  {
+    "objectID": "glm_3.html#sigma-3",
+    "href": "glm_3.html#sigma-3",
+    "title": "GLM basics",
+    "section": "Sigma",
+    "text": "Sigma\n\nBest to think of sigma as a conditional value that is dependent on what is in your model. As your model gets better, there is less unexplained noise in the data.\n\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma)\\] - We want smaller sigma, because that means a better model"
+  },
+  {
+    "objectID": "glm_3.html#sigma-4",
+    "href": "glm_3.html#sigma-4",
+    "title": "GLM basics",
+    "section": "Sigma",
+    "text": "Sigma\nReasons for larger vs smaller sigma are aplenty: - Omitted variables - Measurement error/poor experimental design - Population heterogeneity - Inherent randomness"
   }
 ]

@@ -490,9 +490,9 @@ sample_size <- 50
 sample_data <- population[sample(1:population_size, sample_size), ]
 
 # --- 3. Fit a Regression Model to the SAMPLE ---
-sample_model <- lm(y ~ x, data = sample_data)
-sample_beta0_hat <- coef(sample_model)[1]
-sample_beta1_hat <- coef(sample_model)[2]
+sample_model1 <- lm(y ~ x, data = sample_data)
+sample_beta0_hat <- coef(sample_model1)[1]
+sample_beta1_hat <- coef(sample_model1)[2]
 
 # --- 4. Visualize the Relationship ---
 
@@ -634,6 +634,109 @@ ggplot(population, aes(x = x, y = y)) +
   theme_minimal(base_size = 14)
 ```
 
+
+------------
+
+What would happen if we increased sigma? 
+
+
+$$Y_i \sim \mathcal{N}(\mu, \sigma)$$
+
+
+$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$
+
+-----------
+
+```{r}
+#| code-fold: true
+# Load the ggplot2 library for plotting
+library(ggplot2)
+
+set.seed(24)
+
+# --- 1. Define the True Population Model ---
+# These are the "true" parameters that we are trying to discover.
+true_beta0 <- 10
+true_beta1 <- 2
+true_sigma <- 75
+population_size <- 10000
+
+# Create the entire population based on the true model
+population <- data.frame(
+  x = runif(population_size, 0, 50)
+)
+population$y <- true_beta0 + true_beta1 * population$x + rnorm(population_size, mean = 0, sd = true_sigma)
+
+# --- 2. Draw a Random Sample from the Population ---
+sample_size <- 50
+sample_data <- population[sample(1:population_size, sample_size), ]
+
+# --- 3. Fit a Regression Model to the SAMPLE ---
+sample_model2 <- lm(y ~ x, data = sample_data)
+sample_beta0_hat <- coef(sample_model2)[1]
+sample_beta1_hat <- coef(sample_model2)[2]
+
+ggplot(population, aes(x = x, y = y)) +
+# Plot the entire population as faint gray points
+geom_point(color = "gray80", alpha = 0.5) +
+# Add the TRUE population regression line in red
+geom_abline(
+intercept = true_beta0,
+slope = true_beta1,
+color = "black",
+size = 1.5,
+linetype = "dashed"
+) +
+# Highlight the points from our random sample in blue
+geom_point(data = sample_data, color = "blue", size = 2.5) +
+# Add the ESTIMATED sample regression line in blue
+geom_abline(
+intercept = sample_beta0_hat,
+slope = sample_beta1_hat,
+color = "green",
+size = 1.5
+) +
+labs(subtitle = "The green line is our sample estimate of the population (black)",
+x = "Predictor (X)",
+y = "Outcome (Y)"
+) +
+theme_minimal(base_size = 14)
+```
+
+----------
+
+```{r}
+sigma(sample_model2)
+```
+
+```{r}
+sigma(sample_model1)
+```
+- Our regression line better reflects the population in our first simulation compared to this last one
+
+
+## Sigma
+
+- Our sigma reflects the conditional spread in the population. If there is low sigma there is low noise. We can estimate the population relatively easy with less sample size. (signal vs noise)
+
+- Slope estimate is noisier and less precise with larger sigma, but not biased! If we sampled an infinite number of times the average slope would be correct
+
+## Sigma
+
+- Best to think of sigma as a conditional value that is dependent on what is in your model. As your model gets better, there is less unexplained noise in the data. 
+
+$$Y_i \sim \mathcal{N}(\mu, \sigma)$$
+
+$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$
+- We want smaller sigma, because that means a better model
+
+## Sigma
+
+Reasons for larger vs smaller sigma are aplenty: 
+- Omitted variables 
+- Measurement error/poor experimental design
+- Population heterogeneity
+- Inherent randomness
 
 
 ## Wrap-up

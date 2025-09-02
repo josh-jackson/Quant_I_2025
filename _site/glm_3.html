@@ -1285,9 +1285,9 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 <span id="cb39-19"><a href="#cb39-19"></a>sample_data <span class="ot">&lt;-</span> population[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>population_size, sample_size), ]</span>
 <span id="cb39-20"><a href="#cb39-20"></a></span>
 <span id="cb39-21"><a href="#cb39-21"></a><span class="co"># --- 3. Fit a Regression Model to the SAMPLE ---</span></span>
-<span id="cb39-22"><a href="#cb39-22"></a>sample_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sample_data)</span>
-<span id="cb39-23"><a href="#cb39-23"></a>sample_beta0_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model)[<span class="dv">1</span>]</span>
-<span id="cb39-24"><a href="#cb39-24"></a>sample_beta1_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model)[<span class="dv">2</span>]</span>
+<span id="cb39-22"><a href="#cb39-22"></a>sample_model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sample_data)</span>
+<span id="cb39-23"><a href="#cb39-23"></a>sample_beta0_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model1)[<span class="dv">1</span>]</span>
+<span id="cb39-24"><a href="#cb39-24"></a>sample_beta1_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model1)[<span class="dv">2</span>]</span>
 <span id="cb39-25"><a href="#cb39-25"></a></span>
 <span id="cb39-26"><a href="#cb39-26"></a><span class="co"># --- 4. Visualize the Relationship ---</span></span>
 <span id="cb39-27"><a href="#cb39-27"></a></span>
@@ -1432,6 +1432,110 @@ x 1         |        0.45 | 0.21 | [ 0.02, 0.87] |  2.08 | 0.040</code></pre>
 
 </div>
 <img data-src="glm_3_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<p>What would happen if we increased sigma?</p>
+<p><span class="math display">\[Y_i \sim \mathcal{N}(\mu, \sigma)\]</span></p>
+<p><span class="math display">\[Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)\]</span></p>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># Load the ggplot2 library for plotting</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb43-3"><a href="#cb43-3"></a></span>
+<span id="cb43-4"><a href="#cb43-4"></a><span class="fu">set.seed</span>(<span class="dv">24</span>)</span>
+<span id="cb43-5"><a href="#cb43-5"></a></span>
+<span id="cb43-6"><a href="#cb43-6"></a><span class="co"># --- 1. Define the True Population Model ---</span></span>
+<span id="cb43-7"><a href="#cb43-7"></a><span class="co"># These are the "true" parameters that we are trying to discover.</span></span>
+<span id="cb43-8"><a href="#cb43-8"></a>true_beta0 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb43-9"><a href="#cb43-9"></a>true_beta1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb43-10"><a href="#cb43-10"></a>true_sigma <span class="ot">&lt;-</span> <span class="dv">75</span></span>
+<span id="cb43-11"><a href="#cb43-11"></a>population_size <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb43-12"><a href="#cb43-12"></a></span>
+<span id="cb43-13"><a href="#cb43-13"></a><span class="co"># Create the entire population based on the true model</span></span>
+<span id="cb43-14"><a href="#cb43-14"></a>population <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb43-15"><a href="#cb43-15"></a>  <span class="at">x =</span> <span class="fu">runif</span>(population_size, <span class="dv">0</span>, <span class="dv">50</span>)</span>
+<span id="cb43-16"><a href="#cb43-16"></a>)</span>
+<span id="cb43-17"><a href="#cb43-17"></a>population<span class="sc">$</span>y <span class="ot">&lt;-</span> true_beta0 <span class="sc">+</span> true_beta1 <span class="sc">*</span> population<span class="sc">$</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> true_sigma)</span>
+<span id="cb43-18"><a href="#cb43-18"></a></span>
+<span id="cb43-19"><a href="#cb43-19"></a><span class="co"># --- 2. Draw a Random Sample from the Population ---</span></span>
+<span id="cb43-20"><a href="#cb43-20"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb43-21"><a href="#cb43-21"></a>sample_data <span class="ot">&lt;-</span> population[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>population_size, sample_size), ]</span>
+<span id="cb43-22"><a href="#cb43-22"></a></span>
+<span id="cb43-23"><a href="#cb43-23"></a><span class="co"># --- 3. Fit a Regression Model to the SAMPLE ---</span></span>
+<span id="cb43-24"><a href="#cb43-24"></a>sample_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sample_data)</span>
+<span id="cb43-25"><a href="#cb43-25"></a>sample_beta0_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model2)[<span class="dv">1</span>]</span>
+<span id="cb43-26"><a href="#cb43-26"></a>sample_beta1_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(sample_model2)[<span class="dv">2</span>]</span>
+<span id="cb43-27"><a href="#cb43-27"></a></span>
+<span id="cb43-28"><a href="#cb43-28"></a><span class="fu">ggplot</span>(population, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb43-29"><a href="#cb43-29"></a><span class="co"># Plot the entire population as faint gray points</span></span>
+<span id="cb43-30"><a href="#cb43-30"></a><span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"gray80"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb43-31"><a href="#cb43-31"></a><span class="co"># Add the TRUE population regression line in red</span></span>
+<span id="cb43-32"><a href="#cb43-32"></a><span class="fu">geom_abline</span>(</span>
+<span id="cb43-33"><a href="#cb43-33"></a><span class="at">intercept =</span> true_beta0,</span>
+<span id="cb43-34"><a href="#cb43-34"></a><span class="at">slope =</span> true_beta1,</span>
+<span id="cb43-35"><a href="#cb43-35"></a><span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb43-36"><a href="#cb43-36"></a><span class="at">size =</span> <span class="fl">1.5</span>,</span>
+<span id="cb43-37"><a href="#cb43-37"></a><span class="at">linetype =</span> <span class="st">"dashed"</span></span>
+<span id="cb43-38"><a href="#cb43-38"></a>) <span class="sc">+</span></span>
+<span id="cb43-39"><a href="#cb43-39"></a><span class="co"># Highlight the points from our random sample in blue</span></span>
+<span id="cb43-40"><a href="#cb43-40"></a><span class="fu">geom_point</span>(<span class="at">data =</span> sample_data, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb43-41"><a href="#cb43-41"></a><span class="co"># Add the ESTIMATED sample regression line in blue</span></span>
+<span id="cb43-42"><a href="#cb43-42"></a><span class="fu">geom_abline</span>(</span>
+<span id="cb43-43"><a href="#cb43-43"></a><span class="at">intercept =</span> sample_beta0_hat,</span>
+<span id="cb43-44"><a href="#cb43-44"></a><span class="at">slope =</span> sample_beta1_hat,</span>
+<span id="cb43-45"><a href="#cb43-45"></a><span class="at">color =</span> <span class="st">"green"</span>,</span>
+<span id="cb43-46"><a href="#cb43-46"></a><span class="at">size =</span> <span class="fl">1.5</span></span>
+<span id="cb43-47"><a href="#cb43-47"></a>) <span class="sc">+</span></span>
+<span id="cb43-48"><a href="#cb43-48"></a><span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"The green line is our sample estimate of the population (black)"</span>,</span>
+<span id="cb43-49"><a href="#cb43-49"></a><span class="at">x =</span> <span class="st">"Predictor (X)"</span>,</span>
+<span id="cb43-50"><a href="#cb43-50"></a><span class="at">y =</span> <span class="st">"Outcome (Y)"</span></span>
+<span id="cb43-51"><a href="#cb43-51"></a>) <span class="sc">+</span></span>
+<span id="cb43-52"><a href="#cb43-52"></a><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="glm_3_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">sigma</span>(sample_model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 81.24068</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">sigma</span>(sample_model1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15.80739</code></pre>
+</div>
+</div>
+<ul>
+<li>Our regression line better reflects the population in our first simulation compared to this last one</li>
+</ul>
+</section>
+<section id="sigma-2" class="slide level2">
+<h2>Sigma</h2>
+<ul>
+<li><p>Our sigma reflects the conditional spread in the population. If there is low sigma there is low noise. We can estimate the population relatively easy with less sample size. (signal vs noise)</p></li>
+<li><p>Slope estimate is noisier and less precise with larger sigma, but not biased! If we sampled an infinite number of times the average slope would be correct</p></li>
+</ul>
+</section>
+<section id="sigma-3" class="slide level2">
+<h2>Sigma</h2>
+<ul>
+<li>Best to think of sigma as a conditional value that is dependent on what is in your model. As your model gets better, there is less unexplained noise in the data.</li>
+</ul>
+<p><span class="math display">\[Y_i \sim \mathcal{N}(\mu, \sigma)\]</span></p>
+<p><span class="math display">\[Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)\]</span> - We want smaller sigma, because that means a better model</p>
+</section>
+<section id="sigma-4" class="slide level2">
+<h2>Sigma</h2>
+<p>Reasons for larger vs smaller sigma are aplenty: - Omitted variables - Measurement error/poor experimental design - Population heterogeneity - Inherent randomness</p>
+</section>
 <section id="wrap-up" class="slide level2">
 <h2>Wrap-up</h2>
 <ul>
