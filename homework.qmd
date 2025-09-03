@@ -3,4 +3,4 @@ title: "Homework"
 format: html
 ---
 
-1.  [Homework #1](hw1.qmd)
+1.  [Homework #1](hw1.html)
