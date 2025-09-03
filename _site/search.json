@@ -1255,85 +1255,92 @@
   {
     "objectID": "HW1.html",
     "href": "HW1.html",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include both the .qmd or .Rmd and knitted .html files. Please turn in both documents to the ASSIGNMENTS page on Canvas.\nPut all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that outside of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.\nYou are allowed to Google or use your preferred AI-overlord. However, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a working link to the website you used. You don’t need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and do not simply copy someone else’s code. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.\nIn the instructions, when it says by hand, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean by hand, you should not use the mean() function. However, you can (and should!) use your variables. So for instance, if I ask you to find the mean() by hand, you may do something like sum(variableX)/length(variableX). This would be an appropriate by hand calculation.\nData: We will use the dataset referred to as homework-world. This dataset is similar to one you’ve seen in class and contains a new variable called World. So-called “first world” countries (coded 1) are those that were aligned with the United States after World War II (e.g., members of NATO) or were considered to be clearly in the U.S. sphere of influence. “Second world” countries (coded 2) are former members of the Soviet Union or countries considered to have been clearly in the Soviet Union’s sphere of influence. “Third world” countries (coded 3) include those considered by the United Nations to be among the least developed countries in the world. The remaining countries are coded 4 for this variable.\nGood luck!\n\n\nIn the first code chunk, please 1) load packages you will use in the homework and 2) import the homework-world.csv file. Name the data.frame whatever you want.\n\n\n\nCalculate descriptive statistics for each of the 4 World groups. That is, you should get the mean GDP for countries that are coded as 1 in the World variable, mean GDP for countries coded as 2 in the World variable etc. This should include (it’s OK if more are included, but at least these):\n\nmean\nmedian\nrange\nmin & max\nstandard deviation\nskew & kurtosis\n\n\n\n\nStandardize all numeric variables in the dataset, and re-run your descriptive statistics. Are there any variables that you would be concerned about? If so, which ones and why? If not, why are you not concerned?\n\n\n\nCalculate the population variance and standard deviations by hand (aka don’t use a particular variance or standard deviation function) for any 3 numeric variables.\nNote the na.omit() function can be handy with missing data. This will get rid of any NA values, and make your calculations easier.\n\n\n\nCreate a violin plot (a new and improved box plot) for the Corruption variable, with plots for the four groups defined by the new variable, World. What does this graph tell you, in broad strokes, about:\n\ngroup differences in corruption central tendency?\ngroup differences in corruption variability?\nthe presence of outliers within each group?\n\n\n\n\n\n\nCalculate the correlation for Happiness & Freedom, Happiness & Support, and finally Freedom & Support.\n\n\n\nNow make a scatterplot for each of these 3 relationships. Include a linear best fit “regresion” line (a straight line).\n\nHow does the best fit lines correspond to the correlations that you got in Part A of this question?\nDoes a linear relationship seem to describe any of the pairwise relationships?\n\n\n\n\n\n\n\nCalculate the regression coefficient \\(\\hat{\\beta}\\) by hand for Happiness & Freedom with Happiness as the DV, and Freedom as the IV.\n\nInterpret the regression coefficient\nWithout doing any new calculations, assume that the regression coefficient you just calculated was the output of a standardized regression i.e., both your Y and X were standardized. Interpret this regression coefficient.\n\n\n\n\nCalculate the standard error of the regression coefficient ‘by hand’ using sigma.\n\n\n\n\nUsing functions presented in class, create a data frame that includes the predicted/fitted values and the residuals. Calculate the mean and SD of each of these values.\n\nWhat statistic is the mean of fitted values equal to?\nWhat statistic does the the SD of the residuals conceptually equal?\n\n\n\n\nGraph the PDF and CDF of Y ~ t(3, 3, .5)\n\n\n\nPsychological and educational tests, including the MMPI (Minnesota Multiphasic Personality Inventory), are often designed so they have a mean of 50 and a standard deviation of 10, and assumed to be normally distributed.\n\nThe MMPI says that scores that are two standard deviations or more above the mean may indicate pathology. Among a thousand people, how many would be expected to have scores two standard deviations or more above the mean?\nWhat proportion would be expected to score 68 or above?\nWhat proportion would be expected to score between 53 and 63?\nWhat value corresponds to the 89th percentile of scores? 5th percentile?\n\n\n\n\nFilter your World variable to set up a regression where you are comparing whether world coded 1 differs from world coded 3 on Freedom.\n\nInterpret the intercept\nInterpret the regression coefficient\nWhat is the predicted value for group coded 1, group coded 3?\nWhat would you change if you wanted your intercept to have a different interpretation?\nWhat effect size metric would you use to describe your results?"
   },
   {
     "objectID": "HW1.html#setup",
     "href": "HW1.html#setup",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "In the first code chunk, please 1) load packages you will use in the homework and 2) import the homework-world.csv file. Name the data.frame whatever you want."
   },
   {
     "objectID": "HW1.html#question-1",
     "href": "HW1.html#question-1",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Calculate descriptive statistics for each of the 4 World groups. That is, you should get the mean GDP for countries that are coded as 1 in the World variable, mean GDP for countries coded as 2 in the World variable etc. This should include (it’s OK if more are included, but at least these):\n\nmean\nmedian\nrange\nmin & max\nstandard deviation\nskew & kurtosis"
   },
   {
     "objectID": "HW1.html#question-2",
     "href": "HW1.html#question-2",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Standardize all numeric variables in the dataset, and re-run your descriptive statistics. Are there any variables that you would be concerned about? If so, which ones and why? If not, why are you not concerned?"
   },
   {
     "objectID": "HW1.html#question-3",
     "href": "HW1.html#question-3",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Calculate the population variance and standard deviations by hand (aka don’t use a particular variance or standard deviation function) for any 3 numeric variables.\nNote the na.omit() function can be handy with missing data. This will get rid of any NA values, and make your calculations easier."
   },
   {
     "objectID": "HW1.html#question-4",
     "href": "HW1.html#question-4",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Create a violin plot (a new and improved box plot) for the Corruption variable, with plots for the four groups defined by the new variable, World. What does this graph tell you, in broad strokes, about:\n\ngroup differences in corruption central tendency?\ngroup differences in corruption variability?\nthe presence of outliers within each group?"
   },
   {
     "objectID": "HW1.html#question-5",
     "href": "HW1.html#question-5",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Calculate the correlation for Happiness & Freedom, Happiness & Support, and finally Freedom & Support.\n\n\n\nNow make a scatterplot for each of these 3 relationships. Include a linear best fit “regresion” line (a straight line).\n\nHow does the best fit lines correspond to the correlations that you got in Part A of this question?\nDoes a linear relationship seem to describe any of the pairwise relationships?"
   },
   {
     "objectID": "HW1.html#question-6",
     "href": "HW1.html#question-6",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Calculate the regression coefficient \\(\\hat{\\beta}\\) by hand for Happiness & Freedom with Happiness as the DV, and Freedom as the IV.\n\nInterpret the regression coefficient\nWithout doing any new calculations, assume that the regression coefficient you just calculated was the output of a standardized regression i.e., both your Y and X were standardized. Interpret this regression coefficient.\n\n\n\n\nCalculate the standard error of the regression coefficient ‘by hand’ using sigma."
   },
   {
     "objectID": "HW1.html#question-7",
     "href": "HW1.html#question-7",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Using functions presented in class, create a data frame that includes the predicted/fitted values and the residuals. Calculate the mean and SD of each of these values.\n\nWhat statistic is the mean of fitted values equal to?\nWhat statistic does the the SD of the residuals conceptually equal?"
   },
   {
     "objectID": "HW1.html#question-8",
     "href": "HW1.html#question-8",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Graph the PDF and CDF of Y ~ t(3, 3, .5)"
   },
   {
     "objectID": "HW1.html#question-9",
     "href": "HW1.html#question-9",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Psychological and educational tests, including the MMPI (Minnesota Multiphasic Personality Inventory), are often designed so they have a mean of 50 and a standard deviation of 10, and assumed to be normally distributed.\n\nThe MMPI says that scores that are two standard deviations or more above the mean may indicate pathology. Among a thousand people, how many would be expected to have scores two standard deviations or more above the mean?\nWhat proportion would be expected to score 68 or above?\nWhat proportion would be expected to score between 53 and 63?\nWhat value corresponds to the 89th percentile of scores? 5th percentile?"
   },
   {
     "objectID": "HW1.html#question-10",
     "href": "HW1.html#question-10",
-    "title": "homework 1",
+    "title": "Homework 1",
     "section": "",
     "text": "Filter your World variable to set up a regression where you are comparing whether world coded 1 differs from world coded 3 on Freedom.\n\nInterpret the intercept\nInterpret the regression coefficient\nWhat is the predicted value for group coded 1, group coded 3?\nWhat would you change if you wanted your intercept to have a different interpretation?\nWhat effect size metric would you use to describe your results?"
+  },
+  {
+    "objectID": "homework.html",
+    "href": "homework.html",
+    "title": "Homework",
+    "section": "",
+    "text": "Homework #1"
   }
 ]

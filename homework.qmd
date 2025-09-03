@@ -1,4 +1,6 @@
 ---
-title: "Homeworks"
-editor: source
+title: "Homework"
+format: html
 ---
+
+1.  [Homework #1](hw1.qmd)
