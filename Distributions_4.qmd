@@ -570,6 +570,7 @@ $$f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - 
 ## Central limit theorm, take 1
 
 ```{r}
+#| code-fold: true
 # Load the required libraries
 library(ggplot2)
 library(patchwork)
@@ -1059,6 +1060,7 @@ ggplot(plot_data, aes(x = x, y = density, color = distribution)) +
 ------------------------------------------------------------------------
 
 ```{r}
+#| code-fold: true
 # Load the ggplot2 library for plotting
 library(ggplot2)
 
