@@ -26,8 +26,8 @@ Why: Literally most important class ever. Plus it is a requirement.
 | \- | 9/4 | Probability distributions |LSR 9 |  |
 | 3 | 9/9 | Probability distributions |  | |
 | \- | 9/11 | Estimation, Likelihood & Loss   | 15.4 -  |  |
-| 4 | 9/16 |  Estimation, Likelihood & Loss     |  | HW 1 due  |
-| \- | 9/18 | Simple regressions (1 predictor and t-tests) | LSR 13 |  |
+| 4 | 9/16 |  Estimation, Likelihood & Loss     |  |  |
+| \- | 9/18 | Simple regressions (1 predictor and t-tests) | LSR 13 | HW 1 due  |
 | 5 | 9/23 |  **Exam 1** |  |  |
 | \- | 9/25 | Statistical inference part 1 (Sampling and NHST)  | LSR 10 & 11 | |
 | 6 | 9/30 |  Statistical inference part 2 (Estimation) | LSR 15.5 - 15.7 |  |

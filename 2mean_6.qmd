@@ -1,0 +1,191 @@
+---
+title: "t-tests"
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+
+## last time
+
+- How do we get our regression estiamtes
+- How do we evaluate our regression model
+
+
+## this time
+
+- Example of regression with 2 means aka a t-test
+
+
+
+## t-test
+
+- The data generating process is still assumed to be a normal
+
+$$Y_i \sim \mathcal{N}(\mu, \sigma)$$
+
+
+$$Y_i \ = \beta_0 + \beta_1 X_i$$
+
+----------
+
+```{r}
+#| code-fold: true
+# For reproducibility
+set.seed(42)
+
+# --- 1. Create Sample Data ---
+# Create data for two groups
+group0 <- rnorm(50, mean = 100, sd = 15)
+group1 <- rnorm(50, mean = 110, sd = 15)
+
+# Combine into a data frame
+data <- data.frame(
+  y = c(group0, group1),
+  tx = factor(rep(c(0, 1), each = 50))
+)
+
+# --- 2. Run the Regression Model ---
+regression_model <- lm(y ~ tx, data = data)
+
+summary(regression_model)
+```
+
+-------------
+
+$$t = \frac{\bar{X}_1-\bar{X}_2}{\hat{\sigma_d}}$$
+
+
+```{r}
+#| code-fold: true
+# --- 3. Run the t-test ---
+# Note: var.equal = TRUE makes it equivalent to standard OLS
+t_test_result <- t.test(y ~ tx, data = data, var.equal = TRUE)
+
+t_test_result
+```
+
+--------------
+
+
+Standard error of the difference ($SE_{\hat{\beta}}$): 
+
+$${\hat{\sigma}_d = SE_{\hat{\beta}} = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2-2}} \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}$$
+
+$${\hat{\sigma}_d = SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}$$
+
+## pooled SD
+
+$$ \hat{\sigma}_p = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2 - 2}} $$
+
+- Unlike the pooled SD $\hat{\sigma}_p$, the standard error of the difference $\hat{\sigma}_d$ decreases the larger your sample size is. 
+
+## pooled SD
+
+```{r}
+#| code-fold: true
+rse_from_regression <- sigma(regression_model)
+cat("Residual Standard Error (from Regression):", rse_from_regression, "\n")
+
+# --- 3. Manually Calculate the Pooled Standard Deviation ---
+n1 <- length(group0)
+n2 <- length(group1)
+s1_sq <- var(group0) # Variance of group A
+s2_sq <- var(group1) # Variance of group B
+
+pooled_sd <- sqrt(((n1 - 1) * s1_sq + (n2 - 1) * s2_sq) / (n1 + n2 - 2))
+cat("Manually Calculated Pooled SD (for t-test):", pooled_sd, "\n")
+```
+
+---------------
+
+```{r}
+#| code-fold: true
+library(easystats)
+model_parameters(regression_model)
+```
+
+$${\hat{\sigma}_d = SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}$$
+
+```{r}
+#| code-fold: true
+n <- nobs(regression_model)/2 
+sigma(regression_model)*sqrt(1/n + 1/n) 
+```
+
+
+## Group specific estimates
+
+```{r}
+library(marginaleffects)
+predictions(regression_model, newdata = datagrid(tx = unique))
+
+```
+
+```{r}
+avg_predictions(regression_model, by = "tx")
+```
+
+
+## standard error of the mean
+
+
+```{r}
+sigma(regression_model)/sqrt(n) 
+```
+
+## Plotting
+
+
+
+
+
+
+
+## types of t-test
+
+- Student's t-test is used when the variances of each sample are (roughly) the same. In many cases, slightly more powerful test but the pooled variance will be biased toward the sample with the larger sample size.
+
+- Welch's t-test if the variances are NOT (roughly) the same. Slightly less powerful. You don't pool the variances in the same way
+
+$$\hat{\sigma}_p = \sqrt{\frac{\hat{\sigma}^2_1}{N_1}+\frac{\hat{\sigma}^2_2}{N_2}}$$
+
+## Welch's t-test
+
+$$Y_i \sim \mathcal{N}(\mu, \sigma)$$
+
+$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \gamma_0 + \gamma_1 X_i)$$
+
+
+## Effect size
+
+Cohen's D: 
+
+$$\delta = \frac{\mu_1 - \mu_0}{\sigma} \approx d = \frac{\bar{X}_1-\bar{X}_2}{\hat{\sigma}_p}$$
+
+- A Cohen’s d of .2 is considered “small”, .5 is considered “moderate”, and .8 is considered “large”
+
+------------
+
+```{r}
+#| code-fold: true
+coef(regression_model)[2]/sigma(regression_model)
+```
+
+
+```{r}
+library(emmeans)
+emm <- emmeans(regression_model, "tx")
+eff_size(emm, sigma = sigma(regression_model), edf = df.residual(regression_model))
+```
+
+
+# One sample t-test
+
+

@@ -12,3 +12,5 @@ editor: source
 4. [Distributions](Distributions_4.qmd)
 
 5. [Estimation](Estimation_5.qmd)
+
+6. [Comparing 2 means](2mean_6.qmd)

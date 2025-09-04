@@ -802,7 +802,7 @@
     "href": "lecture.html",
     "title": "Lectures",
     "section": "",
-    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation"
+    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation\nComparing 2 means"
   },
   {
     "objectID": "Estimation_5.html#likelihoods",
@@ -1342,5 +1342,82 @@
     "title": "Homework",
     "section": "",
     "text": "Homework #1"
+  },
+  {
+    "objectID": "2mean_6.html#last-time",
+    "href": "2mean_6.html#last-time",
+    "title": "t-tests",
+    "section": "last time",
+    "text": "last time\n\nHow do we get our regression estiamtes\nHow do we evaluate our regression model"
+  },
+  {
+    "objectID": "2mean_6.html#this-time",
+    "href": "2mean_6.html#this-time",
+    "title": "t-tests",
+    "section": "this time",
+    "text": "this time\n\nExample of regression with 2 means aka a t-test"
+  },
+  {
+    "objectID": "2mean_6.html#t-test",
+    "href": "2mean_6.html#t-test",
+    "title": "t-tests",
+    "section": "t-test",
+    "text": "t-test\n\nThe data generating process is still assumed to be a normal\n\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\\[Y_i \\ = \\beta_0 + \\beta_1 X_i\\]"
+  },
+  {
+    "objectID": "2mean_6.html#pooled-sd",
+    "href": "2mean_6.html#pooled-sd",
+    "title": "t-tests",
+    "section": "pooled SD",
+    "text": "pooled SD\n\\[ \\hat{\\sigma}_p = \\sqrt{\\frac{(N_1-1)\\hat{\\sigma}^2_1 + (N_2-1)\\hat{\\sigma}^2_2}{N_1+N_2 - 2}} \\]\n\nUnlike the pooled SD \\(\\hat{\\sigma}_p\\), the standard error of the difference \\(\\hat{\\sigma}_d\\) decreases the larger your sample size is."
+  },
+  {
+    "objectID": "2mean_6.html#pooled-sd-1",
+    "href": "2mean_6.html#pooled-sd-1",
+    "title": "t-tests",
+    "section": "pooled SD",
+    "text": "pooled SD\n\n\nCode\nrse_from_regression &lt;- sigma(regression_model)\ncat(\"Residual Standard Error (from Regression):\", rse_from_regression, \"\\n\")\n\n\nResidual Standard Error (from Regression): 15.66581 \n\n\nCode\n# --- 3. Manually Calculate the Pooled Standard Deviation ---\nn1 &lt;- length(group0)\nn2 &lt;- length(group1)\ns1_sq &lt;- var(group0) # Variance of group A\ns2_sq &lt;- var(group1) # Variance of group B\n\npooled_sd &lt;- sqrt(((n1 - 1) * s1_sq + (n2 - 1) * s2_sq) / (n1 + n2 - 2))\ncat(\"Manually Calculated Pooled SD (for t-test):\", pooled_sd, \"\\n\")\n\n\nManually Calculated Pooled SD (for t-test): 15.66581"
+  },
+  {
+    "objectID": "2mean_6.html#group-specific-estimates",
+    "href": "2mean_6.html#group-specific-estimates",
+    "title": "t-tests",
+    "section": "Group specific estimates",
+    "text": "Group specific estimates\n\nlibrary(marginaleffects)\npredictions(regression_model, newdata = datagrid(tx = unique))\n\n\n tx Estimate Std. Error    z Pr(&gt;|z|)   S 2.5 % 97.5 %\n  0     99.5       2.22 44.9   &lt;0.001 Inf  95.1    104\n  1    111.5       2.22 50.3   &lt;0.001 Inf 107.2    116\n\nType:  response \nColumns: rowid, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, tx, y \n\n\n\navg_predictions(regression_model, by = \"tx\")\n\n\n tx Estimate Std. Error    z Pr(&gt;|z|)   S 2.5 % 97.5 %\n  0     99.5       2.22 44.9   &lt;0.001 Inf  95.1    104\n  1    111.5       2.22 50.3   &lt;0.001 Inf 107.2    116\n\nType:  response \nColumns: rowid, tx, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, rowid_dedup"
+  },
+  {
+    "objectID": "2mean_6.html#standard-error-of-the-mean",
+    "href": "2mean_6.html#standard-error-of-the-mean",
+    "title": "t-tests",
+    "section": "standard error of the mean",
+    "text": "standard error of the mean\n\nsigma(regression_model)/sqrt(n) \n\n[1] 2.215481"
+  },
+  {
+    "objectID": "2mean_6.html#types-of-t-test",
+    "href": "2mean_6.html#types-of-t-test",
+    "title": "t-tests",
+    "section": "types of t-test",
+    "text": "types of t-test\n\nStudent’s t-test is used when the variances of each sample are (roughly) the same. In many cases, slightly more powerful test but the pooled variance will be biased toward the sample with the larger sample size.\nWelch’s t-test if the variances are NOT (roughly) the same. Slightly less powerful. You don’t pool the variances in the same way\n\n\\[\\hat{\\sigma}_p = \\sqrt{\\frac{\\hat{\\sigma}^2_1}{N_1}+\\frac{\\hat{\\sigma}^2_2}{N_2}}\\]"
+  },
+  {
+    "objectID": "2mean_6.html#welchs-t-test",
+    "href": "2mean_6.html#welchs-t-test",
+    "title": "t-tests",
+    "section": "Welch’s t-test",
+    "text": "Welch’s t-test\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\gamma_0 + \\gamma_1 X_i)\\]"
+  },
+  {
+    "objectID": "2mean_6.html#effect-size",
+    "href": "2mean_6.html#effect-size",
+    "title": "t-tests",
+    "section": "Effect size",
+    "text": "Effect size\nCohen’s D:\n\\[\\delta = \\frac{\\mu_1 - \\mu_0}{\\sigma} \\approx d = \\frac{\\bar{X}_1-\\bar{X}_2}{\\hat{\\sigma}_p}\\]\n\nA Cohen’s d of .2 is considered “small”, .5 is considered “moderate”, and .8 is considered “large”"
+  },
+  {
+    "objectID": "2mean_6.html#plotting",
+    "href": "2mean_6.html#plotting",
+    "title": "t-tests",
+    "section": "Plotting",
+    "text": "Plotting"
   }
 ]
