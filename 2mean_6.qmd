@@ -31,7 +31,7 @@ html:
 $$Y_i \sim \mathcal{N}(\mu, \sigma)$$
 
 
-$$Y_i \ = \beta_0 + \beta_1 X_i$$
+$$\mu_i \ = \beta_0 + \beta_1 X_i$$
 
 ----------
 
@@ -84,7 +84,7 @@ $${\hat{\sigma}_d = SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \fr
 
 $$ \hat{\sigma}_p = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2 - 2}} $$
 
-- Unlike the pooled SD $\hat{\sigma}_p$, the standard error of the difference $\hat{\sigma}_d$ decreases the larger your sample size is. 
+- Unlike the pooled SD $\hat{\sigma}_p$, the standard error of the difference $\hat{\sigma}_d$ decreases the larger your sample size is. Pooled SD is indifferent to sample size.  
 
 ## pooled SD
 
@@ -140,12 +140,34 @@ avg_predictions(regression_model, by = "tx")
 sigma(regression_model)/sqrt(n) 
 ```
 
-## Plotting
+## R2 test
+
+```{r}
+summary(regression_model)
+```
+
+## F-test
+
+- F-statistic is calculated as a ratio of the variance explained by your model to the unexplained variance (the residuals). Specifically, it's the ratio of the Mean Squared Regression (MSR) to the Mean Squared Error (MSE).
+
+- MSE is sort of in the summary output (15.67^2), but MSR is not. 
+
+## ANOVA
+
+```{r}
+anova(regression_model)
+```
+
+```{r}
+15.67^2
+```
 
 
+## degrees of freedom
 
+MSR: p (for now)
 
-
+MSE: n - p - 1 
 
 
 ## types of t-test
@@ -186,6 +208,6 @@ eff_size(emm, sigma = sigma(regression_model), edf = df.residual(regression_mode
 ```
 
 
-# One sample t-test
+
 
 

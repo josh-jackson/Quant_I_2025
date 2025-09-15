@@ -414,7 +414,7 @@
 <li>The data generating process is still assumed to be a normal</li>
 </ul>
 <p><span class="math display">\[Y_i \sim \mathcal{N}(\mu, \sigma)\]</span></p>
-<p><span class="math display">\[Y_i \ = \beta_0 + \beta_1 X_i\]</span></p>
+<p><span class="math display">\[\mu_i \ = \beta_0 + \beta_1 X_i\]</span></p>
 </section>
 <section class="slide level2">
 
@@ -499,7 +499,7 @@ mean in group 0 mean in group 1
 <h2>pooled SD</h2>
 <p><span class="math display">\[ \hat{\sigma}_p = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2 - 2}} \]</span></p>
 <ul>
-<li>Unlike the pooled SD <span class="math inline">\(\hat{\sigma}_p\)</span>, the standard error of the difference <span class="math inline">\(\hat{\sigma}_d\)</span> decreases the larger your sample size is.</li>
+<li>Unlike the pooled SD <span class="math inline">\(\hat{\sigma}_p\)</span>, the standard error of the difference <span class="math inline">\(\hat{\sigma}_d\)</span> decreases the larger your sample size is. Pooled SD is indifferent to sample size.</li>
 </ul>
 </section>
 <section id="pooled-sd-1" class="slide level2">
@@ -593,8 +593,65 @@ Columns: rowid, tx, estimate, std.error, statistic, p.value, s.value, conf.low, 
 </div>
 </div>
 </section>
-<section id="plotting" class="slide level2">
-<h2>Plotting</h2>
+<section id="r2-test" class="slide level2">
+<h2>R2 test</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">summary</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ tx, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.407  -9.212   0.457  10.016  34.835 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   99.465      2.215  44.895  &lt; 2e-16 ***
+tx1           12.046      3.133   3.845 0.000215 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.67 on 98 degrees of freedom
+Multiple R-squared:  0.1311,    Adjusted R-squared:  0.1222 
+F-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147</code></pre>
+</div>
+</div>
+</section>
+<section id="f-test" class="slide level2">
+<h2>F-test</h2>
+<ul>
+<li><p>F-statistic is calculated as a ratio of the variance explained by your model to the unexplained variance (the residuals). Specifically, it’s the ratio of the Mean Squared Regression (MSR) to the Mean Squared Error (MSE).</p></li>
+<li><p>MSE is sort of in the summary output (15.67^2), but MSR is not.</p></li>
+</ul>
+</section>
+<section id="anova" class="slide level2">
+<h2>ANOVA</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">anova</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: y
+          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+tx         1  3627.4  3627.4  14.781 0.0002147 ***
+Residuals 98 24050.9   245.4                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fl">15.67</span><span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 245.5489</code></pre>
+</div>
+</div>
+</section>
+<section id="degrees-of-freedom" class="slide level2">
+<h2>degrees of freedom</h2>
+<p>MSR: p (for now)</p>
+<p>MSE: n - p - 1</p>
 </section>
 <section id="types-of-t-test" class="slide level2">
 <h2>types of t-test</h2>
@@ -622,7 +679,7 @@ Columns: rowid, tx, estimate, std.error, statistic, p.value, s.value, conf.low, 
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">coef</span>(regression_model)[<span class="dv">2</span>]<span class="sc">/</span><span class="fu">sigma</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">coef</span>(regression_model)[<span class="dv">2</span>]<span class="sc">/</span><span class="fu">sigma</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      tx1 
@@ -630,9 +687,9 @@ Columns: rowid, tx, estimate, std.error, statistic, p.value, s.value, conf.low, 
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">library</span>(emmeans)</span>
-<span id="cb21-2"><a href="#cb21-2"></a>emm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(regression_model, <span class="st">"tx"</span>)</span>
-<span id="cb21-3"><a href="#cb21-3"></a><span class="fu">eff_size</span>(emm, <span class="at">sigma =</span> <span class="fu">sigma</span>(regression_model), <span class="at">edf =</span> <span class="fu">df.residual</span>(regression_model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb27-2"><a href="#cb27-2"></a>emm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(regression_model, <span class="st">"tx"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="fu">eff_size</span>(emm, <span class="at">sigma =</span> <span class="fu">sigma</span>(regression_model), <span class="at">edf =</span> <span class="fu">df.residual</span>(regression_model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> contrast  effect.size    SE df lower.CL upper.CL
  tx0 - tx1      -0.769 0.207 98    -1.18   -0.357
@@ -641,9 +698,6 @@ sigma used for effect sizes: 15.67
 Confidence level used: 0.95 </code></pre>
 </div>
 </div>
-</section>
-<section id="one-sample-t-test" class="title-slide slide level1 center">
-<h1>One sample t-test</h1>
 
 <div class="footer footer-default">
 

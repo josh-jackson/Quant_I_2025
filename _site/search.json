@@ -158,7 +158,7 @@
     "href": "syllabus.html",
     "title": "Syllabus",
     "section": "",
-    "text": "What: Quant 1\nWhen: Class: 9:30 AM - 10:50 Tuesday & Thursday. Sam office hours: 11-12 Tue & Thursday 407A Somers Ben office hours:\nWhere: 216 Somers\nWho: Josh Jackson and AIs Sam Bennett & Ben Hardin\nWhy: Literally most important class ever. Plus it is a requirement."
+    "text": "What: Quant 1\nWhen: Class: 9:30 AM - 10:50 Tuesday & Thursday.\nSam office hours: 11-12 Tue & Thursday 407A Somers Ben office hours: 2-3pm on Monday and Tuesday 250 Somers. Josh office hours:\nWhere: 216 Somers\nWho: Josh Jackson and AIs Sam Bennett & Ben Hardin\nWhy: Literally most important class ever. Plus it is a requirement."
   },
   {
     "objectID": "Estimation_5.html#today",
@@ -1362,14 +1362,14 @@
     "href": "2mean_6.html#t-test",
     "title": "t-tests",
     "section": "t-test",
-    "text": "t-test\n\nThe data generating process is still assumed to be a normal\n\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\\[Y_i \\ = \\beta_0 + \\beta_1 X_i\\]"
+    "text": "t-test\n\nThe data generating process is still assumed to be a normal\n\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\\[\\mu_i \\ = \\beta_0 + \\beta_1 X_i\\]"
   },
   {
     "objectID": "2mean_6.html#pooled-sd",
     "href": "2mean_6.html#pooled-sd",
     "title": "t-tests",
     "section": "pooled SD",
-    "text": "pooled SD\n\\[ \\hat{\\sigma}_p = \\sqrt{\\frac{(N_1-1)\\hat{\\sigma}^2_1 + (N_2-1)\\hat{\\sigma}^2_2}{N_1+N_2 - 2}} \\]\n\nUnlike the pooled SD \\(\\hat{\\sigma}_p\\), the standard error of the difference \\(\\hat{\\sigma}_d\\) decreases the larger your sample size is."
+    "text": "pooled SD\n\\[ \\hat{\\sigma}_p = \\sqrt{\\frac{(N_1-1)\\hat{\\sigma}^2_1 + (N_2-1)\\hat{\\sigma}^2_2}{N_1+N_2 - 2}} \\]\n\nUnlike the pooled SD \\(\\hat{\\sigma}_p\\), the standard error of the difference \\(\\hat{\\sigma}_d\\) decreases the larger your sample size is. Pooled SD is indifferent to sample size."
   },
   {
     "objectID": "2mean_6.html#pooled-sd-1",
@@ -1419,5 +1419,54 @@
     "title": "t-tests",
     "section": "Plotting",
     "text": "Plotting"
+  },
+  {
+    "objectID": "Estimation_5.html#skip-for-time",
+    "href": "Estimation_5.html#skip-for-time",
+    "title": "Estimation",
+    "section": "Skip for time",
+    "text": "Skip for time\n\nWe will skip the next few slides, but revist in a later slide deck"
+  },
+  {
+    "objectID": "Estimation_5.html#ml-for-linear-regression",
+    "href": "Estimation_5.html#ml-for-linear-regression",
+    "title": "Estimation",
+    "section": "ML for linear regression",
+    "text": "ML for linear regression\n\nDefault DGP will be normal/Gaussian\n\n\\(Y_i | X_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)\\)\nThe probability density function (PDF) for a single data point: \\(f(Y_i | \\beta_0, \\beta_1, \\sigma^2) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac {(Y_i - (\\beta_0 + \\beta_1 X_i))^2}{2\\sigma^2}\\right)\\)\nThe likelihood function \\(\\mathcal{L}(θ | data )\\) is based on our model parameters \\(\\theta =(\\beta_0 + \\beta_1, \\sigma^2)\\) such that we find that values of our parameters that maximize this function:\n\\[\\mathcal{L}(\\beta_0, \\beta_1, \\sigma^2) = \\prod_{i=1}^{n} \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac{(Y_i - (\\beta_0 + \\beta_1 X_i))^2}{2\\sigma^2}\\right)\\]"
+  },
+  {
+    "objectID": "Estimation_5.html#start-again-here",
+    "href": "Estimation_5.html#start-again-here",
+    "title": "Estimation",
+    "section": "Start again here",
+    "text": "Start again here\n\nIgnore previous slides for the time being"
+  },
+  {
+    "objectID": "2mean_6.html#r2-test",
+    "href": "2mean_6.html#r2-test",
+    "title": "t-tests",
+    "section": "R2 test",
+    "text": "R2 test\n\nsummary(regression_model)\n\n\nCall:\nlm(formula = y ~ tx, data = data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-46.407  -9.212   0.457  10.016  34.835 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   99.465      2.215  44.895  &lt; 2e-16 ***\ntx1           12.046      3.133   3.845 0.000215 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 15.67 on 98 degrees of freedom\nMultiple R-squared:  0.1311,    Adjusted R-squared:  0.1222 \nF-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147"
+  },
+  {
+    "objectID": "2mean_6.html#f-test",
+    "href": "2mean_6.html#f-test",
+    "title": "t-tests",
+    "section": "F-test",
+    "text": "F-test\n\nF-statistic is calculated as a ratio of the variance explained by your model to the unexplained variance (the residuals). Specifically, it’s the ratio of the Mean Squared Regression (MSR) to the Mean Squared Error (MSE).\nMSE is sort of in the summary output (15.67^2), but MSR is not."
+  },
+  {
+    "objectID": "2mean_6.html#anova",
+    "href": "2mean_6.html#anova",
+    "title": "t-tests",
+    "section": "ANOVA",
+    "text": "ANOVA\n\nanova(regression_model)\n\nAnalysis of Variance Table\n\nResponse: y\n          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    \ntx         1  3627.4  3627.4  14.781 0.0002147 ***\nResiduals 98 24050.9   245.4                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\n15.67^2\n\n[1] 245.5489"
+  },
+  {
+    "objectID": "2mean_6.html#degrees-of-freedom",
+    "href": "2mean_6.html#degrees-of-freedom",
+    "title": "t-tests",
+    "section": "degrees of freedom",
+    "text": "degrees of freedom\nMSR: p (for now)\nMSE: n - p - 1"
   }
 ]

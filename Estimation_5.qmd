@@ -262,8 +262,11 @@ ggplot(log_likelihood_df, aes(x = p, y = log_likelihood)) +
   theme_minimal()
 ```
 
+## Skip for time
 
-## Likelihood estimation for linear regression
+- We will skip the next few slides, but revist in a later slide deck
+
+## ML for linear regression
 
 - Default DGP will be normal/Gaussian
 
@@ -488,6 +491,10 @@ ggplot(surface_data, aes(x = beta0, y = beta1, fill = ll)) +
   theme_minimal()
 ```
 
+
+## Start again here
+
+- Ignore previous slides for the time being
 
 
 ## The importance of probability distributions

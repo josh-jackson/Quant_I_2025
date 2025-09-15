@@ -6,8 +6,10 @@ format: html
 What: Quant 1 
 
 When: Class: 9:30 AM - 10:50 Tuesday & Thursday. 
+
 Sam office hours: 11-12 Tue & Thursday 407A Somers
-Ben office hours: 
+Ben office hours: 2-3pm on Monday and Tuesday 250 Somers.
+Josh office hours: 
 
 Where: 216 Somers 
 
