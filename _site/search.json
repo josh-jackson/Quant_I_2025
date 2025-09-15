@@ -823,7 +823,7 @@
     "href": "Estimation_5.html#estimation-vs-falsification",
     "title": "Estimation",
     "section": "Estimation vs falsification",
-    "text": "Estimation vs falsification\n\nMost of our science pits two hypotheses against one another. Winner take all.\nOur stats are set up similarly, but often the opponent is weak (measly nil hypothesis). This falsification view is standard.\nWe sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation (note, not an estimator).\nWe still can test/falsify hypotheses, but the estimation framework is more robust"
+    "text": "Estimation vs falsification\n\nMost of our science pits two hypotheses against one another. Winner take all.\nOur stats are set up similarly, but often the opponent is weak (measly nil hypothesis). This falsification view is standard.\nWe sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation (note, not an estimator).\nWe still can test/falsify hypotheses, but the estimation framework is more robust (and keeps you honest)"
   },
   {
     "objectID": "Estimation_5.html#binomial-likelihood",
@@ -921,7 +921,7 @@
     "href": "Estimation_5.html#r",
     "title": "Estimation",
     "section": "R",
-    "text": "R\n\nupper case R, not lower case r as in correlation\n\n\\[\\large \\sqrt{R^2} = r_{Y\\hat{Y}}\\]"
+    "text": "R\n\nupper case R, not lower case r as in correlation\n\n\\(R = \\sqrt{R^2} = r_{Y\\hat{Y}}\\)$"
   },
   {
     "objectID": "correlation_2.html#correlation-2",
@@ -1068,14 +1068,14 @@
     "href": "Estimation_5.html#standard-error-1",
     "title": "Estimation",
     "section": "Standard error",
-    "text": "Standard error\n\\[\\text{SE}(\\hat{\\beta}_1) = \\frac{\\text{RSE}}{\\sqrt{\\sum(X_i - \\bar{X})^2}}\\]\n\nReminder: residual standard error is our estimate of sigma\nSmaller sigma and/or greater variability in X means more precision in our estimate"
+    "text": "Standard error\n\\[\\text{SE}(\\hat{\\beta}_1) = \\frac{\\text{RSE}}{\\sqrt{\\sum(X_i - \\bar{X})^2}}\\]\n\nReminder: residual standard error is our estimate of sigma\nLarger N, Smaller sigma and/or greater variability in X means more precision in our estimate"
   },
   {
     "objectID": "Estimation_5.html#standard-error-2",
     "href": "Estimation_5.html#standard-error-2",
     "title": "Estimation",
     "section": "Standard error",
-    "text": "Standard error\n\n\nCode\nlibrary(easystats)\ns1 &lt;- lm(Y ~ x1, simulated_data)\nmodel_parameters(s1)\n\n\nParameter   | Coefficient |   SE |       95% CI | t(98) |      p\n----------------------------------------------------------------\n(Intercept) |        6.07 | 0.93 | [4.22, 7.92] |  6.52 | &lt; .001\nx1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001\n\n\n\n\nCode\n# ignore code\nlibrary(brms)\nlibrary(tidybayes)\nb1 &lt;-brm(Y ~ X1, data = simulated_data, file = \"b1\")\nb1 %&gt;%\n  spread_draws(b_X1) %&gt;%\n  ggplot(aes(x = b_X1)) +\n  stat_halfeye(.width = c(0.95)) + theme(\n    axis.title.y = element_blank(),\n    axis.text.y = element_blank(),\n    axis.ticks.y = element_blank()\n  )"
+    "text": "Standard error\n\nWe have standard errors for all statistics we estimate. Each of them provide precision on the estimate of a population parameter. How confident we are in the estimate.\nWe will use these to develop, ahem, confidence intervals.\n\n\\[\n\\text{SE}(\\hat{\\beta}_0) = \\hat{\\sigma} \\sqrt{\\frac{1}{n} + \\frac{\\bar{X}^2}{\\sum(X_i - \\bar{X})^2}}\n\\]"
   },
   {
     "objectID": "Estimation_5.html#loss-functions",
@@ -1089,7 +1089,7 @@
     "href": "Estimation_5.html#estimators",
     "title": "Estimation",
     "section": "Estimators",
-    "text": "Estimators\n\nEstimators are our functions used to estimate our parameters. Estimators find the parameters that make the value of their loss function as small as possible\nOLS, WLS, maximum likelihood (+ variants: FIML, PML, REML, QMLE), MCMC variants (Hamiltonian; Gibbs; metropolis), variational inference, etc."
+    "text": "Estimators\n\nEstimators are our functions used to estimate our parameters. Estimators find the parameters that make the value of their loss function as small as possible\nOLS, WLS, penalized/ridge/lasso, robust, maximum likelihood (+ variants: FIML, PML, REML, QMLE), MCMC variants (Hamiltonian; Gibbs; metropolis), variational inference, etc."
   },
   {
     "objectID": "Estimation_5.html#standard-error-3",
@@ -1117,7 +1117,7 @@
     "href": "Estimation_5.html#wrap-up",
     "title": "Estimation",
     "section": "Wrap-up",
-    "text": "Wrap-up"
+    "text": "Wrap-up\n\nOLS\nLikelihood and ML\nStandard error\nModel fit via sigma, R2 and R"
   },
   {
     "objectID": "correlation_2.html#sum-of-squares",
@@ -1468,5 +1468,19 @@
     "title": "t-tests",
     "section": "degrees of freedom",
     "text": "degrees of freedom\nMSR: p (for now)\nMSE: n - p - 1"
+  },
+  {
+    "objectID": "Estimation_5.html#likelihoods-1",
+    "href": "Estimation_5.html#likelihoods-1",
+    "title": "Estimation",
+    "section": "Likelihoods",
+    "text": "Likelihoods\n\np(data | θ ) is what we typically work with\np(data | .5) or more extreme = .1. What do we do with this? Is this what we want to know?\nPerhaps more helpful for scientists would be “what is the most likely parameter value, given our data”?\nL(θ | data )"
+  },
+  {
+    "objectID": "Estimation_5.html#se-indexes-noise-in-estimate",
+    "href": "Estimation_5.html#se-indexes-noise-in-estimate",
+    "title": "Estimation",
+    "section": "SE indexes noise in estimate",
+    "text": "SE indexes noise in estimate\n\n\nCode\nlibrary(easystats)\ns1 &lt;- lm(Y ~ x1, simulated_data)\nmodel_parameters(s1)\n\n\nParameter   | Coefficient |   SE |       95% CI | t(98) |      p\n----------------------------------------------------------------\n(Intercept) |        6.07 | 0.93 | [4.22, 7.92] |  6.52 | &lt; .001\nx1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001\n\n\n\n\nCode\n# ignore code\nlibrary(brms)\nlibrary(tidybayes)\nb1 &lt;-brm(Y ~ X1, data = simulated_data, file = \"b1\")\nb1 %&gt;%\n  spread_draws(b_X1) %&gt;%\n  ggplot(aes(x = b_X1)) +\n  stat_halfeye(.width = c(0.95)) + theme(\n    axis.title.y = element_blank(),\n    axis.text.y = element_blank(),\n    axis.ticks.y = element_blank()\n  )"
   }
 ]

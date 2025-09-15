@@ -125,7 +125,7 @@ print(plot2)
 
 - Estimators are our functions used to estimate our parameters. Estimators find the parameters that make the value of their loss function as small as possible
 
-- OLS, WLS, maximum likelihood (+ variants: FIML, PML, REML, QMLE), MCMC variants (Hamiltonian; Gibbs; metropolis), variational inference, etc. 
+- OLS, WLS, penalized/ridge/lasso, robust, maximum likelihood (+ variants: FIML, PML, REML, QMLE), MCMC variants (Hamiltonian; Gibbs; metropolis), variational inference, etc. 
 
 ## When OLS doesn't work
 
@@ -190,6 +190,16 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
   ylab("Probability") + scale_x_continuous(limits = c(10, 40)) 
 ```
 
+## Likelihoods
+
+- p(data | θ ) is what we typically work with
+
+- p(data | .5) or more extreme = .1. What do we do with this? Is this what we want to know? 
+
+- Perhaps more helpful for scientists would be "what is the most likely parameter value, given our data"?
+
+- L(θ | data )
+
 ## Estimation vs falsification
 
 - Most of our science pits two hypotheses against one another. Winner take all. 
@@ -198,7 +208,7 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
 
 - We sometimes want to ask what is the most likely parameter value rather than assuming one. I.e. Estimation (note, not an estimator). 
 
-- We still can test/falsify hypotheses, but the estimation framework is more robust
+- We still can test/falsify hypotheses, but the estimation framework is more robust (and keeps you honest)
 
 ## Binomial likelihood
 
@@ -240,6 +250,14 @@ ggplot(likelihood_df, aes(x = p, y = likelihood)) +
 
 
 ```
+
+-------
+
+```{r}
+likelihood_df 
+```
+
+
 
 ## Binomial loglikelihood
 
@@ -604,6 +622,16 @@ p1/p2
 
 ```
 
+------
+
+3. Large N. 
+
+$$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
+
+- With a larger sample, your estimate of RSE becomes more reliable and stable
+
+- With larger sample, the denominator will increase (as it is a SS) and thus the SE will decrease. 
+
 ## Standard error
 
 $$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
@@ -611,9 +639,9 @@ $$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
 
 - Reminder: residual standard error is our estimate of sigma
 
-- Smaller sigma and/or greater variability in X means more precision in our estimate
+- Larger N, Smaller sigma and/or greater variability in X means more precision in our estimate
 
-## Standard error
+## SE indexes noise in estimate
 
 ```{r}
 #| code-fold: true
@@ -641,7 +669,7 @@ b1 %>%
 
 ## Standard error
 
-- We have standard errors for all statistics we estimate. Each of them provide precision on the estimate of a population parameter. Or how confident we are in the estimate. 
+- We have standard errors for all statistics we estimate. Each of them provide precision on the estimate of a population parameter. How confident we are in the estimate. 
 
 - We will use these to develop, ahem, confidence intervals. 
 
@@ -977,7 +1005,7 @@ sum((mod.1$.fitted - mean(data$y1))^2)/sum((mod.1$y1 - mean(data$y1))^2)
 
 - upper case R, not lower case r as in correlation
 
- $$\large \sqrt{R^2} = r_{Y\hat{Y}}$$
+ $R = \sqrt{R^2} = r_{Y\hat{Y}}$$
 
 -------------
 
@@ -989,6 +1017,17 @@ mod.1
 ```
 
 ----------
+
+
+```{r}
+#| code-fold: true
+ggplot(mod.1 , aes(x=.fitted, y=y1)) +
+    geom_point(size = 2) +
+  geom_smooth(method = lm, se = FALSE) 
+```
+
+
+---------
 
 ```{r}
 #| code-fold: true
@@ -1004,6 +1043,11 @@ sqrt(0.3781187)
 ```
 
 ## Wrap-up
+
+- OLS
+- Likelihood and ML
+- Standard error
+- Model fit via sigma, R2 and R
 
 
 
