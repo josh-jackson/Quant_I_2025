@@ -491,7 +491,7 @@ mean in group control      mean in group tx
 </section>
 <section class="slide level2">
 
-<p>What are similarities between t.test and lm function?</p>
+<p>What similarities exist between t.test and lm function?</p>
 </section>
 <section id="pooled-sd" class="slide level2">
 <h2>pooled SD</h2>
@@ -536,7 +536,7 @@ mean in group control      mean in group tx
 <p><span class="math display">\[SE_{\hat{\beta}} = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2-2}} \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}\]</span></p>
 <p><span class="math display">\[SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}\]</span></p>
 <ul>
-<li>Unlike the pooled SD <span class="math inline">\(\hat{\sigma}_p\)</span>, the standard error of the difference <span class="math inline">\(\hat{\sigma}_d\)</span> decreases the larger your sample size is.</li>
+<li>Unlike the pooled SD (<span class="math inline">\(\hat{\sigma}_p\)</span>), the standard error of the difference <span class="math inline">\(SE_{\hat{\beta}}\)</span> decreases the larger your sample size is.</li>
 </ul>
 </section>
 <section class="slide level2">
@@ -750,7 +750,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <pre><code>[1] 245.5489</code></pre>
 </div>
 </div>
-<p>##SS total</p>
+<p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2\]</span></p>
+</section>
+<section id="ss-total" class="slide level2">
+<h2>SS total</h2>
 <p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2\]</span></p>
 <div class="cell">
 <details>
@@ -786,6 +789,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <h2>Welch’s t-test</h2>
 <p><span class="math display">\[Y_i \sim \mathcal{N}(\mu, \sigma)\]</span></p>
 <p><span class="math display">\[Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \gamma_0 + \gamma_1 X_i)\]</span></p>
+<p><span class="math display">\[\mu = \beta_0 + \beta_1 X_i\]</span></p>
+<p><span class="math display">\[\sigma = \gamma_0 + \gamma_1 X_i\]</span></p>
 </section>
 <section id="effect-size" class="slide level2">
 <h2>Effect size</h2>

@@ -1404,7 +1404,7 @@
     "href": "2mean_6.html#welchs-t-test",
     "title": "t-tests",
     "section": "Welch’s t-test",
-    "text": "Welch’s t-test\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\gamma_0 + \\gamma_1 X_i)\\]"
+    "text": "Welch’s t-test\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\\[Y_i \\sim \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\gamma_0 + \\gamma_1 X_i)\\]\n\\[\\mu = \\beta_0 + \\beta_1 X_i\\]\n\\[\\sigma = \\gamma_0 + \\gamma_1 X_i\\]"
   },
   {
     "objectID": "2mean_6.html#effect-size",
@@ -1460,7 +1460,7 @@
     "href": "2mean_6.html#anova",
     "title": "t-tests",
     "section": "ANOVA",
-    "text": "ANOVA\n\nanova(regression_model)\n\nAnalysis of Variance Table\n\nResponse: y\n          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup      1  3627.4  3627.4  14.781 0.0002147 ***\nResiduals 98 24050.9   245.4                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\n15.67^2\n\n[1] 245.5489\n\n\n##SS total\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]\n\n\nCode\nanova(regression_model)\n\n\nAnalysis of Variance Table\n\nResponse: y\n          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup      1  3627.4  3627.4  14.781 0.0002147 ***\nResiduals 98 24050.9   245.4                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+    "text": "ANOVA\n\nanova(regression_model)\n\nAnalysis of Variance Table\n\nResponse: y\n          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup      1  3627.4  3627.4  14.781 0.0002147 ***\nResiduals 98 24050.9   245.4                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\n15.67^2\n\n[1] 245.5489\n\n\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]"
   },
   {
     "objectID": "2mean_6.html#degrees-of-freedom",
@@ -1510,5 +1510,12 @@
     "title": "t-tests",
     "section": "Wrap up",
     "text": "Wrap up\n\\(b_0\\)\n\\(b_1\\)\n\\(R^2\\)\n\\(\\hat{\\sigma}\\)\n\\(SE({b_1)}\\)"
+  },
+  {
+    "objectID": "2mean_6.html#ss-total",
+    "href": "2mean_6.html#ss-total",
+    "title": "t-tests",
+    "section": "SS total",
+    "text": "SS total\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]\n\n\nCode\nanova(regression_model)\n\n\nAnalysis of Variance Table\n\nResponse: y\n          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup      1  3627.4  3627.4  14.781 0.0002147 ***\nResiduals 98 24050.9   245.4                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   }
 ]
