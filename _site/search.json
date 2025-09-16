@@ -1348,7 +1348,7 @@
     "href": "2mean_6.html#last-time",
     "title": "t-tests",
     "section": "last time",
-    "text": "last time\n\nHow do we get our regression estiamtes\nHow do we evaluate our regression model"
+    "text": "last time\n\nHow do we get our regression estimates\nHow do we evaluate our regression model"
   },
   {
     "objectID": "2mean_6.html#this-time",
@@ -1369,7 +1369,7 @@
     "href": "2mean_6.html#pooled-sd",
     "title": "t-tests",
     "section": "pooled SD",
-    "text": "pooled SD\n\\[ \\hat{\\sigma}_p = \\sqrt{\\frac{(N_1-1)\\hat{\\sigma}^2_1 + (N_2-1)\\hat{\\sigma}^2_2}{N_1+N_2 - 2}} \\]\n\nUnlike the pooled SD \\(\\hat{\\sigma}_p\\), the standard error of the difference \\(\\hat{\\sigma}_d\\) decreases the larger your sample size is. Pooled SD is indifferent to sample size."
+    "text": "pooled SD\n\nImportant in t test is to get an assessment of the variance in each group. Often these variances can differ, so we want to get a pooled estimate, as we are assuming the groups come from the same population with the same sigma.\nAs such, pooled sd is our estimate of sigma\n\n\\[ \\hat{\\sigma}_p = \\sqrt{\\frac{(N_1-1)\\hat{\\sigma}^2_1 + (N_2-1)\\hat{\\sigma}^2_2}{N_1+N_2 - 2}} \\]"
   },
   {
     "objectID": "2mean_6.html#pooled-sd-1",
@@ -1383,14 +1383,14 @@
     "href": "2mean_6.html#group-specific-estimates",
     "title": "t-tests",
     "section": "Group specific estimates",
-    "text": "Group specific estimates\n\nlibrary(marginaleffects)\npredictions(regression_model, newdata = datagrid(tx = unique))\n\n\n tx Estimate Std. Error    z Pr(&gt;|z|)   S 2.5 % 97.5 %\n  0     99.5       2.22 44.9   &lt;0.001 Inf  95.1    104\n  1    111.5       2.22 50.3   &lt;0.001 Inf 107.2    116\n\nType:  response \nColumns: rowid, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, tx, y \n\n\n\navg_predictions(regression_model, by = \"tx\")\n\n\n tx Estimate Std. Error    z Pr(&gt;|z|)   S 2.5 % 97.5 %\n  0     99.5       2.22 44.9   &lt;0.001 Inf  95.1    104\n  1    111.5       2.22 50.3   &lt;0.001 Inf 107.2    116\n\nType:  response \nColumns: rowid, tx, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, rowid_dedup"
+    "text": "Group specific estimates\n\nregression models are prediction (y-hat) machines\ndefault in R is to use “dummy scores” which assign 0 or 1 to categorical variables\n\n\nlibrary(marginaleffects)\npredictions(regression_model, newdata = datagrid(group = unique))\n\n\n   Group Estimate Std. Error    z Pr(&gt;|z|)   S 2.5 % 97.5 %\n control     99.5       2.22 44.9   &lt;0.001 Inf  95.1    104\n tx         111.5       2.22 50.3   &lt;0.001 Inf 107.2    116\n\nType:  response \nColumns: rowid, group, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, y"
   },
   {
     "objectID": "2mean_6.html#standard-error-of-the-mean",
     "href": "2mean_6.html#standard-error-of-the-mean",
     "title": "t-tests",
     "section": "standard error of the mean",
-    "text": "standard error of the mean\n\nsigma(regression_model)/sqrt(n) \n\n[1] 2.215481"
+    "text": "standard error of the mean\n\nIndexes how much precision we have in each of our (mean) estimates\n\n\nsigma(regression_model)/sqrt(n) \n\n[1] 2.215481\n\n\n\nWhy is this equal the the SE of the \\(b_0\\) (assuming we use R defaults)?\nNot equivalent to effect coding because those estimates are asking a different question"
   },
   {
     "objectID": "2mean_6.html#types-of-t-test",
@@ -1446,7 +1446,7 @@
     "href": "2mean_6.html#r2-test",
     "title": "t-tests",
     "section": "R2 test",
-    "text": "R2 test\n\nsummary(regression_model)\n\n\nCall:\nlm(formula = y ~ tx, data = data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-46.407  -9.212   0.457  10.016  34.835 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   99.465      2.215  44.895  &lt; 2e-16 ***\ntx1           12.046      3.133   3.845 0.000215 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 15.67 on 98 degrees of freedom\nMultiple R-squared:  0.1311,    Adjusted R-squared:  0.1222 \nF-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147"
+    "text": "R2 test\n\nsummary(regression_model)\n\n\nCall:\nlm(formula = y ~ group, data = data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-46.407  -9.212   0.457  10.016  34.835 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   99.465      2.215  44.895  &lt; 2e-16 ***\ngrouptx       12.046      3.133   3.845 0.000215 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 15.67 on 98 degrees of freedom\nMultiple R-squared:  0.1311,    Adjusted R-squared:  0.1222 \nF-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147"
   },
   {
     "objectID": "2mean_6.html#f-test",
@@ -1460,7 +1460,7 @@
     "href": "2mean_6.html#anova",
     "title": "t-tests",
     "section": "ANOVA",
-    "text": "ANOVA\n\nanova(regression_model)\n\nAnalysis of Variance Table\n\nResponse: y\n          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    \ntx         1  3627.4  3627.4  14.781 0.0002147 ***\nResiduals 98 24050.9   245.4                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\n15.67^2\n\n[1] 245.5489"
+    "text": "ANOVA\n\nanova(regression_model)\n\nAnalysis of Variance Table\n\nResponse: y\n          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup      1  3627.4  3627.4  14.781 0.0002147 ***\nResiduals 98 24050.9   245.4                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\n15.67^2\n\n[1] 245.5489\n\n\n##SS total\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]\n\n\nCode\nanova(regression_model)\n\n\nAnalysis of Variance Table\n\nResponse: y\n          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup      1  3627.4  3627.4  14.781 0.0002147 ***\nResiduals 98 24050.9   245.4                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   },
   {
     "objectID": "2mean_6.html#degrees-of-freedom",
@@ -1482,5 +1482,33 @@
     "title": "Estimation",
     "section": "SE indexes noise in estimate",
     "text": "SE indexes noise in estimate\n\n\nCode\nlibrary(easystats)\ns1 &lt;- lm(Y ~ x1, simulated_data)\nmodel_parameters(s1)\n\n\nParameter   | Coefficient |   SE |       95% CI | t(98) |      p\n----------------------------------------------------------------\n(Intercept) |        6.07 | 0.93 | [4.22, 7.92] |  6.52 | &lt; .001\nx1          |        2.24 | 0.18 | [1.89, 2.60] | 12.65 | &lt; .001\n\n\n\n\nCode\n# ignore code\nlibrary(brms)\nlibrary(tidybayes)\nb1 &lt;-brm(Y ~ X1, data = simulated_data, file = \"b1\")\nb1 %&gt;%\n  spread_draws(b_X1) %&gt;%\n  ggplot(aes(x = b_X1)) +\n  stat_halfeye(.width = c(0.95)) + theme(\n    axis.title.y = element_blank(),\n    axis.text.y = element_blank(),\n    axis.ticks.y = element_blank()\n  )"
+  },
+  {
+    "objectID": "2mean_6.html#interpreation",
+    "href": "2mean_6.html#interpreation",
+    "title": "t-tests",
+    "section": "Interpreation",
+    "text": "Interpreation\n\\(b_0\\),\n\\(b_1\\),\n\\(R^2\\),\n\\(\\hat{\\sigma}\\),\n\\(SE({b_1)}\\)"
+  },
+  {
+    "objectID": "2mean_6.html#contrasts",
+    "href": "2mean_6.html#contrasts",
+    "title": "t-tests",
+    "section": "Contrasts",
+    "text": "Contrasts\n\nclass(data$group)\n\n[1] \"factor\"\n\n\n\ncontrasts(data$group)\n\n        tx\ncontrol  0\ntx       1"
+  },
+  {
+    "objectID": "2mean_6.html#deviation-effectsum-coding",
+    "href": "2mean_6.html#deviation-effectsum-coding",
+    "title": "t-tests",
+    "section": "Deviation/ effect/sum coding",
+    "text": "Deviation/ effect/sum coding\n\ncontrasts(data$group) &lt;- contr.sum(2)\ncontrasts(data$group)\n\n        [,1]\ncontrol    1\ntx        -1\n\n\n\nregression_model2 &lt;- lm(y ~ group, data = data)\nsummary(regression_model2)\n\n\nCall:\nlm(formula = y ~ group, data = data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-46.407  -9.212   0.457  10.016  34.835 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  105.488      1.567  67.336  &lt; 2e-16 ***\ngroup1        -6.023      1.567  -3.845 0.000215 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 15.67 on 98 degrees of freedom\nMultiple R-squared:  0.1311,    Adjusted R-squared:  0.1222 \nF-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147"
+  },
+  {
+    "objectID": "2mean_6.html#wrap-up",
+    "href": "2mean_6.html#wrap-up",
+    "title": "t-tests",
+    "section": "Wrap up",
+    "text": "Wrap up\n\\(b_0\\)\n\\(b_1\\)\n\\(R^2\\)\n\\(\\hat{\\sigma}\\)\n\\(SE({b_1)}\\)"
   }
 ]

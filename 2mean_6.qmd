@@ -14,7 +14,7 @@ html:
 
 ## last time
 
-- How do we get our regression estiamtes
+- How do we get our regression estimates
 - How do we evaluate our regression model
 
 
@@ -48,43 +48,48 @@ group1 <- rnorm(50, mean = 110, sd = 15)
 # Combine into a data frame
 data <- data.frame(
   y = c(group0, group1),
-  tx = factor(rep(c(0, 1), each = 50))
+  group = factor(rep(c("control", "tx"), each = 50))
 )
 
 # --- 2. Run the Regression Model ---
-regression_model <- lm(y ~ tx, data = data)
+regression_model <- lm(y ~ group, data = data)
 
 summary(regression_model)
 ```
 
+
+
 -------------
 
-$$t = \frac{\bar{X}_1-\bar{X}_2}{\hat{\sigma_d}}$$
+$$t = \frac{\bar{X}_1-\bar{X}_2}{{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}$$
 
 
 ```{r}
 #| code-fold: true
 # --- 3. Run the t-test ---
 # Note: var.equal = TRUE makes it equivalent to standard OLS
-t_test_result <- t.test(y ~ tx, data = data, var.equal = TRUE)
+t_test_result <- t.test(y ~ group, data = data, var.equal = TRUE)
 
 t_test_result
 ```
 
---------------
 
 
-Standard error of the difference ($SE_{\hat{\beta}}$): 
+---------
 
-$${\hat{\sigma}_d = SE_{\hat{\beta}} = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2-2}} \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}$$
+What are similarities between t.test and lm function? 
 
-$${\hat{\sigma}_d = SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}$$
 
 ## pooled SD
 
+- Important in t test is to get an assessment of the variance in each group. Often these variances can differ, so we want to get a pooled estimate, as we are assuming the groups come from the same population with the same sigma. 
+
+- As such, pooled sd is our estimate of sigma
+
 $$ \hat{\sigma}_p = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2 - 2}} $$
 
-- Unlike the pooled SD $\hat{\sigma}_p$, the standard error of the difference $\hat{\sigma}_d$ decreases the larger your sample size is. Pooled SD is indifferent to sample size.  
+
+
 
 ## pooled SD
 
@@ -103,6 +108,19 @@ pooled_sd <- sqrt(((n1 - 1) * s1_sq + (n2 - 1) * s2_sq) / (n1 + n2 - 2))
 cat("Manually Calculated Pooled SD (for t-test):", pooled_sd, "\n")
 ```
 
+
+
+------------
+
+- Standard error of the difference ($SE_{\hat{\beta}}$) indexes our precision of our estimate. Like any regression SE estimate, it uses $\hat{\sigma}$ 
+
+$$SE_{\hat{\beta}} = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2-2}} \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}$$
+
+$$SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}$$
+
+- Unlike the pooled SD $\hat{\sigma}_p$, the standard error of the difference $\hat{\sigma}_d$ decreases the larger your sample size is. 
+
+
 ---------------
 
 ```{r}
@@ -111,7 +129,18 @@ library(easystats)
 model_parameters(regression_model)
 ```
 
-$${\hat{\sigma}_d = SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}$$
+```{r}
+#| code-fold: true
+
+# --- 3. Manually Calculate the Standard error of the difference ---
+n1 <- length(group0)
+n2 <- length(group1)
+s1_sq <- var(group0) # Variance of group A
+s2_sq <- var(group1) # Variance of group B
+
+b_se <- sqrt(((n1 - 1) * s1_sq + (n2 - 1) * s2_sq) / (n1 + n2 - 2))*sqrt((1/n1) + ((1/n2)))
+cat("Manually Calculated SE difference:", b_se, "\n")
+```
 
 ```{r}
 #| code-fold: true
@@ -122,23 +151,60 @@ sigma(regression_model)*sqrt(1/n + 1/n)
 
 ## Group specific estimates
 
+- regression models are prediction (y-hat) machines
+- default in R is to use "dummy scores" which assign 0 or 1 to categorical variables
+
 ```{r}
 library(marginaleffects)
-predictions(regression_model, newdata = datagrid(tx = unique))
+predictions(regression_model, newdata = datagrid(group = unique))
 
+```
+
+
+
+
+
+## Contrasts
+
+```{r}
+class(data$group)
 ```
 
 ```{r}
-avg_predictions(regression_model, by = "tx")
+contrasts(data$group)
 ```
+
+## Deviation/ effect/sum coding
+
+```{r}
+contrasts(data$group) <- contr.sum(2)
+contrasts(data$group)
+```
+
+```{r}
+regression_model2 <- lm(y ~ group, data = data)
+summary(regression_model2)
+```
+
+------------------
+
+```{r}
+summary(regression_model)
+```
+
+
 
 
 ## standard error of the mean
 
+- Indexes how much precision we have in each of our (mean) estimates
 
 ```{r}
 sigma(regression_model)/sqrt(n) 
 ```
+- Why is this equal the the SE of the $b_0$ (assuming we use R defaults)?
+- Not equivalent to effect coding because those estimates are asking a different question
+
 
 ## R2 test
 
@@ -162,6 +228,15 @@ anova(regression_model)
 15.67^2
 ```
 
+
+##SS total
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
+
+```{r}
+#| code-fold: true
+anova(regression_model)
+```
 
 ## degrees of freedom
 
@@ -203,11 +278,17 @@ coef(regression_model)[2]/sigma(regression_model)
 
 ```{r}
 library(emmeans)
-emm <- emmeans(regression_model, "tx")
+emm <- emmeans(regression_model, "group")
 eff_size(emm, sigma = sigma(regression_model), edf = df.residual(regression_model))
 ```
 
 
+## Wrap up
 
+$b_0$  
+$b_1$  
+$R^2$  
+$\hat{\sigma}$  
+$SE({b_1)}$ 
 
 

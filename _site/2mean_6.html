@@ -398,7 +398,7 @@
 <section id="last-time" class="slide level2">
 <h2>last time</h2>
 <ul>
-<li>How do we get our regression estiamtes</li>
+<li>How do we get our regression estimates</li>
 <li>How do we evaluate our regression model</li>
 </ul>
 </section>
@@ -432,18 +432,18 @@
 <span id="cb1-9"><a href="#cb1-9"></a><span class="co"># Combine into a data frame</span></span>
 <span id="cb1-10"><a href="#cb1-10"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb1-11"><a href="#cb1-11"></a>  <span class="at">y =</span> <span class="fu">c</span>(group0, group1),</span>
-<span id="cb1-12"><a href="#cb1-12"></a>  <span class="at">tx =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">each =</span> <span class="dv">50</span>))</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"tx"</span>), <span class="at">each =</span> <span class="dv">50</span>))</span>
 <span id="cb1-13"><a href="#cb1-13"></a>)</span>
 <span id="cb1-14"><a href="#cb1-14"></a></span>
 <span id="cb1-15"><a href="#cb1-15"></a><span class="co"># --- 2. Run the Regression Model ---</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a>regression_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> tx, <span class="at">data =</span> data)</span>
+<span id="cb1-16"><a href="#cb1-16"></a>regression_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> group, <span class="at">data =</span> data)</span>
 <span id="cb1-17"><a href="#cb1-17"></a></span>
 <span id="cb1-18"><a href="#cb1-18"></a><span class="fu">summary</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = y ~ tx, data = data)
+lm(formula = y ~ group, data = data)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
@@ -452,7 +452,7 @@ Residuals:
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
 (Intercept)   99.465      2.215  44.895  &lt; 2e-16 ***
-tx1           12.046      3.133   3.845 0.000215 ***
+grouptx       12.046      3.133   3.845 0.000215 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -464,13 +464,13 @@ F-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147</code></pre>
 </section>
 <section class="slide level2">
 
-<p><span class="math display">\[t = \frac{\bar{X}_1-\bar{X}_2}{\hat{\sigma_d}}\]</span></p>
+<p><span class="math display">\[t = \frac{\bar{X}_1-\bar{X}_2}{{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}\]</span></p>
 <div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># --- 3. Run the t-test ---</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="co"># Note: var.equal = TRUE makes it equivalent to standard OLS</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>t_test_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y <span class="sc">~</span> tx, <span class="at">data =</span> data, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>t_test_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y <span class="sc">~</span> group, <span class="at">data =</span> data, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
 <span id="cb3-5"><a href="#cb3-5"></a>t_test_result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -478,29 +478,28 @@ F-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147</code></pre>
 <pre><code>
     Two Sample t-test
 
-data:  y by tx
+data:  y by group
 t = -3.8445, df = 98, p-value = 0.0002147
-alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+alternative hypothesis: true difference in means between group control and group tx is not equal to 0
 95 percent confidence interval:
  -18.263258  -5.827938
 sample estimates:
-mean in group 0 mean in group 1 
-       99.46492       111.51052 </code></pre>
+mean in group control      mean in group tx 
+             99.46492             111.51052 </code></pre>
 </div>
 </div>
 </section>
 <section class="slide level2">
 
-<p>Standard error of the difference (<span class="math inline">\(SE_{\hat{\beta}}\)</span>):</p>
-<p><span class="math display">\[{\hat{\sigma}_d = SE_{\hat{\beta}} = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2-2}} \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}\]</span></p>
-<p><span class="math display">\[{\hat{\sigma}_d = SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}\]</span></p>
+<p>What are similarities between t.test and lm function?</p>
 </section>
 <section id="pooled-sd" class="slide level2">
 <h2>pooled SD</h2>
-<p><span class="math display">\[ \hat{\sigma}_p = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2 - 2}} \]</span></p>
 <ul>
-<li>Unlike the pooled SD <span class="math inline">\(\hat{\sigma}_p\)</span>, the standard error of the difference <span class="math inline">\(\hat{\sigma}_d\)</span> decreases the larger your sample size is. Pooled SD is indifferent to sample size.</li>
+<li><p>Important in t test is to get an assessment of the variance in each group. Often these variances can differ, so we want to get a pooled estimate, as we are assuming the groups come from the same population with the same sigma.</p></li>
+<li><p>As such, pooled sd is our estimate of sigma</p></li>
 </ul>
+<p><span class="math display">\[ \hat{\sigma}_p = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2 - 2}} \]</span></p>
 </section>
 <section id="pooled-sd-1" class="slide level2">
 <h2>pooled SD</h2>
@@ -531,6 +530,17 @@ mean in group 0 mean in group 1
 </section>
 <section class="slide level2">
 
+<ul>
+<li>Standard error of the difference (<span class="math inline">\(SE_{\hat{\beta}}\)</span>) indexes our precision of our estimate. Like any regression SE estimate, it uses <span class="math inline">\(\hat{\sigma}\)</span></li>
+</ul>
+<p><span class="math display">\[SE_{\hat{\beta}} = \sqrt{\frac{(N_1-1)\hat{\sigma}^2_1 + (N_2-1)\hat{\sigma}^2_2}{N_1+N_2-2}} \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}\]</span></p>
+<p><span class="math display">\[SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}\]</span></p>
+<ul>
+<li>Unlike the pooled SD <span class="math inline">\(\hat{\sigma}_p\)</span>, the standard error of the difference <span class="math inline">\(\hat{\sigma}_d\)</span> decreases the larger your sample size is.</li>
+</ul>
+</section>
+<section class="slide level2">
+
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -541,15 +551,30 @@ mean in group 0 mean in group 1
 <pre><code>Parameter   | Coefficient |   SE |          95% CI | t(98) |      p
 -------------------------------------------------------------------
 (Intercept) |       99.46 | 2.22 | [95.07, 103.86] | 44.90 | &lt; .001
-tx [1]      |       12.05 | 3.13 | [ 5.83,  18.26] |  3.84 | &lt; .001</code></pre>
+group [tx]  |       12.05 | 3.13 | [ 5.83,  18.26] |  3.84 | &lt; .001</code></pre>
 </div>
 </div>
-<p><span class="math display">\[{\hat{\sigma}_d = SE_{\hat{\beta}} =\hat{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}\]</span></p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nobs</span>(regression_model)<span class="sc">/</span><span class="dv">2</span> </span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">sigma</span>(regression_model)<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>n <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># --- 3. Manually Calculate the Standard error of the difference ---</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>n1 <span class="ot">&lt;-</span> <span class="fu">length</span>(group0)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>n2 <span class="ot">&lt;-</span> <span class="fu">length</span>(group1)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>s1_sq <span class="ot">&lt;-</span> <span class="fu">var</span>(group0) <span class="co"># Variance of group A</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>s2_sq <span class="ot">&lt;-</span> <span class="fu">var</span>(group1) <span class="co"># Variance of group B</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a>b_se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(((n1 <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> s1_sq <span class="sc">+</span> (n2 <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> s2_sq) <span class="sc">/</span> (n1 <span class="sc">+</span> n2 <span class="sc">-</span> <span class="dv">2</span>))<span class="sc">*</span><span class="fu">sqrt</span>((<span class="dv">1</span><span class="sc">/</span>n1) <span class="sc">+</span> ((<span class="dv">1</span><span class="sc">/</span>n2)))</span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="fu">cat</span>(<span class="st">"Manually Calculated SE difference:"</span>, b_se, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Manually Calculated SE difference: 3.133163 </code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nobs</span>(regression_model)<span class="sc">/</span><span class="dv">2</span> </span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">sigma</span>(regression_model)<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>n <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.133163</code></pre>
@@ -558,49 +583,85 @@ tx [1]      |       12.05 | 3.13 | [ 5.83,  18.26] |  3.84 | &lt; .001</code></p
 </section>
 <section id="group-specific-estimates" class="slide level2">
 <h2>Group specific estimates</h2>
+<ul>
+<li>regression models are prediction (y-hat) machines</li>
+<li>default in R is to use “dummy scores” which assign 0 or 1 to categorical variables</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(marginaleffects)</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">predictions</span>(regression_model, <span class="at">newdata =</span> <span class="fu">datagrid</span>(<span class="at">tx =</span> unique))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">predictions</span>(regression_model, <span class="at">newdata =</span> <span class="fu">datagrid</span>(<span class="at">group =</span> unique))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
- tx Estimate Std. Error    z Pr(&gt;|z|)   S 2.5 % 97.5 %
-  0     99.5       2.22 44.9   &lt;0.001 Inf  95.1    104
-  1    111.5       2.22 50.3   &lt;0.001 Inf 107.2    116
+   Group Estimate Std. Error    z Pr(&gt;|z|)   S 2.5 % 97.5 %
+ control     99.5       2.22 44.9   &lt;0.001 Inf  95.1    104
+ tx         111.5       2.22 50.3   &lt;0.001 Inf 107.2    116
 
 Type:  response 
-Columns: rowid, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, tx, y </code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">avg_predictions</span>(regression_model, <span class="at">by =</span> <span class="st">"tx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
- tx Estimate Std. Error    z Pr(&gt;|z|)   S 2.5 % 97.5 %
-  0     99.5       2.22 44.9   &lt;0.001 Inf  95.1    104
-  1    111.5       2.22 50.3   &lt;0.001 Inf 107.2    116
-
-Type:  response 
-Columns: rowid, tx, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, rowid_dedup </code></pre>
+Columns: rowid, group, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, y </code></pre>
 </div>
 </div>
 </section>
-<section id="standard-error-of-the-mean" class="slide level2">
-<h2>standard error of the mean</h2>
+<section id="contrasts" class="slide level2">
+<h2>Contrasts</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">sigma</span>(regression_model)<span class="sc">/</span><span class="fu">sqrt</span>(n) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">class</span>(data<span class="sc">$</span>group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.215481</code></pre>
+<pre><code>[1] "factor"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">contrasts</span>(data<span class="sc">$</span>group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        tx
+control  0
+tx       1</code></pre>
 </div>
 </div>
 </section>
-<section id="r2-test" class="slide level2">
-<h2>R2 test</h2>
+<section id="deviation-effectsum-coding" class="slide level2">
+<h2>Deviation/ effect/sum coding</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">summary</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">contrasts</span>(data<span class="sc">$</span>group) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">2</span>)</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">contrasts</span>(data<span class="sc">$</span>group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        [,1]
+control    1
+tx        -1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>regression_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> group, <span class="at">data =</span> data)</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="fu">summary</span>(regression_model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = y ~ tx, data = data)
+lm(formula = y ~ group, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.407  -9.212   0.457  10.016  34.835 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  105.488      1.567  67.336  &lt; 2e-16 ***
+group1        -6.023      1.567  -3.845 0.000215 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.67 on 98 degrees of freedom
+Multiple R-squared:  0.1311,    Adjusted R-squared:  0.1222 
+F-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">summary</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ group, data = data)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
@@ -609,7 +670,49 @@ Residuals:
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
 (Intercept)   99.465      2.215  44.895  &lt; 2e-16 ***
-tx1           12.046      3.133   3.845 0.000215 ***
+grouptx       12.046      3.133   3.845 0.000215 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.67 on 98 degrees of freedom
+Multiple R-squared:  0.1311,    Adjusted R-squared:  0.1222 
+F-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147</code></pre>
+</div>
+</div>
+</section>
+<section id="standard-error-of-the-mean" class="slide level2">
+<h2>standard error of the mean</h2>
+<ul>
+<li>Indexes how much precision we have in each of our (mean) estimates</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">sigma</span>(regression_model)<span class="sc">/</span><span class="fu">sqrt</span>(n) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.215481</code></pre>
+</div>
+</div>
+<ul>
+<li>Why is this equal the the SE of the <span class="math inline">\(b_0\)</span> (assuming we use R defaults)?</li>
+<li>Not equivalent to effect coding because those estimates are asking a different question</li>
+</ul>
+</section>
+<section id="r2-test" class="slide level2">
+<h2>R2 test</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">summary</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ group, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.407  -9.212   0.457  10.016  34.835 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   99.465      2.215  44.895  &lt; 2e-16 ***
+grouptx       12.046      3.133   3.845 0.000215 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -629,22 +732,40 @@ F-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147</code></pre>
 <section id="anova" class="slide level2">
 <h2>ANOVA</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">anova</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">anova</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
 Response: y
           Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
-tx         1  3627.4  3627.4  14.781 0.0002147 ***
+group      1  3627.4  3627.4  14.781 0.0002147 ***
 Residuals 98 24050.9   245.4                      
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fl">15.67</span><span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fl">15.67</span><span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 245.5489</code></pre>
+</div>
+</div>
+<p>##SS total</p>
+<p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2\]</span></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">anova</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: y
+          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+group      1  3627.4  3627.4  14.781 0.0002147 ***
+Residuals 98 24050.9   245.4                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </section>
@@ -679,25 +800,33 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">coef</span>(regression_model)[<span class="dv">2</span>]<span class="sc">/</span><span class="fu">sigma</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">coef</span>(regression_model)[<span class="dv">2</span>]<span class="sc">/</span><span class="fu">sigma</span>(regression_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>      tx1 
+<pre><code>  grouptx 
 0.7689098 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">library</span>(emmeans)</span>
-<span id="cb27-2"><a href="#cb27-2"></a>emm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(regression_model, <span class="st">"tx"</span>)</span>
-<span id="cb27-3"><a href="#cb27-3"></a><span class="fu">eff_size</span>(emm, <span class="at">sigma =</span> <span class="fu">sigma</span>(regression_model), <span class="at">edf =</span> <span class="fu">df.residual</span>(regression_model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb39-2"><a href="#cb39-2"></a>emm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(regression_model, <span class="st">"group"</span>)</span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="fu">eff_size</span>(emm, <span class="at">sigma =</span> <span class="fu">sigma</span>(regression_model), <span class="at">edf =</span> <span class="fu">df.residual</span>(regression_model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> contrast  effect.size    SE df lower.CL upper.CL
- tx0 - tx1      -0.769 0.207 98    -1.18   -0.357
+<pre><code> contrast     effect.size    SE df lower.CL upper.CL
+ control - tx      -0.769 0.207 98    -1.18   -0.357
 
 sigma used for effect sizes: 15.67 
 Confidence level used: 0.95 </code></pre>
 </div>
 </div>
+</section>
+<section id="wrap-up" class="slide level2">
+<h2>Wrap up</h2>
+<p><span class="math inline">\(b_0\)</span><br>
+<span class="math inline">\(b_1\)</span><br>
+<span class="math inline">\(R^2\)</span><br>
+<span class="math inline">\(\hat{\sigma}\)</span><br>
+<span class="math inline">\(SE({b_1)}\)</span></p>
 
 <div class="footer footer-default">
 
