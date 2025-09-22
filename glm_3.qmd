@@ -11,11 +11,10 @@ html:
   scrollable: true
 ---
 
-
 ## This time
 
-- Getting comfortable with regression/glm 
-- More in depth on each component of the model
+-   Getting comfortable with regression/glm
+-   More in depth on each component of the model
 
 ## Thinking in terms of models
 
@@ -25,7 +24,7 @@ html:
 
 $Y = b_0 + b_{1}X + e$
 
-- Your model is how you think the world works
+-   Your model is how you think the world works
 
 ## How can we visualize data to make sense of it?
 
@@ -69,8 +68,6 @@ $$Y_i = b_{0} + b_{1}X_i + e_i$$
 -   Each individual has a unique Y value an X value and a residual/error term\
 -   The model only has a single $b_{0}$ and $b_{1}$ term. These are the regression parameters. $b_{0}$ is the intercept and $b_{1}$ quantifies the relationship between your model of the world and the DV.
 
-
-
 ## in R
 
 ```{r, eval = FALSE}
@@ -93,7 +90,7 @@ $$Y_i = b_{0} + b_{1}X_i + e_i$$
 coef(m.1)
 ```
 
-- Estimates are specific values for our coefficients (B or $\hat{\beta}$) which represent our best *guess* of the true population parameter ($\beta$) 
+-   Estimates are specific values for our coefficients (B or $\hat{\beta}$) which represent our best *guess* of the true population parameter ($\beta$)
 
 ## How to interpret regression estimates
 
@@ -128,15 +125,13 @@ report_sample(d.1)
 
 ```
 
-
 ## pop quiz
 
 If I flipped the x and y variables, would I get the same regression coefficient?
 
-
 ## pop quiz #2
 
-What would the regression coefficient be if I standardized (z-scored) the variables? The intercept? 
+What would the regression coefficient be if I standardized (z-scored) the variables? The intercept?
 
 ------------------------------------------------------------------------
 
@@ -204,8 +199,8 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
 model_parameters(m.1)
 ```
 
-- Only the intercept changes. Not the slope. 
-- What happens if we add 5 to Y variable? 
+-   Only the intercept changes. Not the slope.
+-   What happens if we add 5 to Y variable?
 
 ## Centroid
 
@@ -228,9 +223,7 @@ ggplot(d1.f , aes(x=x.1, y=y.1)) +
 
 ## Predictions
 
-$$\hat{Y_i} = b_{0} + b_{1}X_i $$ 
-- People who have the same IV, get the same DV. No error in our equation.
-
+$$\hat{Y_i} = b_{0} + b_{1}X_i $$ - People who have the same IV, get the same DV. No error in our equation.
 
 ## Predictions
 
@@ -244,18 +237,17 @@ d1.f
 
 ## Predictions
 
-- A regression model can be best thought of as prediction machine. Add hypothetical Xs in, get $\hat{Y}$ in return
+-   A regression model can be best thought of as prediction machine. Add hypothetical Xs in, get $\hat{Y}$ in return
 
-- Regression can be thought of as telling us E(Y|X)
+-   Regression can be thought of as telling us E(Y\|X)
 
 ## Residuals
 
-The residuals can be thought of as how far off we are in our predictions.  What is left over in Y that is not explained by our model (i.e. Xs).  
+The residuals can be thought of as how far off we are in our predictions. What is left over in Y that is not explained by our model (i.e. Xs).
 
 $$Y_i = b_{0} + b_{1}X_i + e_i$$
 
-$$\hat{Y_i} = b_{0} + b_{1}X_i$$ 
-$${Y_i} - \hat{Y_i} = e_i $$
+$$\hat{Y_i} = b_{0} + b_{1}X_i$$ $${Y_i} - \hat{Y_i} = e_i $$
 
 ## Residuals
 
@@ -343,30 +335,29 @@ d1.f |>
 ggplot(aes(x = x.1, y = .fitted)) + geom_point() + geom_smooth(se = F, method = "lm") 
 ```
 
-
 ## Error vs residual
 
-- Much like we have sample statistics and population parameters with $\bar{X}, \mu$
+-   Much like we have sample statistics and population parameters with $\bar{X}, \mu$
 
-- Residual (e or $\hat{\epsilon}$)is the difference between our estimated regression line and our observed data.
+-   Residual (e or $\hat{\epsilon}$)is the difference between our estimated regression line and our observed data.
 
-- Error ($\epsilon$) is unknown parameter we estimate via the residual. It is the difference between our observed scores and our true population line.  
+-   Error ($\epsilon$) is unknown parameter we estimate via the residual. It is the difference between our observed scores and our true population line.
 
 ## Sigma
 
--   How do we know whether we have a lot or a little error in our model? 
+-   How do we know whether we have a lot or a little error in our model?
 
 ```{r}
 #| code-fold: true
 d1.f<- augment(m.1)
 mean(d1.f$.resid)
 ```
-- Dispersion estimates! 
 
--   Sigma (σ) is a population parameter that represents the spread of error around the regression line. In our sample it reflects the SD of residuals. 
+-   Dispersion estimates!
 
+-   Sigma (σ) is a population parameter that represents the spread of error around the regression line. In our sample it reflects the SD of residuals.
 
-----------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -431,29 +422,27 @@ p + geom_polygon(data = density_df1, aes(x = x_poly, y = y_poly), alpha = 0.2) +
 
 ## Sigma
 
-- Can be thought of as how much left over in Y that we cannot explain by our model. Often discussed in terms of Sums of Squares or variance (for math simplicity). 
+-   Can be thought of as how much left over in Y that we cannot explain by our model. Often discussed in terms of Sums of Squares or variance (for math simplicity).
 
 $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
 
-- Total variation = regression (model) variation + residual variation
-
+-   Total variation = regression (model) variation + residual variation
 
 ## Sum of Squared Errors (SSE)
 
-- Reflects the "total" error in our model 
+-   Reflects the "total" error in our model
 
-- SSE = $\sum(Y_i - \hat{Y_i})^2$
+-   SSE = $\sum(Y_i - \hat{Y_i})^2$
 
-- To the extent that our actual values are close to the predicted values our model is doing better
+-   To the extent that our actual values are close to the predicted values our model is doing better
 
 ## MSE & RSE
 
-- Mean squared error is the "average" error in our model. RSE/sigma is our average error in original units. 
+-   Mean squared error is the "average" error in our model. RSE/sigma is our average error in original units.
 
-- Our estimate of sigma ($\hat{\sigma}$) is also known as Residual Standard Error (RSE), which is equal to the square root of the Mean Square Error (MSE).
+-   Our estimate of sigma ($\hat{\sigma}$) is also known as Residual Standard Error (RSE), which is equal to the square root of the Mean Square Error (MSE).
 
-- $\hat{\sigma}$ = $\sqrt{MSE}$ = $\sqrt{\frac{\sum(Y_i - \hat{Y_i})^2}{n-k-1}}$
-
+-   $\hat{\sigma}$ = $\sqrt{MSE}$ = $\sqrt{\frac{\sum(Y_i - \hat{Y_i})^2}{n-k-1}}$
 
 ## From population to sample
 
@@ -511,7 +500,7 @@ pop
 
 ```
 
--------------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -541,9 +530,6 @@ y = "Outcome (Y)"
 ) +
 theme_minimal(base_size = 14)
 ```
-
-
-
 
 ## From population to sample
 
@@ -607,8 +593,7 @@ ggplot(population, aes(x = y)) +
 
 ```
 
-
------------------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -634,18 +619,15 @@ ggplot(population, aes(x = x, y = y)) +
   theme_minimal(base_size = 14)
 ```
 
+------------------------------------------------------------------------
 
-------------
-
-What would happen if we increased sigma? 
-
+What would happen if we increased sigma?
 
 $$Y_i \sim \mathcal{N}(\mu, \sigma)$$
 
-
 $$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$
 
------------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -703,7 +685,7 @@ y = "Outcome (Y)"
 theme_minimal(base_size = 14)
 ```
 
-----------
+------------------------------------------------------------------------
 
 ```{r}
 sigma(sample_model2)
@@ -712,40 +694,31 @@ sigma(sample_model2)
 ```{r}
 sigma(sample_model1)
 ```
-- Our regression line better reflects the population in our first simulation compared to this last one
 
-
-## Sigma
-
-- Our sigma reflects the conditional spread in the population. If there is low sigma there is low noise. We can estimate the population relatively easy with less sample size. (signal vs noise)
-
-- Slope estimate is noisier and less precise with larger sigma, but not biased! If we sampled an infinite number of times the average slope would be correct
+-   Our regression line better reflects the population in our first simulation compared to this last one
 
 ## Sigma
 
-- Best to think of sigma as a conditional value that is dependent on what is in your model. As your model gets better, there is less unexplained noise in the data. 
+-   Our sigma reflects the conditional spread in the population. If there is low sigma there is low noise. We can estimate the population relatively easy with less sample size. (signal vs noise)
+
+-   Slope estimate is noisier and less precise with larger sigma, but not biased! If we sampled an infinite number of times the average slope would be correct
+
+## Sigma
+
+-   Best to think of sigma as a conditional value that is dependent on what is in your model. As your model gets better, there is less unexplained noise in the data.
 
 $$Y_i \sim \mathcal{N}(\mu, \sigma)$$
 
-$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$
-- We want smaller sigma, because that means a better model
+$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$ - We want smaller sigma, because that means a better model
 
 ## Sigma
 
-Reasons for larger vs smaller sigma are aplenty: 
-- Omitted variables 
-- Measurement error/poor experimental design
-- Population heterogeneity
-- Inherent randomness
-
+Reasons for larger vs smaller sigma are aplenty: - Omitted variables - Measurement error/poor experimental design - Population heterogeneity - Inherent randomness
 
 ## Wrap-up
 
-- Interpretation of coefficients
-- The line is made up of predictions
-- Predictions
-- Residuals
-- Sigma/SSE/MSE/RSE
-
-
-
+-   Interpretation of coefficients
+-   The line is made up of predictions
+-   Predictions
+-   Residuals
+-   Sigma/SSE/MSE/RSE

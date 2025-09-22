@@ -1,0 +1,533 @@
+---
+title: "Statistical Inference"
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+## This time
+
+-   Sampling distributions
+
+-   NHST
+
+-   Estimation as alternative
+
+-   Model comparison as second alternative
+
+## Estimation of what?
+
+-   We To do that we need to use an *Estimator* to get *Estimates*, which are our best guess of the population parameters.
+
+-   The population parameters are your *Estimand* -- what you want to know but have to estimate
+
+-   Picture of perfect cake (Estimand), Cake recipe (Estimator), your cake (Estimate)
+
+## How good our are estimates?
+
+-   Thus far we used the standard error to help us define the precision around the estimates... and I just gave you the equation
+
+-   Where does this come from, and how can I think about the process?
+
+-   Remember, we only get one shot to estimate the population.
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+# Load the ggplot2 library for plotting
+library(ggplot2)
+
+# --- 1. Define the True Population Model ---
+# These are the "true" parameters that we are trying to discover.
+true_beta0 <- 10
+true_beta1 <- 2
+true_sigma <- 15
+population_size <- 20000
+
+# Create the entire population based on the true model
+population <- data.frame(
+  x = runif(population_size, 0, 50)
+)
+population$y <- true_beta0 + true_beta1 * population$x + rnorm(population_size, mean = 0, sd = true_sigma)
+
+# --- 2. Draw a Random Sample from the Population ---
+sample_size <- 50
+sample_data <- population[sample(1:population_size, sample_size), ]
+
+# --- 3. Fit a Regression Model to the SAMPLE ---
+sample_model1 <- lm(y ~ x, data = sample_data)
+sample_beta0_hat <- coef(sample_model1)[1]
+sample_beta1_hat <- coef(sample_model1)[2]
+
+# --- 4. Visualize the Relationship ---
+
+pop <- ggplot(population, aes(x = y)) +
+  geom_density(fill = "lightblue", alpha = 0.8, color = "black") +
+  labs(
+    title = "Distribution of the Outcome Variable (Y) in the Population",
+    subtitle = "Y is determined by y = 10 + 2X + rnorm(0,15) ",
+    x = "Outcome (Y)",
+    y = "Density"
+  ) +
+  theme_minimal(base_size = 14)
+
+
+pop
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+ggplot(population, aes(x = x, y = y)) +
+# Plot the entire population as faint gray points
+geom_point(color = "gray80", alpha = 0.5) +
+# Add the TRUE population regression line in red
+geom_abline(
+intercept = true_beta0,
+slope = true_beta1,
+color = "black",
+size = 1.5,
+linetype = "dashed"
+) +
+# Highlight the points from our random sample in blue
+geom_point(data = sample_data, color = "blue", size = 2.5) +
+# Add the ESTIMATED sample regression line in blue
+geom_abline(
+intercept = sample_beta0_hat,
+slope = sample_beta1_hat,
+color = "green",
+size = 1.5
+) +
+labs(subtitle = "The green line is our sample estimate of the population (black)",
+x = "Predictor (X)",
+y = "Outcome (Y)"
+) +
+theme_minimal(base_size = 14)
+```
+
+## What we normally see
+
+```{r}
+#| code-fold: true
+ggplot(sample_data, aes(x = x, y = y))+
+geom_point() +
+geom_smooth(method='lm', se = FALSE) 
+```
+
+------------------------------------------------------------------------
+
+-   The major goal that we have in statistical inference is to make confident claims about the population based on a small representation of it, the sample. We use features of the sample (statistics) to inform us about features of the population (parameters).
+
+-   Any sample will be off the mark in how well it captures the important features of a population due to *sampling variability*. 
+
+- The sampling distribution tells us how far off the mark we can expect a sample statistic to be.
+
+
+## Sampling distribution - empirical
+
+- Run 5000 experiments from a known population. Make a distribution of the 5000 regression coefs to tell us what we should expect from any 1 experiment. 
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+
+# --- Step 1: Create a "True" Population ---
+
+true_intercept <- 10
+true_slope <- 2
+true_error_sd <- 15 # The true standard deviation of the residuals (sigma)
+population_size <- 20000
+
+# Create the entire population based on our true model
+set.seed(74) # for reproducibility
+population_data <- data.frame(
+  x = runif(population_size, 0, 50)
+)
+population_data$y <- true_intercept + true_slope * population_data$x + rnorm(population_size, mean = 0, sd = true_error_sd)
+
+
+
+# --- Step 2: Simulate the Process of Repeated Sampling ---
+
+n_simulations <- 5000 # Let's take 5000 different samples
+sample_size <- 100  # Each sample will have 10 data points
+all_my_slopes <- numeric(n_simulations) # An empty vector to store our results
+
+all_my_models <- data.frame(
+  intercept = numeric(n_simulations),
+  slope = numeric(n_simulations)
+)
+
+for (i in 1:n_simulations) {
+  # Draw one random sample of 100 data points from our population
+  current_sample <- population_data[sample(1:population_size, sample_size), ]
+  
+  # Fit a regression model to this one small sample
+  sample_model <- lm(y ~ x, data = current_sample)
+  
+  # Extract and store the estimated slope from this sample's model
+  all_my_models$intercept[i] <- coef(sample_model)[1]
+  all_my_models$slope[i] <- coef(sample_model)[2]
+}
+
+
+# --- Step 3: Build and Analyze the Sampling Distribution ---
+all_my_slopes <- all_my_models$slope
+mean_of_slopes <- mean(all_my_slopes)
+
+
+cat("The mean of our 2000 estimated slopes is:", round(mean_of_slopes, 4), "\n")
+
+simulated_standard_error <- sd(all_my_slopes)
+cat("The standard deviation of our slopes (the Simulated Standard Error) is:", round(simulated_standard_error, 4), "\n\n")
+
+
+```
+
+## Sampling distribution
+
+-   For each sample, we calculate a statistic, and then create a distribution of sample statistics
+
+```{r}
+#| code-fold: true
+# --- Step 5: Visualize Everything ---
+# A histogram clearly shows the distribution of our estimates.
+sampling_dist_plot <- ggplot(data.frame(slopes = all_my_slopes), aes(x = slopes)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "red", size = 1) +
+  geom_vline(xintercept = true_slope, color = "blue", linetype = "dashed", size = 1.5) +
+  labs(
+    title = "Sampling Distribution of the Slope (β₁)",
+    subtitle = paste("Based on", n_simulations, "samples of size", sample_size),
+    x = "Estimated Slope Coefficient (β̂₁)",
+    y = "Density"
+  ) + 
+  # geom_vline(2.014) + 
+  theme_minimal()
+
+print(sampling_dist_plot)
+
+```
+
+
+------------------------------------------------------------------------
+
+-   We normally do not have access to this data, but if we did we now have a *distribution* of plausible statistics drawn from the population.
+
+-   This distribution tells us what we would expect if we repeated the experiment again, and again, and again
+
+-   Range of scores are SUPER helpful to gauge our precision of the estimate.
+
+------------------------------------------------------------------------
+
+-   If we look at just one sample (like normal experiments), we won't exactly estimate the population intercept and slope. 
+
+
+```{r}
+#| code-fold: true
+# --- Step 4:Connecting to a Single Regression Summary ---
+summary(sample_model) # Using the last model from our loop
+
+```
+
+## Sampling distribution
+
+```{r}
+#| code-fold: true
+# --- Step 5: Visualize Everything ---
+# A histogram clearly shows the distribution of our estimates.
+sampling_dist_plot <- ggplot(data.frame(slopes = all_my_slopes), aes(x = slopes)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "red", size = 1) +
+  geom_vline(xintercept = true_slope, color = "blue", linetype = "dashed", size = 1.5) +
+  geom_vline(xintercept = 1.87082, color = "black", linetype = "solid", size = 1.5) +
+  labs(
+    title = "Sampling Distribution of the Slope (β₁)",
+    subtitle = paste("Based on", n_simulations, "samples of size", sample_size),
+    x = "Estimated Slope Coefficient (β̂₁)",
+    y = "Density"
+  ) + 
+  # geom_vline(2.014) + 
+  theme_minimal()
+
+print(sampling_dist_plot)
+
+```
+
+## Sampling distribution
+
+-   Can be for any statistic. Mean, SD, r, b, etc.
+
+http://shiny.calpoly.sh/Sampling_Distribution/
+
+-   If unbiased, the mean of the sampling distribution is equal to the population parameter
+
+-   The standard deviation of the sampling distribution is called standard error, and helps us gauge our precision of the statistic.
+
+
+## Sampling distribution
+
+-   Given we don't have access to the population, nor do we have the time and resources to conduct thousands of replication studies, what do we do?
+
+-   Our sampling distribution will be theoretical... and it will be normal.
+
+## Central limit theorm take 2
+
+-   Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal.
+
+-   we previously used this to show that the normal was everywhere. Here we are going to use it to define the shape of our sampling distribution.
+
+-   The sample size necessary to be "approximately normal" depends on the nature of the underlying data. The less normal it is, the larger the sample size necessary in order for the sampling distribution of the means to become normal.
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+# Load the required libraries
+library(ggplot2)
+library(patchwork)
+
+# --- 1. Create a Skewed Population ---
+# We'll use an exponential distribution, which is very non-normal.
+population_size <- 100000
+population <- data.frame(value = rexp(population_size, rate = 0.5))
+
+# --- 2. Set Simulation Parameters ---
+sample_size <- 40       # The size of each sample we draw from the population
+n_simulations <- 5000  # The number of samples we will take
+
+# Create a vector to store the mean of each sample
+sample_means <- numeric(n_simulations)
+
+# --- 3. Run the Simulation ---
+for (i in 1:n_simulations) {
+  # Draw a random sample from the population
+  my_sample <- sample(population$value, size = sample_size)
+  
+  # Calculate the mean of that sample and store it
+  sample_means[i] <- mean(my_sample)
+}
+
+# Create a data frame of the results
+sampling_dist_data <- data.frame(mean = sample_means)
+
+# --- 4. Visualize the Results ---
+
+# Plot 1: The original, skewed population distribution
+plot_population <- ggplot(population, aes(x = value)) +
+  geom_density(fill = "lightcoral", alpha = 0.8) +
+  labs(title = "1. Population Distribution",
+       subtitle = "Highly skewed (Exponential)",
+       x = "Value", y = "Density") +
+  theme_minimal(base_size = 14)
+
+# Plot 2: The distribution of sample means 
+plot_sampling_dist <- ggplot(sampling_dist_data, aes(x = mean)) +
+  geom_density(fill = "skyblue", alpha = 0.8) +
+  # Overlay a perfect normal curve for comparison
+  stat_function(fun = dnorm, args = list(mean = mean(sample_means), sd = sd(sample_means)),
+                color = "red", size = 1) +
+  labs(title = "2. Distribution of Means from samples",
+       x = "Sample Mean", y = "Density") +
+  theme_minimal(base_size = 14)
+
+# Combine the plots side-by-side
+plot_population + plot_sampling_dist
+```
+
+## Sampling distribution
+
+- Based on central limit theorem we know that the shape will be normal. 
+
+- We know the area under the curve and other properties about the normal based on PDF
+
+- However, we dont have time and resources to sample again and again, so how does this help us? 
+
+## Sampling mean = population mean
+
+
+$$\begin{equation}
+\bar{x} = \frac{(x_1 + x_2 + ... x_N)}{N} \\
+E(\bar{x}) = E\bigg(\frac{(x_1 + x_2 + ... x_N)}{N}\bigg) \\
+E(\bar{x}) = \frac{E(x_1) + E(x_2) + ... E(x_N)}{E(N)} \\
+E(\bar{x}) = \frac{\mu + \mu + ...\mu}{N} \\
+E(\bar{x}) = \frac{N\mu}{N} \\
+E(\bar{x}) = \mu
+\end{equation}$$
+
+
+
+## sampling SD ≠ population SD
+
+- The dispersion parameter is what we are going to be focused on the most rather than the mean. 
+
+- The SD of the sampling distribution is the standard error of the statistic. 
+
+- The width of the sampling distribution depends on the population variance but also the sample size! 
+
+- We have an estimate of population variance and sample size! 
+
+-----------
+
+```{r}
+#| code-fold: true
+library(dplyr)
+
+# --- Step 1: Create a "True" Population ---
+
+true_population_mean <- 20
+true_population_sd <- 5
+population_size <- 20000
+
+# Create the population data (a skewed gamma distribution)
+set.seed(456) # for reproducibility
+population_data <- rgamma(population_size, shape = (true_population_mean^2)/(true_population_sd^2), scale = (true_population_sd^2)/true_population_mean)
+
+
+# --- Step 2: Simulate Sampling for DIFFERENT Sample Sizes ---
+
+n_simulations <- 5000 # We'll run 5000 simulations for each sample size
+sample_sizes <- c(5, 30, 100)  # The different sample sizes we want to test
+
+# Create an empty data frame to store all of our results
+results_df <- data.frame()
+
+# Loop through each sample size we want to test
+for (n in sample_sizes) {
+  
+  # Create a temporary vector to store the means for the current sample size
+  current_means1 <- numeric(n_simulations)
+  
+  for (i in 1:n_simulations) {
+    # Draw one random sample of size 'n'
+    current_sample1 <- sample(population_data, n)
+    
+    # Calculate the mean of this sample and store it
+    current_means1[i] <- mean(current_sample1)
+  }
+  
+  # Add the means for this sample size to our main results dataframe
+  results_df <- bind_rows(results_df, data.frame(mean = current_means1, sample_size = n))
+}
+
+# Convert sample_size to a factor for better plotting
+results_df$sample_size <- as.factor(results_df$sample_size)
+
+#  Visualize the Sampling Distributions Side-by-Side ---
+sampling_dist_plot <- ggplot(results_df, aes(x = mean)) +
+  # Create a separate histogram plot for each sample size
+  facet_wrap(~ sample_size, scales = "free_y") + 
+  geom_histogram(aes(y = ..density..), bins = 40, fill = "skyblue", color = "black") +
+  geom_density(color = "red", size = 1) +
+  # Add a vertical line for the true population mean on all plots
+  geom_vline(xintercept = true_population_mean, color = "blue", linetype = "dashed", size = 1.2) +
+  labs(
+    title = "Sampling Distribution of the Mean for Different Sample Sizes",
+    subtitle = "Drawn from the same skewed population. The blue line is the true population mean.",
+    x = "Sample Mean",
+    y = "Density"
+  ) +
+  theme_minimal()
+
+print(sampling_dist_plot)
+```
+
+-------------
+
+- We can see this too by sampling randomly from a known population
+
+```{r}
+
+sd(replicate(1000, mean(rnorm(5, 100, 15))))
+sd(replicate(1000, mean(rnorm(25, 100, 15))))
+sd(replicate(1000, mean(rnorm(100, 100, 15))))
+sd(replicate(1000, mean(rnorm(1000, 100, 15))))
+
+```
+
+## Sampling distribution standard error
+
+- mean $SE_m = \frac{\hat{\sigma}}{\sqrt{N}}$
+
+- sd $SE_s = \frac{\hat{\sigma}}{\sqrt{2(n-1)}}$
+
+- r $$SE_r =\sqrt{\frac{1-r^2}{n-2}}$$
+
+- regression $$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
+
+
+## sampling distribution of the mean
+
+
+```{r}
+sd(replicate(1000, mean(rnorm(25, 100, 15))))
+```
+
+```{r}
+sd(rnorm(25, 100, 15))/sqrt(25)
+```
+
+```{r}
+set.seed(74)
+sd(rnorm(25, 100, 15))/sqrt(25)
+```
+
+- Sometimes we are unlucky. The good thing (?) is we will never know. 
+
+## sampling distribution of regression coefficient
+
+
+```{r}
+sd(all_my_slopes)
+```
+
+```{r}
+summary(sample_model)
+```
+
+
+## SE implies different regression lines
+
+```{r}
+
+regression_lines_plot <- ggplot(current_sample, aes(x = x, y = y)) +
+  geom_point(alpha = 0.6) +
+  # Add the 50 regression lines from our first 50 simulations
+  geom_abline(
+    data = all_my_models[1:50, ], 
+    aes(intercept = intercept, slope = slope), 
+    color = "gray", alpha = 0.5
+  ) +
+  # Add the "true" population line in blue so we can see how our samples vary around it
+  geom_abline(intercept = true_intercept, slope = true_slope, color = "blue", size = 1.5) +
+  labs(
+    title = "Regression Lines from 50 Different Samples",
+    x = "Predictor (x)",
+    y = "Outcome (y)"
+  ) +
+  theme_minimal()
+
+print(regression_lines_plot)
+```
+
+## Regression Band
+
+```{r}
+#| code-fold: true
+ggplot(sample_data, aes(x = x, y = y))+
+geom_point() +
+geom_smooth(method='lm', se = TRUE) +
+  theme_minimal()
+```
+
+
+## Confidence intervals

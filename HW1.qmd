@@ -5,110 +5,109 @@ format: html
 
 # Instructions
 
-Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include **_both_** the .qmd or .Rmd and knitted .html files. Please turn in both documents to the **ASSIGNMENTS** page on Canvas.
+Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include ***both*** the .qmd or .Rmd and knitted .html files. Please turn in both documents to the **ASSIGNMENTS** page on Canvas.
 
 Put all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that *outside* of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
 
-You are allowed to Google or use your preferred AI-overlord.  *However*, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a **working link** to the website you used. You don't need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with. 
+You are allowed to Google or use your preferred AI-overlord. *However*, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a **working link** to the website you used. You don't need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.
 
-In the instructions, when it says **_by hand_**, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation. 
+In the instructions, when it says ***by hand***, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation.
 
 **Data:** We will use the dataset referred to as [`homework-world`](https://raw.githubusercontent.com/josh-jackson/Quant_I_2025/refs/heads/main/homework-world.csv). This dataset is similar to one you've seen in class and contains a new variable called `World`. So-called "first world" countries (coded 1) are those that were aligned with the United States after World War II (e.g., members of NATO) or were considered to be clearly in the U.S. sphere of influence. "Second world" countries (coded 2) are former members of the Soviet Union or countries considered to have been clearly in the Soviet Union’s sphere of influence. "Third world" countries (coded 3) include those considered by the United Nations to be among the least developed countries in the world. The remaining countries are coded 4 for this variable.
 
 Good luck!
 
 ## Setup
-In the first code chunk, please 1) load packages you will use in the homework and 2) import the `homework-world.csv` file. Name the data.frame whatever you want. 
 
+In the first code chunk, please 1) load packages you will use in the homework and 2) import the `homework-world.csv` file. Name the data.frame whatever you want.
 
 ## Question 1
-Calculate descriptive statistics for each of the 4 `World` groups. That is, you should get the mean `GDP` for countries that are coded as 1 in the `World` variable, mean `GDP` for countries coded as 2 in the `World` variable etc. This should include (it's OK if more are included, but at least these): 
 
-- mean
-- median
-- range
-- min & max
-- standard deviation
-- skew & kurtosis
+Calculate descriptive statistics for each of the 4 `World` groups. That is, you should get the mean `GDP` for countries that are coded as 1 in the `World` variable, mean `GDP` for countries coded as 2 in the `World` variable etc. This should include (it's OK if more are included, but at least these):
+
+-   mean
+-   median
+-   range
+-   min & max
+-   standard deviation
+-   skew & kurtosis
 
 ## Question 2
+
 Standardize all numeric variables in the dataset, and re-run your descriptive statistics. Are there any variables that you would be concerned about? If so, which ones and why? If not, why are you not concerned?
 
-
 ## Question 3
+
 Calculate the population variance and standard deviations *by hand* (aka don't use a particular variance or standard deviation function) for any 3 numeric variables.
 
-Note the `na.omit()` function can be handy with missing data. This will get rid of any `NA` values, and make your calculations easier. 
-
+Note the `na.omit()` function can be handy with missing data. This will get rid of any `NA` values, and make your calculations easier.
 
 ## Question 4
 
 Create a violin plot (a new and improved box plot) for the `Corruption` variable, with plots for the four groups defined by the new variable, `World.` What does this graph tell you, in broad strokes, about:
 
-  - group differences in corruption central tendency?
-  - group differences in corruption variability?
-  - the presence of outliers within each group?
-
+-   group differences in corruption central tendency?
+-   group differences in corruption variability?
+-   the presence of outliers within each group?
 
 ## Question 5
-#### Part A
-Calculate the correlation for `Happiness` & `Freedom`, `Happiness` & `Support`, and finally `Freedom` & `Support`. 
 
+#### Part A
+
+Calculate the correlation for `Happiness` & `Freedom`, `Happiness` & `Support`, and finally `Freedom` & `Support`.
 
 #### Part B
-Now make a scatterplot for each of these 3 relationships. Include a linear best fit "regresion" line (a straight line). 
 
-   - How does the best fit lines correspond to the correlations that you got in Part A of this question? 
-   
-   - Does a linear relationship seem to describe any of the pairwise relationships?
-   
+Now make a scatterplot for each of these 3 relationships. Include a linear best fit "regresion" line (a straight line).
+
+-   How does the best fit lines correspond to the correlations that you got in Part A of this question?
+
+-   Does a linear relationship seem to describe any of the pairwise relationships?
+
 ## Question 6
 
 #### Part A
-Calculate the regression coefficient $\hat{\beta}$ *by hand* for `Happiness` & `Freedom` with `Happiness` as the DV, and `Freedom` as the IV. 
 
-- Interpret the regression coefficient
+Calculate the regression coefficient $\hat{\beta}$ *by hand* for `Happiness` & `Freedom` with `Happiness` as the DV, and `Freedom` as the IV.
 
-- Without doing any new calculations, assume that the regression coefficient you just calculated was the output of a standardized regression i.e., both your Y and X were standardized. Interpret this regression coefficient. 
+-   Interpret the regression coefficient
+
+-   Without doing any new calculations, assume that the regression coefficient you just calculated was the output of a standardized regression i.e., both your Y and X were standardized. Interpret this regression coefficient.
 
 #### Part B
-Calculate the standard error of the regression coefficient 'by hand' using sigma. 
+
+Calculate the standard error of the regression coefficient 'by hand' using sigma.
 
 ## Question 7
 
-Using functions presented in class, create a data frame that includes the predicted/fitted values and the residuals. Calculate the mean and SD of each of these values. 
+Using functions presented in class, create a data frame that includes the predicted/fitted values and the residuals. Calculate the mean and SD of each of these values.
 
-- What statistic is the mean of fitted values equal to? 
+-   What statistic is the mean of fitted values equal to?
 
-- What statistic does the the SD of the residuals conceptually equal? 
+-   What statistic does the the SD of the residuals conceptually equal?
 
+## Question 8
 
-## Question 8 
-
-Graph the PDF and CDF of Y ~ t(3, 3, .5)
+Graph the PDF and CDF of Y \~ t(3, 3, .5)
 
 ## Question 9
 
 Psychological and educational tests, including the MMPI (Minnesota Multiphasic Personality Inventory), are often designed so they have a mean of 50 and a standard deviation of 10, and assumed to be normally distributed.
 
--  The MMPI says that scores that are two standard deviations or more above the mean may indicate pathology. Among a thousand people, how many would be expected to have scores two standard deviations or more above the mean?
+-   The MMPI says that scores that are two standard deviations or more above the mean may indicate pathology. Among a thousand people, how many would be expected to have scores two standard deviations or more above the mean?
 
--  What proportion would be expected to score 68 or above?
+-   What proportion would be expected to score 68 or above?
 
--  What proportion would be expected to score between 53 and 63?
+-   What proportion would be expected to score between 53 and 63?
 
-- What value corresponds to the 89th percentile of scores? 5th percentile?  
+-   What value corresponds to the 89th percentile of scores? 5th percentile?
 
-## Question 10 
+## Question 10
 
 Filter your `World` variable to set up a regression where you are comparing whether world coded 1 differs from world coded 3 on Freedom.
 
-- Interpret the intercept
-- Interpret the regression coefficient
-- What is the predicted value for group coded 1, group coded 3? 
-- What would you change if you wanted your intercept to have a different interpretation? 
-- What effect size metric would you use to describe your results? 
-
-
-
-
+-   Interpret the intercept
+-   Interpret the regression coefficient
+-   What is the predicted value for group coded 1, group coded 3?
+-   What would you change if you wanted your intercept to have a different interpretation?
+-   What effect size metric would you use to describe your results?

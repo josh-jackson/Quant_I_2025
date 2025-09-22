@@ -30,9 +30,7 @@ $$Y_i \sim \mathcal{N}(\mu, \sigma)$$
 
 -   We assume the DV, $Y$ has a DGP that is Gaussian normal, made up of $Y_i$, with a mean of $\mu$ and a standard deviation of $\sigma$
 
-$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$
-- Almost all the time we will never and can never know what the true DPG looks like. Normal typically serves as our default (based on how we measure or DV). 
-
+$$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma)$$ - Almost all the time we will never and can never know what the true DPG looks like. Normal typically serves as our default (based on how we measure or DV).
 
 ## What are probability distributions?
 
@@ -101,17 +99,13 @@ ggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle("PDF of Normal Dist
   ylab("Density")
 ```
 
-
 ## Probability Density Function (PDF)
-
 
 -   The value of the PDF at any specific point is not a probability. The probability of observing exactly one value is zero.
 
 -   Probability is represented by the area under the curve over a range (density)
 
-
 ## Cumulative distribtuion function (CDF)
-
 
 ```{r}
 #| code-fold: true
@@ -127,12 +121,11 @@ ggplot(cdf_df, aes(x = x, y = cdf)) +
   xlab("Number of Successes") + ylab("Cumulative Probability")
 ```
 
-----------
+------------------------------------------------------------------------
 
 -   The CDF applies to both discrete and continuous variables. It gives the "running total" of probability. The CDF at a value x is the probability of observing an outcome less than or equal to x.
 
 -   Will use to calculate p-values and percentiles or quantiles
-
 
 ------------------------------------------------------------------------
 
@@ -146,19 +139,17 @@ ggplot(norm_dat) + geom_line(aes(x = q, y = cdf)) +  ggtitle("CDF of normal Dist
 
 ## Binomial Distribution
 
-- Theoretical probability distribution appropriate when modeling the expected *binary* outcomes, X, across N trials, with the same probability of success (p) across independent trials.
+-   Theoretical probability distribution appropriate when modeling the expected *binary* outcomes, X, across N trials, with the same probability of success (p) across independent trials.
 
 PMF: $$P(X = x|n,p) = \frac{N!}{X!(N-X)!}p^X(1-p)^{N-X}$$
 
-- X = Number of successes p = probability of success n = number of trials
-
+-   X = Number of successes p = probability of success n = number of trials
 
 ## Binomial Distribution
 
-- First part of equation tells you the number of ways to select k success from a set of N, where order doesn't matter. Second tells you the probability of any given sequence. By multiplying the number of ways an event can happen by the probability of any single one of those ways, you get the total overall probability.
+-   First part of equation tells you the number of ways to select k success from a set of N, where order doesn't matter. Second tells you the probability of any given sequence. By multiplying the number of ways an event can happen by the probability of any single one of those ways, you get the total overall probability.
 
-
-- 3 ways of flipping 1 success with fair coin out of three trials (001,010,100) * .125  = .375
+-   3 ways of flipping 1 success with fair coin out of three trials (001,010,100) \* .125 = .375
 
 ------------------------------------------------------------------------
 
@@ -175,10 +166,7 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
   ylab("Probability")
 ```
 
-
-
-
----------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -240,7 +228,6 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
   ylab("Probability") +scale_x_continuous(breaks = seq(0, 10, by = 1))
 ```
 
-
 ## Binomial Distribution
 
 -   Our mean and variance are related in the binomial distribution
@@ -249,15 +236,16 @@ E(X) = Np
 
 Var(X) = Np(1-p)
 
-- This will have consequences when we use the binomial as our DGP
+-   This will have consequences when we use the binomial as our DGP
 
 ## History of Binomial
 
 -   The foundation of probability theory based ways to win gambling! ("problem of points")
+
 -   Built upon Pascals's triangle, which was a way to describe the binomial coefficient (the number of ways k successes can occur in n trials)
 
-
 -   Laid the groundwork for setting up expected values $E(x)$ which are long run averages
+
 -   Jacob Bernoulli took Pascal's binomial coefficient and ran with it, using it to set up the Law of Large Numbers (more later; as you increase the size of a random sample, its average will get closer and closer to the population)
 
 ## R functions
@@ -324,9 +312,9 @@ dbinom asks: What is the probability of getting exactly X successes (uses PMF)? 
 
 ------------------------------------------------------------------------
 
-- qbinom is similar but instead of number of success given, the percent/quantiles are provided. Th
+-   qbinom is similar but instead of number of success given, the percent/quantiles are provided. Th
 
-- How many successes (or fewer) is associated with the 75% percentile?
+-   How many successes (or fewer) is associated with the 75% percentile?
 
 ```{r}
 #quantile
@@ -343,7 +331,7 @@ qbinom(p = 0.7482, size = 20, prob = 0.5)
 
 ------------------------------------------------------------------------
 
-- rbinom does random draws from the probability distribution. You pick the binomial distribution Size(N) and p, and then how many draws you want from it, n. 
+-   rbinom does random draws from the probability distribution. You pick the binomial distribution Size(N) and p, and then how many draws you want from it, n.
 
 ```{r}
 #random
@@ -352,7 +340,7 @@ rbinom(n = 100, size = 20, prob = .5)
 
 ------------------------------------------------------------------------
 
-- What if we want 20 samples of 100 people from some distribution to mimic what it would be like if we repeated our experiment multiple times?
+-   What if we want 20 samples of 100 people from some distribution to mimic what it would be like if we repeated our experiment multiple times?
 
 ```{r}
 #| code-fold: true
@@ -420,7 +408,7 @@ $$X \sim \text{Bern}(p)$$
 
 $$X \sim \text{Bin}(1, p =  \beta_0 + \beta_1 X_i)$$
 
---------------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -435,12 +423,11 @@ ggplot(pmf_df, aes(x = x, y = pmf)) +
   ylab("Probability") +scale_x_continuous(breaks = seq(0, 20, by = 1)) 
 ```
 
-
 ## Poisson
 
 -   What if you have not single success, but *counts* of successes?
 -   Can be thought of as a binomial that has infinite trials and when occurrence/success is rare (i.e. p is small).
--   Can think of this as the average "rate" often across time or space. 
+-   Can think of this as the average "rate" often across time or space.
 
 $$X \sim \text{Pois}(\lambda)$$
 
@@ -498,7 +485,7 @@ ggplot(poisson_df, aes(x = k, y = probability)) +
 
 ## History of Poisson
 
--   How many wrongful convictions in France. One of the first instances of social science 
+-   How many wrongful convictions in France. One of the first instances of social science
 
 -   Popularized via Prussian soldier donkey deaths. Number of soldiers killed by being kicked by a horse each year in each of 14 cavalry corps over a 20-year period
 
@@ -544,8 +531,8 @@ ggplot(nb_df, aes(x = k, y = probability)) +
 ## Negative binomial distribution
 
 -   Sometimes called Gamma Poisson.
--   Negative binomial distribution is a mixture between the poisson and another distribution, gamma. 
-- Lambda (λ), is not treated as a fixed number but is itself a random variable that follows a Gamma distribution
+-   Negative binomial distribution is a mixture between the poisson and another distribution, gamma.
+-   Lambda (λ), is not treated as a fixed number but is itself a random variable that follows a Gamma distribution
 
 $$P(X=x) = \frac{\Gamma(x+\theta)}{\Gamma(x+1)\Gamma(\theta)} \left(\frac{\theta}{\mu+\theta}\right)^\theta \left(\frac{\mu}{\mu+\theta}\right)^x$$
 
@@ -565,7 +552,7 @@ ggplot(norm_dat) + geom_line(aes(x = x, y = pdf)) +  ggtitle("PDF of Normal Dist
 
 $$f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$$
 
-- Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal.
+-   Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal.
 
 ## Central limit theorm, take 1
 
@@ -625,11 +612,9 @@ plot_population + plot_sampling_dist
 
 ## Normal (Gaussian) distrbution
 
-- One of the many reasons we like it is because it shows up all the time in nature. Randomness + More randomness leads to normal distribution. 
+-   One of the many reasons we like it is because it shows up all the time in nature. Randomness + More randomness leads to normal distribution.
 
-- The CLT allows the use of normal distribution methods for statistical inference (like confidence intervals and hypothesis tests), regardless of the underlying population's shape
-
-
+-   The CLT allows the use of normal distribution methods for statistical inference (like confidence intervals and hypothesis tests), regardless of the underlying population's shape
 
 ## Normal (Gaussian) distribution
 
@@ -638,7 +623,6 @@ $$X \sim \mathcal{N}(\mu, \sigma^2)$$
 $$f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$$
 
 $$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)$$
-
 
 ## Standardized normal
 
@@ -798,8 +782,7 @@ ggplot(normal_df, aes(x = x, y = density)) +
   theme_minimal(base_size = 14)
 ```
 
-
-----------------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -855,10 +838,6 @@ ggplot(normal_df, aes(x = x, y = density)) +
   ) +
   theme_minimal(base_size = 14)
 ```
-
-
-
-
 
 ------------------------------------------------------------------------
 
@@ -967,7 +946,6 @@ ggplot(normal_df, aes(x = x, y = density)) +
 
 What Z-score corresponds to the \_\_\_th percentile?
 
-
 ```{r}
 qnorm(.95)
 ```
@@ -976,7 +954,6 @@ qnorm(.95)
 qnorm(.975)
 ```
 
-
 ```{r}
 qnorm(.025)
 ```
@@ -984,7 +961,6 @@ qnorm(.025)
 ```{r}
 qnorm(.999999) # one in a million
 ```
-
 
 ------------------------------------------------------------------------
 
@@ -1004,8 +980,7 @@ rnorm(n = 10, mean = 100, sd = 15)
 
 ## t-distribution
 
-$$X \sim \mathcal{t}(\nu)$$ 
-$$X \sim \mathcal{t}(\nu, \mu, \sigma^2)$$ - New parameter, nu
+$$X \sim \mathcal{t}(\nu)$$ $$X \sim \mathcal{t}(\nu, \mu, \sigma^2)$$ - New parameter, nu
 
 -   Like the normal, but with larger tails.
 
@@ -1125,10 +1100,7 @@ ggplot(simulation_results, aes(x = t_stat)) +
   theme(legend.position = "top")
 ```
 
-
-
---------------
-
+------------------------------------------------------------------------
 
 ```{r}
 pt(1.96, df = 1)
@@ -1194,15 +1166,13 @@ ggplot(plot_data_cdf, aes(x = x, y = cumulative_prob, color = distribution)) +
 
 -   We will use t-distributions a lot (coefs, CIs)! It is used when we have 1) small samples and/or 2) unknown population variance. The latter is almost always true.
 
-- The sample SD can be (s) can be a  poor estimate of the true SD (σ). Just by random chance, you can get a sample where the data points are unusually close together, resulting in an s that is much smaller than the true σ.
+-   The sample SD can be (s) can be a poor estimate of the true SD (σ). Just by random chance, you can get a sample where the data points are unusually close together, resulting in an s that is much smaller than the true σ.
 
-- When this happens, the denominator of the standardized score becomes very small, and thus produces a very large value
-
+-   When this happens, the denominator of the standardized score becomes very small, and thus produces a very large value
 
 ## History of the t-distribution
 
-- Gosset, Guinness, and Student 
-
+-   Gosset, Guinness, and Student
 
 ## F-distribution
 
@@ -1410,13 +1380,12 @@ ggplot() +
 
 -   Goodness of fit (observed counts differ from expected)
 
-------------
+------------------------------------------------------------------------
 
 ![](dist.png)
 
-
 ## Wrap up
 
-- PMF, PDF, CDF
-- r functions
-- Binomial, Bernoulli, Poisson, negative Binomial, Normal, t, F, Chi-square.
+-   PMF, PDF, CDF
+-   r functions
+-   Binomial, Bernoulli, Poisson, negative Binomial, Normal, t, F, Chi-square.

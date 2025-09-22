@@ -1,0 +1,399 @@
+---
+title: "homework 1 key"
+format: html
+---
+
+## NOTE
+
+These answers are only one way to do it. The great thing about R is that there are many roads to the right answer. You do not need to have exactly the same code to get full points. The key is here to show you merely one solution of the homework.
+
+```{r}
+
+set.seed(55555)
+
+##Load packages
+library(tidyverse)
+library(psych)
+library(broom)
+library(emmeans)
+```
+
+## Load data
+
+```{r data}
+data <- read.csv("homework-world.csv")
+data$World <- as.factor(data$World)
+```
+
+## Q1 Calculate descriptive statistics for each of the 4 World groups. That is, you should get the mean GDP for countries that are coded as 1 in the World variable, mean GDP for countries coded as 2 in the World variable etc. This should include (it’s OK if more are included, but at least these): - mean - median - range - min & max - standard deviation - skew & kurtosis
+
+For this question, you can use various coding approaches to calculate each of the descriptives separately for each group.
+
+```{r q1}
+##Create a list of the variables we are interested in
+continuous_vars <- c("Happiness", "GDP", "Support", "Life", "Freedom", "Generosity", "Corruption")
+
+##Define a function to calculate all our descriptive statistics within a given World group 
+##for a given variable
+stats <- function(data, world_group, variable){
+  ##Filter dataset to only the World group of interest
+  data <- data %>%
+    filter(World == world_group)
+  
+  ##Calculate descriptive statistics on the variable of interest
+  stat <- data.frame(mean = mean(na.omit(data[,paste0(variable)])),
+                     median = median(na.omit(data[,paste0(variable)])),
+                     range = max(na.omit(data[,paste0(variable)])) 
+                           - min(na.omit(data[,paste0(variable)])),
+                     min = min(na.omit(data[,paste0(variable)])),
+                     max = max(na.omit(data[,paste0(variable)])),
+                     sd = sd(na.omit(data[,paste0(variable)])),
+                     ##skew and kurtosis = loaded from "psych" package
+                     skew = skew(na.omit(data[,paste0(variable)])),
+                     kurtosis = kurtosi(na.omit(data[,paste0(variable)])))
+  ##Add variable name
+  rownames(stat) <- variable
+  return(stat)
+}
+
+##First World descriptives
+###NOTE: This code will use the function above to do the same thing as calculating
+###mean(na.omit(filter(data, World == 1)))$Happiness
+###median(na.omit(filter(data, World == 1)))$Happiness
+###and so on..., but more efficiently
+World1_descriptives <- data.frame()
+for(i in continuous_vars){
+  World1_descriptives <- rbind(World1_descriptives, stats(data, 1, i))
+}
+
+##Second World descriptives
+World2_descriptives <- data.frame()
+for(i in continuous_vars){
+  World2_descriptives <- rbind(World2_descriptives, stats(data, 2, i))
+}
+
+##Third World descriptives
+World3_descriptives <- data.frame()
+for(i in continuous_vars){
+  World3_descriptives <- rbind(World3_descriptives, stats(data, 3, i))
+}
+
+##Other descriptives
+World4_descriptives <- data.frame()
+for(i in continuous_vars){
+  World4_descriptives <- rbind(World4_descriptives, stats(data, 4, i))
+}
+
+##Print descriptives for each of the 4 groups
+World1_descriptives
+World2_descriptives
+World3_descriptives
+World4_descriptives
+
+##NOTE: The psych package also has a very handy function named describeBy() that will give you 
+##all the same stuff as the code above (plus some nice bonus info!):
+##describeBy(data[,c(continuous_vars, "World")], group = data$World)
+```
+
+##Q2 Standardize all numeric variables in the dataset, and re-run your descriptive statistics. Are there any variables that you would be concerned about? If so, which ones and why? If not, why are you not concerned?
+
+```{r Q2 Code}
+#Convert unstandardized variables into standardized variables 
+#using the "scale()" function:
+data_z <- mutate_if(data, is.numeric, scale)
+
+
+#Descriptive statistics of standardized variables for the whole data set:
+describe(data_z)
+
+#Descriptive statistics of standardized variables grouped by World:
+describeBy(x = data_z, group = data_z$World)
+```
+
+This is an open question, so a number of responses are valid.
+
+##Q3 Calculate the population variance and standard deviations by hand (aka don’t use a particular variance or standard deviation function) for any 3 numeric variables.
+
+Note the na.omit() function can be handy with missing data. This will get rid of any NA values, and make your calculations easier.
+
+Calculate the population variance using the formula sum((X - M)\^2)/N. Then, take the square root of the variance to get the population standard deviation. Because this is a population variance, N is used as the denominator rather than N - 1 (as in the sample variance).
+
+```{r q3}
+##Define a function to calculate the population variance and standard deviation by hand
+dispersion <- function(variable){
+  x <- na.omit(data[,variable])
+  variance <- sum((x - mean(x))^2)/length(x)
+  sd <- sqrt(variance)
+  
+  result <- data.frame(variance, sd)
+  rownames(result) <- variable
+  return(result)
+}
+
+##Run the function on 3 variables, save each result to a dataframe
+variances <- data.frame()
+for(i in c("Happiness", "GDP", "Support")){
+  variances <- rbind(variances, dispersion(i))
+}
+variances
+```
+
+##Q4 Create a violin plot (a new and improved box plot) for the Corruption variable, with plots for the four groups defined by the new variable, World. What does this graph tell you, in broad strokes, about:
+
+1.  group differences in corruption central tendency?
+2.  group differences in corruption variability?
+3.  the presence of outliers within each group?
+
+```{r Q4 Code}
+#Violin Plot Code:
+ggplot(data = data, aes(x = World, y = Corruption, fill = World))+
+  geom_violin()+
+  theme_classic()
+```
+
+1.  As reflected in the medians, relative to the differences between other country groups, the central tendency for “first-world” countries is substantially lower than the other groups.
+
+2.  Relative to the differences between other country groups, there is substantially more variation in the Corruption distribution for “first-world” countries than the other groups.
+
+3.  Second, Third, and fourth world counties appear to have outliers which are scewing the data. The outliers in third and fourth world countries appear to be more extreme.
+
+##Q5 ##Part A Calculate the correlation for Happiness & Freedom, Happiness & Support, and finally Freedom & Support.
+
+###Part B Now make a scatterplot for each of these 3 relationships. Include a linear best fit “regresion” line (a straight line). - How does the best fit lines correspond to the correlations that you got in Part A of this question? - Does a linear relationship seem to describe any of the pairwise relationships?
+
+```{r q5}
+##Calculate 3 correlations
+cor(data$Happiness, data$Freedom, use = "pairwise")
+cor(data$Happiness, data$Support, use = "pairwise")
+cor(data$Freedom, data$Support, use = "pairwise")
+
+##Plot the three relationships
+###Happiness ~ Freedom
+ggplot(aes(x = Happiness, y = Freedom), data = data)+
+  geom_point()+
+  geom_smooth(method = "lm", se = F)
+
+###Happiness ~ Support
+ggplot(aes(x = Happiness, y = Support), data = data)+
+  geom_point()+
+  geom_smooth(method = "lm", se = F)
+
+###Freedom ~ Support
+ggplot(aes(x = Freedom, y = Support), data = data)+
+  geom_point()+
+  geom_smooth(method = "lm", se = F)
+```
+
+-   The positive slope of the three regression lines corresponds to the positive correlations between eacah pair of variables. The spread of datapoints around the regression line is (a) tightest for Happiness and Support showing a strong correlation, (b) slightly less tight for Happiness and Freedom showing a slightly weaker correlation, (c) least tight for Freedom and Support showing the weakest correlation.
+
+-   Each of the three pairwise relationships seems to be captured by a positive linear relationship. For the relationship between Freedom and Support, a large portion of the data are in the upper right quadrant of the scatterplot and relatively less data is in the lower quadrants, making the linear relationship somewhat less clear.
+
+##Q6
+
+####Part A Calculate the regression coefficient by hand for Happiness & Freedom with Happiness as the DV, and Freedom as the IV.
+
+Interpret the regression coefficient
+
+Without doing any new calculations, assume that the regression coefficient you just calculated was the output of a standardized regression i.e., both your Y and X were standardized. Interpret this regression coefficient.
+
+The formula for the beta1 regression coefficient is (rxy \* Sy) / Sx:
+
+```{r Q6a Code}
+#Calculation of the Regression Coefficient:
+
+#Correlation of Freedom and Happiness:
+rFreeHapp <- cor(data$Freedom, data$Happiness, use = "pairwise")
+
+#Standard Deviation of Freedom:
+sdFree <- sd(na.omit(data$Freedom))
+
+#Standard Deviation of Happiness:
+sdHapp <- sd(na.omit(data$Happiness))
+
+beta1 <- (rFreeHapp * sdHapp) / sdFree
+beta1
+
+
+#Calculation of the Regression Coefficient if the variables were standardized:
+
+#Correlation of Freedom and Happiness:
+rFreeHapp_z <- as.numeric(cor(data_z$Freedom, data_z$Happiness, use = "pairwise"))
+
+#Standard Deviation of Freedom:
+sdFree_z <- sd(na.omit(data_z$Freedom))
+
+#Standard Deviation of Happiness:
+sdHapp_z <- sd(na.omit(data_z$Happiness))
+
+beta1_z <- (rFreeHapp_z * sdHapp_z) / sdFree_z
+beta1_z
+```
+
+Interpreting the regression coefficient in raw units: For a one unit increase in Freedom, Happiness is expected to increase by 4.43.
+
+Interpreting the regression coefficient in raw units as if it were standardized: For a one standard deviation increase in Freedom, Happiness is expected to increase by 4.43 standard deviations.
+
+regression coefficient in standardized units: For a one standard deviation increase in Freedom, Happiness is expected to increase by 0.51 standard deviations.
+
+####Part B Calculate the standard error of the regression coefficient ‘by hand’ using sigma.
+
+The formula for the standard error of the regression coefficient (beta1) is RSE / sqrt(SSD), where RSE is the residual Standard Error (Sigma) and SSD is the Sum of Squared Deviations.
+
+```{r Q6b Code}
+#Model for the Happiness predicted by Freedom:
+FreeHappmodel <- lm(Happiness ~ Freedom, data = data)
+
+#RSE
+RSE <- sigma(FreeHappmodel)
+
+#Get the deviations from the mean for Freedom:
+data$Freedom_differences <- data$Freedom - mean(na.omit(data$Freedom))
+
+#Square the deviations:
+data$Freedom_differences_sq <- data$Freedom_differences^2
+
+#Sum of Squared deviations:
+ssd_Freedom <- sum(na.omit(data$Freedom_differences_sq))
+
+#square root the Sum of Squared Deviations:
+denominator <- sqrt(ssd_Freedom)
+
+#Calculate the Standard Error:
+SEbeta1 <- RSE / denominator
+SEbeta1
+```
+
+##Q7
+
+Using functions presented in class, create a data frame that includes the predicted/fitted values and the residuals. Calculate the mean and SD of each of these values. - What statistic is the mean of fitted values equal to? - What statistic does the the SD of the residuals conceptually equal?
+
+```{r q7}
+##Run lm version of the model
+mod <- lm(Happiness ~ Freedom, data = data)
+
+##Using augment() from the broom package, get the fitted values and residuals
+predictions <- augment(mod)
+###Mean Yhat
+mean(predictions$.fitted)
+mean(na.omit(data[,c("Happiness", "Freedom")])$Happiness)
+sd(predictions$.fitted)
+###SD of residuals
+mean(predictions$.resid)
+sd(predictions$.resid)
+```
+
+-   The mean of fitted values is equal to the mean of the DV/Y (Happiness).
+-   The SD of the residuals is conceptually equal to Sigma. (Note: the actual number is different, because the denominator for the sd() function is n - 1, whereas the denominator for Sigma is n - k - 1)
+
+##Q8
+
+Graph the PDF and CDF of Y \~ t(3, 3, .5)
+
+For Q8, we are looking for a distribution where Y \~ t(3,3,.5). The first number refers to the degrees of freedom. The second number refers to the population mean, mu. The third number refers to the population standard deviation, sigma.
+
+Using the dt() function, you can only specify degrees of freedom. mu and sigma are standardized, meaning that they are set to 0 and 1, respectively. To unstandardize them to the values above, we can use this equation: x = Z \* sigma + mu, which is the inverse of the standardization equation.
+
+```{r Q8 Code}
+#Distribution parameters:
+df <- 3
+mu <- 3
+sigma <- .5
+
+##Create a sequence of numbers which will function as standardized t-values
+#for the purpose of obtaining Pdata and Cdata values:
+Zt <- seq(-4, 4, length.out = 200)
+
+#Get Pdata and Cdatavalues for those t-values given the degrees of freedom:
+Pdata <- dt(Zt,df)
+Cdata <- pt(Zt,df)
+
+#Unstandardize the t-values according to the given parameters:
+t <- Zt * sigma + mu
+
+#Put them together in a dataframe:
+t_dist_data <- data.frame(Zt, Pdata, Cdata, t)
+
+##Plot the Pdata distribution:
+ggplot(t_dist_data) +
+  geom_line(aes(x = t, y = Pdata))+
+  xlab("t(3,3,.5)")+
+  theme_classic()
+
+
+##Plot the Cdata distribution:
+ggplot(t_dist_data) +
+  geom_line(aes(x = t, y = Cdata))+
+  xlab("t(3,3,.5)")+
+  theme_classic()
+```
+
+##Q9 Psychological and educational tests, including the MMPI (Minnesota Multiphasic Personality Inventory), are often designed so they have a mean of 50 and a standard deviation of 10, and assumed to be normally distributed.
+
+-   The MMPI says that scores that are two standard deviations or more above the mean may indicate pathology. Among a thousand people, how many would be expected to have scores two standard deviations or more above the mean?
+-   What proportion would be expected to score 68 or above?
+-   What proportion would be expected to score between 53 and 63?
+-   What value corresponds to the 89th percentile of scores? 5th percentile?
+
+```{r}
+##Proof for proportion > 2 SDs above the mean
+1 - pnorm(q = 50+(2*10), mean = 50, sd = 10)
+
+##Proportion above 68
+1 - pnorm(q = 68, mean = 50, sd = 10)
+
+##Proportion between 53 - 63
+pnorm(q = 63, mean = 50, sd = 10) - pnorm(q = 53, mean = 50, sd = 10)
+
+##89th and 5th percentiles
+qnorm(p = .89, mean = 50, sd = 10)
+qnorm(p = .05, mean = 50, sd = 10)
+```
+
+-   \~2.28% would have scores 2 SDs above the mean or greater.
+-   \~3.6% would have scores of 68 or greater.
+-   \~28.5% would have scores between 53 and 63.
+-   A score of \~62.26 corresponds to the 89th percentile, and a score of \~33.55 corresponds to the 5th percentile.
+
+##Q10 Filter your World variable to set up a regression where you are comparing whether world coded 1 differs from world coded 3 on Freedom.
+
+1.  Interpret the intercept
+2.  Interpret the regression coefficient
+3.  What is the predicted value for group coded 1, group coded 3?
+4.  What would you change if you wanted your intercept to have a different interpretation?
+5.  What effect size metric would you use to describe your results?
+
+```{r}
+
+#Filter the dataframe such that only World = 1 and World = 3 are included:
+library(tidyverse)
+library(emmeans)
+
+homework.world1 <- read.csv("homework-world.csv")
+
+data_filtered <- homework.world1 |> 
+  dplyr::filter(World %in% c(1, 3)) |> 
+  dplyr::mutate(World = as.factor(World))
+
+#Create a regression model for Freedom predicted by World
+#(NOTE: At the beginning of my code, I set the World variable as a factor variable
+#rather than an int or num variable. By default, this means that First World Countries
+#Will be interpreted as X = 0 and Third World Countries will be interpreted as X = 1.
+#If you don't do this, your results will look very different and should be interpreted differently). Treating World as a categorical (factor) variable is the correct way to
+#run this model:
+model1v3 <- lm(Freedom ~ World, data = data_filtered)
+summary(model1v3)
+
+#Getting the effect size (Not required):
+emm <- emmeans(model1v3, "World")
+eff_size(emm, sigma = sigma(model1v3), edf = df.residual(model1v3))
+```
+
+1.  The predicted freedom value for First World Countries is 0.83.
+
+2.  The Third World Countries are expected to have freedom values 0.11 units less than First World Countries.
+
+3.  The predicted freedom value for First World Countries is 0.83. The predicted freedom value for Third World Countries is .696 (0.83025 - 0.11289).
+
+4.  You could, for example, use contr.sum(2) function so that the intercept is between First World Countries and Third World Countries. Or you can manually code 0 and 1s.
+
+5.  Cohen's D would be appropriate. .11 (difference) / .137 (pooled sd) = .824.
