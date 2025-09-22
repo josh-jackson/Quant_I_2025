@@ -25,7 +25,9 @@ data <- read.csv("homework-world.csv")
 data$World <- as.factor(data$World)
 ```
 
-## Q1 Calculate descriptive statistics for each of the 4 World groups. That is, you should get the mean GDP for countries that are coded as 1 in the World variable, mean GDP for countries coded as 2 in the World variable etc. This should include (it’s OK if more are included, but at least these): - mean - median - range - min & max - standard deviation - skew & kurtosis
+## Q1 Calculate descriptive statistics for each of the 4 World groups. 
+
+That is, you should get the mean GDP for countries that are coded as 1 in the World variable, mean GDP for countries coded as 2 in the World variable etc. This should include (it’s OK if more are included, but at least these): - mean - median - range - min & max - standard deviation - skew & kurtosis
 
 For this question, you can use various coding approaches to calculate each of the descriptives separately for each group.
 
