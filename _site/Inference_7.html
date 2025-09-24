@@ -399,9 +399,9 @@
 <h2>This time</h2>
 <ul>
 <li><p>Sampling distributions</p></li>
-<li><p>NHST</p></li>
+<li><p>NHST as evaluating our hypothesis</p></li>
 <li><p>Estimation as alternative</p></li>
-<li><p>Model comparison as second alternative</p></li>
+<li><p>Model comparison as third alternative</p></li>
 </ul>
 </section>
 <section id="estimation-of-what" class="slide level2">
@@ -577,10 +577,10 @@
 <span id="cb4-45"><a href="#cb4-45"></a>mean_of_slopes <span class="ot">&lt;-</span> <span class="fu">mean</span>(all_my_slopes)</span>
 <span id="cb4-46"><a href="#cb4-46"></a></span>
 <span id="cb4-47"><a href="#cb4-47"></a></span>
-<span id="cb4-48"><a href="#cb4-48"></a><span class="fu">cat</span>(<span class="st">"The mean of our 2000 estimated slopes is:"</span>, <span class="fu">round</span>(mean_of_slopes, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="fu">cat</span>(<span class="st">"The true slope is 2.0. The mean of our 5000 estimated slopes is:"</span>, <span class="fu">round</span>(mean_of_slopes, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>The mean of our 2000 estimated slopes is: 1.9876 </code></pre>
+<pre><code>The true slope is 2.0. The mean of our 5000 estimated slopes is: 1.9876 </code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -625,13 +625,14 @@
 <ul>
 <li><p>We normally do not have access to this data, but if we did we now have a <em>distribution</em> of plausible statistics drawn from the population.</p></li>
 <li><p>This distribution tells us what we would expect if we repeated the experiment again, and again, and again</p></li>
+<li><p>Regression coef is an unbiased estimator because we can find the true mean (if we repeat experiment infinite times)</p></li>
 <li><p>Range of scores are SUPER helpful to gauge our precision of the estimate.</p></li>
 </ul>
 </section>
 <section class="slide level2">
 
 <ul>
-<li>If we look at just one sample (like normal experiments), we won’t exactly estimate the population intercept and slope.</li>
+<li>If we look at just one sample (like normal experiments), we won’t exactly estimate the population intercept (10) and slope (2).</li>
 </ul>
 <div class="cell">
 <details>
@@ -686,7 +687,10 @@ F-statistic: 403.4 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </details>
 
 </div>
-<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><ul>
+<li>Did we get unlucky with our one experiment? Or is this just part of the variability we have to live with?</li>
+</ul>
+</section>
 <section id="sampling-distribution-2" class="slide level2">
 <h2>Sampling distribution</h2>
 <ul>
@@ -709,7 +713,7 @@ F-statistic: 403.4 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h2>Central limit theorm take 2</h2>
 <ul>
 <li><p>Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal.</p></li>
-<li><p>we previously used this to show that the normal was everywhere. Here we are going to use it to define the shape of our sampling distribution.</p></li>
+<li><p>We previously used this to show that the normal was everywhere. Here we are going to use it to define the shape of our sampling distribution.</p></li>
 <li><p>The sample size necessary to be “approximately normal” depends on the nature of the underlying data. The less normal it is, the larger the sample size necessary in order for the sampling distribution of the means to become normal.</p></li>
 </ul>
 </section>
@@ -762,7 +766,7 @@ F-statistic: 403.4 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb12-42"><a href="#cb12-42"></a>  <span class="co"># Overlay a perfect normal curve for comparison</span></span>
 <span id="cb12-43"><a href="#cb12-43"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(sample_means), <span class="at">sd =</span> <span class="fu">sd</span>(sample_means)),</span>
 <span id="cb12-44"><a href="#cb12-44"></a>                <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb12-45"><a href="#cb12-45"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"2. Distribution of Means from samples"</span>,</span>
+<span id="cb12-45"><a href="#cb12-45"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"2. Distribution of Means from repeated samples"</span>,</span>
 <span id="cb12-46"><a href="#cb12-46"></a>       <span class="at">x =</span> <span class="st">"Sample Mean"</span>, <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span></span>
 <span id="cb12-47"><a href="#cb12-47"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span>
 <span id="cb12-48"><a href="#cb12-48"></a></span>
@@ -782,22 +786,32 @@ F-statistic: 403.4 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="sampling-mean-population-mean" class="slide level2">
 <h2>Sampling mean = population mean</h2>
-<p><span class="math display">\[\begin{equation}
+<ul>
+<li><p>for a mean statistic <span class="math display">\[\begin{equation}
 \bar{x} = \frac{(x_1 + x_2 + ... x_N)}{N} \\
 E(\bar{x}) = E\bigg(\frac{(x_1 + x_2 + ... x_N)}{N}\bigg) \\
 E(\bar{x}) = \frac{E(x_1) + E(x_2) + ... E(x_N)}{E(N)} \\
 E(\bar{x}) = \frac{\mu + \mu + ...\mu}{N} \\
 E(\bar{x}) = \frac{N\mu}{N} \\
 E(\bar{x}) = \mu
-\end{equation}\]</span></p>
+\end{equation}\]</span></p></li>
+<li><p>Similar proofs for other statistics</p></li>
+</ul>
+</section>
+<section id="sampling-mean-population-mean-1" class="slide level2">
+<h2>Sampling mean = population mean</h2>
+<ul>
+<li><p>What does this mean? (pun intended)</p></li>
+<li><p>That we can assume our statistic is an unbiased best guess. We then want to ask our self “How good is that guess?” Or “How confident are we in this guess”</p></li>
+</ul>
 </section>
 <section id="sampling-sd-population-sd" class="slide level2">
 <h2>sampling SD ≠ population SD</h2>
 <ul>
 <li><p>The dispersion parameter is what we are going to be focused on the most rather than the mean.</p></li>
-<li><p>The SD of the sampling distribution is the standard error of the statistic.</p></li>
+<li><p>The SD of the sampling distribution is the standard error of the statistic (mean, b, r, SD, etc).</p></li>
 <li><p>The width of the sampling distribution depends on the population variance but also the sample size!</p></li>
-<li><p>We have an estimate of population variance and sample size!</p></li>
+<li><p>We have an estimate of population variance (and any other population parameters) and we defined sample size!</p></li>
 </ul>
 </section>
 <section class="slide level2">
@@ -892,6 +906,30 @@ E(\bar{x}) = \mu
 </div>
 </div>
 </section>
+<section class="slide level2">
+
+<ul>
+<li>Mean of sampling distribution not systematically influenced by sample size</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="dv">100</span>, <span class="dv">15</span>))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100.1167</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">15</span>))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100.0203</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">15</span>))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 99.97351</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="dv">100</span>, <span class="dv">15</span>))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 99.98833</code></pre>
+</div>
+</div>
+</section>
 <section id="sampling-distribution-standard-error" class="slide level2">
 <h2>Sampling distribution standard error</h2>
 <ul>
@@ -904,20 +942,20 @@ E(\bar{x}) = \mu
 <section id="sampling-distribution-of-the-mean" class="slide level2">
 <h2>sampling distribution of the mean</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">sd</span>(<span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">15</span>))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">sd</span>(<span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">15</span>))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.927859</code></pre>
+<pre><code>[1] 3.018793</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">sd</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">15</span>))<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">sd</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">15</span>))<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4.009748</code></pre>
+<pre><code>[1] 2.179772</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">set.seed</span>(<span class="dv">74</span>)</span>
-<span id="cb26-2"><a href="#cb26-2"></a><span class="fu">sd</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">15</span>))<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">set.seed</span>(<span class="dv">74</span>)</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="fu">sd</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">15</span>))<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.030684</code></pre>
 </div>
@@ -928,14 +966,20 @@ E(\bar{x}) = \mu
 </section>
 <section id="sampling-distribution-of-regression-coefficient" class="slide level2">
 <h2>sampling distribution of regression coefficient</h2>
+<ul>
+<li>From our simulation:</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">sd</span>(all_my_slopes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">sd</span>(all_my_slopes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1048326</code></pre>
 </div>
 </div>
+<ul>
+<li>From our single experiment:</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">summary</span>(sample_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">summary</span>(sample_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -961,42 +1005,657 @@ F-statistic: 403.4 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="se-implies-different-regression-lines" class="slide level2">
 <h2>SE implies different regression lines</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>regression_lines_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(current_sample, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a>  <span class="co"># Add the 50 regression lines from our first 50 simulations</span></span>
-<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">geom_abline</span>(</span>
-<span id="cb32-5"><a href="#cb32-5"></a>    <span class="at">data =</span> all_my_models[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ], </span>
-<span id="cb32-6"><a href="#cb32-6"></a>    <span class="fu">aes</span>(<span class="at">intercept =</span> intercept, <span class="at">slope =</span> slope), </span>
-<span id="cb32-7"><a href="#cb32-7"></a>    <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span></span>
-<span id="cb32-8"><a href="#cb32-8"></a>  ) <span class="sc">+</span></span>
-<span id="cb32-9"><a href="#cb32-9"></a>  <span class="co"># Add the "true" population line in blue so we can see how our samples vary around it</span></span>
-<span id="cb32-10"><a href="#cb32-10"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> true_intercept, <span class="at">slope =</span> true_slope, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb32-11"><a href="#cb32-11"></a>  <span class="fu">labs</span>(</span>
-<span id="cb32-12"><a href="#cb32-12"></a>    <span class="at">title =</span> <span class="st">"Regression Lines from 50 Different Samples"</span>,</span>
-<span id="cb32-13"><a href="#cb32-13"></a>    <span class="at">x =</span> <span class="st">"Predictor (x)"</span>,</span>
-<span id="cb32-14"><a href="#cb32-14"></a>    <span class="at">y =</span> <span class="st">"Outcome (y)"</span></span>
-<span id="cb32-15"><a href="#cb32-15"></a>  ) <span class="sc">+</span></span>
-<span id="cb32-16"><a href="#cb32-16"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb32-17"><a href="#cb32-17"></a></span>
-<span id="cb32-18"><a href="#cb32-18"></a><span class="fu">print</span>(regression_lines_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>regression_lines_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(current_sample, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a>  <span class="co"># Add the 50 regression lines from our first 50 simulations</span></span>
+<span id="cb40-4"><a href="#cb40-4"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb40-5"><a href="#cb40-5"></a>    <span class="at">data =</span> all_my_models[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ], </span>
+<span id="cb40-6"><a href="#cb40-6"></a>    <span class="fu">aes</span>(<span class="at">intercept =</span> intercept, <span class="at">slope =</span> slope), </span>
+<span id="cb40-7"><a href="#cb40-7"></a>    <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span></span>
+<span id="cb40-8"><a href="#cb40-8"></a>  ) <span class="sc">+</span></span>
+<span id="cb40-9"><a href="#cb40-9"></a>  <span class="co"># Add the "true" population line in blue so we can see how our samples vary around it</span></span>
+<span id="cb40-10"><a href="#cb40-10"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> true_intercept, <span class="at">slope =</span> true_slope, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb40-11"><a href="#cb40-11"></a>  <span class="fu">labs</span>(</span>
+<span id="cb40-12"><a href="#cb40-12"></a>    <span class="at">title =</span> <span class="st">"Regression Lines from 50 Different Samples"</span>,</span>
+<span id="cb40-13"><a href="#cb40-13"></a>    <span class="at">x =</span> <span class="st">"Predictor (x)"</span>,</span>
+<span id="cb40-14"><a href="#cb40-14"></a>    <span class="at">y =</span> <span class="st">"Outcome (y)"</span></span>
+<span id="cb40-15"><a href="#cb40-15"></a>  ) <span class="sc">+</span></span>
+<span id="cb40-16"><a href="#cb40-16"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb40-17"><a href="#cb40-17"></a></span>
+<span id="cb40-18"><a href="#cb40-18"></a><span class="fu">print</span>(regression_lines_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 
 </div>
-<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
 <section id="regression-band" class="slide level2">
 <h2>Regression Band</h2>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">ggplot</span>(sample_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y))<span class="sc">+</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb33-3"><a href="#cb33-3"></a><span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>, <span class="at">se =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb33-4"><a href="#cb33-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">ggplot</span>(sample_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y))<span class="sc">+</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>, <span class="at">se =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 
 </div>
-<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<section id="using-sampling-distributions" class="slide level2">
+<h2>Using Sampling distributions</h2>
+<ul>
+<li><p>Sampling distributions are used to make probabilistic statements about statistics in the same way that the standard normal distribution is used to make probabilistic statements about scores.</p></li>
+<li><p>Can propose different values for the population parameter and ask how rare the sample statistic would be if that population parameter were true (NHST).</p></li>
+<li><p>We can determine the range within which the population mean is likely to be with a particular level of confidence (ie CI).</p></li>
+</ul>
+</section>
+<section id="inferences-from-data" class="slide level2">
+<h2>Inferences from data</h2>
+<ol type="1">
+<li>Null hypothesis significance testing</li>
+<li>Precision estimation of a particular parameter</li>
+<li>Comparing alternative models to see which fits the data better</li>
+</ol>
+</section>
+<section id="nhst" class="slide level2">
+<h2>NHST</h2>
+<p>Logic:</p>
+<ul>
+<li><p>We are interested in estimating some statistic, which we do not know the true population parameter.</p></li>
+<li><p>We are going to assume some true value (null hypothesis), to see if our statistic is likely (or not) based on this assumption.</p></li>
+<li><p>We then either reject the null (and accept the alternative), or fail to reject (and then are back at square one. The theory lives to fight another day)</p></li>
+</ul>
+</section>
+<section id="problem-of-induction" class="slide level2">
+<h2>Problem of induction</h2>
+<ul>
+<li><p>Ideally we want deductive reasoning. If the premises are true, the conclusion must be true. e.g., all people are mortal…</p></li>
+<li><p>Learning about the world necessitates induction. Start with specific observations and move to a general conclusion. e.g., all swans are white</p></li>
+<li><p>We use our sample to try and make general claims about the population, but we can never observe everything. Thus we can’t prove our theories are true through induction alone.</p></li>
+</ul>
+</section>
+<section id="falsification" class="slide level2">
+<h2>Falsification</h2>
+<ul>
+<li><p>Popper states science does not progress by proving theories true (verification), but by proving theories false (falsification).</p></li>
+<li><p>Research Hypothesis (H₁): This is your scientific theory</p></li>
+<li><p>Null Hypothesis (H₀): A testable, and falsifiable straw man</p></li>
+<li><p>Use deductive logic, grounded in probability theory, to challenge the null.</p></li>
+<li><p>Then make a tentative inductive inference about (H₁)</p></li>
+</ul>
+</section>
+<section id="nhst-1" class="slide level2">
+<h2>NHST</h2>
+<ol type="1">
+<li>Assume some population value you want to reject (H₀)</li>
+<li>Collect a sample</li>
+<li>Use sample statistics to construct sampling distribution</li>
+<li>Compare the sample “test” statistic to a predefined “critical” value on the sampling distribution.</li>
+<li>If test statistic &gt; critical value, reject null (H₀)</li>
+<li>If test statistic &lt; critical value, fail to reject null (H₁)</li>
+</ol>
+</section>
+<section id="null-and-alternative-hypothesis" class="slide level2">
+<h2>Null and alternative hypothesis</h2>
+<ul>
+<li><p>(H₀) is often a specific parameter value. Typically it is zero, which is often referred to as the nil hypothesis.</p></li>
+<li><p>It can be a range, but a specific (worse case) value is needed to create the sampling distribution</p></li>
+<li><p>(H₁) is ALL other values. Even if you have a specific Estimate in mind</p></li>
+</ul>
+</section>
+<section id="nhst-in-action" class="slide level2">
+<h2>NHST in action</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb42-2"><a href="#cb42-2"></a></span>
+<span id="cb42-3"><a href="#cb42-3"></a></span>
+<span id="cb42-4"><a href="#cb42-4"></a></span>
+<span id="cb42-5"><a href="#cb42-5"></a><span class="co"># --- Step 1: Create a "True" Population ---</span></span>
+<span id="cb42-6"><a href="#cb42-6"></a></span>
+<span id="cb42-7"><a href="#cb42-7"></a></span>
+<span id="cb42-8"><a href="#cb42-8"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb42-9"><a href="#cb42-9"></a>population_size <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb42-10"><a href="#cb42-10"></a></span>
+<span id="cb42-11"><a href="#cb42-11"></a><span class="co"># World where the Null Hypothesis is TRUE (No difference between groups)</span></span>
+<span id="cb42-12"><a href="#cb42-12"></a>population_h0_control <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb42-13"><a href="#cb42-13"></a>population_h0_treatment <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>) <span class="co"># Identical to control</span></span>
+<span id="cb42-14"><a href="#cb42-14"></a></span>
+<span id="cb42-15"><a href="#cb42-15"></a></span>
+<span id="cb42-16"><a href="#cb42-16"></a><span class="co"># --- Step 2: Build the Sampling Distribution of the COEFFICIENT ---</span></span>
+<span id="cb42-17"><a href="#cb42-17"></a><span class="co"># We'll simulate thousands of experiments, and for each one, we will store the</span></span>
+<span id="cb42-18"><a href="#cb42-18"></a><span class="co"># estimated regression coefficient (the slope).</span></span>
+<span id="cb42-19"><a href="#cb42-19"></a></span>
+<span id="cb42-20"><a href="#cb42-20"></a>n_simulations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb42-21"><a href="#cb42-21"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb42-22"><a href="#cb42-22"></a><span class="co"># Create an empty vector to store the SLOPE from each simulated experiment</span></span>
+<span id="cb42-23"><a href="#cb42-23"></a>slope_dist_h0 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)</span>
+<span id="cb42-24"><a href="#cb42-24"></a></span>
+<span id="cb42-25"><a href="#cb42-25"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_simulations) {</span>
+<span id="cb42-26"><a href="#cb42-26"></a>  <span class="co"># Draw samples from the world where the NULL IS TRUE</span></span>
+<span id="cb42-27"><a href="#cb42-27"></a>  sample_control <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_h0_control, sample_size)</span>
+<span id="cb42-28"><a href="#cb42-28"></a>  sample_treatment <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_h0_treatment, sample_size)</span>
+<span id="cb42-29"><a href="#cb42-29"></a>  </span>
+<span id="cb42-30"><a href="#cb42-30"></a>  <span class="co"># Combine data and create a grouping variable for the linear model</span></span>
+<span id="cb42-31"><a href="#cb42-31"></a>  combined_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb42-32"><a href="#cb42-32"></a>    <span class="at">value =</span> <span class="fu">c</span>(sample_control, sample_treatment),</span>
+<span id="cb42-33"><a href="#cb42-33"></a>    <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> sample_size), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>))</span>
+<span id="cb42-34"><a href="#cb42-34"></a>  )</span>
+<span id="cb42-35"><a href="#cb42-35"></a>  </span>
+<span id="cb42-36"><a href="#cb42-36"></a>  <span class="co"># Run a linear model</span></span>
+<span id="cb42-37"><a href="#cb42-37"></a>  lm_result <span class="ot">&lt;-</span> <span class="fu">lm</span>(value <span class="sc">~</span> group, <span class="at">data =</span> combined_data)</span>
+<span id="cb42-38"><a href="#cb42-38"></a>  </span>
+<span id="cb42-39"><a href="#cb42-39"></a>  <span class="co"># Extract and store the SLOPE for the group predictor</span></span>
+<span id="cb42-40"><a href="#cb42-40"></a>  <span class="co"># The slope is in the 2nd row, 1st column of the coefficients table</span></span>
+<span id="cb42-41"><a href="#cb42-41"></a>  slope_dist_h0[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(lm_result)<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb42-42"><a href="#cb42-42"></a>}</span>
+<span id="cb42-43"><a href="#cb42-43"></a></span>
+<span id="cb42-44"><a href="#cb42-44"></a></span>
+<span id="cb42-45"><a href="#cb42-45"></a><span class="co"># --- Step 3: Analyze the Sampling Distribution of the Slope ---</span></span>
+<span id="cb42-46"><a href="#cb42-46"></a><span class="co"># The standard deviation of this distribution is our "true" Standard Error.</span></span>
+<span id="cb42-47"><a href="#cb42-47"></a></span>
+<span id="cb42-48"><a href="#cb42-48"></a>mean_of_slopes <span class="ot">&lt;-</span> <span class="fu">mean</span>(slope_dist_h0)</span>
+<span id="cb42-49"><a href="#cb42-49"></a>simulated_standard_error <span class="ot">&lt;-</span> <span class="fu">sd</span>(slope_dist_h0)</span>
+<span id="cb42-50"><a href="#cb42-50"></a></span>
+<span id="cb42-51"><a href="#cb42-51"></a></span>
+<span id="cb42-52"><a href="#cb42-52"></a><span class="co"># --- Step 4: Connecting to a Single Regression Summary ---</span></span>
+<span id="cb42-53"><a href="#cb42-53"></a><span class="co"># Now, let's run just ONE experiment and see how its summary output compares to our simulation.</span></span>
+<span id="cb42-54"><a href="#cb42-54"></a></span>
+<span id="cb42-55"><a href="#cb42-55"></a>our_sample_control <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_h0_control, sample_size)</span>
+<span id="cb42-56"><a href="#cb42-56"></a>our_sample_treatment <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_h0_treatment, sample_size)</span>
+<span id="cb42-57"><a href="#cb42-57"></a></span>
+<span id="cb42-58"><a href="#cb42-58"></a>our_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb42-59"><a href="#cb42-59"></a>  <span class="at">value =</span> <span class="fu">c</span>(our_sample_control, our_sample_treatment),</span>
+<span id="cb42-60"><a href="#cb42-60"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> sample_size), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>))</span>
+<span id="cb42-61"><a href="#cb42-61"></a>)</span>
+<span id="cb42-62"><a href="#cb42-62"></a></span>
+<span id="cb42-63"><a href="#cb42-63"></a>our_lm_test <span class="ot">&lt;-</span> <span class="fu">lm</span>(value <span class="sc">~</span> group, <span class="at">data =</span> our_data)</span>
+<span id="cb42-64"><a href="#cb42-64"></a>summary_our_lm <span class="ot">&lt;-</span> <span class="fu">summary</span>(our_lm_test)</span>
+<span id="cb42-65"><a href="#cb42-65"></a></span>
+<span id="cb42-66"><a href="#cb42-66"></a><span class="co"># Extract the Standard Error from the summary output</span></span>
+<span id="cb42-67"><a href="#cb42-67"></a>estimated_se_from_summary <span class="ot">&lt;-</span> summary_our_lm<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">2</span>]</span>
+<span id="cb42-68"><a href="#cb42-68"></a></span>
+<span id="cb42-69"><a href="#cb42-69"></a><span class="co"># --- Step 5: Visualize the Sampling Distribution ---</span></span>
+<span id="cb42-70"><a href="#cb42-70"></a><span class="co"># Let's plot the distribution of the slopes we generated.</span></span>
+<span id="cb42-71"><a href="#cb42-71"></a></span>
+<span id="cb42-72"><a href="#cb42-72"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">slopes =</span> slope_dist_h0)</span>
+<span id="cb42-73"><a href="#cb42-73"></a></span>
+<span id="cb42-74"><a href="#cb42-74"></a>se_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> slopes)) <span class="sc">+</span></span>
+<span id="cb42-75"><a href="#cb42-75"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb42-76"><a href="#cb42-76"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb42-77"><a href="#cb42-77"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb42-78"><a href="#cb42-78"></a>  <span class="fu">labs</span>(</span>
+<span id="cb42-79"><a href="#cb42-79"></a>    <span class="at">title =</span> <span class="st">"Sampling Distribution of the Regression Coefficient (Slope)"</span>,</span>
+<span id="cb42-80"><a href="#cb42-80"></a>    <span class="at">subtitle =</span> <span class="st">"The distribution of estimates from 5000 experiments. The blue line is the true slope (0)."</span>,</span>
+<span id="cb42-81"><a href="#cb42-81"></a>    <span class="at">x =</span> <span class="st">"Estimated Slope (Difference between group means)"</span>,</span>
+<span id="cb42-82"><a href="#cb42-82"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb42-83"><a href="#cb42-83"></a>  ) <span class="sc">+</span></span>
+<span id="cb42-84"><a href="#cb42-84"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">0.5</span>, <span class="at">y =</span> <span class="fl">0.05</span>, <span class="at">label =</span> <span class="st">"True Slope = 0"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb42-85"><a href="#cb42-85"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb42-86"><a href="#cb42-86"></a></span>
+<span id="cb42-87"><a href="#cb42-87"></a><span class="fu">print</span>(se_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<section id="sampling-distribution-regression-estimate" class="slide level2">
+<h2>Sampling distribution regression estimate</h2>
+<ul>
+<li><p>Centered around the null.</p></li>
+<li><p>“The standard deviation of the sampling distribution is the standard error of the statistic”</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="fu">round</span>(simulated_standard_error, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.8978</code></pre>
+</div>
+</div>
+</section>
+<section id="our-sample-statistics" class="slide level2">
+<h2>Our sample statistics</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="fu">summary</span>(our_lm_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = value ~ group, data = our_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-33.611  -8.378   1.665  10.748  28.944 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     101.247      2.746  36.873   &lt;2e-16 ***
+grouptreatment   -1.529      3.883  -0.394    0.695    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.04 on 58 degrees of freedom
+Multiple R-squared:  0.002666,  Adjusted R-squared:  -0.01453 
+F-statistic: 0.155 on 1 and 58 DF,  p-value: 0.6952</code></pre>
+</div>
+</div>
+</section>
+<section id="nhst-in-action-1" class="slide level2">
+<h2>NHST in action</h2>
+<ul>
+<li>I want to see if our statistic (-1.529) is unlikley or likely assuming the null.</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> slopes)) <span class="sc">+</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">1.529</span>, <span class="at">xend =</span> <span class="sc">-</span><span class="fl">1.529</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> .<span class="dv">1</span>), <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb47-6"><a href="#cb47-6"></a>  <span class="fu">labs</span>(</span>
+<span id="cb47-7"><a href="#cb47-7"></a>    <span class="at">title =</span> <span class="st">"Sampling Distribution of the Regression Coefficient (Slope)"</span>,</span>
+<span id="cb47-8"><a href="#cb47-8"></a>    <span class="at">subtitle =</span> <span class="st">"The distribution of estimates from 5000 experiments. The blue line is the null slope (0)."</span>,</span>
+<span id="cb47-9"><a href="#cb47-9"></a>    <span class="at">x =</span> <span class="st">"Estimated Slope (Difference between group means)"</span>,</span>
+<span id="cb47-10"><a href="#cb47-10"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb47-11"><a href="#cb47-11"></a>  ) <span class="sc">+</span></span>
+<span id="cb47-12"><a href="#cb47-12"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="sc">-</span><span class="dv">8</span>, <span class="at">y =</span> <span class="fl">0.09</span>, <span class="at">label =</span> <span class="st">"Observed slope"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb47-13"><a href="#cb47-13"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
+<section id="nhst-in-action-2" class="slide level2">
+<h2>NHST in action</h2>
+<ul>
+<li><p>Next we need to define critical values.</p></li>
+<li><p>Can be anywhere. Convention is to define extreme values as happening less than .05 percent of time.</p></li>
+<li><p>Since extreme can be both above and below the mean, we set area under curve at 2.5% on each tail.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb48-2"><a href="#cb48-2"></a><span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>,  <span class="dv">0</span>, <span class="fl">3.883</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.61054</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">qnorm</span>(alpha<span class="sc">/</span><span class="dv">2</span>,  <span class="dv">0</span>, <span class="fl">3.883</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -7.61054</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># ---  Define the Rejection Region on the ESTIMATE's Scale ---</span></span>
+<span id="cb52-2"><a href="#cb52-2"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb52-3"><a href="#cb52-3"></a>degrees_freedom <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb52-4"><a href="#cb52-4"></a>standard_error <span class="ot">&lt;-</span> <span class="fl">3.883</span></span>
+<span id="cb52-5"><a href="#cb52-5"></a><span class="co"># First, find the critical t-values</span></span>
+<span id="cb52-6"><a href="#cb52-6"></a>critical_t_upper <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> degrees_freedom)</span>
+<span id="cb52-7"><a href="#cb52-7"></a>critical_t_lower <span class="ot">&lt;-</span> <span class="fu">qt</span>(alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> degrees_freedom)</span>
+<span id="cb52-8"><a href="#cb52-8"></a></span>
+<span id="cb52-9"><a href="#cb52-9"></a><span class="co"># Now, convert these t-values back to the scale of your original estimate</span></span>
+<span id="cb52-10"><a href="#cb52-10"></a>critical_value_upper <span class="ot">&lt;-</span> critical_t_upper <span class="sc">*</span> standard_error</span>
+<span id="cb52-11"><a href="#cb52-11"></a>critical_value_lower <span class="ot">&lt;-</span> critical_t_lower <span class="sc">*</span> standard_error</span>
+<span id="cb52-12"><a href="#cb52-12"></a></span>
+<span id="cb52-13"><a href="#cb52-13"></a></span>
+<span id="cb52-14"><a href="#cb52-14"></a> <span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> slopes)) <span class="sc">+</span></span>
+<span id="cb52-15"><a href="#cb52-15"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb52-16"><a href="#cb52-16"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb52-17"><a href="#cb52-17"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb52-18"><a href="#cb52-18"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">1.529</span>, <span class="at">xend =</span> <span class="sc">-</span><span class="fl">1.529</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> .<span class="dv">1</span>), <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb52-19"><a href="#cb52-19"></a>  <span class="fu">labs</span>(</span>
+<span id="cb52-20"><a href="#cb52-20"></a>    <span class="at">title =</span> <span class="st">"Sampling Distribution of the Regression Coefficient (Slope)"</span>,</span>
+<span id="cb52-21"><a href="#cb52-21"></a>    <span class="at">subtitle =</span> <span class="st">"The distribution of estimates from 5000 experiments. The blue line is the null slope (0)."</span>,</span>
+<span id="cb52-22"><a href="#cb52-22"></a>    <span class="at">x =</span> <span class="st">"Estimated Slope (Difference between group means)"</span>,</span>
+<span id="cb52-23"><a href="#cb52-23"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb52-24"><a href="#cb52-24"></a>  ) <span class="sc">+</span></span>
+<span id="cb52-25"><a href="#cb52-25"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="sc">-</span><span class="fl">7.9</span>, <span class="at">y =</span> <span class="fl">0.09</span>, <span class="at">label =</span> <span class="st">"Observed slope"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb52-26"><a href="#cb52-26"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> critical_value_upper, <span class="at">xmax =</span> <span class="cn">Inf</span>, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>), <span class="at">fill =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb52-27"><a href="#cb52-27"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xmax =</span> critical_value_lower, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>), <span class="at">fill =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb52-28"><a href="#cb52-28"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> critical_value_upper <span class="sc">+</span> <span class="dv">2</span>, <span class="at">y =</span> <span class="fl">0.05</span>, <span class="at">label =</span> <span class="st">"Rejection</span><span class="sc">\n</span><span class="st">Region"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb52-29"><a href="#cb52-29"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> critical_value_lower <span class="sc">-</span> <span class="dv">2</span>, <span class="at">y =</span> <span class="fl">0.05</span>, <span class="at">label =</span> <span class="st">"Rejection</span><span class="sc">\n</span><span class="st">Region"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
+<section id="decision" class="slide level2">
+<h2>Decision</h2>
+<ul>
+<li><p>Given that our statistic was not in the rejection region, we fail to reject the null.</p></li>
+<li><p>Our value was consistent with a process that occurred assuming no effect.</p></li>
+<li><p>This doesn’t meant the null is true, just that the statistic from our sample was indistinguishable from a sampling process from a null distribution.</p></li>
+</ul>
+</section>
+<section id="nhst-in-action-3" class="slide level2">
+<h2>NHST in action</h2>
+<ul>
+<li><p>Rather than work with our sampling distribution in original units, we are going to translate this distribution into a standardized form. We do this by dividing by the standard error (which is a standard deviation).</p></li>
+<li><p>The information is the same, this is just convention. For regression, because we have to estimate the SE, we use the t distribution</p></li>
+</ul>
+<p><span class="math display">\[\frac{(\hat{\beta} - H_0)} {\hat{\sigma}}\]</span></p>
+</section>
+<section id="critical-values" class="slide level2">
+<h2>Critical values</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>critical_t_upper <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> <span class="dv">100</span>)</span>
+<span id="cb53-2"><a href="#cb53-2"></a>critical_t_lower <span class="ot">&lt;-</span> <span class="fu">qt</span>(alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> <span class="dv">100</span>)</span>
+<span id="cb53-3"><a href="#cb53-3"></a></span>
+<span id="cb53-4"><a href="#cb53-4"></a><span class="co"># Now, convert these t-values back to the scale of your original estimate</span></span>
+<span id="cb53-5"><a href="#cb53-5"></a>critical_o.unit_upper <span class="ot">&lt;-</span> critical_t_upper <span class="sc">*</span> standard_error</span>
+<span id="cb53-6"><a href="#cb53-6"></a>critical_o.unit_lower <span class="ot">&lt;-</span> critical_t_lower <span class="sc">*</span> standard_error</span>
+<span id="cb53-7"><a href="#cb53-7"></a></span>
+<span id="cb53-8"><a href="#cb53-8"></a>critical_t_lower </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1.983972</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>critical_o.unit_lower </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -7.703761</code></pre>
+</div>
+</div>
+</section>
+<section id="sampling-distribution-of-the-test-statistic" class="slide level2">
+<h2>Sampling distribution of the test statistic</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb57-2"><a href="#cb57-2"></a></span>
+<span id="cb57-3"><a href="#cb57-3"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb57-4"><a href="#cb57-4"></a>population_size <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb57-5"><a href="#cb57-5"></a></span>
+<span id="cb57-6"><a href="#cb57-6"></a><span class="co"># World 1: The Null Hypothesis is TRUE (No difference between groups)</span></span>
+<span id="cb57-7"><a href="#cb57-7"></a>population_h0_control <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb57-8"><a href="#cb57-8"></a>population_h0_treatment <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>) <span class="co"># Identical to control</span></span>
+<span id="cb57-9"><a href="#cb57-9"></a></span>
+<span id="cb57-10"><a href="#cb57-10"></a><span class="co"># World 2: The Alternative Hypothesis is TRUE (A real difference exists)</span></span>
+<span id="cb57-11"><a href="#cb57-11"></a>population_h1_control <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb57-12"><a href="#cb57-12"></a>population_h1_treatment <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> <span class="dv">105</span>, <span class="at">sd =</span> <span class="dv">15</span>) <span class="co"># Mean is 5 points higher</span></span>
+<span id="cb57-13"><a href="#cb57-13"></a></span>
+<span id="cb57-14"><a href="#cb57-14"></a></span>
+<span id="cb57-15"><a href="#cb57-15"></a><span class="co"># --- Step 2: Build the Sampling Distribution ASSUMING THE NULL IS TRUE ---</span></span>
+<span id="cb57-16"><a href="#cb57-16"></a></span>
+<span id="cb57-17"><a href="#cb57-17"></a>n_simulations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb57-18"><a href="#cb57-18"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb57-19"><a href="#cb57-19"></a><span class="co"># Create an empty vector to store the t-statistic from each simulated experiment</span></span>
+<span id="cb57-20"><a href="#cb57-20"></a>t_dist_h0 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)</span>
+<span id="cb57-21"><a href="#cb57-21"></a></span>
+<span id="cb57-22"><a href="#cb57-22"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_simulations) {</span>
+<span id="cb57-23"><a href="#cb57-23"></a>  <span class="co"># Draw samples from the world where the NULL IS TRUE</span></span>
+<span id="cb57-24"><a href="#cb57-24"></a>  sample_control <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_h0_control, sample_size)</span>
+<span id="cb57-25"><a href="#cb57-25"></a>  sample_treatment <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_h0_treatment, sample_size)</span>
+<span id="cb57-26"><a href="#cb57-26"></a>  </span>
+<span id="cb57-27"><a href="#cb57-27"></a>  <span class="co"># Combine data and create a grouping variable for the linear model</span></span>
+<span id="cb57-28"><a href="#cb57-28"></a>  combined_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb57-29"><a href="#cb57-29"></a>    <span class="at">value =</span> <span class="fu">c</span>(sample_control, sample_treatment),</span>
+<span id="cb57-30"><a href="#cb57-30"></a>    <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> sample_size))</span>
+<span id="cb57-31"><a href="#cb57-31"></a>  )</span>
+<span id="cb57-32"><a href="#cb57-32"></a>  </span>
+<span id="cb57-33"><a href="#cb57-33"></a>  <span class="co"># Run a linear model </span></span>
+<span id="cb57-34"><a href="#cb57-34"></a>  lm_result <span class="ot">&lt;-</span> <span class="fu">lm</span>(value <span class="sc">~</span> group, <span class="at">data =</span> combined_data)</span>
+<span id="cb57-35"><a href="#cb57-35"></a>  </span>
+<span id="cb57-36"><a href="#cb57-36"></a>  <span class="co"># Extract and store the t-statistic for the group predictor</span></span>
+<span id="cb57-37"><a href="#cb57-37"></a>  <span class="co"># The t-statistic is in the 2nd row, 3rd column of the coefficients table</span></span>
+<span id="cb57-38"><a href="#cb57-38"></a>  t_dist_h0[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(lm_result)<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb57-39"><a href="#cb57-39"></a>}</span>
+<span id="cb57-40"><a href="#cb57-40"></a></span>
+<span id="cb57-41"><a href="#cb57-41"></a></span>
+<span id="cb57-42"><a href="#cb57-42"></a><span class="co"># --- Step 3: Define Our Rejection Region ---</span></span>
+<span id="cb57-43"><a href="#cb57-43"></a><span class="co"># We set our standard of proof, alpha (α). This defines our "zone of surprise."</span></span>
+<span id="cb57-44"><a href="#cb57-44"></a><span class="co"># If a result falls in this zone, it's too unlikely to have happened by chance.</span></span>
+<span id="cb57-45"><a href="#cb57-45"></a></span>
+<span id="cb57-46"><a href="#cb57-46"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb57-47"><a href="#cb57-47"></a><span class="co"># Find the critical t-values that mark the boundaries of our rejection region</span></span>
+<span id="cb57-48"><a href="#cb57-48"></a>degrees_freedom <span class="ot">&lt;-</span> (sample_size <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb57-49"><a href="#cb57-49"></a>critical_value_upper <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> degrees_freedom)</span>
+<span id="cb57-50"><a href="#cb57-50"></a>critical_value_lower <span class="ot">&lt;-</span> <span class="fu">qt</span>(alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> degrees_freedom)</span>
+<span id="cb57-51"><a href="#cb57-51"></a></span>
+<span id="cb57-52"><a href="#cb57-52"></a></span>
+<span id="cb57-53"><a href="#cb57-53"></a><span class="co"># --- Step 4: Conduct "Our" Single, Real Experiment ---</span></span>
+<span id="cb57-54"><a href="#cb57-54"></a>our_sample_control <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_h1_control, sample_size)</span>
+<span id="cb57-55"><a href="#cb57-55"></a>our_sample_treatment <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_h1_treatment, sample_size)</span>
+<span id="cb57-56"><a href="#cb57-56"></a></span>
+<span id="cb57-57"><a href="#cb57-57"></a><span class="co"># Combine our single experiment's data for the linear model</span></span>
+<span id="cb57-58"><a href="#cb57-58"></a>our_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb57-59"><a href="#cb57-59"></a>  <span class="at">value =</span> <span class="fu">c</span>(our_sample_control, our_sample_treatment),</span>
+<span id="cb57-60"><a href="#cb57-60"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> sample_size))</span>
+<span id="cb57-61"><a href="#cb57-61"></a>)</span>
+<span id="cb57-62"><a href="#cb57-62"></a></span>
+<span id="cb57-63"><a href="#cb57-63"></a></span>
+<span id="cb57-64"><a href="#cb57-64"></a><span class="co"># Extract the t-statistic and p-value for the group predictor</span></span>
+<span id="cb57-65"><a href="#cb57-65"></a>our_observed_t <span class="ot">&lt;-</span> summary_our_lm<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb57-66"><a href="#cb57-66"></a>p_value <span class="ot">&lt;-</span> summary_our_lm<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span>
+<span id="cb57-67"><a href="#cb57-67"></a></span>
+<span id="cb57-68"><a href="#cb57-68"></a><span class="co"># --- Step 5: Visualize the Verdict ---</span></span>
+<span id="cb57-69"><a href="#cb57-69"></a><span class="co"># Let's plot the sampling distribution (from Step 2) and see where our</span></span>
+<span id="cb57-70"><a href="#cb57-70"></a><span class="co"># single result (from Step 4) lands.</span></span>
+<span id="cb57-71"><a href="#cb57-71"></a></span>
+<span id="cb57-72"><a href="#cb57-72"></a><span class="co"># Create a dataframe for the plot</span></span>
+<span id="cb57-73"><a href="#cb57-73"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">t_values =</span> t_dist_h0)</span>
+<span id="cb57-74"><a href="#cb57-74"></a></span>
+<span id="cb57-75"><a href="#cb57-75"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> t_values)) <span class="sc">+</span></span>
+<span id="cb57-76"><a href="#cb57-76"></a>  <span class="co"># Create the histogram of the sampling distribution under the null</span></span>
+<span id="cb57-77"><a href="#cb57-77"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb57-78"><a href="#cb57-78"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dt, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df =</span> degrees_freedom), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<ul>
+<li>Don’t need to work with the simulated sampling distribution, as we estimated it and defined it as a t.</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb58-2"><a href="#cb58-2"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dt, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df =</span> <span class="dv">50</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
+<section id="our-sample-statistics-1" class="slide level2">
+<h2>Our sample statistics</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="fu">summary</span>(our_lm_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = value ~ group, data = our_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-33.611  -8.378   1.665  10.748  28.944 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     101.247      2.746  36.873   &lt;2e-16 ***
+grouptreatment   -1.529      3.883  -0.394    0.695    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.04 on 58 degrees of freedom
+Multiple R-squared:  0.002666,  Adjusted R-squared:  -0.01453 
+F-statistic: 0.155 on 1 and 58 DF,  p-value: 0.6952</code></pre>
+</div>
+</div>
+</section>
+<section id="test-statistic" class="slide level2">
+<h2>Test statistic</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> t_values)) <span class="sc">+</span></span>
+<span id="cb61-2"><a href="#cb61-2"></a>    <span class="fu">stat_function</span>(<span class="at">fun =</span> dt, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df =</span> degrees_freedom))  <span class="sc">+</span> <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> our_observed_t, <span class="at">xend =</span> our_observed_t, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> .<span class="dv">4</span>), <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb61-3"><a href="#cb61-3"></a></span>
+<span id="cb61-4"><a href="#cb61-4"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The null distribution"</span>,</span>
+<span id="cb61-5"><a href="#cb61-5"></a>    <span class="at">x =</span> <span class="st">"t-statistic"</span>,</span>
+<span id="cb61-6"><a href="#cb61-6"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb61-7"><a href="#cb61-7"></a>  ) <span class="sc">+</span>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> our_observed_t, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.035</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Our observed test t-statistic</span><span class="sc">\n</span><span class="st">(t ="</span>, <span class="fu">round</span>(our_observed_t, <span class="dv">2</span>), <span class="st">")"</span>), <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb61-8"><a href="#cb61-8"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
+<section id="critical-values-and-rejection-regions" class="slide level2">
+<h2>Critical values and Rejection regions</h2>
+<ul>
+<li>A “one tail” test does the same, such that you specify your direction prior to analzying. Your critical value is closer to the null because now 5% AUC is on one side.</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> t_values)) <span class="sc">+</span></span>
+<span id="cb62-2"><a href="#cb62-2"></a>    <span class="fu">stat_function</span>(<span class="at">fun =</span> dt, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df =</span> degrees_freedom))  <span class="sc">+</span> <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> our_observed_t, <span class="at">xend =</span> our_observed_t, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> .<span class="dv">4</span>), <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb62-3"><a href="#cb62-3"></a>  <span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin=</span><span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xmax=</span>critical_value_lower, <span class="at">ymin=</span><span class="dv">0</span>, <span class="at">ymax=</span><span class="cn">Inf</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, <span class="at">fill=</span><span class="st">"red"</span>) <span class="sc">+</span> <span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin=</span>critical_value_upper, <span class="at">xmax=</span><span class="cn">Inf</span>, <span class="at">ymin=</span><span class="dv">0</span>, <span class="at">ymax=</span><span class="cn">Inf</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, <span class="at">fill=</span><span class="st">"red"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
+<section id="nhst-in-action-4" class="slide level2">
+<h2>NHST in action</h2>
+<ul>
+<li><p>Again, our test statistic is not more extreme than our critical value so we fail to reject the null.</p></li>
+<li><p>The logic of rejecting or not rejecting should be it as it is a decision rule.</p></li>
+<li><p>Unfortunately, current practice awkwardly combines two differnt views on NHST: Fisherian and Neymann-Pearson.</p></li>
+</ul>
+</section>
+<section id="p-values" class="slide level2">
+<h2>p-values</h2>
+<ul>
+<li>Fisher only cared about p-values, and the null. There were no alternative hypothesess or decisions to be made. Provided a strength against the null.</li>
+</ul>
+<p>P-value:</p>
+<p><span class="math inline">\(p(\text{data} | H_0)\)</span>$</p>
+<p>“The probability of getting the sample value or more extreme, assuming the null hypothesis is true”</p>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb63-2"><a href="#cb63-2"></a>  </span>
+<span id="cb63-3"><a href="#cb63-3"></a><span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin=</span><span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xmax=</span>our_observed_t, <span class="at">ymin=</span><span class="dv">0</span>, <span class="at">ymax=</span><span class="cn">Inf</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, <span class="at">fill=</span><span class="st">"red"</span>) <span class="sc">+</span> <span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin=</span><span class="fu">abs</span>(our_observed_t), <span class="at">xmax=</span><span class="cn">Inf</span>, <span class="at">ymin=</span><span class="dv">0</span>, <span class="at">ymax=</span><span class="cn">Inf</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, <span class="at">fill=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb63-4"><a href="#cb63-4"></a>  </span>
+<span id="cb63-5"><a href="#cb63-5"></a>  <span class="co"># Draw the t-distribution curve</span></span>
+<span id="cb63-6"><a href="#cb63-6"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dt, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df =</span> degrees_freedom), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb63-7"><a href="#cb63-7"></a>  </span>
+<span id="cb63-8"><a href="#cb63-8"></a>  <span class="co"># Add a vertical line to mark our specific t-statistic</span></span>
+<span id="cb63-9"><a href="#cb63-9"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> our_observed_t, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb63-10"><a href="#cb63-10"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="sc">-</span><span class="dv">3</span>, <span class="at">y =</span> <span class="fl">0.15</span>, <span class="at">label =</span> <span class="st">"This area under the curve..."</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb63-11"><a href="#cb63-11"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">3</span>, <span class="at">y =</span> <span class="fl">0.15</span>, <span class="at">label =</span> <span class="st">"...plus this area..."</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb63-12"><a href="#cb63-12"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">0.2</span>, <span class="at">y =</span> <span class="fl">0.12</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"...equals the p-value</span><span class="sc">\n</span><span class="st">(p ="</span>, <span class="fu">round</span>(p_value, <span class="dv">2</span>), <span class="st">")"</span>), <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb63-13"><a href="#cb63-13"></a>  </span>
+<span id="cb63-14"><a href="#cb63-14"></a>  <span class="co"># Add labels and title</span></span>
+<span id="cb63-15"><a href="#cb63-15"></a>  <span class="fu">labs</span>(</span>
+<span id="cb63-16"><a href="#cb63-16"></a>    <span class="at">title =</span> <span class="st">"Conceptualizing a P-Value"</span>,</span>
+<span id="cb63-17"><a href="#cb63-17"></a>    <span class="at">x =</span> <span class="st">"t-statistic"</span>,</span>
+<span id="cb63-18"><a href="#cb63-18"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb63-19"><a href="#cb63-19"></a>  ) <span class="sc">+</span></span>
+<span id="cb63-20"><a href="#cb63-20"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a><span class="fu">pt</span>(<span class="sc">-</span>.<span class="dv">93</span>, <span class="at">df =</span> <span class="dv">100</span>) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(.<span class="dv">93</span>, <span class="at">df =</span> degrees_freedom)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3554183</code></pre>
+</div>
+</div>
+<ul>
+<li>What would 1 sided p value be if 2 sided is .36?</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="fu">pt</span>(<span class="sc">-</span>.<span class="dv">93</span>, <span class="at">df =</span> <span class="dv">100</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1773054</code></pre>
+</div>
+</div>
+</section>
+<section id="problems-wiht-p-values" class="slide level2">
+<h2>Problems wiht p-values</h2>
+<ul>
+<li>Doesn’t tell you what you want to know, which leads to misunderstanding</li>
+</ul>
+<p>“What’s wrong with <a href="#/nhst">NHST</a>? Well, among many other things, it does not tell us what we want to know, and we so much want to know what we want to know that, out of desperation, we nevertheless believe that it does!” – Cohen (1994)</p>
+<ul>
+<li>p(data | H0) when we really want p(H1 | data)</li>
+</ul>
+</section>
+<section id="problems-wiht-p-values-1" class="slide level2">
+<h2>Problems wiht p-values</h2>
+<ul>
+<li><p>Focus on p-values leads to weird incentives</p></li>
+<li><p>p &lt; .05 as a condition for publication, publication as a condition for job/tenure/grant$, which leads to gaming the system given it all hinges on this one value. Makes this all you care about at the expense of other things.</p></li>
+<li><p>Leads to p-hacking, file drawers, etc (more later)</p></li>
+</ul>
+</section>
+<section id="problems-with-p-values" class="slide level2">
+<h2>Problems with p-values</h2>
+<ul>
+<li><p>Leads to dichotomous thinking.</p></li>
+<li><p>“The world is flat p &lt; .05”; “Surely god loves .051 as much as .049”</p></li>
+<li><p>Fail vs not fail when the world is much more grey. Both in terms of original hypotheses (nil isn’t risky) as well as interpreting results.</p></li>
+<li><p>Lacks a measure of interpretable effect size and an estimate of precision</p></li>
+</ul>
+</section>
+<section id="problems-with-p-values-1" class="slide level2">
+<h2>Problems with p-values</h2>
+<ul>
+<li><p>Leads to uncritical thinking</p></li>
+<li><p>“I wouldn’t trust a study with larger sample size than is standard (in the field), as that suggests they just gamed the system”. - WashU big wig</p></li>
+<li><p>Not reporting necessary information as long as p-value is there, ritualistic p-value corrections without thought, power estimates without thought, asterisk</p></li>
+</ul>
+</section>
+<section id="problems-with-p-values-2" class="slide level2">
+<h2>Problems with p-values</h2>
+<ul>
+<li><p>Assuming no effect, we are still wrong at best 1/20 times. Likely much more (low power, p-hacking, etc) in published lit.</p></li>
+<li><p>Assuming an effect exists, do our results tell us anything? Are they risky hypotheses at all? Instead low value, low precision (“differences” are enough), almost no non-nil null hypotheses.</p></li>
+</ul>
+</section>
+<section id="p-values-and-nhst" class="slide level2">
+<h2>p-values and NHST</h2>
+<p>… are intrinsically tied.</p>
+<p>But there are other ways!</p>
+</section>
+<section id="estimation" class="slide level2">
+<h2>Estimation</h2>
+<p>Logic:</p>
+<ul>
+<li><p>Sampling distribution provides us with information about how much we can trust the parameter estimate.</p></li>
+<li><p>We can quantify this precision via a confidence interval (CI), created from the sampling distribution.</p></li>
+<li><p>Rather than focus on null/nil, focus on effect size estimate.</p></li>
+<li><p>Can also do NHST, but with a focus on gauging uncertainty</p></li>
+</ul>
+</section>
 <section id="confidence-intervals" class="slide level2">
 <h2>Confidence intervals</h2>
+</section>
+<section id="model-comparison" class="slide level2">
+<h2>Model comparison</h2>
+<ul>
+<li><p>We should explicitly test theories against one another rather than weak null/nil hypotheses.</p></li>
+<li><p>Build more than one regression model and pit two (or more) models against one another</p></li>
+<li><p>Compare which fit the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used estimate SE.</p></li>
+</ul>
 
 <div class="footer footer-default">
 

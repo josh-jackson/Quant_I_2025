@@ -15,11 +15,11 @@ html:
 
 -   Sampling distributions
 
--   NHST
+-   NHST as evaluating our hypothesis
 
 -   Estimation as alternative
 
--   Model comparison as second alternative
+-   Model comparison as third alternative
 
 ## Estimation of what?
 
@@ -127,14 +127,13 @@ geom_smooth(method='lm', se = FALSE)
 
 -   The major goal that we have in statistical inference is to make confident claims about the population based on a small representation of it, the sample. We use features of the sample (statistics) to inform us about features of the population (parameters).
 
--   Any sample will be off the mark in how well it captures the important features of a population due to *sampling variability*. 
+-   Any sample will be off the mark in how well it captures the important features of a population due to *sampling variability*.
 
-- The sampling distribution tells us how far off the mark we can expect a sample statistic to be.
-
+-   The sampling distribution tells us how far off the mark we can expect a sample statistic to be.
 
 ## Sampling distribution - empirical
 
-- Run 5000 experiments from a known population. Make a distribution of the 5000 regression coefs to tell us what we should expect from any 1 experiment. 
+-   Run 5000 experiments from a known population. Make a distribution of the 5000 regression coefs to tell us what we should expect from any 1 experiment.
 
 ```{r}
 #| code-fold: true
@@ -185,7 +184,7 @@ all_my_slopes <- all_my_models$slope
 mean_of_slopes <- mean(all_my_slopes)
 
 
-cat("The mean of our 2000 estimated slopes is:", round(mean_of_slopes, 4), "\n")
+cat("The true slope is 2.0. The mean of our 5000 estimated slopes is:", round(mean_of_slopes, 4), "\n")
 
 simulated_standard_error <- sd(all_my_slopes)
 cat("The standard deviation of our slopes (the Simulated Standard Error) is:", round(simulated_standard_error, 4), "\n\n")
@@ -218,19 +217,19 @@ print(sampling_dist_plot)
 
 ```
 
-
 ------------------------------------------------------------------------
 
 -   We normally do not have access to this data, but if we did we now have a *distribution* of plausible statistics drawn from the population.
 
 -   This distribution tells us what we would expect if we repeated the experiment again, and again, and again
 
+- Regression coef is an unbiased estimator because we can find the true mean (if we repeat experiment infinite times)
+
 -   Range of scores are SUPER helpful to gauge our precision of the estimate.
 
 ------------------------------------------------------------------------
 
--   If we look at just one sample (like normal experiments), we won't exactly estimate the population intercept and slope. 
-
+-   If we look at just one sample (like normal experiments), we won't exactly estimate the population intercept (10) and slope (2).
 
 ```{r}
 #| code-fold: true
@@ -263,6 +262,8 @@ print(sampling_dist_plot)
 
 ```
 
+- Did we get unlucky with our one experiment? Or is this just part of the variability we have to live with? 
+
 ## Sampling distribution
 
 -   Can be for any statistic. Mean, SD, r, b, etc.
@@ -272,7 +273,6 @@ http://shiny.calpoly.sh/Sampling_Distribution/
 -   If unbiased, the mean of the sampling distribution is equal to the population parameter
 
 -   The standard deviation of the sampling distribution is called standard error, and helps us gauge our precision of the statistic.
-
 
 ## Sampling distribution
 
@@ -284,7 +284,7 @@ http://shiny.calpoly.sh/Sampling_Distribution/
 
 -   Central Limit Theorem: the sum of a large number of independent random variables will be approximately normally distributed, even if original distributions are not normal.
 
--   we previously used this to show that the normal was everywhere. Here we are going to use it to define the shape of our sampling distribution.
+-   We previously used this to show that the normal was everywhere. Here we are going to use it to define the shape of our sampling distribution.
 
 -   The sample size necessary to be "approximately normal" depends on the nature of the underlying data. The less normal it is, the larger the sample size necessary in order for the sampling distribution of the means to become normal.
 
@@ -336,7 +336,7 @@ plot_sampling_dist <- ggplot(sampling_dist_data, aes(x = mean)) +
   # Overlay a perfect normal curve for comparison
   stat_function(fun = dnorm, args = list(mean = mean(sample_means), sd = sd(sample_means)),
                 color = "red", size = 1) +
-  labs(title = "2. Distribution of Means from samples",
+  labs(title = "2. Distribution of Means from repeated samples",
        x = "Sample Mean", y = "Density") +
   theme_minimal(base_size = 14)
 
@@ -346,15 +346,15 @@ plot_population + plot_sampling_dist
 
 ## Sampling distribution
 
-- Based on central limit theorem we know that the shape will be normal. 
+-   Based on central limit theorem we know that the shape will be normal.
 
-- We know the area under the curve and other properties about the normal based on PDF
+-   We know the area under the curve and other properties about the normal based on PDF
 
-- However, we dont have time and resources to sample again and again, so how does this help us? 
+-   However, we dont have time and resources to sample again and again, so how does this help us?
 
-## Sampling mean = population mean
+## Sampling mean = population mean 
 
-
+- for a mean statistic 
 $$\begin{equation}
 \bar{x} = \frac{(x_1 + x_2 + ... x_N)}{N} \\
 E(\bar{x}) = E\bigg(\frac{(x_1 + x_2 + ... x_N)}{N}\bigg) \\
@@ -364,19 +364,25 @@ E(\bar{x}) = \frac{N\mu}{N} \\
 E(\bar{x}) = \mu
 \end{equation}$$
 
+- Similar proofs for other statistics
 
+## Sampling mean = population mean
+
+- What does this mean? (pun intended) 
+
+- That we can assume our statistic is an unbiased best guess. We then want to ask our self "How good is that guess?" Or "How confident are we in this guess"
 
 ## sampling SD ≠ population SD
 
-- The dispersion parameter is what we are going to be focused on the most rather than the mean. 
+-   The dispersion parameter is what we are going to be focused on the most rather than the mean.
 
-- The SD of the sampling distribution is the standard error of the statistic. 
+-   The SD of the sampling distribution is the standard error of the statistic (mean, b, r, SD, etc).
 
-- The width of the sampling distribution depends on the population variance but also the sample size! 
+-   The width of the sampling distribution depends on the population variance but also the sample size!
 
-- We have an estimate of population variance and sample size! 
+-   We have an estimate of population variance (and any other population parameters) and we defined sample size!
 
------------
+------------------------------------------------------------------------
 
 ```{r}
 #| code-fold: true
@@ -441,9 +447,9 @@ sampling_dist_plot <- ggplot(results_df, aes(x = mean)) +
 print(sampling_dist_plot)
 ```
 
--------------
+------------------------------------------------------------------------
 
-- We can see this too by sampling randomly from a known population
+-   We can see this too by sampling randomly from a known population
 
 ```{r}
 
@@ -454,19 +460,33 @@ sd(replicate(1000, mean(rnorm(1000, 100, 15))))
 
 ```
 
+
+--------
+
+-   Mean of sampling distribution not systematically influenced by sample size 
+
+```{r}
+
+mean(replicate(1000, mean(rnorm(5, 100, 15))))
+mean(replicate(1000, mean(rnorm(25, 100, 15))))
+mean(replicate(1000, mean(rnorm(100, 100, 15))))
+mean(replicate(1000, mean(rnorm(1000, 100, 15))))
+
+```
+
+
 ## Sampling distribution standard error
 
-- mean $SE_m = \frac{\hat{\sigma}}{\sqrt{N}}$
+-   mean $SE_m = \frac{\hat{\sigma}}{\sqrt{N}}$
 
-- sd $SE_s = \frac{\hat{\sigma}}{\sqrt{2(n-1)}}$
+-   sd $SE_s = \frac{\hat{\sigma}}{\sqrt{2(n-1)}}$
 
-- r $$SE_r =\sqrt{\frac{1-r^2}{n-2}}$$
+-   r $$SE_r =\sqrt{\frac{1-r^2}{n-2}}$$
 
-- regression $$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
+-   regression $$\text{SE}(\hat{\beta}_1) = \frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}}$$
 
 
 ## sampling distribution of the mean
-
 
 ```{r}
 sd(replicate(1000, mean(rnorm(25, 100, 15))))
@@ -481,24 +501,24 @@ set.seed(74)
 sd(rnorm(25, 100, 15))/sqrt(25)
 ```
 
-- Sometimes we are unlucky. The good thing (?) is we will never know. 
+-   Sometimes we are unlucky. The good thing (?) is we will never know.
 
 ## sampling distribution of regression coefficient
 
-
+- From our simulation: 
 ```{r}
 sd(all_my_slopes)
 ```
 
+- From our single experiment: 
 ```{r}
 summary(sample_model)
 ```
 
-
 ## SE implies different regression lines
 
 ```{r}
-
+#| code-fold: true
 regression_lines_plot <- ggplot(current_sample, aes(x = x, y = y)) +
   geom_point(alpha = 0.6) +
   # Add the 50 regression lines from our first 50 simulations
@@ -530,4 +550,545 @@ geom_smooth(method='lm', se = TRUE) +
 ```
 
 
+## Using Sampling distributions
+
+- Sampling distributions are used to make probabilistic statements about statistics in the same way that the standard normal distribution is used to make probabilistic statements about scores.
+
+- Can propose different values for the population parameter and ask how rare the sample statistic would be if that population parameter were true (NHST). 
+
+- We can determine the range within which the population mean is likely to be with a particular level of confidence (ie CI).
+
+
+
+## Inferences from data
+
+1. Null hypothesis significance testing
+2. Precision estimation of a particular parameter
+3. Comparing alternative models to see which fits the data better
+
+## NHST
+
+Logic:
+
+- We are interested in estimating some statistic, which we do not know the true population parameter. 
+
+- We are going to assume some true value (null hypothesis), to see if our statistic is likely (or not) based on this assumption. 
+
+- We then either reject the null (and accept the alternative), or fail to reject (and then are back at square one. The theory lives to fight another day)
+
+
+## Problem of induction
+
+- Ideally we want deductive reasoning. If the premises are true, the conclusion must be true. e.g., all people are mortal...
+
+- Learning about the world necessitates induction. Start with specific observations and move to a general conclusion. e.g., all swans are white
+
+- We use our sample to try and make general claims about the population, but we can never observe everything. Thus we can't prove our theories are true through induction alone.
+
+## Falsification
+
+- Popper states science does not progress by proving theories true (verification), but by proving theories false (falsification). 
+
+- Research Hypothesis (H₁): This is your scientific theory 
+- Null Hypothesis (H₀): A testable, and falsifiable straw man
+- Use deductive logic, grounded in probability theory, to challenge the null. 
+- Then make a tentative inductive inference about (H₁)
+
+
+## NHST
+
+1. Assume some population value you want to reject (H₀) 
+2. Collect a sample 
+3. Use sample statistics to construct sampling distribution
+4. Compare the sample "test" statistic to a predefined "critical" value on the sampling distribution. 
+5. If test statistic > critical value, reject null (H₀)
+6. If test statistic < critical value, fail to reject null (H₁)
+
+
+## Null and alternative hypothesis
+
+- (H₀) is often a specific parameter value. Typically it is zero, which is often referred to as the nil hypothesis. 
+- It can be a range, but a specific (worse case) value is needed to create the sampling distribution
+
+- (H₁) is ALL other values. Even if you have a specific Estimate in mind
+
+## NHST in action
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+
+
+
+# --- Step 1: Create a "True" Population ---
+
+
+set.seed(123) # For reproducibility
+population_size <- 100000
+
+# World where the Null Hypothesis is TRUE (No difference between groups)
+population_h0_control <- rnorm(population_size, mean = 100, sd = 15)
+population_h0_treatment <- rnorm(population_size, mean = 100, sd = 15) # Identical to control
+
+
+# --- Step 2: Build the Sampling Distribution of the COEFFICIENT ---
+# We'll simulate thousands of experiments, and for each one, we will store the
+# estimated regression coefficient (the slope).
+
+n_simulations <- 5000
+sample_size <- 30
+# Create an empty vector to store the SLOPE from each simulated experiment
+slope_dist_h0 <- numeric(n_simulations)
+
+for (i in 1:n_simulations) {
+  # Draw samples from the world where the NULL IS TRUE
+  sample_control <- sample(population_h0_control, sample_size)
+  sample_treatment <- sample(population_h0_treatment, sample_size)
+  
+  # Combine data and create a grouping variable for the linear model
+  combined_data <- data.frame(
+    value = c(sample_control, sample_treatment),
+    group = factor(rep(c("control", "treatment"), each = sample_size), levels = c("control", "treatment"))
+  )
+  
+  # Run a linear model
+  lm_result <- lm(value ~ group, data = combined_data)
+  
+  # Extract and store the SLOPE for the group predictor
+  # The slope is in the 2nd row, 1st column of the coefficients table
+  slope_dist_h0[i] <- summary(lm_result)$coefficients[2, 1]
+}
+
+
+# --- Step 3: Analyze the Sampling Distribution of the Slope ---
+# The standard deviation of this distribution is our "true" Standard Error.
+
+mean_of_slopes <- mean(slope_dist_h0)
+simulated_standard_error <- sd(slope_dist_h0)
+
+
+# --- Step 4: Connecting to a Single Regression Summary ---
+# Now, let's run just ONE experiment and see how its summary output compares to our simulation.
+
+our_sample_control <- sample(population_h0_control, sample_size)
+our_sample_treatment <- sample(population_h0_treatment, sample_size)
+
+our_data <- data.frame(
+  value = c(our_sample_control, our_sample_treatment),
+  group = factor(rep(c("control", "treatment"), each = sample_size), levels = c("control", "treatment"))
+)
+
+our_lm_test <- lm(value ~ group, data = our_data)
+summary_our_lm <- summary(our_lm_test)
+
+# Extract the Standard Error from the summary output
+estimated_se_from_summary <- summary_our_lm$coefficients[2, 2]
+
+# --- Step 5: Visualize the Sampling Distribution ---
+# Let's plot the distribution of the slopes we generated.
+
+plot_data <- data.frame(slopes = slope_dist_h0)
+
+se_plot <- ggplot(plot_data, aes(x = slopes)) +
+  geom_histogram(aes(y = ..density..), bins = 40, fill = "skyblue", color = "black") +
+  geom_density(color = "red", size = 1) +
+  geom_vline(xintercept = 0, color = "blue", size = 1.5, linetype = "dashed") +
+  labs(
+    title = "Sampling Distribution of the Regression Coefficient (Slope)",
+    subtitle = "The distribution of estimates from 5000 experiments. The blue line is the true slope (0).",
+    x = "Estimated Slope (Difference between group means)",
+    y = "Density"
+  ) +
+  annotate("text", x = 0.5, y = 0.05, label = "True Slope = 0", color = "blue", fontface = "bold", hjust = 0) +
+  theme_minimal()
+
+print(se_plot)
+
+```
+
+
+
+## Sampling distribution regression estimate
+
+- Centered around the null. 
+
+- "The standard deviation of the sampling distribution is the standard error of the statistic"
+
+```{r}
+round(simulated_standard_error, 4)
+```
+
+## Our sample statistics
+
+```{r}
+summary(our_lm_test)
+```
+
+## NHST in action
+
+- I want to see if our statistic (-1.529) is unlikley or likely assuming the null. 
+
+
+```{r}
+#| code-fold: true
+ggplot(plot_data, aes(x = slopes)) +
+  geom_histogram(aes(y = ..density..), bins = 40, fill = "skyblue", color = "black") +
+  geom_density(color = "red", size = 1) +
+  geom_vline(xintercept = 0, color = "blue", size = 1.5, linetype = "dashed") +
+  geom_segment(aes(x = -1.529, xend = -1.529, y = 0, yend = .1), size = 1.5, linetype = "dashed") + 
+  labs(
+    title = "Sampling Distribution of the Regression Coefficient (Slope)",
+    subtitle = "The distribution of estimates from 5000 experiments. The blue line is the null slope (0).",
+    x = "Estimated Slope (Difference between group means)",
+    y = "Density"
+  ) +
+  annotate("text", x = -8, y = 0.09, label = "Observed slope", color = "black", fontface = "bold", hjust = 0) +
+  theme_minimal()
+```
+
+## NHST in action
+
+- Next we need to define critical values. 
+
+- Can be anywhere. Convention is to define extreme values as happening less than .05 percent of time. 
+
+- Since extreme can be both above and below the mean, we set area under curve at 2.5% on each tail. 
+
+```{r}
+alpha <- 0.05
+qnorm(1 - alpha/2,  0, 3.883)
+qnorm(alpha/2,  0, 3.883)
+```
+---------------
+
+```{r}
+#| code-fold: true
+# ---  Define the Rejection Region on the ESTIMATE's Scale ---
+alpha <- 0.05
+degrees_freedom <- 100
+standard_error <- 3.883
+# First, find the critical t-values
+critical_t_upper <- qt(1 - alpha/2, df = degrees_freedom)
+critical_t_lower <- qt(alpha/2, df = degrees_freedom)
+
+# Now, convert these t-values back to the scale of your original estimate
+critical_value_upper <- critical_t_upper * standard_error
+critical_value_lower <- critical_t_lower * standard_error
+
+
+ ggplot(plot_data, aes(x = slopes)) +
+  geom_histogram(aes(y = ..density..), bins = 40, fill = "skyblue", color = "black") +
+  geom_density(color = "red", size = 1) +
+  geom_vline(xintercept = 0, color = "blue", size = 1.5, linetype = "dashed") +
+  geom_segment(aes(x = -1.529, xend = -1.529, y = 0, yend = .1), size = 1.5, linetype = "dashed") + 
+  labs(
+    title = "Sampling Distribution of the Regression Coefficient (Slope)",
+    subtitle = "The distribution of estimates from 5000 experiments. The blue line is the null slope (0).",
+    x = "Estimated Slope (Difference between group means)",
+    y = "Density"
+  ) +
+  annotate("text", x = -7.9, y = 0.09, label = "Observed slope", color = "black", fontface = "bold", hjust = 0) +
+  geom_rect(aes(xmin = critical_value_upper, xmax = Inf, ymin = 0, ymax = Inf), fill = "grey", alpha = 0.1) +
+  geom_rect(aes(xmin = -Inf, xmax = critical_value_lower, ymin = 0, ymax = Inf), fill = "grey", alpha = 0.1) +
+  annotate("text", x = critical_value_upper + 2, y = 0.05, label = "Rejection\nRegion", color = "red", fontface = "bold") +
+  annotate("text", x = critical_value_lower - 2, y = 0.05, label = "Rejection\nRegion", color = "red", fontface = "bold") 
+
+
+```
+
+## Decision
+
+- Given that our statistic was not in the rejection region, we fail to reject the null. 
+
+- Our value was consistent with a process that occurred assuming no effect. 
+
+- This doesn't meant the null is true, just that the statistic from our sample was indistinguishable from a sampling process from a null distribution. 
+
+## NHST in action
+
+- Rather than work with our sampling distribution in original units, we are going to translate this distribution into a standardized form. We do this by dividing by the standard error (which is a standard deviation). 
+
+- The information is the same, this is just convention. For regression, because we have to estimate the SE, we use the t distribution
+
+$$\frac{(\hat{\beta} - H_0)} {\hat{\sigma}}$$
+
+## Critical values 
+
+
+```{r}
+#| code-fold: true
+critical_t_upper <- qt(1 - alpha/2, df = 100)
+critical_t_lower <- qt(alpha/2, df = 100)
+
+# Now, convert these t-values back to the scale of your original estimate
+critical_o.unit_upper <- critical_t_upper * standard_error
+critical_o.unit_lower <- critical_t_lower * standard_error
+
+critical_t_lower 
+critical_o.unit_lower 
+```
+
+## Sampling distribution of the test statistic 
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+
+set.seed(123) # For reproducibility
+population_size <- 100000
+
+# World 1: The Null Hypothesis is TRUE (No difference between groups)
+population_h0_control <- rnorm(population_size, mean = 100, sd = 15)
+population_h0_treatment <- rnorm(population_size, mean = 100, sd = 15) # Identical to control
+
+# World 2: The Alternative Hypothesis is TRUE (A real difference exists)
+population_h1_control <- rnorm(population_size, mean = 100, sd = 15)
+population_h1_treatment <- rnorm(population_size, mean = 105, sd = 15) # Mean is 5 points higher
+
+
+# --- Step 2: Build the Sampling Distribution ASSUMING THE NULL IS TRUE ---
+
+n_simulations <- 5000
+sample_size <- 30
+# Create an empty vector to store the t-statistic from each simulated experiment
+t_dist_h0 <- numeric(n_simulations)
+
+for (i in 1:n_simulations) {
+  # Draw samples from the world where the NULL IS TRUE
+  sample_control <- sample(population_h0_control, sample_size)
+  sample_treatment <- sample(population_h0_treatment, sample_size)
+  
+  # Combine data and create a grouping variable for the linear model
+  combined_data <- data.frame(
+    value = c(sample_control, sample_treatment),
+    group = factor(rep(c("control", "treatment"), each = sample_size))
+  )
+  
+  # Run a linear model 
+  lm_result <- lm(value ~ group, data = combined_data)
+  
+  # Extract and store the t-statistic for the group predictor
+  # The t-statistic is in the 2nd row, 3rd column of the coefficients table
+  t_dist_h0[i] <- summary(lm_result)$coefficients[2, 3]
+}
+
+
+# --- Step 3: Define Our Rejection Region ---
+# We set our standard of proof, alpha (α). This defines our "zone of surprise."
+# If a result falls in this zone, it's too unlikely to have happened by chance.
+
+alpha <- 0.05
+# Find the critical t-values that mark the boundaries of our rejection region
+degrees_freedom <- (sample_size - 1) * 2
+critical_value_upper <- qt(1 - alpha/2, df = degrees_freedom)
+critical_value_lower <- qt(alpha/2, df = degrees_freedom)
+
+
+# --- Step 4: Conduct "Our" Single, Real Experiment ---
+our_sample_control <- sample(population_h1_control, sample_size)
+our_sample_treatment <- sample(population_h1_treatment, sample_size)
+
+# Combine our single experiment's data for the linear model
+our_data <- data.frame(
+  value = c(our_sample_control, our_sample_treatment),
+  group = factor(rep(c("control", "treatment"), each = sample_size))
+)
+
+
+# Extract the t-statistic and p-value for the group predictor
+our_observed_t <- summary_our_lm$coefficients[2, 3]
+p_value <- summary_our_lm$coefficients[2, 4]
+
+# --- Step 5: Visualize the Verdict ---
+# Let's plot the sampling distribution (from Step 2) and see where our
+# single result (from Step 4) lands.
+
+# Create a dataframe for the plot
+plot_data <- data.frame(t_values = t_dist_h0)
+
+ggplot(plot_data, aes(x = t_values)) +
+  # Create the histogram of the sampling distribution under the null
+  geom_histogram(aes(y = ..density..), bins = 40, fill = "skyblue", color = "black") +
+  stat_function(fun = dt, args = list(df = degrees_freedom), color = "blue", size = 1) 
+
+```
+
+
+------------
+
+- Don't need to work with the simulated sampling distribution, as we estimated it and defined it as a t.
+
+```{r}
+#| code-fold: true
+ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dt, args = list(df = 50)) 
+```
+
+
+## Our sample statistics
+
+```{r}
+summary(our_lm_test)
+```
+
+
+## Test statistic
+
+```{r}
+#| code-fold: true
+ggplot(plot_data, aes(x = t_values)) +
+    stat_function(fun = dt, args = list(df = degrees_freedom))  + geom_segment(aes(x = our_observed_t, xend = our_observed_t, y = 0, yend = .4), size = 1.5, linetype = "dashed") +
+
+  labs(title = "The null distribution",
+    x = "t-statistic",
+    y = "Density"
+  ) +  annotate("text", x = our_observed_t, y = -0.035, label = paste("Our observed test t-statistic\n(t =", round(our_observed_t, 2), ")"), color = "black", fontface = "bold") +
+  theme_minimal()
+
+
+```
+
+## Critical values and Rejection regions
+
+
+
+- A "one tail" test does the same, such that you specify your direction prior to analzying. Your critical value is closer to the null because now 5% AUC is on one side. 
+
+---------------------
+
+```{r}
+#| code-fold: true
+ggplot(plot_data, aes(x = t_values)) +
+    stat_function(fun = dt, args = list(df = degrees_freedom))  + geom_segment(aes(x = our_observed_t, xend = our_observed_t, y = 0, yend = .4), size = 1.5, linetype = "dashed") +
+  annotate("rect", xmin=-Inf, xmax=critical_value_lower, ymin=0, ymax=Inf, alpha=0.2, fill="red") + annotate("rect", xmin=critical_value_upper, xmax=Inf, ymin=0, ymax=Inf, alpha=0.2, fill="red") 
+  
+
+```
+## NHST in action
+
+- Again, our test statistic is not more extreme than our critical value so we fail to reject the null. 
+
+- The logic of rejecting or not rejecting should be it as it is a decision rule. 
+- Unfortunately, current practice awkwardly combines two differnt views on NHST: Fisherian and Neymann-Pearson. 
+
+## p-values
+
+- Fisher only cared about p-values, and the null. There were no alternative hypothesess or decisions to be made. Provided a strength against the null. 
+
+P-value: 
+
+$p(\text{data} | H_0)$$
+
+"The probability of getting the sample value or more extreme, assuming the null hypothesis is true"
+
+-----------------
+
+```{r}
+#| code-fold: true
+ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  
+annotate("rect", xmin=-Inf, xmax=our_observed_t, ymin=0, ymax=Inf, alpha=0.2, fill="red") + annotate("rect", xmin=abs(our_observed_t), xmax=Inf, ymin=0, ymax=Inf, alpha=0.2, fill="red") +
+  
+  # Draw the t-distribution curve
+  stat_function(fun = dt, args = list(df = degrees_freedom), color = "blue", size = 1) +
+  
+  # Add a vertical line to mark our specific t-statistic
+  geom_vline(xintercept = our_observed_t, linetype = "dashed", size = 1)+
+  annotate("text", x = -3, y = 0.15, label = "This area under the curve...", color = "black") +
+  annotate("text", x = 3, y = 0.15, label = "...plus this area...", color = "black") +
+  annotate("text", x = 0.2, y = 0.12, label = paste("...equals the p-value\n(p =", round(p_value, 2), ")"), color = "black", fontface = "bold", size = 5) +
+  
+  # Add labels and title
+  labs(
+    title = "Conceptualizing a P-Value",
+    x = "t-statistic",
+    y = "Density"
+  ) +
+  theme_minimal()
+```
+
+---------
+
+
+```{r}
+pt(-.93, df = 100) + (1 - pt(.93, df = degrees_freedom)) 
+```
+
+- What would 1 sided p value be if 2 sided is .36? 
+
+```{r}
+pt(-.93, df = 100) 
+```
+
+## Problems wiht p-values
+
+- Doesn't tell you what you want to know, which leads to misunderstanding
+
+"What's wrong with [NHST]? Well, among many other things, it does not tell us what we want to know, and we so much want to know what we want to know that, out of desperation, we nevertheless believe that it does!" – Cohen (1994)
+
+- p(data | H0) when we really want p(H1 | data)
+
+## Problems wiht p-values
+
+- Focus on p-values leads to weird incentives
+
+- p < .05 as a condition for publication, publication as a condition for job/tenure/grant$, which leads to gaming the system given it all hinges on this one value. Makes this all you care about at the expense of other things. 
+
+- Leads to p-hacking, file drawers, etc (more later)
+
+## Problems with p-values
+
+- Leads to dichotomous thinking. 
+
+- "The world is flat p < .05";  "Surely god loves .051 as much as .049"
+
+- Fail vs not fail when the world is much more grey. Both in terms of original hypotheses (nil isn't risky) as well as interpreting results. 
+
+- Lacks a measure of interpretable effect size and an estimate of precision 
+
+
+## Problems with p-values
+
+- Leads to uncritical thinking
+
+- "I wouldn't trust a study with larger sample size than is standard (in the field), as that suggests they just gamed the system". - WashU big wig 
+
+- Not reporting necessary information as long as p-value is there, ritualistic p-value corrections without thought, power estimates without thought, asterisk  
+
+
+## Problems with p-values
+
+- Assuming no effect, we are still wrong at best 1/20 times. Likely much more (low power, p-hacking, etc) in published lit. 
+
+- Assuming an effect exists, do our results tell us anything? Are they risky hypotheses at all? Instead low value, low precision (“differences” are enough), almost no non-nil null hypotheses. 
+
+## p-values and NHST
+
+... are intrinsically tied. 
+
+But there are other ways! 
+
+## Estimation
+
+Logic: 
+
+- Sampling distribution provides us with information about how much we can trust the parameter estimate. 
+
+- We can quantify this precision via a confidence interval (CI), created from the sampling distribution.
+
+- Rather than focus on null/nil, focus on effect size estimate. 
+
+- Can also do NHST, but with a focus on gauging uncertainty
+
 ## Confidence intervals
+
+## Model comparison
+
+- We should explicitly test theories against one another rather than weak null/nil hypotheses.  
+
+- Build more than one regression model and pit two (or more) models against one another
+
+- Compare which fit the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used estimate SE. 
+
+
+
