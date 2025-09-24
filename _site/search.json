@@ -1565,7 +1565,7 @@
     "href": "Inference_7.html#sampling-distribution-1",
     "title": "Statistical Inference",
     "section": "Sampling distribution",
-    "text": "Sampling distribution\n\n\nCode\n# --- Step 5: Visualize Everything ---\n# A histogram clearly shows the distribution of our estimates.\nsampling_dist_plot &lt;- ggplot(data.frame(slopes = all_my_slopes), aes(x = slopes)) +\n  geom_histogram(aes(y = ..density..), bins = 30, fill = \"skyblue\", color = \"black\") +\n  geom_density(color = \"red\", size = 1) +\n  geom_vline(xintercept = true_slope, color = \"blue\", linetype = \"dashed\", size = 1.5) +\n  geom_vline(xintercept = 1.87082, color = \"black\", linetype = \"solid\", size = 1.5) +\n  labs(\n    title = \"Sampling Distribution of the Slope (β₁)\",\n    subtitle = paste(\"Based on\", n_simulations, \"samples of size\", sample_size),\n    x = \"Estimated Slope Coefficient (β̂₁)\",\n    y = \"Density\"\n  ) + \n  # geom_vline(2.014) + \n  theme_minimal()\n\nprint(sampling_dist_plot)\n\n\n\n\nDid we get unlucky with our one experiment? Or is this just part of the variability we have to live with?"
+    "text": "Sampling distribution\n\n\nCode\n# --- Step 5: Visualize Everything ---\n# A histogram clearly shows the distribution of our estimates.\nsampling_dist_plot &lt;- ggplot(data.frame(slopes = all_my_slopes), aes(x = slopes)) +\n  geom_histogram(aes(y = ..density..), bins = 30, fill = \"skyblue\", color = \"black\") +\n  geom_density(color = \"red\", size = 1) +\n  geom_vline(xintercept = true_slope, color = \"blue\", linetype = \"dashed\", size = 1.5) +\n  geom_vline(xintercept = 1.87082, color = \"black\", linetype = \"solid\", size = 1.5) +\n  labs(\n    title = \"Sampling Distribution of the Slope (β₁)\",\n    subtitle = paste(\"Based on\", n_simulations, \"samples of size\", sample_size),\n    x = \"Estimated Slope Coefficient (β̂₁)\",\n    y = \"Density\"\n  ) + \n  # geom_vline(2.014) + \n  theme_minimal()\n\nprint(sampling_dist_plot)\n\n\n\n\nDid we get unlucky with our one experiment? Is this just part of the uncertainty we have to live with?"
   },
   {
     "objectID": "Inference_7.html#sampling-distribution-2",
@@ -1740,7 +1740,7 @@
     "href": "Inference_7.html#nhst",
     "title": "Statistical Inference",
     "section": "NHST",
-    "text": "NHST\nLogic:\n\nWe are interested in estimating some statistic, which we do not know the true population parameter.\nWe are going to assume some true value (null hypothesis), to see if our statistic is likely (or not) based on this assumption.\nWe then either reject the null (and accept the alternative), or fail to reject (and then are back at square one. The theory lives to fight another day)"
+    "text": "NHST\nLogic:\n\nWe are interested in estimating some statistic, for which we do not know the true population parameter.\nWe are going to assume some true value (null hypothesis), to see if our statistic is likely (or not) based on this assumption.\nWe then either reject the null (and accept the alternative), or fail to reject (and then are back at square one. The theory lives to fight another day)"
   },
   {
     "objectID": "Inference_7.html#estimation",
@@ -1824,7 +1824,7 @@
     "href": "Inference_7.html#nhst-in-action-3",
     "title": "Statistical Inference",
     "section": "NHST in action",
-    "text": "NHST in action\n\nRather than work with our sampling distribution in original units, we are going to translate this distribution into a standardized form. We do this by dividing by the standard error (which is a standard deviation).\nThe information is the same, this is just convention. For regression, because we have to estimate the SE, we use the t distribution\n\n\\[\\frac{(\\hat{\\beta} - H_0)} {\\hat{\\sigma}}\\]"
+    "text": "NHST in action\n\nRather than work with our sampling distribution in original units, we are going to translate this distribution into a standardized form. We do this by dividing by the standard error (which is a standard deviation).\nThe information is the same, this is just convention. Because we have to estimate the SE, we use the t distribution\n\n\\[\\frac{(\\hat{\\beta} - H_0)} {\\hat{\\sigma}}\\]"
   },
   {
     "objectID": "Inference_7.html#sampling-distribution-of-the-test-statistic",
@@ -1838,7 +1838,7 @@
     "href": "Inference_7.html#our-sample-statistics-1",
     "title": "Statistical Inference",
     "section": "Our sample statistics",
-    "text": "Our sample statistics\n\nsummary(our_lm_test)\n\n\nCall:\nlm(formula = value ~ group, data = our_data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-33.611  -8.378   1.665  10.748  28.944 \n\nCoefficients:\n               Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)     101.247      2.746  36.873   &lt;2e-16 ***\ngrouptreatment   -1.529      3.883  -0.394    0.695    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 15.04 on 58 degrees of freedom\nMultiple R-squared:  0.002666,  Adjusted R-squared:  -0.01453 \nF-statistic: 0.155 on 1 and 58 DF,  p-value: 0.6952"
+    "text": "Our sample statistics\n\nDifferent from above, like we ran a new experiment\n\n\nsummary(our_lm_test)\n\n\nCall:\nlm(formula = value ~ group, data = our_data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-33.611  -8.378   1.665  10.748  28.944 \n\nCoefficients:\n               Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)     101.247      2.746  36.873   &lt;2e-16 ***\ngrouptreatment   -1.529      3.883  -0.394    0.695    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 15.04 on 58 degrees of freedom\nMultiple R-squared:  0.002666,  Adjusted R-squared:  -0.01453 \nF-statistic: 0.155 on 1 and 58 DF,  p-value: 0.6952"
   },
   {
     "objectID": "Inference_7.html#test-statistic",
@@ -1852,7 +1852,7 @@
     "href": "Inference_7.html#p-values",
     "title": "Statistical Inference",
     "section": "p-values",
-    "text": "p-values\n\nFisher only cared about p-values, and the null. There were no alternative hypothesess or decisions to be made. Provided a strength against the null.\n\nP-value:\n\\(p(\\text{data} | H_0)\\)$\n“The probability of getting the sample value or more extreme, assuming the null hypothesis is true”"
+    "text": "p-values\n\nFisher only cared about p-values and the null. There were no alternative hypothesess or decisions to be made. Provided a strength against the null.\n\nP-value:\n\\[p(\\text{data} | H_0)\\]\n“The probability of getting the sample value or more extreme, assuming the null hypothesis is true”"
   },
   {
     "objectID": "Inference_7.html#decision",
@@ -1873,14 +1873,14 @@
     "href": "Inference_7.html#critical-values-and-rejection-regions",
     "title": "Statistical Inference",
     "section": "Critical values and Rejection regions",
-    "text": "Critical values and Rejection regions\n\nA “one tail” test does the same, such that you specify your direction prior to analzying. Your critical value is closer to the null because now 5% AUC is on one side."
+    "text": "Critical values and Rejection regions\n\nConvention is two look at more extreme regardless of direction, a two tailed test.\nConvention is to set it at .05 AUC. This is your alpha level.\nA “one tail” test does the same, such that you specify your direction prior to analzying. Your critical value is closer to the null because now 5% AUC is on one side."
   },
   {
     "objectID": "Inference_7.html#nhst-in-action-4",
     "href": "Inference_7.html#nhst-in-action-4",
     "title": "Statistical Inference",
     "section": "NHST in action",
-    "text": "NHST in action\n\nAgain, our test statistic is not more extreme than our critical value so we fail to reject the null.\nThe logic of rejecting or not rejecting should be it as it is a decision rule.\nUnfortunately, current practice awkwardly combines two differnt views on NHST: Fisherian and Neymann-Pearson."
+    "text": "NHST in action\n\nAgain, our test statistic is not more extreme than our critical value so we fail to reject the null.\nThe logic of rejecting or not rejecting should be it, as in nothing else is needed given it is a decision rule.\nUnfortunately, current practice awkwardly combines two differnt views on NHST: Fisherian and Neymann-Pearson.\nThis results in people wanting to also interpret p-values."
   },
   {
     "objectID": "Inference_7.html#problems-wiht-p-values",
