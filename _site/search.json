@@ -1901,21 +1901,21 @@
     "href": "Inference_7.html#problems-with-p-values",
     "title": "Statistical Inference",
     "section": "Problems with p-values",
-    "text": "Problems with p-values\n\nLeads to dichotomous thinking.\n“The world is flat p &lt; .05”; “Surely god loves .051 as much as .049”\nFail vs not fail when the world is much more grey. Both in terms of original hypotheses (nil isn’t risky) as well as interpreting results.\nLacks a measure of interpretable effect size and an estimate of precision"
+    "text": "Problems with p-values\n\nDoesn’t tell you what you want to know, which leads to misunderstanding\n\n“What’s wrong with NHST? Well, among many other things, it does not tell us what we want to know, and we so much want to know what we want to know that, out of desperation, we nevertheless believe that it does!” – Cohen (1994)\n\np(data | H0) when we really want p(H1 | data)"
   },
   {
     "objectID": "Inference_7.html#problems-with-p-values-1",
     "href": "Inference_7.html#problems-with-p-values-1",
     "title": "Statistical Inference",
     "section": "Problems with p-values",
-    "text": "Problems with p-values\n\nLeads to uncritical thinking\n“I wouldn’t trust a study with larger sample size than is standard (in the field), as that suggests they just gamed the system”. - WashU big wig\nNot reporting necessary information as long as p-value is there, ritualistic p-value corrections without thought, power estimates without thought, asterisk"
+    "text": "Problems with p-values\n\nFocus on p-values leads to weird incentives\np &lt; .05 as a condition for publication, publication as a condition for job/tenure/grant$, which leads to gaming the system given it all hinges on this one value. Makes this all you care about at the expense of other things.\nLeads to p-hacking, file drawers, etc (more later)"
   },
   {
     "objectID": "Inference_7.html#problems-with-p-values-2",
     "href": "Inference_7.html#problems-with-p-values-2",
     "title": "Statistical Inference",
     "section": "Problems with p-values",
-    "text": "Problems with p-values\n\nAssuming no effect, we are still wrong at best 1/20 times. Likely much more (low power, p-hacking, etc) in published lit.\nAssuming an effect exists, do our results tell us anything? Are they risky hypotheses at all? Instead low value, low precision (“differences” are enough), almost no non-nil null hypotheses."
+    "text": "Problems with p-values\n\nLeads to dichotomous thinking.\n“The world is flat p &lt; .05”; “Surely god loves .051 as much as .049”\nFail vs not fail when the world is much more grey. Both in terms of original hypotheses (nil isn’t risky) as well as interpreting results.\nLacks a measure of interpretable effect size and an estimate of precision"
   },
   {
     "objectID": "Inference_7.html#p-values-and-nhst",
@@ -1923,5 +1923,47 @@
     "title": "Statistical Inference",
     "section": "p-values and NHST",
     "text": "p-values and NHST\n… are intrinsically tied.\nBut there are other ways!"
+  },
+  {
+    "objectID": "Inference_7.html#last-section",
+    "href": "Inference_7.html#last-section",
+    "title": "Statistical Inference",
+    "section": "Last section",
+    "text": "Last section\n\nFirst third of the class\n\n\nConstruction of model (make it work)\nInference from model (learn from it)\nAdditions to basic model (make it suit our needs)"
+  },
+  {
+    "objectID": "Inference_7.html#this-time-this-section",
+    "href": "Inference_7.html#this-time-this-section",
+    "title": "Statistical Inference",
+    "section": "This time (this section)",
+    "text": "This time (this section)\n\nSampling distributions\nNHST as evaluating our hypothesis\nEstimation as alternative\nModel comparison as third alternative"
+  },
+  {
+    "objectID": "Inference_7.html#problems-with-p-values-3",
+    "href": "Inference_7.html#problems-with-p-values-3",
+    "title": "Statistical Inference",
+    "section": "Problems with p-values",
+    "text": "Problems with p-values\n\nLeads to uncritical thinking\n“I wouldn’t trust a study with larger sample size than is standard (in the field), as that suggests they just gamed the system”. - WashU big wig\nNot reporting necessary information as long as p-value is there, ritualistic p-value corrections without thought, power estimates without thought, asterisk"
+  },
+  {
+    "objectID": "Inference_7.html#problems-with-p-values-4",
+    "href": "Inference_7.html#problems-with-p-values-4",
+    "title": "Statistical Inference",
+    "section": "Problems with p-values",
+    "text": "Problems with p-values\n\nAssuming no effect, we are still wrong at best 1/20 times. Likely much more (low power, p-hacking, etc) in published lit.\nAssuming an effect exists, do our results tell us anything? Are they risky hypotheses at all? Instead low value, low precision (“differences” are enough), almost no non-nil null hypotheses."
+  },
+  {
+    "objectID": "Inference_7.html#effect-sizes",
+    "href": "Inference_7.html#effect-sizes",
+    "title": "Statistical Inference",
+    "section": "Effect sizes",
+    "text": "Effect sizes\n\npractical versus statistical significance\n“One weird trick to significance. PhDs hate it.”"
+  },
+  {
+    "objectID": "Inference_7.html#revisit-anova-table",
+    "href": "Inference_7.html#revisit-anova-table",
+    "title": "Statistical Inference",
+    "section": "Revisit ANOVA table",
+    "text": "Revisit ANOVA table"
   }
 ]

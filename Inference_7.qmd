@@ -11,7 +11,15 @@ html:
   scrollable: true
 ---
 
-## This time
+## Last section
+
+- First third of the class
+
+1. Construction of model (make it work)
+2. Inference from model (learn from it)
+3. Additions to basic model (make it suit our needs)
+
+## This time (this section)
 
 -   Sampling distributions
 
@@ -1030,7 +1038,7 @@ pt(-0.394, df = 100) + (1 - pt(0.394, df = degrees_freedom))
 pt(-0.394, df = 100) 
 ```
 
-## Problems wiht p-values
+## Problems with p-values
 
 - Doesn't tell you what you want to know, which leads to misunderstanding
 
@@ -1038,7 +1046,7 @@ pt(-0.394, df = 100)
 
 - p(data | H0) when we really want p(H1 | data)
 
-## Problems wiht p-values
+## Problems with p-values
 
 - Focus on p-values leads to weird incentives
 
@@ -1092,6 +1100,15 @@ Logic:
 
 ## Confidence intervals
 
+
+## Effect sizes
+
+- practical versus statistical significance
+
+- "One weird trick to significance. PhDs hate it."
+
+
+
 ## Model comparison
 
 - We should explicitly test theories against one another rather than weak null/nil hypotheses.  
@@ -1099,6 +1116,9 @@ Logic:
 - Build more than one regression model and pit two (or more) models against one another
 
 - Compare which fit the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used estimate SE. 
+
+## Revisit ANOVA table
+
 
 
 
