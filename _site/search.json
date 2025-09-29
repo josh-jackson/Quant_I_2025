@@ -1649,7 +1649,7 @@
     "href": "Inference_7.html#confidence-intervals",
     "title": "Statistical Inference",
     "section": "Confidence intervals",
-    "text": "Confidence intervals"
+    "text": "Confidence intervals\n\nThe sampling distribution dispersion, represented by the SE, reflects uncertainty in the sample statistic as an estimate of the population parameter\nWe can create an interval that tells us how “confident” we are in the population parameter being in the range.\nWe can do this because we know that the sampling distribution is normal and…"
   },
   {
     "objectID": "Inference_7.html#sampling-distribution-standard-error",
@@ -1957,7 +1957,7 @@
     "href": "Inference_7.html#effect-sizes",
     "title": "Statistical Inference",
     "section": "Effect sizes",
-    "text": "Effect sizes\n\npractical versus statistical significance\n“One weird trick to significance. PhDs hate it.”"
+    "text": "Effect sizes\n\npractical versus statistical significance\n“One weird trick to significance. PhDs hate it.”\nstd b, correlation, cohen’s d, odds ratio…"
   },
   {
     "objectID": "Inference_7.html#revisit-anova-table",
@@ -1965,5 +1965,68 @@
     "title": "Statistical Inference",
     "section": "Revisit ANOVA table",
     "text": "Revisit ANOVA table"
+  },
+  {
+    "objectID": "Inference_7.html#cis",
+    "href": "Inference_7.html#cis",
+    "title": "Statistical Inference",
+    "section": "CIs",
+    "text": "CIs\n\nCan make the range any level you want, just have to know the critical value under your theoretical probability distribution\n\n\\[CI_{95} = \\text{statistic} \\pm (\\text{crit value}* SE)\\] p &lt;.01 or 99% CI\n\nqnorm(.01/2)\n\n[1] -2.575829\n\n\n89% CI\n\nqnorm(.11/2)\n\n[1] -1.598193"
+  },
+  {
+    "objectID": "Inference_7.html#ci",
+    "href": "Inference_7.html#ci",
+    "title": "Statistical Inference",
+    "section": "CI",
+    "text": "CI\n\nDo not (necessarily) require a null hypothesis. We can focus on our “best guess” and the precision around it.\n“One weird trick to significance. PhDs hate it.”\nThe standard error is treated as a fixed property of the sample, regardless of what the true mean is"
+  },
+  {
+    "objectID": "Inference_7.html#ci-interpretation",
+    "href": "Inference_7.html#ci-interpretation",
+    "title": "Statistical Inference",
+    "section": "CI interpretation",
+    "text": "CI interpretation\n\n“If we repeated this experiment, …”\nPlausible range of values. (est could be any of these)\nPrecision in our estimate (is our Margin of Error (MOE) excessively large)"
+  },
+  {
+    "objectID": "Inference_7.html#cis-summary",
+    "href": "Inference_7.html#cis-summary",
+    "title": "Statistical Inference",
+    "section": "CIs summary",
+    "text": "CIs summary\n\nremember we can always get unlucky\n\n\n\nCode\nplot_data &lt;- simulation_results[1:100, ]\n\nggplot(plot_data, aes(x = simulation_id, ymin = lower_bound, ymax = upper_bound, color = captured_true_mean)) +\n  # Draw a vertical line for each confidence interval\n  geom_errorbar(width = 0.5) +\n  \n  # Draw a horizontal line representing the true population mean\n  geom_hline(yintercept = true_population_mean, color = \"black\", linetype = \"dashed\", size = 1) +\n  \n  # Manually set the colors (green for capture, red for miss)\n  scale_color_manual(values = c(\"TRUE\" = \"gray50\", \"FALSE\" = \"red\")) +\n  \n  # Add labels and a title\n  labs(\n    title = \"Visualizing 95% Confidence Intervals\",\n    subtitle = \"Each vertical line is one 95% CI from a different sample. The dashed line is the true population mean.\",\n    x = \"Simulation Number (First 100 Shown)\",\n    y = \"Value\"\n  ) +\n  theme_minimal() +\n  theme(legend.position = \"none\") + # Hide the legend for a cleaner look\n  annotate(\"text\", x = 80, y = true_population_mean + 1, label = \"True Population Mean\", color = \"black\", fontface = \"bold\")"
+  },
+  {
+    "objectID": "Inference_7.html#conveying-uncertainty",
+    "href": "Inference_7.html#conveying-uncertainty",
+    "title": "Statistical Inference",
+    "section": "Conveying uncertainty",
+    "text": "Conveying uncertainty\n\n\nCode\nlibrary(ggplot2)\nlibrary(dplyr)\n\n# --- Step 1: Simulate Data for Two Groups ---\n# We'll create a dataset with a continuous outcome and a two-level factor\n# to represent a simple linear model with a dummy-coded predictor.\n\nset.seed(42) # for reproducibility\nn_per_group &lt;- 50\ncontrol_mean &lt;- 100\ntreatment_mean &lt;- 110\ncommon_sd &lt;- 15\n\n# Create the data\nfull_data &lt;- data.frame(\n  value = c(\n    rnorm(n_per_group, mean = control_mean, sd = common_sd),\n    rnorm(n_per_group, mean = treatment_mean, sd = common_sd)\n  ),\n  group = factor(rep(c(\"Control\", \"Treatment\"), each = n_per_group))\n)\n\n\n# --- Step 2: Calculate Summary Statistics for Each Group ---\n# We need to calculate the mean and the three different interval types.\n# Using dplyr makes this straightforward.\n\nsummary_stats &lt;- full_data %&gt;%\n  group_by(group) %&gt;%\n  summarise(\n    mean = mean(value),\n    sd = sd(value),\n    n = n(),\n    se = sd / sqrt(n),\n    .groups = 'drop'\n  ) %&gt;%\n  mutate(\n    # Calculate the 95% CI using the t-distribution\n    critical_t = qt(0.975, df = n - 1),\n    ci_margin = critical_t * se,\n    ci_lower = mean - ci_margin,\n    ci_upper = mean + ci_margin\n  )\n\n\nmodel &lt;- lm(value ~ group, data = full_data)\n\n\n# --- Step 3: Create the Visualization ---\n# We will create one plot that shows the raw data and overlays the\n# three different error bars, jittered side-by-side for clarity.\n\n# Define the amount to jitter the error bars\ndodge_width &lt;- 0.2\n\nerror_plot &lt;- ggplot() +\n  \n  # Layer 1: The Raw Data Points (in the background)\n  # REVISED: Using as.numeric(group) for a consistent continuous x-axis\n  geom_jitter(\n    data = full_data, \n    aes(x = as.numeric(group), y = value),\n    width = 0.15, \n    color = \"gray70\", \n    alpha = 0.5\n  ) +\n  \n  # Layer 2: Standard Deviation\n  geom_errorbar(\n    data = summary_stats,\n    aes(x = as.numeric(group) - dodge_width, ymin = mean - sd, ymax = mean + sd, color = \"Standard Deviation\"),\n    width = 0.1, size = 1\n  ) +\n  geom_point(data = summary_stats, aes(x = as.numeric(group) - dodge_width, y = mean, color = \"Standard Deviation\"), size = 4) +\n\n  # Layer 3: 95% Confidence Interval\n  geom_errorbar(\n    data = summary_stats,\n    aes(x = as.numeric(group), ymin = ci_lower, ymax = ci_upper, color = \"95% Confidence Interval\"),\n    width = 0.1, size = 1\n  ) +\n  geom_point(data = summary_stats, aes(x = as.numeric(group), y = mean, color = \"95% Confidence Interval\"), size = 4) +\n  \n  # Layer 4: Standard Error\n  geom_errorbar(\n    data = summary_stats,\n    aes(x = as.numeric(group) + dodge_width, ymin = mean - se, ymax = mean + se, color = \"Standard Error\"),\n    width = 0.1, size = 1\n  ) +\n  geom_point(data = summary_stats, aes(x = as.numeric(group) + dodge_width, y = mean, color = \"Standard Error\"), size = 4) +\n  \n  # --- Formatting and Labels ---\n  # Use scale_color_manual to define our legend\n  scale_color_manual(\n    name = \"Uncertainty Measure\",\n    values = c(\"Standard Deviation\" = \"gray50\", \"95% Confidence Interval\" = \"blue\", \"Standard Error\" = \"darkgreen\")\n  ) +\n  \n  # Use scale_x_continuous to set the labels back to the group names\n  scale_x_continuous(\n    breaks = 1:length(levels(summary_stats$group)),\n    labels = levels(summary_stats$group)\n  ) +\n  \n  labs(\n    title = \"Comparing Measures of Spread and Precision for Group Means\",\n    subtitle = \"Showing raw data with jittered error bars for SD, SE, and 95% CI.\",\n    x = \"Group\",\n    y = \"Value\"\n  ) +\n  theme_minimal(base_size = 14) +\n  theme(legend.position = \"bottom\")\n\nprint(error_plot)"
+  },
+  {
+    "objectID": "Inference_7.html#overlapping-cis",
+    "href": "Inference_7.html#overlapping-cis",
+    "title": "Statistical Inference",
+    "section": "Overlapping CIs",
+    "text": "Overlapping CIs\n\nIf they touch then p ~= .01\nThey can overlap and still be significantly different.\nIf they do not overlap, they are significantly different from one another."
+  },
+  {
+    "objectID": "Inference_7.html#effect-sizes-1",
+    "href": "Inference_7.html#effect-sizes-1",
+    "title": "Statistical Inference",
+    "section": "Effect sizes",
+    "text": "Effect sizes\nCohen’s D:\n\\[\\delta = \\frac{\\mu_1 - \\mu_0}{\\sigma} \\approx d = \\frac{\\bar{X}_1-\\bar{X}_2}{\\hat{\\sigma}_p}\\]\n\nA Cohen’s d of .2 is considered “small”, .5 is considered “moderate”, and .8 is considered “large”"
+  },
+  {
+    "objectID": "Inference_7.html#meta-analytic-thinking",
+    "href": "Inference_7.html#meta-analytic-thinking",
+    "title": "Statistical Inference",
+    "section": "Meta-analytic thinking",
+    "text": "Meta-analytic thinking\n\nEstimation can be thought of as “getting the best guess (at population parameter), given my data, and conveying the uncertainty”\nIdeally, we would do this again, either via a direct replication or some “extension.” Overtime, we would learn more, getting more and more precise about the parameter we are interested in (this is what a meta-analysis does).\nIn contrast, NHST focuses on compiling yeses and nos, which makes it harder to be “cumulative”"
+  },
+  {
+    "objectID": "Inference_7.html#meta-analytic-thinking-1",
+    "href": "Inference_7.html#meta-analytic-thinking-1",
+    "title": "Statistical Inference",
+    "section": "Meta-analytic thinking",
+    "text": "Meta-analytic thinking\n\nEven if you do NHST make sure there is enough information for people to do “estimation”\nProvide sample statistics (means, SDs), Ns, se, RSE, etc. (You would be amazed at what people neglect)\nEasily identifiable red flag, especially as models get more complex"
   }
 ]

@@ -1666,12 +1666,1066 @@ F-statistic: 0.155 on 1 and 58 DF,  p-value: 0.6952</code></pre>
 </section>
 <section id="confidence-intervals" class="slide level2">
 <h2>Confidence intervals</h2>
+<ul>
+<li><p>The sampling distribution dispersion, represented by the SE, reflects uncertainty in the sample statistic as an estimate of the population parameter</p></li>
+<li><p>We can create an interval that tells us how “confident” we are in the population parameter being in the range.</p></li>
+<li><p>We can do this because we know that the sampling distribution is normal and…</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<ul>
+<li><p>Because if a sample mean is close to the true mean, then logically, the true mean must also be close to that sample mean. If Josh (sample) is standing close to Ben (pop), then we know Ben (pop) is standing close to Josh (sample).</p></li>
+<li><p>Based on our simulation, we know 95% of our samples will be within 2 SDs of our true population parameter. Or that 95% of our samples will be “close” to the true parameter.</p></li>
+<li><p>We know that 95% of times our sample statistic is going to be close to the population parameter. Thus we know 95% of times our population parameter will be close to the sample statistic.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><span class="math display">\[CI_{95} = \text{statistic} \pm (1.96 * SE)\]</span></p>
+<p><span class="math display">\[CI_{95} = \bar{X} \pm [1.96*\frac{\hat{\sigma}}{\sqrt{N}}]\]</span> <span class="math display">\[CI_{95} = \hat{\beta_{1}} \pm (1.96*\frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}})\]</span></p>
+</section>
+<section class="slide level2">
+
+<ul>
+<li><p>The 95% does not mean there is a 95% probability that the true mean is in your specific interval. We could be unlucky.</p></li>
+<li><p>It means that if you were to repeat your study many times, you would expect 95% of the confidence intervals you calculate to contain the true mean.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb68-2"><a href="#cb68-2"></a></span>
+<span id="cb68-3"><a href="#cb68-3"></a><span class="co"># --- Step 1: Define Our "True" Population ---</span></span>
+<span id="cb68-4"><a href="#cb68-4"></a><span class="co"># In the real world, we never know the true population mean. But in a simulation,</span></span>
+<span id="cb68-5"><a href="#cb68-5"></a><span class="co"># we can define it. This is the target our confidence intervals will try to capture.</span></span>
+<span id="cb68-6"><a href="#cb68-6"></a></span>
+<span id="cb68-7"><a href="#cb68-7"></a>true_population_mean <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb68-8"><a href="#cb68-8"></a>population_sd <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb68-9"><a href="#cb68-9"></a>population_size <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb68-10"><a href="#cb68-10"></a></span>
+<span id="cb68-11"><a href="#cb68-11"></a><span class="co"># Create the entire population</span></span>
+<span id="cb68-12"><a href="#cb68-12"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb68-13"><a href="#cb68-13"></a>population_data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(population_size, <span class="at">mean =</span> true_population_mean, <span class="at">sd =</span> population_sd)</span>
+<span id="cb68-14"><a href="#cb68-14"></a></span>
+<span id="cb68-15"><a href="#cb68-15"></a></span>
+<span id="cb68-16"><a href="#cb68-16"></a><span class="co"># --- Step 2: Simulate Thousands of Experiments ---</span></span>
+<span id="cb68-17"><a href="#cb68-17"></a><span class="co"># We will repeatedly take small samples and calculate a 95% CI for each one.</span></span>
+<span id="cb68-18"><a href="#cb68-18"></a></span>
+<span id="cb68-19"><a href="#cb68-19"></a>n_simulations <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb68-20"><a href="#cb68-20"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb68-21"><a href="#cb68-21"></a></span>
+<span id="cb68-22"><a href="#cb68-22"></a><span class="co"># Create a dataframe to store the results of each simulation</span></span>
+<span id="cb68-23"><a href="#cb68-23"></a>simulation_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb68-24"><a href="#cb68-24"></a>  <span class="at">simulation_id =</span> <span class="dv">1</span><span class="sc">:</span>n_simulations,</span>
+<span id="cb68-25"><a href="#cb68-25"></a>  <span class="at">lower_bound =</span> <span class="fu">numeric</span>(n_simulations),</span>
+<span id="cb68-26"><a href="#cb68-26"></a>  <span class="at">upper_bound =</span> <span class="fu">numeric</span>(n_simulations),</span>
+<span id="cb68-27"><a href="#cb68-27"></a>  <span class="at">captured_true_mean =</span> <span class="fu">logical</span>(n_simulations)</span>
+<span id="cb68-28"><a href="#cb68-28"></a>)</span>
+<span id="cb68-29"><a href="#cb68-29"></a></span>
+<span id="cb68-30"><a href="#cb68-30"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_simulations) {</span>
+<span id="cb68-31"><a href="#cb68-31"></a>  <span class="co"># 1. Draw one random sample from our population</span></span>
+<span id="cb68-32"><a href="#cb68-32"></a>  current_sample <span class="ot">&lt;-</span> <span class="fu">sample</span>(population_data, sample_size)</span>
+<span id="cb68-33"><a href="#cb68-33"></a>  </span>
+<span id="cb68-34"><a href="#cb68-34"></a>  <span class="co"># 2. Calculate the sample's statistics</span></span>
+<span id="cb68-35"><a href="#cb68-35"></a>  sample_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(current_sample)</span>
+<span id="cb68-36"><a href="#cb68-36"></a>  sample_sd <span class="ot">&lt;-</span> <span class="fu">sd</span>(current_sample)</span>
+<span id="cb68-37"><a href="#cb68-37"></a>  standard_error <span class="ot">&lt;-</span> sample_sd <span class="sc">/</span> <span class="fu">sqrt</span>(sample_size)</span>
+<span id="cb68-38"><a href="#cb68-38"></a>  degrees_freedom <span class="ot">&lt;-</span> sample_size <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb68-39"><a href="#cb68-39"></a>  </span>
+<span id="cb68-40"><a href="#cb68-40"></a>  <span class="co"># 3. Find the critical t-value for a 95% CI</span></span>
+<span id="cb68-41"><a href="#cb68-41"></a>  critical_t <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> degrees_freedom)</span>
+<span id="cb68-42"><a href="#cb68-42"></a>  </span>
+<span id="cb68-43"><a href="#cb68-43"></a>  <span class="co"># 4. Calculate the confidence interval for this one sample</span></span>
+<span id="cb68-44"><a href="#cb68-44"></a>  margin_of_error <span class="ot">&lt;-</span> critical_t <span class="sc">*</span> standard_error</span>
+<span id="cb68-45"><a href="#cb68-45"></a>  simulation_results<span class="sc">$</span>lower_bound[i] <span class="ot">&lt;-</span> sample_mean <span class="sc">-</span> margin_of_error</span>
+<span id="cb68-46"><a href="#cb68-46"></a>  simulation_results<span class="sc">$</span>upper_bound[i] <span class="ot">&lt;-</span> sample_mean <span class="sc">+</span> margin_of_error</span>
+<span id="cb68-47"><a href="#cb68-47"></a>  </span>
+<span id="cb68-48"><a href="#cb68-48"></a>  <span class="co"># 5. Check if this interval "captured" the true population mean</span></span>
+<span id="cb68-49"><a href="#cb68-49"></a>  simulation_results<span class="sc">$</span>captured_true_mean[i] <span class="ot">&lt;-</span> </span>
+<span id="cb68-50"><a href="#cb68-50"></a>    (simulation_results<span class="sc">$</span>lower_bound[i] <span class="sc">&lt;</span> true_population_mean) <span class="sc">&amp;&amp;</span> </span>
+<span id="cb68-51"><a href="#cb68-51"></a>    (simulation_results<span class="sc">$</span>upper_bound[i] <span class="sc">&gt;</span> true_population_mean)</span>
+<span id="cb68-52"><a href="#cb68-52"></a>}</span>
+<span id="cb68-53"><a href="#cb68-53"></a></span>
+<span id="cb68-54"><a href="#cb68-54"></a></span>
+<span id="cb68-55"><a href="#cb68-55"></a><span class="co"># --- Step 3: Calculate the Final Success Rate ---</span></span>
+<span id="cb68-56"><a href="#cb68-56"></a><span class="co"># Let's see what percentage of our 10,000 CIs actually contained the true mean.</span></span>
+<span id="cb68-57"><a href="#cb68-57"></a></span>
+<span id="cb68-58"><a href="#cb68-58"></a>capture_rate <span class="ot">&lt;-</span> <span class="fu">mean</span>(simulation_results<span class="sc">$</span>captured_true_mean) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb68-59"><a href="#cb68-59"></a></span>
+<span id="cb68-60"><a href="#cb68-60"></a></span>
+<span id="cb68-61"><a href="#cb68-61"></a><span class="co"># --- Step 4: Visualize the First 100 Confidence Intervals ---</span></span>
+<span id="cb68-62"><a href="#cb68-62"></a><span class="co"># This plot provides an intuitive look at what "95% confidence" means.</span></span>
+<span id="cb68-63"><a href="#cb68-63"></a></span>
+<span id="cb68-64"><a href="#cb68-64"></a><span class="co"># We'll just plot the first 100 simulations so we can see them clearly</span></span>
+<span id="cb68-65"><a href="#cb68-65"></a>plot_data <span class="ot">&lt;-</span> simulation_results[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, ]</span>
+<span id="cb68-66"><a href="#cb68-66"></a></span>
+<span id="cb68-67"><a href="#cb68-67"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> simulation_id, <span class="at">ymin =</span> lower_bound, <span class="at">ymax =</span> upper_bound, <span class="at">color =</span> captured_true_mean)) <span class="sc">+</span></span>
+<span id="cb68-68"><a href="#cb68-68"></a>  <span class="co"># Draw a vertical line for each confidence interval</span></span>
+<span id="cb68-69"><a href="#cb68-69"></a>  <span class="fu">geom_errorbar</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb68-70"><a href="#cb68-70"></a>  </span>
+<span id="cb68-71"><a href="#cb68-71"></a>  <span class="co"># Draw a horizontal line representing the true population mean</span></span>
+<span id="cb68-72"><a href="#cb68-72"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> true_population_mean, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb68-73"><a href="#cb68-73"></a>  </span>
+<span id="cb68-74"><a href="#cb68-74"></a>  <span class="co"># Manually set the colors (green for capture, red for miss)</span></span>
+<span id="cb68-75"><a href="#cb68-75"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"gray50"</span>, <span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb68-76"><a href="#cb68-76"></a>  </span>
+<span id="cb68-77"><a href="#cb68-77"></a>  <span class="co"># Add labels and a title</span></span>
+<span id="cb68-78"><a href="#cb68-78"></a>  <span class="fu">labs</span>(</span>
+<span id="cb68-79"><a href="#cb68-79"></a>    <span class="at">title =</span> <span class="st">"Visualizing 95% Confidence Intervals"</span>,</span>
+<span id="cb68-80"><a href="#cb68-80"></a>    <span class="at">subtitle =</span> <span class="st">"Each vertical line is one 95% CI from a different sample. The dashed line is the true population mean."</span>,</span>
+<span id="cb68-81"><a href="#cb68-81"></a>    <span class="at">x =</span> <span class="st">"Simulation Number (First 4 Shown)"</span>,</span>
+<span id="cb68-82"><a href="#cb68-82"></a>    <span class="at">y =</span> <span class="st">"Value"</span></span>
+<span id="cb68-83"><a href="#cb68-83"></a>  ) <span class="sc">+</span></span>
+<span id="cb68-84"><a href="#cb68-84"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb68-85"><a href="#cb68-85"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span> <span class="co"># Hide the legend for a cleaner look</span></span>
+<span id="cb68-86"><a href="#cb68-86"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">80</span>, <span class="at">y =</span> true_population_mean <span class="sc">+</span> <span class="dv">1</span>, <span class="at">label =</span> <span class="st">"True Population Mean"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-34-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a>plot_data <span class="ot">&lt;-</span> simulation_results[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]</span>
+<span id="cb69-2"><a href="#cb69-2"></a></span>
+<span id="cb69-3"><a href="#cb69-3"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> simulation_id, <span class="at">ymin =</span> lower_bound, <span class="at">ymax =</span> upper_bound, <span class="at">color =</span> captured_true_mean)) <span class="sc">+</span></span>
+<span id="cb69-4"><a href="#cb69-4"></a>  <span class="co"># Draw a vertical line for each confidence interval</span></span>
+<span id="cb69-5"><a href="#cb69-5"></a>  <span class="fu">geom_errorbar</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb69-6"><a href="#cb69-6"></a>  </span>
+<span id="cb69-7"><a href="#cb69-7"></a>  <span class="co"># Draw a horizontal line representing the true population mean</span></span>
+<span id="cb69-8"><a href="#cb69-8"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> true_population_mean, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb69-9"><a href="#cb69-9"></a>  </span>
+<span id="cb69-10"><a href="#cb69-10"></a>  <span class="co"># Manually set the colors (green for capture, red for miss)</span></span>
+<span id="cb69-11"><a href="#cb69-11"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"gray50"</span>, <span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb69-12"><a href="#cb69-12"></a>  </span>
+<span id="cb69-13"><a href="#cb69-13"></a>  <span class="co"># Add labels and a title</span></span>
+<span id="cb69-14"><a href="#cb69-14"></a>  <span class="fu">labs</span>(</span>
+<span id="cb69-15"><a href="#cb69-15"></a>    <span class="at">title =</span> <span class="st">"Visualizing 95% Confidence Intervals"</span>,</span>
+<span id="cb69-16"><a href="#cb69-16"></a>    <span class="at">subtitle =</span> <span class="st">"Each vertical line is one 95% CI from a different sample. The dashed line is the true population mean."</span>,</span>
+<span id="cb69-17"><a href="#cb69-17"></a>    <span class="at">x =</span> <span class="st">"Simulation Number (First 100 Shown)"</span>,</span>
+<span id="cb69-18"><a href="#cb69-18"></a>    <span class="at">y =</span> <span class="st">"Value"</span></span>
+<span id="cb69-19"><a href="#cb69-19"></a>  ) <span class="sc">+</span></span>
+<span id="cb69-20"><a href="#cb69-20"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb69-21"><a href="#cb69-21"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span> <span class="co"># Hide the legend for a cleaner look</span></span>
+<span id="cb69-22"><a href="#cb69-22"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">80</span>, <span class="at">y =</span> true_population_mean <span class="sc">+</span> <span class="dv">1</span>, <span class="at">label =</span> <span class="st">"True Population Mean"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<ul>
+<li>Are all CIs the same? Why or why not?</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="co">#Number of Simulated Experiments</span></span>
+<span id="cb70-2"><a href="#cb70-2"></a>n_simulations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a><span class="co">#Percentage of CIs that Captured the True Mean</span></span>
+<span id="cb72-2"><a href="#cb72-2"></a> <span class="fu">round</span>(capture_rate, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 95.4</code></pre>
+</div>
+</div>
+<p>95%: “If we repeated our experiment an infinite amount of times, 95% of CIs will contain the true population parameter”</p>
+</section>
+<section id="cis" class="slide level2">
+<h2>CIs</h2>
+<ul>
+<li>Can make the range any level you want, just have to know the critical value under your theoretical probability distribution</li>
+</ul>
+<p><span class="math display">\[CI_{95} = \text{statistic} \pm (\text{crit value}* SE)\]</span> p &lt;.01 or 99% CI</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="fu">qnorm</span>(.<span class="dv">01</span><span class="sc">/</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -2.575829</code></pre>
+</div>
+</div>
+<p>89% CI</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a><span class="fu">qnorm</span>(.<span class="dv">11</span><span class="sc">/</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1.598193</code></pre>
+</div>
+</div>
+</section>
+<section id="ci" class="slide level2">
+<h2>CI</h2>
+<ul>
+<li><p>Do not (necessarily) require a null hypothesis. We can focus on our “best guess” and the precision around it.</p></li>
+<li><p>“One weird trick to significance. PhDs hate it.”</p></li>
+<li><p>The standard error is treated as a fixed property of the sample, regardless of what the true mean is</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb78-2"><a href="#cb78-2"></a></span>
+<span id="cb78-3"><a href="#cb78-3"></a><span class="co"># --- Step 1: Define a Hypothetical "Significant" Result ---</span></span>
+<span id="cb78-4"><a href="#cb78-4"></a><span class="co"># Let's imagine we ran an experiment and got these results.</span></span>
+<span id="cb78-5"><a href="#cb78-5"></a><span class="co"># We chose an estimate that is more than 2 standard errors away from 0,</span></span>
+<span id="cb78-6"><a href="#cb78-6"></a><span class="co"># so we know it should be statistically significant.</span></span>
+<span id="cb78-7"><a href="#cb78-7"></a>observed_estimate <span class="ot">&lt;-</span> <span class="fl">5.0</span></span>
+<span id="cb78-8"><a href="#cb78-8"></a>standard_error <span class="ot">&lt;-</span> <span class="fl">2.0</span></span>
+<span id="cb78-9"><a href="#cb78-9"></a>degrees_freedom <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># A reasonable sample size</span></span>
+<span id="cb78-10"><a href="#cb78-10"></a></span>
+<span id="cb78-11"><a href="#cb78-11"></a><span class="co"># --- Step 2: Calculate the NHST and CI Components ---</span></span>
+<span id="cb78-12"><a href="#cb78-12"></a>null_value <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb78-13"><a href="#cb78-13"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb78-14"><a href="#cb78-14"></a></span>
+<span id="cb78-15"><a href="#cb78-15"></a><span class="co"># --- NHST Components ---</span></span>
+<span id="cb78-16"><a href="#cb78-16"></a><span class="co"># The t-statistic standardizes our result: How many SEs from the null?</span></span>
+<span id="cb78-17"><a href="#cb78-17"></a>t_statistic <span class="ot">&lt;-</span> (observed_estimate <span class="sc">-</span> null_value) <span class="sc">/</span> standard_error</span>
+<span id="cb78-18"><a href="#cb78-18"></a>p_value <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">pt</span>(<span class="fu">abs</span>(t_statistic), <span class="at">df =</span> degrees_freedom, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb78-19"><a href="#cb78-19"></a></span>
+<span id="cb78-20"><a href="#cb78-20"></a><span class="co"># Find the critical t-values that define the rejection region</span></span>
+<span id="cb78-21"><a href="#cb78-21"></a>critical_t <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> degrees_freedom)</span>
+<span id="cb78-22"><a href="#cb78-22"></a></span>
+<span id="cb78-23"><a href="#cb78-23"></a><span class="co"># --- Confidence Interval Components ---</span></span>
+<span id="cb78-24"><a href="#cb78-24"></a>margin_of_error <span class="ot">&lt;-</span> critical_t <span class="sc">*</span> standard_error</span>
+<span id="cb78-25"><a href="#cb78-25"></a>ci_lower <span class="ot">&lt;-</span> observed_estimate <span class="sc">-</span> margin_of_error</span>
+<span id="cb78-26"><a href="#cb78-26"></a>ci_upper <span class="ot">&lt;-</span> observed_estimate <span class="sc">+</span> margin_of_error</span>
+<span id="cb78-27"><a href="#cb78-27"></a></span>
+<span id="cb78-28"><a href="#cb78-28"></a><span class="co"># --- Plot 1: The NHST Perspective (on the t-statistic scale) ---</span></span>
+<span id="cb78-29"><a href="#cb78-29"></a><span class="co"># This plot answers: "Does our t-statistic fall in the rejection region?"</span></span>
+<span id="cb78-30"><a href="#cb78-30"></a></span>
+<span id="cb78-31"><a href="#cb78-31"></a>nhst_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb78-32"><a href="#cb78-32"></a>  <span class="co"># Shade the rejection regions</span></span>
+<span id="cb78-33"><a href="#cb78-33"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> critical_t, <span class="at">xmax =</span> <span class="cn">Inf</span>, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>), <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb78-34"><a href="#cb78-34"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xmax =</span> <span class="sc">-</span>critical_t, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>), <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb78-35"><a href="#cb78-35"></a>  </span>
+<span id="cb78-36"><a href="#cb78-36"></a>  <span class="co"># Draw the t-distribution (the "world of no effect")</span></span>
+<span id="cb78-37"><a href="#cb78-37"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dt, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df =</span> degrees_freedom), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb78-38"><a href="#cb78-38"></a>  </span>
+<span id="cb78-39"><a href="#cb78-39"></a>  <span class="co"># Add a line for our observed t-statistic</span></span>
+<span id="cb78-40"><a href="#cb78-40"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> t_statistic, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb78-41"><a href="#cb78-41"></a>  </span>
+<span id="cb78-42"><a href="#cb78-42"></a>  <span class="fu">labs</span>(</span>
+<span id="cb78-43"><a href="#cb78-43"></a>    <span class="at">title =</span> <span class="st">"Perspective 1: Null Hypothesis Test"</span>,</span>
+<span id="cb78-44"><a href="#cb78-44"></a>    <span class="at">subtitle =</span> <span class="st">"Our t-statistic falls in the rejection region, so we reject the null hypothesis."</span>,</span>
+<span id="cb78-45"><a href="#cb78-45"></a>    <span class="at">x =</span> <span class="st">"t-statistic"</span>,</span>
+<span id="cb78-46"><a href="#cb78-46"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb78-47"><a href="#cb78-47"></a>  ) <span class="sc">+</span></span>
+<span id="cb78-48"><a href="#cb78-48"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> t_statistic <span class="sc">+</span> <span class="fl">0.1</span>, <span class="at">y =</span> <span class="fl">0.2</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Our t-statistic</span><span class="sc">\n</span><span class="st">(t ="</span>, <span class="fu">round</span>(t_statistic, <span class="dv">2</span>), <span class="st">")"</span>), <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb78-49"><a href="#cb78-49"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb78-50"><a href="#cb78-50"></a></span>
+<span id="cb78-51"><a href="#cb78-51"></a><span class="fu">print</span>(nhst_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-39-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<p>Remember, for NHST we convert into a standardized form (usually t if we are estimating s). For CIs we are working with original units.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a><span class="fu">round</span>(t_statistic, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a><span class="fu">round</span>(p_value, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.016</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a><span class="fu">round</span>(ci_lower, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.98</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">round</span>(ci_upper, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.02</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a><span class="co"># --- Plot 2: The Confidence Interval Perspective (on the estimate's scale) ---</span></span>
+<span id="cb87-2"><a href="#cb87-2"></a></span>
+<span id="cb87-3"><a href="#cb87-3"></a>ci_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">15</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb87-4"><a href="#cb87-4"></a>  <span class="co"># Draw the sampling distribution if the null were true (centered at 0)</span></span>
+<span id="cb87-5"><a href="#cb87-5"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> null_value, <span class="at">sd =</span> standard_error), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb87-6"><a href="#cb87-6"></a></span>
+<span id="cb87-7"><a href="#cb87-7"></a>  <span class="co"># Add a vertical line for the null hypothesis value</span></span>
+<span id="cb87-8"><a href="#cb87-8"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> null_value, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb87-9"><a href="#cb87-9"></a>  </span>
+<span id="cb87-10"><a href="#cb87-10"></a>  <span class="co"># Add our observed estimate as a point</span></span>
+<span id="cb87-11"><a href="#cb87-11"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_estimate, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb87-12"><a href="#cb87-12"></a>  </span>
+<span id="cb87-13"><a href="#cb87-13"></a>  <span class="co"># Add the 95% Confidence Interval as an error bar</span></span>
+<span id="cb87-14"><a href="#cb87-14"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> ci_lower, <span class="at">xmax =</span> ci_upper, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">height =</span> <span class="fl">0.01</span>, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb87-15"><a href="#cb87-15"></a>  </span>
+<span id="cb87-16"><a href="#cb87-16"></a>  <span class="fu">labs</span>(</span>
+<span id="cb87-17"><a href="#cb87-17"></a>    <span class="at">title =</span> <span class="st">"Perspective 2: Confidence Interval Estimation"</span>,</span>
+<span id="cb87-18"><a href="#cb87-18"></a>    <span class="at">subtitle =</span> <span class="st">"Our 95% CI does not overlap with the null value (0), so the result is significant."</span>,</span>
+<span id="cb87-19"><a href="#cb87-19"></a>    <span class="at">x =</span> <span class="st">"Value of the Estimate"</span>,</span>
+<span id="cb87-20"><a href="#cb87-20"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb87-21"><a href="#cb87-21"></a>  ) <span class="sc">+</span></span>
+<span id="cb87-22"><a href="#cb87-22"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> null_value <span class="sc">-</span> <span class="fl">0.5</span>, <span class="at">y =</span> <span class="fl">0.1</span>, <span class="at">label =</span> <span class="st">"Null Value (0)"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb87-23"><a href="#cb87-23"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> observed_estimate, <span class="at">y =</span> <span class="fl">0.015</span>, <span class="at">label =</span> <span class="st">"Our Estimate"</span>, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb87-24"><a href="#cb87-24"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb87-25"><a href="#cb87-25"></a></span>
+<span id="cb87-26"><a href="#cb87-26"></a><span class="fu">print</span>(ci_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-41-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a><span class="co"># --- Plot 3: The CI as the "Zone of Plausible Results" ---</span></span>
+<span id="cb88-2"><a href="#cb88-2"></a></span>
+<span id="cb88-3"><a href="#cb88-3"></a></span>
+<span id="cb88-4"><a href="#cb88-4"></a>ci_logic_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">15</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb88-5"><a href="#cb88-5"></a>  <span class="co"># Shade the area of the confidence interval</span></span>
+<span id="cb88-6"><a href="#cb88-6"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> ci_lower, <span class="at">xmax =</span> ci_upper, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>), <span class="at">fill =</span> <span class="st">"gray"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb88-7"><a href="#cb88-7"></a>  </span>
+<span id="cb88-8"><a href="#cb88-8"></a>  <span class="co"># Draw the sampling distribution centered on OUR estimate</span></span>
+<span id="cb88-9"><a href="#cb88-9"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> observed_estimate, <span class="at">sd =</span> standard_error), <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb88-10"><a href="#cb88-10"></a>  </span>
+<span id="cb88-11"><a href="#cb88-11"></a>  <span class="co"># Add the null distribution for comparison</span></span>
+<span id="cb88-12"><a href="#cb88-12"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> null_value, <span class="at">sd =</span> standard_error), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb88-13"><a href="#cb88-13"></a>  </span>
+<span id="cb88-14"><a href="#cb88-14"></a>  <span class="co"># Add a vertical line for our observed estimate</span></span>
+<span id="cb88-15"><a href="#cb88-15"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> observed_estimate, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb88-16"><a href="#cb88-16"></a>  </span>
+<span id="cb88-17"><a href="#cb88-17"></a>  <span class="co"># Add the 95% Confidence Interval as an error bar at the bottom</span></span>
+<span id="cb88-18"><a href="#cb88-18"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> ci_lower, <span class="at">xmax =</span> ci_upper, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">height =</span> <span class="fl">0.01</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb88-19"><a href="#cb88-19"></a>  </span>
+<span id="cb88-20"><a href="#cb88-20"></a>  <span class="fu">labs</span>(</span>
+<span id="cb88-21"><a href="#cb88-21"></a>    <span class="at">title =</span> <span class="st">"The null distribution has same shape as sampling centered around estimate"</span>,</span>
+<span id="cb88-22"><a href="#cb88-22"></a>    <span class="at">x =</span> <span class="st">"Value of the Estimate"</span>,</span>
+<span id="cb88-23"><a href="#cb88-23"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb88-24"><a href="#cb88-24"></a>  ) <span class="sc">+</span></span>
+<span id="cb88-25"><a href="#cb88-25"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> observed_estimate <span class="sc">+</span> <span class="fl">0.2</span>, <span class="at">y =</span> <span class="fl">0.1</span>, <span class="at">label =</span> <span class="st">"Distribution centered</span><span class="sc">\n</span><span class="st">on our estimate"</span>, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb88-26"><a href="#cb88-26"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> observed_estimate, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.015</span>, <span class="at">label =</span> <span class="st">"The 95% Confidence Interval"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb88-27"><a href="#cb88-27"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> null_value <span class="sc">-</span> <span class="fl">0.2</span>, <span class="at">y =</span> <span class="fl">0.1</span>, <span class="at">label =</span> <span class="st">"Null</span><span class="sc">\n</span><span class="st">Distribution"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb88-28"><a href="#cb88-28"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb88-29"><a href="#cb88-29"></a></span>
+<span id="cb88-30"><a href="#cb88-30"></a><span class="fu">print</span>(ci_logic_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-42-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb89-2"><a href="#cb89-2"></a></span>
+<span id="cb89-3"><a href="#cb89-3"></a><span class="co"># --- Step 1: Simulate a Single Experiment with a "Significant" Result ---</span></span>
+<span id="cb89-4"><a href="#cb89-4"></a></span>
+<span id="cb89-5"><a href="#cb89-5"></a><span class="co"># Define the "true" population model</span></span>
+<span id="cb89-6"><a href="#cb89-6"></a>true_intercept <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb89-7"><a href="#cb89-7"></a>true_slope <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="co"># A positive relationship between x and y</span></span>
+<span id="cb89-8"><a href="#cb89-8"></a>true_error_sd <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb89-9"><a href="#cb89-9"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb89-10"><a href="#cb89-10"></a></span>
+<span id="cb89-11"><a href="#cb89-11"></a><span class="co"># Generate one random sample based on this model</span></span>
+<span id="cb89-12"><a href="#cb89-12"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb89-13"><a href="#cb89-13"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb89-14"><a href="#cb89-14"></a>  <span class="at">x =</span> <span class="fu">runif</span>(sample_size, <span class="dv">0</span>, <span class="dv">50</span>)</span>
+<span id="cb89-15"><a href="#cb89-15"></a>)</span>
+<span id="cb89-16"><a href="#cb89-16"></a>sample_data<span class="sc">$</span>y <span class="ot">&lt;-</span> true_intercept <span class="sc">+</span> true_slope <span class="sc">*</span> sample_data<span class="sc">$</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(sample_size, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> true_error_sd)</span>
+<span id="cb89-17"><a href="#cb89-17"></a></span>
+<span id="cb89-18"><a href="#cb89-18"></a><span class="co"># Fit the linear regression model to our single sample</span></span>
+<span id="cb89-19"><a href="#cb89-19"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sample_data)</span>
+<span id="cb89-20"><a href="#cb89-20"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)</span>
+<span id="cb89-21"><a href="#cb89-21"></a></span>
+<span id="cb89-22"><a href="#cb89-22"></a><span class="co"># --- Step 2: Extract Results and Calculate NHST/CI Components ---</span></span>
+<span id="cb89-23"><a href="#cb89-23"></a><span class="co"># We are interested in the coefficient for the predictor 'x'</span></span>
+<span id="cb89-24"><a href="#cb89-24"></a>observed_slope <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="dv">2</span>]</span>
+<span id="cb89-25"><a href="#cb89-25"></a>standard_error <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">2</span>]</span>
+<span id="cb89-26"><a href="#cb89-26"></a>degrees_freedom <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>df[<span class="dv">2</span>]</span>
+<span id="cb89-27"><a href="#cb89-27"></a></span>
+<span id="cb89-28"><a href="#cb89-28"></a>null_value <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># The null hypothesis is that the true slope is 0</span></span>
+<span id="cb89-29"><a href="#cb89-29"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb89-30"><a href="#cb89-30"></a></span>
+<span id="cb89-31"><a href="#cb89-31"></a><span class="co"># --- NHST Components ---</span></span>
+<span id="cb89-32"><a href="#cb89-32"></a>t_statistic <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb89-33"><a href="#cb89-33"></a>p_value <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span>
+<span id="cb89-34"><a href="#cb89-34"></a>critical_t <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> degrees_freedom)</span>
+<span id="cb89-35"><a href="#cb89-35"></a></span>
+<span id="cb89-36"><a href="#cb89-36"></a><span class="co"># --- Confidence Interval Components ---</span></span>
+<span id="cb89-37"><a href="#cb89-37"></a>ci <span class="ot">&lt;-</span> <span class="fu">confint</span>(model, <span class="st">"x"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-38"><a href="#cb89-38"></a>ci_lower <span class="ot">&lt;-</span> ci[<span class="dv">1</span>]</span>
+<span id="cb89-39"><a href="#cb89-39"></a>ci_upper <span class="ot">&lt;-</span> ci[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a> <span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x, data = sample_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-33.837  -8.368  -0.985   8.239  32.792 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   7.8647     4.0818   1.927   0.0599 .  
+x             0.6145     0.1369   4.487  4.5e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 14.11 on 48 degrees of freedom
+Multiple R-squared:  0.2955,    Adjusted R-squared:  0.2809 
+F-statistic: 20.14 on 1 and 48 DF,  p-value: 4.505e-05</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1"></a><span class="fl">0.6145</span> <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fl">0.1369</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.882824</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a><span class="fl">0.6145</span> <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fl">0.1369</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.346176</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a><span class="fu">confint</span>(model, <span class="st">"x"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      2.5 %    97.5 %
+x 0.3391774 0.8898693</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a><span class="co"># --- Plot 1: The NHST Perspective (on the t-statistic scale) ---</span></span>
+<span id="cb98-2"><a href="#cb98-2"></a></span>
+<span id="cb98-3"><a href="#cb98-3"></a>nhst_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb98-4"><a href="#cb98-4"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> critical_t, <span class="at">xmax =</span> <span class="cn">Inf</span>, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>), <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb98-5"><a href="#cb98-5"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xmax =</span> <span class="sc">-</span>critical_t, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>), <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb98-6"><a href="#cb98-6"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dt, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">df =</span> degrees_freedom), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb98-7"><a href="#cb98-7"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> t_statistic, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb98-8"><a href="#cb98-8"></a>  <span class="fu">labs</span>(</span>
+<span id="cb98-9"><a href="#cb98-9"></a>    <span class="at">title =</span> <span class="st">"Perspective 1: Null Hypothesis Test for a Regression Slope"</span>,</span>
+<span id="cb98-10"><a href="#cb98-10"></a>    <span class="at">subtitle =</span> <span class="st">"Our t-statistic falls in the rejection region, so we reject the null hypothesis."</span>,</span>
+<span id="cb98-11"><a href="#cb98-11"></a>    <span class="at">x =</span> <span class="st">"t-statistic for the Slope (β₁)"</span>,</span>
+<span id="cb98-12"><a href="#cb98-12"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb98-13"><a href="#cb98-13"></a>  ) <span class="sc">+</span></span>
+<span id="cb98-14"><a href="#cb98-14"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">2.5</span>, <span class="at">y =</span> <span class="fl">0.2</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Our t-statistic</span><span class="sc">\n</span><span class="st">(t ="</span>, <span class="fu">round</span>(t_statistic, <span class="dv">2</span>), <span class="st">")"</span>), <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb98-15"><a href="#cb98-15"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb98-16"><a href="#cb98-16"></a></span>
+<span id="cb98-17"><a href="#cb98-17"></a><span class="fu">print</span>(nhst_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-47-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<ul>
+<li><p>What is standard error for the standardized sampling distribution?</p></li>
+<li><p>How does it relate to our original unit sampling distribution?</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a><span class="co"># t = 4.487 </span></span>
+<span id="cb99-2"><a href="#cb99-2"></a><span class="co"># t = est/se</span></span>
+<span id="cb99-3"><a href="#cb99-3"></a></span>
+<span id="cb99-4"><a href="#cb99-4"></a><span class="fl">4.49</span> <span class="sc">*</span> <span class="fl">0.1369</span> <span class="co"># mean estiamte</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.614681</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a><span class="fl">0.6145</span> <span class="sc">/</span> <span class="fl">4.49</span>   <span class="co"># se</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1368597</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a><span class="co"># --- Plot 2: The Confidence Interval Perspective (on the slope's scale) ---</span></span>
+<span id="cb103-2"><a href="#cb103-2"></a></span>
+<span id="cb103-3"><a href="#cb103-3"></a>ci_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb103-4"><a href="#cb103-4"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> null_value, <span class="at">sd =</span> standard_error), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb103-5"><a href="#cb103-5"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> null_value, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb103-6"><a href="#cb103-6"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_slope, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb103-7"><a href="#cb103-7"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> ci_lower, <span class="at">xmax =</span> ci_upper, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">height =</span> <span class="fl">0.05</span>, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb103-8"><a href="#cb103-8"></a>  <span class="fu">labs</span>(</span>
+<span id="cb103-9"><a href="#cb103-9"></a>    <span class="at">title =</span> <span class="st">"Confidence Interval for a Regression Slope"</span>,</span>
+<span id="cb103-10"><a href="#cb103-10"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb103-11"><a href="#cb103-11"></a>  ) <span class="sc">+</span></span>
+<span id="cb103-12"><a href="#cb103-12"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> null_value <span class="sc">-</span> <span class="fl">0.05</span>, <span class="at">y =</span> <span class="fl">0.5</span>, <span class="at">label =</span> <span class="st">"Null Value (Slope = 0)"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb103-13"><a href="#cb103-13"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> observed_slope, <span class="at">y =</span> <span class="fl">0.1</span>, <span class="at">label =</span> <span class="st">"Our Estimated Slope (.614)"</span>, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> scales<span class="sc">::</span><span class="fu">pretty_breaks</span>(<span class="at">n =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb103-14"><a href="#cb103-14"></a>  <span class="fu">theme_minimal</span>() </span>
+<span id="cb103-15"><a href="#cb103-15"></a></span>
+<span id="cb103-16"><a href="#cb103-16"></a><span class="fu">print</span>(ci_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-49-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a>ci_logic_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.5</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb104-2"><a href="#cb104-2"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> ci_lower, <span class="at">xmax =</span> ci_upper, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>), <span class="at">fill =</span> <span class="st">"gray"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb104-3"><a href="#cb104-3"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> observed_slope, <span class="at">sd =</span> standard_error), <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb104-4"><a href="#cb104-4"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> null_value, <span class="at">sd =</span> standard_error), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb104-5"><a href="#cb104-5"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> observed_slope, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb104-6"><a href="#cb104-6"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> ci_lower, <span class="at">xmax =</span> ci_upper, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">height =</span> <span class="fl">0.05</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb104-7"><a href="#cb104-7"></a>  <span class="fu">labs</span>(</span>
+<span id="cb104-8"><a href="#cb104-8"></a>    <span class="at">title =</span> <span class="st">"Confidence Interval for a Regression Slope"</span>,</span>
+<span id="cb104-9"><a href="#cb104-9"></a>    <span class="at">x =</span> <span class="st">"Value of the Slope Estimate (β₁)"</span>,</span>
+<span id="cb104-10"><a href="#cb104-10"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb104-11"><a href="#cb104-11"></a>  ) <span class="sc">+</span></span>
+<span id="cb104-12"><a href="#cb104-12"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> observed_slope <span class="sc">+</span> <span class="fl">0.02</span>, <span class="at">y =</span> <span class="fl">0.5</span>, <span class="at">label =</span> <span class="st">"Distribution centered</span><span class="sc">\n</span><span class="st">on our estimate"</span>, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb104-13"><a href="#cb104-13"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> observed_slope, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.1</span>, <span class="at">label =</span> <span class="st">"The 95% Confidence Interval"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb104-14"><a href="#cb104-14"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> null_value <span class="sc">-</span> <span class="fl">0.02</span>, <span class="at">y =</span> <span class="fl">0.5</span>, <span class="at">label =</span> <span class="st">"Null</span><span class="sc">\n</span><span class="st">Distribution"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> scales<span class="sc">::</span><span class="fu">pretty_breaks</span>(<span class="at">n =</span> <span class="dv">10</span>))<span class="sc">+</span></span>
+<span id="cb104-15"><a href="#cb104-15"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb104-16"><a href="#cb104-16"></a></span>
+<span id="cb104-17"><a href="#cb104-17"></a><span class="fu">print</span>(ci_logic_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-50-1.png" width="960" class="r-stretch"></section>
+<section id="ci-interpretation" class="slide level2">
+<h2>CI interpretation</h2>
+<ol type="1">
+<li>“If we repeated this experiment, …”</li>
+<li>Plausible range of values. (est could be any of these)</li>
+<li>Precision in our estimate (is our Margin of Error (MOE) excessively large)</li>
+</ol>
+</section>
+<section id="cis-summary" class="slide level2">
+<h2>CIs summary</h2>
+<ul>
+<li>remember we can always get unlucky</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a>plot_data <span class="ot">&lt;-</span> simulation_results[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]</span>
+<span id="cb105-2"><a href="#cb105-2"></a></span>
+<span id="cb105-3"><a href="#cb105-3"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> simulation_id, <span class="at">ymin =</span> lower_bound, <span class="at">ymax =</span> upper_bound, <span class="at">color =</span> captured_true_mean)) <span class="sc">+</span></span>
+<span id="cb105-4"><a href="#cb105-4"></a>  <span class="co"># Draw a vertical line for each confidence interval</span></span>
+<span id="cb105-5"><a href="#cb105-5"></a>  <span class="fu">geom_errorbar</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb105-6"><a href="#cb105-6"></a>  </span>
+<span id="cb105-7"><a href="#cb105-7"></a>  <span class="co"># Draw a horizontal line representing the true population mean</span></span>
+<span id="cb105-8"><a href="#cb105-8"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> true_population_mean, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb105-9"><a href="#cb105-9"></a>  </span>
+<span id="cb105-10"><a href="#cb105-10"></a>  <span class="co"># Manually set the colors (green for capture, red for miss)</span></span>
+<span id="cb105-11"><a href="#cb105-11"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"gray50"</span>, <span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb105-12"><a href="#cb105-12"></a>  </span>
+<span id="cb105-13"><a href="#cb105-13"></a>  <span class="co"># Add labels and a title</span></span>
+<span id="cb105-14"><a href="#cb105-14"></a>  <span class="fu">labs</span>(</span>
+<span id="cb105-15"><a href="#cb105-15"></a>    <span class="at">title =</span> <span class="st">"Visualizing 95% Confidence Intervals"</span>,</span>
+<span id="cb105-16"><a href="#cb105-16"></a>    <span class="at">subtitle =</span> <span class="st">"Each vertical line is one 95% CI from a different sample. The dashed line is the true population mean."</span>,</span>
+<span id="cb105-17"><a href="#cb105-17"></a>    <span class="at">x =</span> <span class="st">"Simulation Number (First 100 Shown)"</span>,</span>
+<span id="cb105-18"><a href="#cb105-18"></a>    <span class="at">y =</span> <span class="st">"Value"</span></span>
+<span id="cb105-19"><a href="#cb105-19"></a>  ) <span class="sc">+</span></span>
+<span id="cb105-20"><a href="#cb105-20"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb105-21"><a href="#cb105-21"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span> <span class="co"># Hide the legend for a cleaner look</span></span>
+<span id="cb105-22"><a href="#cb105-22"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">80</span>, <span class="at">y =</span> true_population_mean <span class="sc">+</span> <span class="dv">1</span>, <span class="at">label =</span> <span class="st">"True Population Mean"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-51-1.png" width="960" class="r-stretch"></section>
+<section id="conveying-uncertainty" class="slide level2">
+<h2>Conveying uncertainty</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb106-2"><a href="#cb106-2"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb106-3"><a href="#cb106-3"></a></span>
+<span id="cb106-4"><a href="#cb106-4"></a><span class="co"># --- Step 1: Simulate Data for Two Groups ---</span></span>
+<span id="cb106-5"><a href="#cb106-5"></a><span class="co"># We'll create a dataset with a continuous outcome and a two-level factor</span></span>
+<span id="cb106-6"><a href="#cb106-6"></a><span class="co"># to represent a simple linear model with a dummy-coded predictor.</span></span>
+<span id="cb106-7"><a href="#cb106-7"></a></span>
+<span id="cb106-8"><a href="#cb106-8"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb106-9"><a href="#cb106-9"></a>n_per_group <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb106-10"><a href="#cb106-10"></a>control_mean <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb106-11"><a href="#cb106-11"></a>treatment_mean <span class="ot">&lt;-</span> <span class="dv">110</span></span>
+<span id="cb106-12"><a href="#cb106-12"></a>common_sd <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb106-13"><a href="#cb106-13"></a></span>
+<span id="cb106-14"><a href="#cb106-14"></a><span class="co"># Create the data</span></span>
+<span id="cb106-15"><a href="#cb106-15"></a>full_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb106-16"><a href="#cb106-16"></a>  <span class="at">value =</span> <span class="fu">c</span>(</span>
+<span id="cb106-17"><a href="#cb106-17"></a>    <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> control_mean, <span class="at">sd =</span> common_sd),</span>
+<span id="cb106-18"><a href="#cb106-18"></a>    <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> treatment_mean, <span class="at">sd =</span> common_sd)</span>
+<span id="cb106-19"><a href="#cb106-19"></a>  ),</span>
+<span id="cb106-20"><a href="#cb106-20"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>), <span class="at">each =</span> n_per_group))</span>
+<span id="cb106-21"><a href="#cb106-21"></a>)</span>
+<span id="cb106-22"><a href="#cb106-22"></a></span>
+<span id="cb106-23"><a href="#cb106-23"></a></span>
+<span id="cb106-24"><a href="#cb106-24"></a><span class="co"># --- Step 2: Calculate Summary Statistics for Each Group ---</span></span>
+<span id="cb106-25"><a href="#cb106-25"></a><span class="co"># We need to calculate the mean and the three different interval types.</span></span>
+<span id="cb106-26"><a href="#cb106-26"></a><span class="co"># Using dplyr makes this straightforward.</span></span>
+<span id="cb106-27"><a href="#cb106-27"></a></span>
+<span id="cb106-28"><a href="#cb106-28"></a>summary_stats <span class="ot">&lt;-</span> full_data <span class="sc">%&gt;%</span></span>
+<span id="cb106-29"><a href="#cb106-29"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span></span>
+<span id="cb106-30"><a href="#cb106-30"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb106-31"><a href="#cb106-31"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(value),</span>
+<span id="cb106-32"><a href="#cb106-32"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(value),</span>
+<span id="cb106-33"><a href="#cb106-33"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb106-34"><a href="#cb106-34"></a>    <span class="at">se =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
+<span id="cb106-35"><a href="#cb106-35"></a>    <span class="at">.groups =</span> <span class="st">'drop'</span></span>
+<span id="cb106-36"><a href="#cb106-36"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb106-37"><a href="#cb106-37"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb106-38"><a href="#cb106-38"></a>    <span class="co"># Calculate the 95% CI using the t-distribution</span></span>
+<span id="cb106-39"><a href="#cb106-39"></a>    <span class="at">critical_t =</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb106-40"><a href="#cb106-40"></a>    <span class="at">ci_margin =</span> critical_t <span class="sc">*</span> se,</span>
+<span id="cb106-41"><a href="#cb106-41"></a>    <span class="at">ci_lower =</span> mean <span class="sc">-</span> ci_margin,</span>
+<span id="cb106-42"><a href="#cb106-42"></a>    <span class="at">ci_upper =</span> mean <span class="sc">+</span> ci_margin</span>
+<span id="cb106-43"><a href="#cb106-43"></a>  )</span>
+<span id="cb106-44"><a href="#cb106-44"></a></span>
+<span id="cb106-45"><a href="#cb106-45"></a></span>
+<span id="cb106-46"><a href="#cb106-46"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(value <span class="sc">~</span> group, <span class="at">data =</span> full_data)</span>
+<span id="cb106-47"><a href="#cb106-47"></a></span>
+<span id="cb106-48"><a href="#cb106-48"></a></span>
+<span id="cb106-49"><a href="#cb106-49"></a><span class="co"># --- Step 3: Create the Visualization ---</span></span>
+<span id="cb106-50"><a href="#cb106-50"></a><span class="co"># We will create one plot that shows the raw data and overlays the</span></span>
+<span id="cb106-51"><a href="#cb106-51"></a><span class="co"># three different error bars, jittered side-by-side for clarity.</span></span>
+<span id="cb106-52"><a href="#cb106-52"></a></span>
+<span id="cb106-53"><a href="#cb106-53"></a><span class="co"># Define the amount to jitter the error bars</span></span>
+<span id="cb106-54"><a href="#cb106-54"></a>dodge_width <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb106-55"><a href="#cb106-55"></a></span>
+<span id="cb106-56"><a href="#cb106-56"></a>error_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb106-57"><a href="#cb106-57"></a>  </span>
+<span id="cb106-58"><a href="#cb106-58"></a>  <span class="co"># Layer 1: The Raw Data Points (in the background)</span></span>
+<span id="cb106-59"><a href="#cb106-59"></a>  <span class="co"># REVISED: Using as.numeric(group) for a consistent continuous x-axis</span></span>
+<span id="cb106-60"><a href="#cb106-60"></a>  <span class="fu">geom_jitter</span>(</span>
+<span id="cb106-61"><a href="#cb106-61"></a>    <span class="at">data =</span> full_data, </span>
+<span id="cb106-62"><a href="#cb106-62"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group), <span class="at">y =</span> value),</span>
+<span id="cb106-63"><a href="#cb106-63"></a>    <span class="at">width =</span> <span class="fl">0.15</span>, </span>
+<span id="cb106-64"><a href="#cb106-64"></a>    <span class="at">color =</span> <span class="st">"gray70"</span>, </span>
+<span id="cb106-65"><a href="#cb106-65"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span></span>
+<span id="cb106-66"><a href="#cb106-66"></a>  ) <span class="sc">+</span></span>
+<span id="cb106-67"><a href="#cb106-67"></a>  </span>
+<span id="cb106-68"><a href="#cb106-68"></a>  <span class="co"># Layer 2: Standard Deviation</span></span>
+<span id="cb106-69"><a href="#cb106-69"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb106-70"><a href="#cb106-70"></a>    <span class="at">data =</span> summary_stats,</span>
+<span id="cb106-71"><a href="#cb106-71"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group) <span class="sc">-</span> dodge_width, <span class="at">ymin =</span> mean <span class="sc">-</span> sd, <span class="at">ymax =</span> mean <span class="sc">+</span> sd, <span class="at">color =</span> <span class="st">"Standard Deviation"</span>),</span>
+<span id="cb106-72"><a href="#cb106-72"></a>    <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="dv">1</span></span>
+<span id="cb106-73"><a href="#cb106-73"></a>  ) <span class="sc">+</span></span>
+<span id="cb106-74"><a href="#cb106-74"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> summary_stats, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group) <span class="sc">-</span> dodge_width, <span class="at">y =</span> mean, <span class="at">color =</span> <span class="st">"Standard Deviation"</span>), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb106-75"><a href="#cb106-75"></a></span>
+<span id="cb106-76"><a href="#cb106-76"></a>  <span class="co"># Layer 3: 95% Confidence Interval</span></span>
+<span id="cb106-77"><a href="#cb106-77"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb106-78"><a href="#cb106-78"></a>    <span class="at">data =</span> summary_stats,</span>
+<span id="cb106-79"><a href="#cb106-79"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group), <span class="at">ymin =</span> ci_lower, <span class="at">ymax =</span> ci_upper, <span class="at">color =</span> <span class="st">"95% Confidence Interval"</span>),</span>
+<span id="cb106-80"><a href="#cb106-80"></a>    <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="dv">1</span></span>
+<span id="cb106-81"><a href="#cb106-81"></a>  ) <span class="sc">+</span></span>
+<span id="cb106-82"><a href="#cb106-82"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> summary_stats, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group), <span class="at">y =</span> mean, <span class="at">color =</span> <span class="st">"95% Confidence Interval"</span>), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb106-83"><a href="#cb106-83"></a>  </span>
+<span id="cb106-84"><a href="#cb106-84"></a>  <span class="co"># Layer 4: Standard Error</span></span>
+<span id="cb106-85"><a href="#cb106-85"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb106-86"><a href="#cb106-86"></a>    <span class="at">data =</span> summary_stats,</span>
+<span id="cb106-87"><a href="#cb106-87"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group) <span class="sc">+</span> dodge_width, <span class="at">ymin =</span> mean <span class="sc">-</span> se, <span class="at">ymax =</span> mean <span class="sc">+</span> se, <span class="at">color =</span> <span class="st">"Standard Error"</span>),</span>
+<span id="cb106-88"><a href="#cb106-88"></a>    <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="dv">1</span></span>
+<span id="cb106-89"><a href="#cb106-89"></a>  ) <span class="sc">+</span></span>
+<span id="cb106-90"><a href="#cb106-90"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> summary_stats, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group) <span class="sc">+</span> dodge_width, <span class="at">y =</span> mean, <span class="at">color =</span> <span class="st">"Standard Error"</span>), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb106-91"><a href="#cb106-91"></a>  </span>
+<span id="cb106-92"><a href="#cb106-92"></a>  <span class="co"># --- Formatting and Labels ---</span></span>
+<span id="cb106-93"><a href="#cb106-93"></a>  <span class="co"># Use scale_color_manual to define our legend</span></span>
+<span id="cb106-94"><a href="#cb106-94"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb106-95"><a href="#cb106-95"></a>    <span class="at">name =</span> <span class="st">"Uncertainty Measure"</span>,</span>
+<span id="cb106-96"><a href="#cb106-96"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Standard Deviation"</span> <span class="ot">=</span> <span class="st">"gray50"</span>, <span class="st">"95% Confidence Interval"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"Standard Error"</span> <span class="ot">=</span> <span class="st">"darkgreen"</span>)</span>
+<span id="cb106-97"><a href="#cb106-97"></a>  ) <span class="sc">+</span></span>
+<span id="cb106-98"><a href="#cb106-98"></a>  </span>
+<span id="cb106-99"><a href="#cb106-99"></a>  <span class="co"># Use scale_x_continuous to set the labels back to the group names</span></span>
+<span id="cb106-100"><a href="#cb106-100"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb106-101"><a href="#cb106-101"></a>    <span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">levels</span>(summary_stats<span class="sc">$</span>group)),</span>
+<span id="cb106-102"><a href="#cb106-102"></a>    <span class="at">labels =</span> <span class="fu">levels</span>(summary_stats<span class="sc">$</span>group)</span>
+<span id="cb106-103"><a href="#cb106-103"></a>  ) <span class="sc">+</span></span>
+<span id="cb106-104"><a href="#cb106-104"></a>  </span>
+<span id="cb106-105"><a href="#cb106-105"></a>  <span class="fu">labs</span>(</span>
+<span id="cb106-106"><a href="#cb106-106"></a>    <span class="at">title =</span> <span class="st">"Comparing Measures of Spread and Precision for Group Means"</span>,</span>
+<span id="cb106-107"><a href="#cb106-107"></a>    <span class="at">subtitle =</span> <span class="st">"Showing raw data with jittered error bars for SD, SE, and 95% CI."</span>,</span>
+<span id="cb106-108"><a href="#cb106-108"></a>    <span class="at">x =</span> <span class="st">"Group"</span>,</span>
+<span id="cb106-109"><a href="#cb106-109"></a>    <span class="at">y =</span> <span class="st">"Value"</span></span>
+<span id="cb106-110"><a href="#cb106-110"></a>  ) <span class="sc">+</span></span>
+<span id="cb106-111"><a href="#cb106-111"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb106-112"><a href="#cb106-112"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb106-113"><a href="#cb106-113"></a></span>
+<span id="cb106-114"><a href="#cb106-114"></a><span class="fu">print</span>(error_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-52-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = value ~ group, data = full_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.407  -9.212   0.457  10.016  34.835 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      99.465      2.215  44.895  &lt; 2e-16 ***
+groupTreatment   12.046      3.133   3.845 0.000215 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.67 on 98 degrees of freedom
+Multiple R-squared:  0.1311,    Adjusted R-squared:  0.1222 
+F-statistic: 14.78 on 1 and 98 DF,  p-value: 0.0002147</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb109-2"><a href="#cb109-2"></a>n_per_group <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb109-3"><a href="#cb109-3"></a>control_mean <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb109-4"><a href="#cb109-4"></a>treatment_mean <span class="ot">&lt;-</span> <span class="dv">105</span></span>
+<span id="cb109-5"><a href="#cb109-5"></a>common_sd <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb109-6"><a href="#cb109-6"></a></span>
+<span id="cb109-7"><a href="#cb109-7"></a><span class="co"># Create the data</span></span>
+<span id="cb109-8"><a href="#cb109-8"></a>full_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb109-9"><a href="#cb109-9"></a>  <span class="at">value =</span> <span class="fu">c</span>(</span>
+<span id="cb109-10"><a href="#cb109-10"></a>    <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> control_mean, <span class="at">sd =</span> common_sd),</span>
+<span id="cb109-11"><a href="#cb109-11"></a>    <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> treatment_mean, <span class="at">sd =</span> common_sd)</span>
+<span id="cb109-12"><a href="#cb109-12"></a>  ),</span>
+<span id="cb109-13"><a href="#cb109-13"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>), <span class="at">each =</span> n_per_group))</span>
+<span id="cb109-14"><a href="#cb109-14"></a>)</span>
+<span id="cb109-15"><a href="#cb109-15"></a></span>
+<span id="cb109-16"><a href="#cb109-16"></a></span>
+<span id="cb109-17"><a href="#cb109-17"></a><span class="co"># --- Step 2: Calculate Summary Statistics for Each Group ---</span></span>
+<span id="cb109-18"><a href="#cb109-18"></a><span class="co"># We need to calculate the mean and the three different interval types.</span></span>
+<span id="cb109-19"><a href="#cb109-19"></a><span class="co"># Using dplyr makes this straightforward.</span></span>
+<span id="cb109-20"><a href="#cb109-20"></a></span>
+<span id="cb109-21"><a href="#cb109-21"></a>summary_stats <span class="ot">&lt;-</span> full_data <span class="sc">%&gt;%</span></span>
+<span id="cb109-22"><a href="#cb109-22"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span></span>
+<span id="cb109-23"><a href="#cb109-23"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb109-24"><a href="#cb109-24"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(value),</span>
+<span id="cb109-25"><a href="#cb109-25"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(value),</span>
+<span id="cb109-26"><a href="#cb109-26"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb109-27"><a href="#cb109-27"></a>    <span class="at">se =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
+<span id="cb109-28"><a href="#cb109-28"></a>    <span class="at">.groups =</span> <span class="st">'drop'</span></span>
+<span id="cb109-29"><a href="#cb109-29"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb109-30"><a href="#cb109-30"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb109-31"><a href="#cb109-31"></a>    <span class="co"># Calculate the 95% CI using the t-distribution</span></span>
+<span id="cb109-32"><a href="#cb109-32"></a>    <span class="at">critical_t =</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb109-33"><a href="#cb109-33"></a>    <span class="at">ci_margin =</span> critical_t <span class="sc">*</span> se,</span>
+<span id="cb109-34"><a href="#cb109-34"></a>    <span class="at">ci_lower =</span> mean <span class="sc">-</span> ci_margin,</span>
+<span id="cb109-35"><a href="#cb109-35"></a>    <span class="at">ci_upper =</span> mean <span class="sc">+</span> ci_margin</span>
+<span id="cb109-36"><a href="#cb109-36"></a>  )</span>
+<span id="cb109-37"><a href="#cb109-37"></a></span>
+<span id="cb109-38"><a href="#cb109-38"></a></span>
+<span id="cb109-39"><a href="#cb109-39"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(value <span class="sc">~</span> group, <span class="at">data =</span> full_data)</span>
+<span id="cb109-40"><a href="#cb109-40"></a></span>
+<span id="cb109-41"><a href="#cb109-41"></a></span>
+<span id="cb109-42"><a href="#cb109-42"></a><span class="co"># --- Step 3: Create the Visualization ---</span></span>
+<span id="cb109-43"><a href="#cb109-43"></a><span class="co"># We will create one plot that shows the raw data and overlays the</span></span>
+<span id="cb109-44"><a href="#cb109-44"></a><span class="co"># three different error bars, jittered side-by-side for clarity.</span></span>
+<span id="cb109-45"><a href="#cb109-45"></a></span>
+<span id="cb109-46"><a href="#cb109-46"></a><span class="co"># Define the amount to jitter the error bars</span></span>
+<span id="cb109-47"><a href="#cb109-47"></a>dodge_width <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb109-48"><a href="#cb109-48"></a></span>
+<span id="cb109-49"><a href="#cb109-49"></a>error_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb109-50"><a href="#cb109-50"></a>  </span>
+<span id="cb109-51"><a href="#cb109-51"></a>  <span class="co"># Layer 1: The Raw Data Points (in the background)</span></span>
+<span id="cb109-52"><a href="#cb109-52"></a>  <span class="co"># REVISED: Using as.numeric(group) for a consistent continuous x-axis</span></span>
+<span id="cb109-53"><a href="#cb109-53"></a>  <span class="fu">geom_jitter</span>(</span>
+<span id="cb109-54"><a href="#cb109-54"></a>    <span class="at">data =</span> full_data, </span>
+<span id="cb109-55"><a href="#cb109-55"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group), <span class="at">y =</span> value),</span>
+<span id="cb109-56"><a href="#cb109-56"></a>    <span class="at">width =</span> <span class="fl">0.15</span>, </span>
+<span id="cb109-57"><a href="#cb109-57"></a>    <span class="at">color =</span> <span class="st">"gray70"</span>, </span>
+<span id="cb109-58"><a href="#cb109-58"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span></span>
+<span id="cb109-59"><a href="#cb109-59"></a>  ) <span class="sc">+</span></span>
+<span id="cb109-60"><a href="#cb109-60"></a>  </span>
+<span id="cb109-61"><a href="#cb109-61"></a>  <span class="co"># # Layer 2: Standard Deviation</span></span>
+<span id="cb109-62"><a href="#cb109-62"></a>  <span class="co"># geom_errorbar(</span></span>
+<span id="cb109-63"><a href="#cb109-63"></a>  <span class="co">#   data = summary_stats,</span></span>
+<span id="cb109-64"><a href="#cb109-64"></a>  <span class="co">#   aes(x = as.numeric(group) - dodge_width, ymin = mean - sd, ymax = mean + sd, color = "Standard Deviation"),</span></span>
+<span id="cb109-65"><a href="#cb109-65"></a>  <span class="co">#   width = 0.1, size = 1</span></span>
+<span id="cb109-66"><a href="#cb109-66"></a>  <span class="co"># ) +</span></span>
+<span id="cb109-67"><a href="#cb109-67"></a>  <span class="co"># geom_point(data = summary_stats, aes(x = as.numeric(group) - dodge_width, y = mean, color = "Standard Deviation"), size = 4) +</span></span>
+<span id="cb109-68"><a href="#cb109-68"></a></span>
+<span id="cb109-69"><a href="#cb109-69"></a>  <span class="co"># Layer 3: 95% Confidence Interval</span></span>
+<span id="cb109-70"><a href="#cb109-70"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb109-71"><a href="#cb109-71"></a>    <span class="at">data =</span> summary_stats,</span>
+<span id="cb109-72"><a href="#cb109-72"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group), <span class="at">ymin =</span> ci_lower, <span class="at">ymax =</span> ci_upper, <span class="at">color =</span> <span class="st">"95% Confidence Interval"</span>),</span>
+<span id="cb109-73"><a href="#cb109-73"></a>    <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="dv">1</span></span>
+<span id="cb109-74"><a href="#cb109-74"></a>  ) <span class="sc">+</span></span>
+<span id="cb109-75"><a href="#cb109-75"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> summary_stats, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group), <span class="at">y =</span> mean, <span class="at">color =</span> <span class="st">"95% Confidence Interval"</span>), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb109-76"><a href="#cb109-76"></a>  </span>
+<span id="cb109-77"><a href="#cb109-77"></a>  <span class="co"># Layer 4: Standard Error</span></span>
+<span id="cb109-78"><a href="#cb109-78"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb109-79"><a href="#cb109-79"></a>    <span class="at">data =</span> summary_stats,</span>
+<span id="cb109-80"><a href="#cb109-80"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group) <span class="sc">+</span> dodge_width, <span class="at">ymin =</span> mean <span class="sc">-</span> se, <span class="at">ymax =</span> mean <span class="sc">+</span> se, <span class="at">color =</span> <span class="st">"Standard Error"</span>),</span>
+<span id="cb109-81"><a href="#cb109-81"></a>    <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="dv">1</span></span>
+<span id="cb109-82"><a href="#cb109-82"></a>  ) <span class="sc">+</span></span>
+<span id="cb109-83"><a href="#cb109-83"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> summary_stats, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(group) <span class="sc">+</span> dodge_width, <span class="at">y =</span> mean, <span class="at">color =</span> <span class="st">"Standard Error"</span>), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb109-84"><a href="#cb109-84"></a>  </span>
+<span id="cb109-85"><a href="#cb109-85"></a>  <span class="co"># --- Formatting and Labels ---</span></span>
+<span id="cb109-86"><a href="#cb109-86"></a>  <span class="co"># Use scale_color_manual to define our legend</span></span>
+<span id="cb109-87"><a href="#cb109-87"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb109-88"><a href="#cb109-88"></a>    <span class="at">name =</span> <span class="st">"Uncertainty Measure"</span>,</span>
+<span id="cb109-89"><a href="#cb109-89"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Standard Deviation"</span> <span class="ot">=</span> <span class="st">"gray50"</span>, <span class="st">"95% Confidence Interval"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"Standard Error"</span> <span class="ot">=</span> <span class="st">"darkgreen"</span>)</span>
+<span id="cb109-90"><a href="#cb109-90"></a>  ) <span class="sc">+</span></span>
+<span id="cb109-91"><a href="#cb109-91"></a>  </span>
+<span id="cb109-92"><a href="#cb109-92"></a>  <span class="co"># Use scale_x_continuous to set the labels back to the group names</span></span>
+<span id="cb109-93"><a href="#cb109-93"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb109-94"><a href="#cb109-94"></a>    <span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">levels</span>(summary_stats<span class="sc">$</span>group)),</span>
+<span id="cb109-95"><a href="#cb109-95"></a>    <span class="at">labels =</span> <span class="fu">levels</span>(summary_stats<span class="sc">$</span>group)</span>
+<span id="cb109-96"><a href="#cb109-96"></a>  ) <span class="sc">+</span></span>
+<span id="cb109-97"><a href="#cb109-97"></a>  </span>
+<span id="cb109-98"><a href="#cb109-98"></a>  <span class="fu">labs</span>(</span>
+<span id="cb109-99"><a href="#cb109-99"></a>    <span class="at">title =</span> <span class="st">"Comparing Measures of Spread and Precision for Group Means"</span>,</span>
+<span id="cb109-100"><a href="#cb109-100"></a>    <span class="at">subtitle =</span> <span class="st">"Showing raw data with jittered error bars for SD, SE, and 95% CI."</span>,</span>
+<span id="cb109-101"><a href="#cb109-101"></a>    <span class="at">x =</span> <span class="st">"Group"</span>,</span>
+<span id="cb109-102"><a href="#cb109-102"></a>    <span class="at">y =</span> <span class="st">"Value"</span></span>
+<span id="cb109-103"><a href="#cb109-103"></a>  ) <span class="sc">+</span></span>
+<span id="cb109-104"><a href="#cb109-104"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb109-105"><a href="#cb109-105"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb109-106"><a href="#cb109-106"></a></span>
+<span id="cb109-107"><a href="#cb109-107"></a><span class="fu">print</span>(error_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-54-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = value ~ group, data = full_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.407  -9.212   0.457  10.016  34.835 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      99.465      2.215  44.895   &lt;2e-16 ***
+groupTreatment    7.046      3.133   2.249   0.0268 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.67 on 98 degrees of freedom
+Multiple R-squared:  0.04907,   Adjusted R-squared:  0.03936 
+F-statistic: 5.057 on 1 and 98 DF,  p-value: 0.02677</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb112-2"><a href="#cb112-2"></a></span>
+<span id="cb112-3"><a href="#cb112-3"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb112-4"><a href="#cb112-4"></a>n_per_group <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb112-5"><a href="#cb112-5"></a>control_mean <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb112-6"><a href="#cb112-6"></a>treatment_mean <span class="ot">&lt;-</span> <span class="dv">105</span></span>
+<span id="cb112-7"><a href="#cb112-7"></a>common_sd <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb112-8"><a href="#cb112-8"></a></span>
+<span id="cb112-9"><a href="#cb112-9"></a><span class="co"># Create the data</span></span>
+<span id="cb112-10"><a href="#cb112-10"></a>full_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb112-11"><a href="#cb112-11"></a>  <span class="at">value =</span> <span class="fu">c</span>(</span>
+<span id="cb112-12"><a href="#cb112-12"></a>    <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> control_mean, <span class="at">sd =</span> common_sd),</span>
+<span id="cb112-13"><a href="#cb112-13"></a>    <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> treatment_mean, <span class="at">sd =</span> common_sd)</span>
+<span id="cb112-14"><a href="#cb112-14"></a>  ),</span>
+<span id="cb112-15"><a href="#cb112-15"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>), <span class="at">each =</span> n_per_group))</span>
+<span id="cb112-16"><a href="#cb112-16"></a>)</span>
+<span id="cb112-17"><a href="#cb112-17"></a></span>
+<span id="cb112-18"><a href="#cb112-18"></a></span>
+<span id="cb112-19"><a href="#cb112-19"></a><span class="co"># --- Step 2: Calculate Summary Statistics for Each Group ---</span></span>
+<span id="cb112-20"><a href="#cb112-20"></a><span class="co"># We only need the mean and the 95% CI for this plot.</span></span>
+<span id="cb112-21"><a href="#cb112-21"></a>summary_stats <span class="ot">&lt;-</span> full_data <span class="sc">%&gt;%</span></span>
+<span id="cb112-22"><a href="#cb112-22"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span></span>
+<span id="cb112-23"><a href="#cb112-23"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb112-24"><a href="#cb112-24"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(value),</span>
+<span id="cb112-25"><a href="#cb112-25"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb112-26"><a href="#cb112-26"></a>    <span class="at">se =</span> <span class="fu">sd</span>(value) <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
+<span id="cb112-27"><a href="#cb112-27"></a>    <span class="at">.groups =</span> <span class="st">'drop'</span></span>
+<span id="cb112-28"><a href="#cb112-28"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb112-29"><a href="#cb112-29"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb112-30"><a href="#cb112-30"></a>    <span class="at">critical_t =</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb112-31"><a href="#cb112-31"></a>    <span class="at">ci_margin =</span> critical_t <span class="sc">*</span> se,</span>
+<span id="cb112-32"><a href="#cb112-32"></a>    <span class="at">ci_lower =</span> mean <span class="sc">-</span> ci_margin,</span>
+<span id="cb112-33"><a href="#cb112-33"></a>    <span class="at">ci_upper =</span> mean <span class="sc">+</span> ci_margin</span>
+<span id="cb112-34"><a href="#cb112-34"></a>  )</span>
+<span id="cb112-35"><a href="#cb112-35"></a></span>
+<span id="cb112-36"><a href="#cb112-36"></a></span>
+<span id="cb112-37"><a href="#cb112-37"></a><span class="co"># --- Step 3: Create the Focused Visualization ---</span></span>
+<span id="cb112-38"><a href="#cb112-38"></a><span class="co"># This plot shows the raw data points with the group mean and 95% CI overlaid.</span></span>
+<span id="cb112-39"><a href="#cb112-39"></a><span class="co"># REVISED: Aesthetics are now defined locally in each geom_ layer to prevent errors.</span></span>
+<span id="cb112-40"><a href="#cb112-40"></a>ci_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span>  <span class="co"># Start with an empty canvas</span></span>
+<span id="cb112-41"><a href="#cb112-41"></a>  </span>
+<span id="cb112-42"><a href="#cb112-42"></a>  <span class="co"># Layer 1: The Raw Data Points (jittered so we can see them all)</span></span>
+<span id="cb112-43"><a href="#cb112-43"></a>  <span class="fu">geom_jitter</span>(</span>
+<span id="cb112-44"><a href="#cb112-44"></a>    <span class="at">data =</span> full_data,</span>
+<span id="cb112-45"><a href="#cb112-45"></a>    <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value), <span class="co"># Aesthetics are local to this layer</span></span>
+<span id="cb112-46"><a href="#cb112-46"></a>    <span class="at">width =</span> <span class="fl">0.2</span>, </span>
+<span id="cb112-47"><a href="#cb112-47"></a>    <span class="at">color =</span> <span class="st">"gray70"</span>, </span>
+<span id="cb112-48"><a href="#cb112-48"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span></span>
+<span id="cb112-49"><a href="#cb112-49"></a>  ) <span class="sc">+</span></span>
+<span id="cb112-50"><a href="#cb112-50"></a>  </span>
+<span id="cb112-51"><a href="#cb112-51"></a>  <span class="co"># Layer 2: The 95% Confidence Interval</span></span>
+<span id="cb112-52"><a href="#cb112-52"></a>  <span class="co"># This is centered and not jittered.</span></span>
+<span id="cb112-53"><a href="#cb112-53"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb112-54"><a href="#cb112-54"></a>    <span class="at">data =</span> summary_stats,</span>
+<span id="cb112-55"><a href="#cb112-55"></a>    <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">ymin =</span> ci_lower, <span class="at">ymax =</span> ci_upper), <span class="co"># Local aesthetics</span></span>
+<span id="cb112-56"><a href="#cb112-56"></a>    <span class="at">width =</span> <span class="fl">0.1</span>, </span>
+<span id="cb112-57"><a href="#cb112-57"></a>    <span class="at">size =</span> <span class="fl">1.2</span>, </span>
+<span id="cb112-58"><a href="#cb112-58"></a>    <span class="at">color =</span> <span class="st">"blue"</span></span>
+<span id="cb112-59"><a href="#cb112-59"></a>  ) <span class="sc">+</span></span>
+<span id="cb112-60"><a href="#cb112-60"></a>  </span>
+<span id="cb112-61"><a href="#cb112-61"></a>  <span class="co"># Layer 3: The Group Mean</span></span>
+<span id="cb112-62"><a href="#cb112-62"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb112-63"><a href="#cb112-63"></a>    <span class="at">data =</span> summary_stats,</span>
+<span id="cb112-64"><a href="#cb112-64"></a>    <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> mean), <span class="co"># Local aesthetics</span></span>
+<span id="cb112-65"><a href="#cb112-65"></a>    <span class="at">color =</span> <span class="st">"blue"</span>,</span>
+<span id="cb112-66"><a href="#cb112-66"></a>    <span class="at">size =</span> <span class="dv">5</span></span>
+<span id="cb112-67"><a href="#cb112-67"></a>  ) <span class="sc">+</span></span>
+<span id="cb112-68"><a href="#cb112-68"></a>  </span>
+<span id="cb112-69"><a href="#cb112-69"></a>  <span class="co"># --- Formatting and Labels ---</span></span>
+<span id="cb112-70"><a href="#cb112-70"></a>  <span class="fu">labs</span>(</span>
+<span id="cb112-71"><a href="#cb112-71"></a>    <span class="at">title =</span> <span class="st">"Group Means with 95% Confidence Intervals"</span>,</span>
+<span id="cb112-72"><a href="#cb112-72"></a>    <span class="at">subtitle =</span> <span class="st">"Showing the plausible range for the true population mean for each group."</span>,</span>
+<span id="cb112-73"><a href="#cb112-73"></a>    <span class="at">x =</span> <span class="st">"Group"</span>,</span>
+<span id="cb112-74"><a href="#cb112-74"></a>    <span class="at">y =</span> <span class="st">"Value"</span></span>
+<span id="cb112-75"><a href="#cb112-75"></a>  ) <span class="sc">+</span></span>
+<span id="cb112-76"><a href="#cb112-76"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span>
+<span id="cb112-77"><a href="#cb112-77"></a></span>
+<span id="cb112-78"><a href="#cb112-78"></a><span class="fu">print</span>(ci_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="Inference_7_files/figure-revealjs/unnamed-chunk-56-1.png" width="960" class="r-stretch"></section>
+<section id="overlapping-cis" class="slide level2">
+<h2>Overlapping CIs</h2>
+<ul>
+<li><p>If they <sub>touch</sub> then p ~= .01</p></li>
+<li><p>They can overlap and still be significantly different.</p></li>
+<li><p>If they do not overlap, they are significantly different from one another.</p></li>
+</ul>
 </section>
 <section id="effect-sizes" class="slide level2">
 <h2>Effect sizes</h2>
 <ul>
 <li><p>practical versus statistical significance</p></li>
 <li><p>“One weird trick to significance. PhDs hate it.”</p></li>
+<li><p>std b, correlation, cohen’s d, odds ratio…</p></li>
+</ul>
+</section>
+<section id="effect-sizes-1" class="slide level2">
+<h2>Effect sizes</h2>
+<p>Cohen’s D:</p>
+<p><span class="math display">\[\delta = \frac{\mu_1 - \mu_0}{\sigma} \approx d = \frac{\bar{X}_1-\bar{X}_2}{\hat{\sigma}_p}\]</span></p>
+<ul>
+<li>A Cohen’s d of .2 is considered “small”, .5 is considered “moderate”, and .8 is considered “large”</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a><span class="fu">coef</span>(model)[<span class="dv">2</span>]<span class="sc">/</span><span class="fu">sigma</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>groupTreatment 
+     0.4497435 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb115-2"><a href="#cb115-2"></a>emm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(model, <span class="st">"group"</span>)</span>
+<span id="cb115-3"><a href="#cb115-3"></a><span class="fu">eff_size</span>(emm, <span class="at">sigma =</span> <span class="fu">sigma</span>(model), <span class="at">edf =</span> <span class="fu">df.residual</span>(model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast            effect.size    SE df lower.CL upper.CL
+ Control - Treatment       -0.45 0.203 98   -0.852  -0.0478
+
+sigma used for effect sizes: 15.67 
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = value ~ group, data = full_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.407  -9.212   0.457  10.016  34.835 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      99.465      2.215  44.895   &lt;2e-16 ***
+groupTreatment    7.046      3.133   2.249   0.0268 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.67 on 98 degrees of freedom
+Multiple R-squared:  0.04907,   Adjusted R-squared:  0.03936 
+F-statistic: 5.057 on 1 and 98 DF,  p-value: 0.02677</code></pre>
+</div>
+</div>
+</section>
+<section id="meta-analytic-thinking" class="slide level2">
+<h2>Meta-analytic thinking</h2>
+<ul>
+<li><p>Estimation can be thought of as “getting the best guess (at population parameter), given my data, and conveying the uncertainty”</p></li>
+<li><p>Ideally, we would do this again, either via a direct replication or some “extension.” Overtime, we would learn more, getting more and more precise about the parameter we are interested in (this is what a meta-analysis does).</p></li>
+<li><p>In contrast, NHST focuses on compiling yeses and nos, which makes it harder to be “cumulative”</p></li>
+</ul>
+</section>
+<section id="meta-analytic-thinking-1" class="slide level2">
+<h2>Meta-analytic thinking</h2>
+<ul>
+<li><p>Even if you do NHST make sure there is enough information for people to do “estimation”</p></li>
+<li><p>Provide sample statistics (means, SDs), Ns, se, RSE, etc. (You would be amazed at what people neglect)</p></li>
+<li><p>Easily identifiable red flag, especially as models get more complex</p></li>
 </ul>
 </section>
 <section id="model-comparison" class="slide level2">

@@ -1100,6 +1100,887 @@ Logic:
 
 ## Confidence intervals
 
+- The sampling distribution dispersion, represented by the SE, reflects uncertainty in the sample statistic as an estimate of the population parameter
+
+- We can create an interval that tells us how "confident" we are in the population parameter being in the range.
+
+- We can do this because we know that the sampling distribution is normal and...
+
+----------
+
+- Because if a sample mean is close to the true mean, then logically, the true mean must also be close to that sample mean. If Josh (sample) is standing close to Ben (pop), then we know Ben (pop) is standing close to Josh (sample).
+
+- Based on our simulation, we know 95% of our samples will be within 2 SDs of our true population parameter. Or that 95% of our samples will be "close" to the true parameter. 
+
+- We know that 95% of times our sample statistic is going to be close to the population parameter. Thus we know 95% of times our population parameter will be close to the sample statistic. 
+
+
+--------
+
+$$CI_{95} = \text{statistic} \pm (1.96 * SE)$$
+
+$$CI_{95} = \bar{X} \pm [1.96*\frac{\hat{\sigma}}{\sqrt{N}}]$$
+$$CI_{95} = \hat{\beta_{1}} \pm (1.96*\frac{\text{RSE}}{\sqrt{\sum(X_i - \bar{X})^2}})$$
+
+-----------
+
+- The 95% does not mean there is a 95% probability that the true mean is in your specific interval. We could be unlucky. 
+
+- It means that if you were to repeat your study many times, you would expect 95% of the confidence intervals you calculate to contain the true mean. 
+
+-------------
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+
+# --- Step 1: Define Our "True" Population ---
+# In the real world, we never know the true population mean. But in a simulation,
+# we can define it. This is the target our confidence intervals will try to capture.
+
+true_population_mean <- 100
+population_sd <- 15
+population_size <- 20000
+
+# Create the entire population
+set.seed(123) # for reproducibility
+population_data <- rnorm(population_size, mean = true_population_mean, sd = population_sd)
+
+
+# --- Step 2: Simulate Thousands of Experiments ---
+# We will repeatedly take small samples and calculate a 95% CI for each one.
+
+n_simulations <- 10000
+sample_size <- 30
+
+# Create a dataframe to store the results of each simulation
+simulation_results <- data.frame(
+  simulation_id = 1:n_simulations,
+  lower_bound = numeric(n_simulations),
+  upper_bound = numeric(n_simulations),
+  captured_true_mean = logical(n_simulations)
+)
+
+for (i in 1:n_simulations) {
+  # 1. Draw one random sample from our population
+  current_sample <- sample(population_data, sample_size)
+  
+  # 2. Calculate the sample's statistics
+  sample_mean <- mean(current_sample)
+  sample_sd <- sd(current_sample)
+  standard_error <- sample_sd / sqrt(sample_size)
+  degrees_freedom <- sample_size - 1
+  
+  # 3. Find the critical t-value for a 95% CI
+  critical_t <- qt(0.975, df = degrees_freedom)
+  
+  # 4. Calculate the confidence interval for this one sample
+  margin_of_error <- critical_t * standard_error
+  simulation_results$lower_bound[i] <- sample_mean - margin_of_error
+  simulation_results$upper_bound[i] <- sample_mean + margin_of_error
+  
+  # 5. Check if this interval "captured" the true population mean
+  simulation_results$captured_true_mean[i] <- 
+    (simulation_results$lower_bound[i] < true_population_mean) && 
+    (simulation_results$upper_bound[i] > true_population_mean)
+}
+
+
+# --- Step 3: Calculate the Final Success Rate ---
+# Let's see what percentage of our 10,000 CIs actually contained the true mean.
+
+capture_rate <- mean(simulation_results$captured_true_mean) * 100
+
+
+# --- Step 4: Visualize the First 100 Confidence Intervals ---
+# This plot provides an intuitive look at what "95% confidence" means.
+
+# We'll just plot the first 100 simulations so we can see them clearly
+plot_data <- simulation_results[1:4, ]
+
+ggplot(plot_data, aes(x = simulation_id, ymin = lower_bound, ymax = upper_bound, color = captured_true_mean)) +
+  # Draw a vertical line for each confidence interval
+  geom_errorbar(width = 0.5) +
+  
+  # Draw a horizontal line representing the true population mean
+  geom_hline(yintercept = true_population_mean, color = "black", linetype = "dashed", size = 1) +
+  
+  # Manually set the colors (green for capture, red for miss)
+  scale_color_manual(values = c("TRUE" = "gray50", "FALSE" = "red")) +
+  
+  # Add labels and a title
+  labs(
+    title = "Visualizing 95% Confidence Intervals",
+    subtitle = "Each vertical line is one 95% CI from a different sample. The dashed line is the true population mean.",
+    x = "Simulation Number (First 4 Shown)",
+    y = "Value"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") + # Hide the legend for a cleaner look
+  annotate("text", x = 80, y = true_population_mean + 1, label = "True Population Mean", color = "black", fontface = "bold") 
+
+```
+
+-------------
+
+
+```{r}
+#| code-fold: true
+plot_data <- simulation_results[1:100, ]
+
+ggplot(plot_data, aes(x = simulation_id, ymin = lower_bound, ymax = upper_bound, color = captured_true_mean)) +
+  # Draw a vertical line for each confidence interval
+  geom_errorbar(width = 0.5) +
+  
+  # Draw a horizontal line representing the true population mean
+  geom_hline(yintercept = true_population_mean, color = "black", linetype = "dashed", size = 1) +
+  
+  # Manually set the colors (green for capture, red for miss)
+  scale_color_manual(values = c("TRUE" = "gray50", "FALSE" = "red")) +
+  
+  # Add labels and a title
+  labs(
+    title = "Visualizing 95% Confidence Intervals",
+    subtitle = "Each vertical line is one 95% CI from a different sample. The dashed line is the true population mean.",
+    x = "Simulation Number (First 100 Shown)",
+    y = "Value"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") + # Hide the legend for a cleaner look
+  annotate("text", x = 80, y = true_population_mean + 1, label = "True Population Mean", color = "black", fontface = "bold") 
+```
+
+-------------------
+
+- Are all CIs the same? Why or why not? 
+
+
+
+------------
+
+```{r}
+#Number of Simulated Experiments
+n_simulations
+
+#Percentage of CIs that Captured the True Mean
+ round(capture_rate, 2)
+```
+95%: "If we repeated our experiment an infinite amount of times, 95% of CIs will contain the true population parameter"
+
+## CIs
+
+- Can make the range any level you want, just have to know the critical value under your theoretical probability distribution
+
+$$CI_{95} = \text{statistic} \pm (\text{crit value}* SE)$$
+p <.01 or 99% CI
+```{r}
+qnorm(.01/2)
+```
+89% CI
+```{r}
+qnorm(.11/2)
+```
+
+
+## CI
+
+- Do not (necessarily) require a null hypothesis. We can focus on our "best guess" and the precision around it. 
+
+- "One weird trick to significance. PhDs hate it."
+
+- The standard error is treated as a fixed property of the sample, regardless of what the true mean is
+
+------------
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+
+# --- Step 1: Define a Hypothetical "Significant" Result ---
+# Let's imagine we ran an experiment and got these results.
+# We chose an estimate that is more than 2 standard errors away from 0,
+# so we know it should be statistically significant.
+observed_estimate <- 5.0
+standard_error <- 2.0
+degrees_freedom <- 50 # A reasonable sample size
+
+# --- Step 2: Calculate the NHST and CI Components ---
+null_value <- 0
+alpha <- 0.05
+
+# --- NHST Components ---
+# The t-statistic standardizes our result: How many SEs from the null?
+t_statistic <- (observed_estimate - null_value) / standard_error
+p_value <- 2 * pt(abs(t_statistic), df = degrees_freedom, lower.tail = FALSE)
+
+# Find the critical t-values that define the rejection region
+critical_t <- qt(1 - alpha/2, df = degrees_freedom)
+
+# --- Confidence Interval Components ---
+margin_of_error <- critical_t * standard_error
+ci_lower <- observed_estimate - margin_of_error
+ci_upper <- observed_estimate + margin_of_error
+
+# --- Plot 1: The NHST Perspective (on the t-statistic scale) ---
+# This plot answers: "Does our t-statistic fall in the rejection region?"
+
+nhst_plot <- ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  # Shade the rejection regions
+  geom_rect(aes(xmin = critical_t, xmax = Inf, ymin = 0, ymax = Inf), fill = "red", alpha = 0.3) +
+  geom_rect(aes(xmin = -Inf, xmax = -critical_t, ymin = 0, ymax = Inf), fill = "red", alpha = 0.3) +
+  
+  # Draw the t-distribution (the "world of no effect")
+  stat_function(fun = dt, args = list(df = degrees_freedom), color = "blue", size = 1) +
+  
+  # Add a line for our observed t-statistic
+  geom_vline(xintercept = t_statistic, color = "darkgreen", size = 1.5, linetype = "dashed") +
+  
+  labs(
+    title = "Perspective 1: Null Hypothesis Test",
+    subtitle = "Our t-statistic falls in the rejection region, so we reject the null hypothesis.",
+    x = "t-statistic",
+    y = "Density"
+  ) +
+  annotate("text", x = t_statistic + 0.1, y = 0.2, label = paste("Our t-statistic\n(t =", round(t_statistic, 2), ")"), color = "darkgreen", fontface = "bold", hjust = 0) +
+  theme_minimal()
+
+print(nhst_plot)
+
+
+```
+
+-------------
+
+Remember, for NHST we convert into a standardized form (usually t if we are estimating s). For CIs we are working with original units. 
+
+```{r}
+
+round(t_statistic, 2)
+round(p_value, 3)
+round(ci_lower, 2)
+round(ci_upper, 2)
+```
+
+------------
+
+```{r}
+#| code-fold: true
+# --- Plot 2: The Confidence Interval Perspective (on the estimate's scale) ---
+
+ci_plot <- ggplot(data.frame(x = c(-10, 15)), aes(x = x)) +
+  # Draw the sampling distribution if the null were true (centered at 0)
+  stat_function(fun = dnorm, args = list(mean = null_value, sd = standard_error), color = "blue", size = 1) +
+
+  # Add a vertical line for the null hypothesis value
+  geom_vline(xintercept = null_value, color = "red", size = 1.5, linetype = "dashed") +
+  
+  # Add our observed estimate as a point
+  geom_point(aes(x = observed_estimate, y = 0), color = "darkgreen", size = 4) +
+  
+  # Add the 95% Confidence Interval as an error bar
+  geom_errorbarh(aes(xmin = ci_lower, xmax = ci_upper, y = 0), height = 0.01, color = "darkgreen", size = 1.5) +
+  
+  labs(
+    title = "Perspective 2: Confidence Interval Estimation",
+    subtitle = "Our 95% CI does not overlap with the null value (0), so the result is significant.",
+    x = "Value of the Estimate",
+    y = "Density"
+  ) +
+  annotate("text", x = null_value - 0.5, y = 0.1, label = "Null Value (0)", color = "red", fontface = "bold", hjust = 1) +
+  annotate("text", x = observed_estimate, y = 0.015, label = "Our Estimate", color = "darkgreen", fontface = "bold") +
+  theme_minimal()
+
+print(ci_plot)
+
+```
+
+
+
+------------
+
+```{r}
+#| code-fold: true
+# --- Plot 3: The CI as the "Zone of Plausible Results" ---
+
+
+ci_logic_plot <- ggplot(data.frame(x = c(-10, 15)), aes(x = x)) +
+  # Shade the area of the confidence interval
+  geom_rect(aes(xmin = ci_lower, xmax = ci_upper, ymin = 0, ymax = Inf), fill = "gray", alpha = 0.5) +
+  
+  # Draw the sampling distribution centered on OUR estimate
+  stat_function(fun = dnorm, args = list(mean = observed_estimate, sd = standard_error), color = "darkgreen", size = 1) +
+  
+  # Add the null distribution for comparison
+  stat_function(fun = dnorm, args = list(mean = null_value, sd = standard_error), color = "blue", linetype = "dotted", size = 1) +
+  
+  # Add a vertical line for our observed estimate
+  geom_vline(xintercept = observed_estimate, color = "darkgreen", size = 1.5, linetype = "dashed") +
+  
+  # Add the 95% Confidence Interval as an error bar at the bottom
+  geom_errorbarh(aes(xmin = ci_lower, xmax = ci_upper, y = 0), height = 0.01, color = "black", size = 1.5) +
+  
+  labs(
+    title = "The null distribution has same shape as sampling centered around estimate",
+    x = "Value of the Estimate",
+    y = "Density"
+  ) +
+  annotate("text", x = observed_estimate + 0.2, y = 0.1, label = "Distribution centered\non our estimate", color = "darkgreen", fontface = "bold", hjust = 0) +
+  annotate("text", x = observed_estimate, y = -0.015, label = "The 95% Confidence Interval", color = "black", fontface = "bold") +
+  annotate("text", x = null_value - 0.2, y = 0.1, label = "Null\nDistribution", color = "blue", fontface = "bold", hjust = 1) +
+  theme_minimal()
+
+print(ci_logic_plot)
+
+```
+
+
+
+
+
+
+
+-------------------
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+
+# --- Step 1: Simulate a Single Experiment with a "Significant" Result ---
+
+# Define the "true" population model
+true_intercept <- 10
+true_slope <- 0.5 # A positive relationship between x and y
+true_error_sd <- 15
+sample_size <- 50
+
+# Generate one random sample based on this model
+set.seed(123) # for reproducibility
+sample_data <- data.frame(
+  x = runif(sample_size, 0, 50)
+)
+sample_data$y <- true_intercept + true_slope * sample_data$x + rnorm(sample_size, mean = 0, sd = true_error_sd)
+
+# Fit the linear regression model to our single sample
+model <- lm(y ~ x, data = sample_data)
+model_summary <- summary(model)
+
+# --- Step 2: Extract Results and Calculate NHST/CI Components ---
+# We are interested in the coefficient for the predictor 'x'
+observed_slope <- coef(model)[2]
+standard_error <- model_summary$coefficients[2, 2]
+degrees_freedom <- model_summary$df[2]
+
+null_value <- 0 # The null hypothesis is that the true slope is 0
+alpha <- 0.05
+
+# --- NHST Components ---
+t_statistic <- model_summary$coefficients[2, 3]
+p_value <- model_summary$coefficients[2, 4]
+critical_t <- qt(1 - alpha/2, df = degrees_freedom)
+
+# --- Confidence Interval Components ---
+ci <- confint(model, "x", level = 0.95)
+ci_lower <- ci[1]
+ci_upper <- ci[2]
+```
+
+
+```{r}
+#| code-fold: true
+ summary(model)
+```
+
+---------
+
+```{r}
+
+0.6145 + 1.96*0.1369
+
+0.6145 - 1.96*0.1369
+```
+
+```{r}
+confint(model, "x", level = 0.95)
+```
+
+-------------
+
+```{r}
+#| code-fold: true
+# --- Plot 1: The NHST Perspective (on the t-statistic scale) ---
+
+nhst_plot <- ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  geom_rect(aes(xmin = critical_t, xmax = Inf, ymin = 0, ymax = Inf), fill = "red", alpha = 0.3) +
+  geom_rect(aes(xmin = -Inf, xmax = -critical_t, ymin = 0, ymax = Inf), fill = "red", alpha = 0.3) +
+  stat_function(fun = dt, args = list(df = degrees_freedom), color = "blue", size = 1) +
+  geom_vline(xintercept = t_statistic, color = "darkgreen", size = 1.5, linetype = "dashed") +
+  labs(
+    title = "Perspective 1: Null Hypothesis Test for a Regression Slope",
+    subtitle = "Our t-statistic falls in the rejection region, so we reject the null hypothesis.",
+    x = "t-statistic for the Slope (β₁)",
+    y = "Density"
+  ) +
+  annotate("text", x = 2.5, y = 0.2, label = paste("Our t-statistic\n(t =", round(t_statistic, 2), ")"), color = "darkgreen", fontface = "bold", hjust = 0) +
+  theme_minimal()
+
+print(nhst_plot)
+
+
+```
+
+
+------------
+
+- What is standard error for the standardized sampling distribution? 
+
+- How does it relate to our original unit sampling distribution?
+
+-------------------
+
+
+```{r}
+# t = 4.487 
+# t = est/se
+
+4.49 * 0.1369 # mean estiamte
+
+0.6145 / 4.49   # se
+```
+
+
+
+-------------
+
+```{r}
+#| code-fold: true
+# --- Plot 2: The Confidence Interval Perspective (on the slope's scale) ---
+
+ci_plot <- ggplot(data.frame(x = c(-1.5, 1.5)), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = null_value, sd = standard_error), color = "blue", size = 1) +
+  geom_vline(xintercept = null_value, color = "red", size = 1.5, linetype = "dashed") +
+  geom_point(aes(x = observed_slope, y = 0), color = "darkgreen", size = 4) +
+  geom_errorbarh(aes(xmin = ci_lower, xmax = ci_upper, y = 0), height = 0.05, color = "darkgreen", size = 1.5) +
+  labs(
+    title = "Confidence Interval for a Regression Slope",
+    y = "Density"
+  ) +
+  annotate("text", x = null_value - 0.05, y = 0.5, label = "Null Value (Slope = 0)", color = "red", fontface = "bold", hjust = 1) +
+  annotate("text", x = observed_slope, y = 0.1, label = "Our Estimated Slope (.614)", color = "darkgreen", fontface = "bold") + scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  theme_minimal() 
+
+print(ci_plot)
+```
+
+
+
+-------------------
+
+```{r}
+#| code-fold: true
+ci_logic_plot <- ggplot(data.frame(x = c(-1, 1.5)), aes(x = x)) +
+  geom_rect(aes(xmin = ci_lower, xmax = ci_upper, ymin = 0, ymax = Inf), fill = "gray", alpha = 0.5) +
+  stat_function(fun = dnorm, args = list(mean = observed_slope, sd = standard_error), color = "darkgreen", size = 1) +
+  stat_function(fun = dnorm, args = list(mean = null_value, sd = standard_error), color = "blue", linetype = "dotted", size = 1) +
+  geom_vline(xintercept = observed_slope, color = "darkgreen", size = 1.5, linetype = "dashed") +
+  geom_errorbarh(aes(xmin = ci_lower, xmax = ci_upper, y = 0), height = 0.05, color = "black", size = 1.5) +
+  labs(
+    title = "Confidence Interval for a Regression Slope",
+    x = "Value of the Slope Estimate (β₁)",
+    y = "Density"
+  ) +
+  annotate("text", x = observed_slope + 0.02, y = 0.5, label = "Distribution centered\non our estimate", color = "darkgreen", fontface = "bold", hjust = 0) +
+  annotate("text", x = observed_slope, y = -0.1, label = "The 95% Confidence Interval", color = "black", fontface = "bold") +
+  annotate("text", x = null_value - 0.02, y = 0.5, label = "Null\nDistribution", color = "blue", fontface = "bold", hjust = 1) + scale_x_continuous(breaks = scales::pretty_breaks(n = 10))+
+  theme_minimal()
+
+print(ci_logic_plot)
+```
+
+
+## CI interpretation
+
+1. "If we repeated this experiment, ..."
+2. Plausible range of values. (est could be any of these)
+3. Precision in our estimate (is our Margin of Error (MOE) excessively large)
+
+
+## CIs summary
+
+- remember we can always get unlucky 
+
+```{r}
+#| code-fold: true
+plot_data <- simulation_results[1:100, ]
+
+ggplot(plot_data, aes(x = simulation_id, ymin = lower_bound, ymax = upper_bound, color = captured_true_mean)) +
+  # Draw a vertical line for each confidence interval
+  geom_errorbar(width = 0.5) +
+  
+  # Draw a horizontal line representing the true population mean
+  geom_hline(yintercept = true_population_mean, color = "black", linetype = "dashed", size = 1) +
+  
+  # Manually set the colors (green for capture, red for miss)
+  scale_color_manual(values = c("TRUE" = "gray50", "FALSE" = "red")) +
+  
+  # Add labels and a title
+  labs(
+    title = "Visualizing 95% Confidence Intervals",
+    subtitle = "Each vertical line is one 95% CI from a different sample. The dashed line is the true population mean.",
+    x = "Simulation Number (First 100 Shown)",
+    y = "Value"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") + # Hide the legend for a cleaner look
+  annotate("text", x = 80, y = true_population_mean + 1, label = "True Population Mean", color = "black", fontface = "bold") 
+
+```
+
+## Conveying uncertainty
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+library(dplyr)
+
+# --- Step 1: Simulate Data for Two Groups ---
+# We'll create a dataset with a continuous outcome and a two-level factor
+# to represent a simple linear model with a dummy-coded predictor.
+
+set.seed(42) # for reproducibility
+n_per_group <- 50
+control_mean <- 100
+treatment_mean <- 110
+common_sd <- 15
+
+# Create the data
+full_data <- data.frame(
+  value = c(
+    rnorm(n_per_group, mean = control_mean, sd = common_sd),
+    rnorm(n_per_group, mean = treatment_mean, sd = common_sd)
+  ),
+  group = factor(rep(c("Control", "Treatment"), each = n_per_group))
+)
+
+
+# --- Step 2: Calculate Summary Statistics for Each Group ---
+# We need to calculate the mean and the three different interval types.
+# Using dplyr makes this straightforward.
+
+summary_stats <- full_data %>%
+  group_by(group) %>%
+  summarise(
+    mean = mean(value),
+    sd = sd(value),
+    n = n(),
+    se = sd / sqrt(n),
+    .groups = 'drop'
+  ) %>%
+  mutate(
+    # Calculate the 95% CI using the t-distribution
+    critical_t = qt(0.975, df = n - 1),
+    ci_margin = critical_t * se,
+    ci_lower = mean - ci_margin,
+    ci_upper = mean + ci_margin
+  )
+
+
+model <- lm(value ~ group, data = full_data)
+
+
+# --- Step 3: Create the Visualization ---
+# We will create one plot that shows the raw data and overlays the
+# three different error bars, jittered side-by-side for clarity.
+
+# Define the amount to jitter the error bars
+dodge_width <- 0.2
+
+error_plot <- ggplot() +
+  
+  # Layer 1: The Raw Data Points (in the background)
+  # REVISED: Using as.numeric(group) for a consistent continuous x-axis
+  geom_jitter(
+    data = full_data, 
+    aes(x = as.numeric(group), y = value),
+    width = 0.15, 
+    color = "gray70", 
+    alpha = 0.5
+  ) +
+  
+  # Layer 2: Standard Deviation
+  geom_errorbar(
+    data = summary_stats,
+    aes(x = as.numeric(group) - dodge_width, ymin = mean - sd, ymax = mean + sd, color = "Standard Deviation"),
+    width = 0.1, size = 1
+  ) +
+  geom_point(data = summary_stats, aes(x = as.numeric(group) - dodge_width, y = mean, color = "Standard Deviation"), size = 4) +
+
+  # Layer 3: 95% Confidence Interval
+  geom_errorbar(
+    data = summary_stats,
+    aes(x = as.numeric(group), ymin = ci_lower, ymax = ci_upper, color = "95% Confidence Interval"),
+    width = 0.1, size = 1
+  ) +
+  geom_point(data = summary_stats, aes(x = as.numeric(group), y = mean, color = "95% Confidence Interval"), size = 4) +
+  
+  # Layer 4: Standard Error
+  geom_errorbar(
+    data = summary_stats,
+    aes(x = as.numeric(group) + dodge_width, ymin = mean - se, ymax = mean + se, color = "Standard Error"),
+    width = 0.1, size = 1
+  ) +
+  geom_point(data = summary_stats, aes(x = as.numeric(group) + dodge_width, y = mean, color = "Standard Error"), size = 4) +
+  
+  # --- Formatting and Labels ---
+  # Use scale_color_manual to define our legend
+  scale_color_manual(
+    name = "Uncertainty Measure",
+    values = c("Standard Deviation" = "gray50", "95% Confidence Interval" = "blue", "Standard Error" = "darkgreen")
+  ) +
+  
+  # Use scale_x_continuous to set the labels back to the group names
+  scale_x_continuous(
+    breaks = 1:length(levels(summary_stats$group)),
+    labels = levels(summary_stats$group)
+  ) +
+  
+  labs(
+    title = "Comparing Measures of Spread and Precision for Group Means",
+    subtitle = "Showing raw data with jittered error bars for SD, SE, and 95% CI.",
+    x = "Group",
+    y = "Value"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "bottom")
+
+print(error_plot)
+
+
+
+```
+
+
+--------
+
+```{r}
+summary(model)
+```
+
+----------------
+
+```{r}
+#| code-fold: true
+set.seed(42) # for reproducibility
+n_per_group <- 50
+control_mean <- 100
+treatment_mean <- 105
+common_sd <- 15
+
+# Create the data
+full_data <- data.frame(
+  value = c(
+    rnorm(n_per_group, mean = control_mean, sd = common_sd),
+    rnorm(n_per_group, mean = treatment_mean, sd = common_sd)
+  ),
+  group = factor(rep(c("Control", "Treatment"), each = n_per_group))
+)
+
+
+# --- Step 2: Calculate Summary Statistics for Each Group ---
+# We need to calculate the mean and the three different interval types.
+# Using dplyr makes this straightforward.
+
+summary_stats <- full_data %>%
+  group_by(group) %>%
+  summarise(
+    mean = mean(value),
+    sd = sd(value),
+    n = n(),
+    se = sd / sqrt(n),
+    .groups = 'drop'
+  ) %>%
+  mutate(
+    # Calculate the 95% CI using the t-distribution
+    critical_t = qt(0.975, df = n - 1),
+    ci_margin = critical_t * se,
+    ci_lower = mean - ci_margin,
+    ci_upper = mean + ci_margin
+  )
+
+
+model <- lm(value ~ group, data = full_data)
+
+
+# --- Step 3: Create the Visualization ---
+# We will create one plot that shows the raw data and overlays the
+# three different error bars, jittered side-by-side for clarity.
+
+# Define the amount to jitter the error bars
+dodge_width <- 0.2
+
+error_plot <- ggplot() +
+  
+  # Layer 1: The Raw Data Points (in the background)
+  # REVISED: Using as.numeric(group) for a consistent continuous x-axis
+  geom_jitter(
+    data = full_data, 
+    aes(x = as.numeric(group), y = value),
+    width = 0.15, 
+    color = "gray70", 
+    alpha = 0.5
+  ) +
+  
+  # # Layer 2: Standard Deviation
+  # geom_errorbar(
+  #   data = summary_stats,
+  #   aes(x = as.numeric(group) - dodge_width, ymin = mean - sd, ymax = mean + sd, color = "Standard Deviation"),
+  #   width = 0.1, size = 1
+  # ) +
+  # geom_point(data = summary_stats, aes(x = as.numeric(group) - dodge_width, y = mean, color = "Standard Deviation"), size = 4) +
+
+  # Layer 3: 95% Confidence Interval
+  geom_errorbar(
+    data = summary_stats,
+    aes(x = as.numeric(group), ymin = ci_lower, ymax = ci_upper, color = "95% Confidence Interval"),
+    width = 0.1, size = 1
+  ) +
+  geom_point(data = summary_stats, aes(x = as.numeric(group), y = mean, color = "95% Confidence Interval"), size = 4) +
+  
+  # Layer 4: Standard Error
+  geom_errorbar(
+    data = summary_stats,
+    aes(x = as.numeric(group) + dodge_width, ymin = mean - se, ymax = mean + se, color = "Standard Error"),
+    width = 0.1, size = 1
+  ) +
+  geom_point(data = summary_stats, aes(x = as.numeric(group) + dodge_width, y = mean, color = "Standard Error"), size = 4) +
+  
+  # --- Formatting and Labels ---
+  # Use scale_color_manual to define our legend
+  scale_color_manual(
+    name = "Uncertainty Measure",
+    values = c("Standard Deviation" = "gray50", "95% Confidence Interval" = "blue", "Standard Error" = "darkgreen")
+  ) +
+  
+  # Use scale_x_continuous to set the labels back to the group names
+  scale_x_continuous(
+    breaks = 1:length(levels(summary_stats$group)),
+    labels = levels(summary_stats$group)
+  ) +
+  
+  labs(
+    title = "Comparing Measures of Spread and Precision for Group Means",
+    subtitle = "Showing raw data with jittered error bars for SD, SE, and 95% CI.",
+    x = "Group",
+    y = "Value"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+print(error_plot)
+```
+
+
+---------------
+
+
+```{r}
+summary(model)
+```
+
+-------------
+
+```{r}
+#| code-fold: true
+library(dplyr)
+
+set.seed(42) # for reproducibility
+n_per_group <- 50
+control_mean <- 100
+treatment_mean <- 105
+common_sd <- 15
+
+# Create the data
+full_data <- data.frame(
+  value = c(
+    rnorm(n_per_group, mean = control_mean, sd = common_sd),
+    rnorm(n_per_group, mean = treatment_mean, sd = common_sd)
+  ),
+  group = factor(rep(c("Control", "Treatment"), each = n_per_group))
+)
+
+
+# --- Step 2: Calculate Summary Statistics for Each Group ---
+# We only need the mean and the 95% CI for this plot.
+summary_stats <- full_data %>%
+  group_by(group) %>%
+  summarise(
+    mean = mean(value),
+    n = n(),
+    se = sd(value) / sqrt(n),
+    .groups = 'drop'
+  ) %>%
+  mutate(
+    critical_t = qt(0.975, df = n - 1),
+    ci_margin = critical_t * se,
+    ci_lower = mean - ci_margin,
+    ci_upper = mean + ci_margin
+  )
+
+
+# --- Step 3: Create the Focused Visualization ---
+# This plot shows the raw data points with the group mean and 95% CI overlaid.
+# REVISED: Aesthetics are now defined locally in each geom_ layer to prevent errors.
+ci_plot <- ggplot() +  # Start with an empty canvas
+  
+  # Layer 1: The Raw Data Points (jittered so we can see them all)
+  geom_jitter(
+    data = full_data,
+    aes(x = group, y = value), # Aesthetics are local to this layer
+    width = 0.2, 
+    color = "gray70", 
+    alpha = 0.6
+  ) +
+  
+  # Layer 2: The 95% Confidence Interval
+  # This is centered and not jittered.
+  geom_errorbar(
+    data = summary_stats,
+    aes(x = group, ymin = ci_lower, ymax = ci_upper), # Local aesthetics
+    width = 0.1, 
+    size = 1.2, 
+    color = "blue"
+  ) +
+  
+  # Layer 3: The Group Mean
+  geom_point(
+    data = summary_stats,
+    aes(x = group, y = mean), # Local aesthetics
+    color = "blue",
+    size = 5
+  ) +
+  
+  # --- Formatting and Labels ---
+  labs(
+    title = "Group Means with 95% Confidence Intervals",
+    subtitle = "Showing the plausible range for the true population mean for each group.",
+    x = "Group",
+    y = "Value"
+  ) +
+  theme_minimal(base_size = 14)
+
+print(ci_plot)
+
+
+
+```
+
+## Overlapping CIs
+
+- If they ~touch~ then p ~= .01
+
+- They can overlap and still be significantly different. 
+
+- If they do not overlap, they are significantly different from one another.
+
 
 ## Effect sizes
 
@@ -1107,7 +1988,52 @@ Logic:
 
 - "One weird trick to significance. PhDs hate it."
 
+- std b, correlation, cohen's d, odds ratio... 
 
+## Effect sizes
+
+
+Cohen's D:
+
+$$\delta = \frac{\mu_1 - \mu_0}{\sigma} \approx d = \frac{\bar{X}_1-\bar{X}_2}{\hat{\sigma}_p}$$
+
+-   A Cohen’s d of .2 is considered “small”, .5 is considered “moderate”, and .8 is considered “large”
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+coef(model)[2]/sigma(model)
+```
+
+```{r}
+library(emmeans)
+emm <- emmeans(model, "group")
+eff_size(emm, sigma = sigma(model), edf = df.residual(model))
+```
+ 
+-----------
+
+
+```{r}
+summary(model)
+```
+
+## Meta-analytic thinking
+
+- Estimation can be thought of as "getting the best guess (at population parameter), given my data, and conveying the uncertainty"
+
+- Ideally, we would do this again, either via a direct replication or some "extension." Overtime, we would learn more, getting more and more precise about the parameter we are interested in (this is what a meta-analysis does).  
+
+- In contrast, NHST focuses on compiling yeses and nos, which makes it harder to be "cumulative"
+
+## Meta-analytic thinking
+
+- Even if you do NHST make sure there is enough information for people to do "estimation"
+
+- Provide sample statistics (means, SDs), Ns, se, RSE, etc.  (You would be amazed at what people neglect)
+
+- Easily identifiable red flag, especially as models get more complex
 
 ## Model comparison
 
