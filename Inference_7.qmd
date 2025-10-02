@@ -991,11 +991,12 @@ ggplot(plot_data, aes(x = t_values)) +
 
 ## p-values
 
-- Fisher only cared about p-values and the null. There were no alternative hypothesess or decisions to be made. Provided a strength against the null. 
+- Fisher only cared about p-values and the null. There were no alternative hypotheses or decisions to be made. Provided a strength against the null. 
 
 P-value: 
 
 $$p(\text{data} | H_0)$$
+
 
 "The probability of getting the sample value or more extreme, assuming the null hypothesis is true"
 
@@ -1003,8 +1004,8 @@ $$p(\text{data} | H_0)$$
 
 ```{r}
 #| code-fold: true
+
 ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
-  
 annotate("rect", xmin=-Inf, xmax=our_observed_t, ymin=0, ymax=Inf, alpha=0.2, fill="red") + annotate("rect", xmin=abs(our_observed_t), xmax=Inf, ymin=0, ymax=Inf, alpha=0.2, fill="red") +
   
   # Draw the t-distribution curve
@@ -1038,6 +1039,22 @@ pt(-0.394, df = 100) + (1 - pt(0.394, df = degrees_freedom))
 pt(-0.394, df = 100) 
 ```
 
+## the p-value is NOT
+
+- The probability that the null hypothesis is true p(Null |data) . This is the "inverse probability fallacy" 
+
+- The probability of replicating your results. A p-value of .04 does not mean there is a 96% chance the effect is real and will replicate.
+
+- The probability that you are wrong. A small p-value does not mean your conclusion has a low chance of being a fluke (prosecutors fallacy).
+
+## Prosecutors fallacy
+
+- The probability of finding a rare gene at the scene of the crime if the suspect is innocent is incredibly low, only 1 in 10,000. Therefore, the probability that the suspect is innocent must be incredibly low.
+
+- False equivalence between: P(Evidence | Innocence) = 1 in 10,000. This is the probability of the evidence, assuming innocence. AND p(Innocence | Evidence) = 1 in 10,000. This is what we want to know—the probability of the hypothesis being true, given our evidence
+
+- If there was 10 people in the city that has the rare gene, then it is 1/10 chance. 
+
 ## Problems with p-values
 
 - Doesn't tell you what you want to know, which leads to misunderstanding
@@ -1045,6 +1062,14 @@ pt(-0.394, df = 100)
 "What's wrong with [NHST]? Well, among many other things, it does not tell us what we want to know, and we so much want to know what we want to know that, out of desperation, we nevertheless believe that it does!" – Cohen (1994)
 
 - p(data | H0) when we really want p(H1 | data)
+
+
+## Problems with p-values
+
+- Awkward combo of two ideas. Fisher's continuous p-value with Neyman and Pearson NHST decision-making procedure. You set an alpha level before the experiment and make a binary "reject/fail to reject" decision. The exact p-value is irrelevant; only whether it crosses your critical value, based on alpha threshold, matters.
+
+-  But people still try to make continuous by interperting p-values out of more ***. "More significant" is oxymoronic as it is either true or not based on priori decisions. 
+
 
 ## Problems with p-values
 
@@ -1056,14 +1081,11 @@ pt(-0.394, df = 100)
 
 ## Problems with p-values
 
-- Leads to dichotomous thinking. 
-
-- "The world is flat p < .05";  "Surely god loves .051 as much as .049"
+- Leads to dichotomous thinking. "The world is flat p < .05";  "Surely god loves .051 as much as .049"
 
 - Fail vs not fail when the world is much more grey. Both in terms of original hypotheses (nil isn't risky) as well as interpreting results. 
 
 - Lacks a measure of interpretable effect size and an estimate of precision 
-
 
 ## Problems with p-values
 
@@ -1071,8 +1093,9 @@ pt(-0.394, df = 100)
 
 - "I wouldn't trust a study with larger sample size than is standard (in the field), as that suggests they just gamed the system". - WashU big wig 
 
-- Not reporting necessary information as long as p-value is there, ritualistic p-value corrections without thought, power estimates without thought, asterisk  
+- As p is a function of sample size, with Large N, anything is significant and with low N, anything is insignificant. 
 
+- Not reporting necessary information as long as p-value is there, ritualistic p-value corrections without thought, power estimates without thought, asterisk  
 
 ## Problems with p-values
 
@@ -1084,7 +1107,9 @@ pt(-0.394, df = 100)
 
 ... are intrinsically tied. 
 
-But there are other ways! 
+- can be used effectively. Just many pitfalls. 
+
+- But there are other ways! 
 
 ## Estimation
 
@@ -1265,7 +1290,7 @@ n_simulations
 #Percentage of CIs that Captured the True Mean
  round(capture_rate, 2)
 ```
-95%: "If we repeated our experiment an infinite amount of times, 95% of CIs will contain the true population parameter"
+95% CI: "If we repeated our experiment an infinite amount of times, 95% of CIs will contain the true population parameter"
 
 ## CIs
 
@@ -1282,7 +1307,7 @@ qnorm(.11/2)
 ```
 
 
-## CI
+## CI NHST
 
 - Do not (necessarily) require a null hypothesis. We can focus on our "best guess" and the precision around it. 
 
@@ -1351,7 +1376,7 @@ print(nhst_plot)
 
 -------------
 
-Remember, for NHST we convert into a standardized form (usually t if we are estimating s). For CIs we are working with original units. 
+Remember, for NHST we convert into a standardized form (usually t if we are estimating s). For CIs we are working with original units (as it has more meaning). 
 
 ```{r}
 
@@ -1360,6 +1385,9 @@ round(p_value, 3)
 round(ci_lower, 2)
 round(ci_upper, 2)
 ```
+
+
+
 
 ------------
 
@@ -1435,11 +1463,7 @@ print(ci_logic_plot)
 
 
 
-
-
-
-
--------------------
+## regression example
 
 ```{r}
 #| code-fold: true
@@ -1606,7 +1630,7 @@ print(ci_logic_plot)
 
 ## CIs summary
 
-- remember we can always get unlucky 
+- Remember we can always get unlucky 
 
 ```{r}
 #| code-fold: true
@@ -1765,7 +1789,7 @@ print(error_plot)
 summary(model)
 ```
 
-----------------
+## smaller effect size example
 
 ```{r}
 #| code-fold: true
@@ -1977,7 +2001,7 @@ print(ci_plot)
 
 - If they ~touch~ then p ~= .01
 
-- They can overlap and still be significantly different. 
+- They can overlap, a little, and still be significantly different. If one edge is near the other's est, then they will be significant different. 
 
 - If they do not overlap, they are significantly different from one another.
 
@@ -1989,6 +2013,13 @@ print(ci_plot)
 - "One weird trick to significance. PhDs hate it."
 
 - std b, correlation, cohen's d, odds ratio... 
+
+## Effect sizes and p-values
+
+- p-value is a function of the effect size and N
+
+- Can think of p value = f(effect size / se), with the se indexing N. 
+
 
 ## Effect sizes
 
@@ -2007,17 +2038,21 @@ coef(model)[2]/sigma(model)
 ```
 
 ```{r}
+#| code-fold: true
 library(emmeans)
 emm <- emmeans(model, "group")
 eff_size(emm, sigma = sigma(model), edf = df.residual(model))
 ```
  
------------
+## Effect sizes
 
+Standardized: 
 
-```{r}
-summary(model)
-```
+- r, R, $R^2$, std. b / b* 
+
+Unstandardized:
+
+- b 
 
 ## Meta-analytic thinking
 
@@ -2037,14 +2072,434 @@ summary(model)
 
 ## Model comparison
 
+Logic:
+
 - We should explicitly test theories against one another rather than weak null/nil hypotheses.  
 
 - Build more than one regression model and pit two (or more) models against one another
 
-- Compare which fit the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used estimate SE. 
+- Compare which fit the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used estimate SE.
+
+## Model comparison
+
+- Simplest model comparison is for a "null" or "intercept only" model vs a model with a predictor
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
 
 ## Revisit ANOVA table
 
+```{r}
+anova(model)
+```
+
+-------
+
+```{r}
+summary(model)
+```
+
+-----------
+
+```{r}
+#| code-fold: true
+model.0 <- lm(value ~ 1, data = full_data)
+summary(model.0)
+```
+
+
+-------------
+
+```{r}
+anova(model.0)
+```
+
+
+-----------
+
+```{r}
+anova(model.0, model)
+```
+
+## SS needs to go somewhere
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
+
+- Null model has 25292 SS residual, while model with group has 24051. That means we took 1241 and put it into model SS. 
+
+```{r}
+anova(model)
+```
+
+## F test
+
+- F here is the same as the previous F and p-value. 1241/245.42
+
+```{r}
+anova(model.0, model)
+```
+- Can be thought of as "Improvement divided by remaining error" or a metric of how much does sigma decrease
+
+
+---------
+
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+
+# --- Step 1: Define the Parameters for the Visualization ---
+
+# Degrees of freedom for the F-distribution
+df1 <- 1
+df2 <- 98
+
+# The alpha level for our hypothesis test
+alpha <- 0.05
+
+# The observed F test statistic from your experiment
+observed_f_statistic <- 5.0567
+
+# --- Step 2: Calculate the Critical Value ---
+# This is the value that our F-statistic must exceed to be "significant".
+# It's the point on the distribution where 5% of the area is to its right.
+critical_value <- qf(1 - alpha, df1 = df1, df2 = df2)
+
+
+# --- Step 3: Create the Plot ---
+
+f_distribution_plot <- ggplot(data.frame(x = c(0, 6)), aes(x = x)) +
+  
+  # Shade the rejection region (the area to the right of the critical value)
+  geom_rect(
+    aes(xmin = critical_value, xmax = Inf, ymin = 0, ymax = Inf),
+    fill = "red",
+    alpha = 0.3
+  ) +
+  
+  # Draw the F-distribution curve
+  stat_function(
+    fun = df, 
+    args = list(df1 = df1, df2 = df2),
+    color = "blue",
+    size = 1
+  ) +
+  
+  # Add a vertical line for the critical value
+  geom_vline(
+    aes(xintercept = critical_value), 
+    color = "darkred", 
+    linetype = "dashed", 
+    size = 1
+  ) +
+  
+  # Add a vertical line for our observed test statistic
+  geom_vline(
+    aes(xintercept = observed_f_statistic), 
+    color = "darkgreen", 
+    size = 1.5
+  ) +
+  
+  # --- Add Labels and Annotations ---
+  labs(
+    title = paste0("F-Distribution (df = ", df1, ", ", df2, ")"),
+    subtitle = "Comparing an Observed Test Statistic to the Critical Value",
+    x = "F-statistic",
+    y = "Density"
+  ) +
+  annotate(
+    "text", x = critical_value, y = 0.2, 
+    label = paste("Critical Value\n(α = 0.05)\nF =", round(critical_value, 2)), 
+    color = "darkred", fontface = "bold", hjust = 1.1
+  ) +
+  annotate(
+    "text", x = observed_f_statistic, y = 0.1, 
+    label = paste("Our Test Statistic\nF =", round(observed_f_statistic, 2)), 
+    color = "darkgreen", fontface = "bold", hjust = 1.1
+  ) +
+  theme_minimal(base_size = 14)
+
+print(f_distribution_plot)
+```
 
 
 
+## OLS vs Maximum Likelihood
+
+- When we have nested models, we can use the F-test to compare. This works for linear models with residual sum of squares are calculated as the residuals are assumed to be Gaussian normal (and thus we can calculate MSE). 
+- We can do the same procedure with ML. It is called a Chi-Square Difference Test (more formally, a Likelihood Ratio Test). It is more flexible because it uses likelihoods. Tests the difference in the log-likelihoods between the simple and complex models
+
+- Asymptotically equivalent (we can see that because F and chi-square are related; and that log-likelihood is proportional to RSE. 
+
+
+## Likelihoods
+
+-   p(data \| θ ) is what we typically work with (or p(data \| H0))
+
+-   Is this what we want to know?
+
+-   Perhaps more helpful for scientists would be "what is the most likely parameter value, given our data"?
+
+-   L(θ \| data )
+
+
+
+## Binomial likelihood
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+# Our observed data from the experiment
+n_trials <- 50
+k_successes <- 30 # Number of heads
+mle_p = .6
+
+# Create a sequence of candidate p values (from 0 to 1)
+# THIS IS WHAT WE ARE TRYING TO ESTIMATE
+p_values <- seq(0, 1, by = 0.001)
+
+# Calculate the likelihood for each p using dbinom()
+# dbinom(x, size, prob) calculates P(X=x) for a binomial distribution
+likelihoods <- dbinom(x = k_successes, size = n_trials, prob = p_values)
+
+# Store the results in a data frame
+likelihood_df <- data.frame(p = p_values, likelihood = likelihoods)
+
+# Load the ggplot2 library for nice plots
+library(ggplot2)
+
+ggplot(likelihood_df, aes(x = p, y = likelihood)) +
+  geom_line(color = "blue", size = 1) +
+  # Add a vertical line at the MLE to highlight the peak
+  geom_vline(xintercept = mle_p, linetype = "dashed", color = "black") +
+  labs(
+    title = "Binomial Likelihood Function for Coin Flips",
+    subtitle = "Likelihood of p given k=30 heads in n=50 flips",
+    x = "Candidate Probability of Heads (p)",
+    y = "Likelihood"
+  ) +
+  theme_minimal()
+
+
+
+
+```
+
+
+## ML for linear regression
+
+-   Default DGP will be normal/Gaussian
+
+$Y_i | X_i \sim \mathcal{N}(\beta_0 + \beta_1 X_i, \sigma^2)$
+
+The probability density function (PDF) for a single data point: $f(Y_i | \beta_0, \beta_1, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac {(Y_i - (\beta_0 + \beta_1 X_i))^2}{2\sigma^2}\right)$
+
+The likelihood function $\mathcal{L}(θ | data )$ is based on our model parameters $\theta =(\beta_0 + \beta_1, \sigma^2)$ such that we find that values of our parameters that maximize this function:
+
+$$\mathcal{L}(\beta_0, \beta_1, \sigma^2) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - (\beta_0 + \beta_1 X_i))^2}{2\sigma^2}\right)$$
+
+## Log Likelihood
+
+-   Maximizing the log-likelihood is the same as maximizing the likelihood, but it's mathematically and computationally much easier.
+
+-   Likelihood of observing all your data points is the product of the likelihood of each individual point. Multiplying many small probs will lead to issues. So we log them to turn it into addition.
+
+## Log Likelihood estimating a mean
+
+-   define what values we want to calculate log likelihood for
+
+```{r}
+#| code-fold: true
+library(psychTools)
+library(tidyr)
+library(tidyverse)
+galton.data <- galton
+grid <-
+  crossing(mu = seq(from = 66, to = 69, length.out = 200), sigma = seq(from = 2, to = 3, length.out = 200))
+grid
+```
+
+## Log Likelihood example
+
+-   Need to calculate the log likelihood of our data (each child’s height) assuming each part of our grid is true.
+
+-   Take the first line of our grid (mu = 66, sigma = 2) so we can see how likely each child (all 928) by dnorm(height, 66, 2)
+
+-   We sum the LLs across all 928 participants for each spot in the grid to get the average log-likelihood for each grid spot
+
+------------------------------------------------------------------------
+
+40,000 grids \* 928 participants = 37,120,000 calculations
+
+```{r}
+#| code-fold: true
+library(purrr)
+grid_function <- function(mu, sigma) {
+  dnorm(galton.data$child, mean = mu, sd = sigma, log = T) %>%
+    sum() 
+  }
+
+p_grid <-
+  grid %>% 
+  mutate(log_likelihood = map2(mu, sigma, grid_function)) %>%
+  unnest(log_likelihood)
+  p_grid
+```
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+library(viridis)
+p_grid %>% 
+  ggplot(aes(x = mu, y = sigma, fill = log_likelihood)) + 
+  geom_raster(interpolate = T) +
+  scale_fill_viridis_c(option = "C") +
+  labs(title = "log likelihood for mean and sd",
+         x = expression(mu),
+       y = expression(sigma)) +
+  theme(panel.grid = element_blank())
+```
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+library(tidybayes)
+p_grid %>% 
+  ggplot(aes(x = mu, y = log_likelihood )) + 
+    stat_lineribbon(.width = c(0), alpha = .4) +  theme(legend.position="none")
+```
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+p_grid %>% 
+  ggplot(aes(x = sigma, y = log_likelihood )) + 
+    stat_lineribbon(.width = c(0), alpha = .4) +  theme(legend.position="none")
+```
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+library(report)
+report_sample(galton.data$child)
+```
+
+## Maximum Likelihood
+
+-   regression example
+
+```{r}
+#| code-fold: true
+# Load the ggplot2 library for plotting
+library(ggplot2)
+
+# --- 1. Generate Sample Data ---
+set.seed(42) # For reproducibility
+n <- 100
+true_beta0 <- 10  # True intercept
+true_beta1 <- 2   # True slope
+true_sigma <- 5   # True standard deviation of the error
+
+x <- 1:n
+errors <- rnorm(n, mean = 0, sd = true_sigma)
+y <- true_beta0 + true_beta1 * x + errors
+
+# --- 2. Define the Log-Likelihood Function ---
+# This function calculates the total log-likelihood for a given set of parameters.
+# params is a vector: c(beta0, beta1, sigma)
+log_likelihood <- function(params, x, y) {
+  beta0 <- params[1]
+  beta1 <- params[2]
+  sigma <- params[3]
+  
+  # Ensure sigma is positive, otherwise, the density is undefined
+  if (sigma <= 0) return(-Inf)
+
+  # Calculate the predicted values for y
+  y_pred <- beta0 + beta1 * x
+
+  # Calculate the log-likelihood using the normal distribution's PDF.
+  # dnorm() with log = TRUE calculates the log-probability density of each residual.
+  ll <- sum(dnorm(y, mean = y_pred, sd = sigma, log = TRUE))
+  
+  return(ll)
+}
+
+# --- 3. Set Up and Run the Grid Search ---
+# To make sure our grid is in the right area, we can center it around the OLS estimates.
+ols_fit <- lm(y ~ x)
+
+# Define a range of plausible values for each parameter
+beta0_grid <- seq(coef(ols_fit)[1] - 2, coef(ols_fit)[1] + 2, length.out = 50)
+beta1_grid <- seq(coef(ols_fit)[2] - 0.1, coef(ols_fit)[2] + 0.1, length.out = 50)
+sigma_grid <- seq(sigma(ols_fit) - 2, sigma(ols_fit) + 2, length.out = 50)
+
+# Create a data frame containing every combination of parameters
+param_grid <- expand.grid(beta0 = beta0_grid, beta1 = beta1_grid, sigma = sigma_grid)
+
+# Calculate the log-likelihood for each combination in the grid. This may take a moment.
+log_likelihood_values <- apply(param_grid, 1, log_likelihood, x = x, y = y)
+param_grid$ll <- log_likelihood_values
+
+# Find the row in the grid with the maximum log-likelihood
+mle_grid_estimate <- param_grid[which.max(param_grid$ll), ]
+
+param_grid
+```
+
+## magic is here
+
+```{r, eval = F}
+dnorm(y, mean = y_pred, sd = sigma, log = TRUE)
+```
+
+-   Our data are fixed as we collected them. We test out which ones make better predictions by trying out different parameters, which will change the y_pred. Asks: How likely is y, using different parameters L($\theta$\|d).
+
+```{r}
+#better guess! 
+dnorm(20, mean = 25, sd = 3.23, log = TRUE)
+```
+
+```{r}
+dnorm(20, mean = 40, sd = 3.23, log = TRUE)
+```
+
+------------------------------------------------------------------------
+
+```{r}
+print(mle_grid_estimate)
+```
+
+```{r}
+coef(ols_fit)
+```
+
+```{r}
+sigma(ols_fit)
+```
+
+------------------------------------------------------------------------
+
+```{r}
+#| code-fold: true
+# Filter the grid to only include the slice with the best sigma value
+surface_data <- subset(param_grid, sigma == mle_grid_estimate$sigma)
+
+ggplot(surface_data, aes(x = beta0, y = beta1, fill = ll)) +
+  geom_tile() + # Creates the heatmap
+  scale_fill_viridis_c() + # A visually appealing color scale
+  # Add a point to mark the maximum
+  geom_point(data = mle_grid_estimate, aes(x = beta0, y = beta1), 
+             color = "red", size = 4, shape = 4, stroke = 1.5) +
+  labs(
+    title = "Log-Likelihood Surface",
+    subtitle = "Red 'X' marks the Maximum Likelihood Estimate from the grid search",
+    x = "Intercept (beta0)",
+    y = "Slope (beta1)",
+    fill = "Log-Likelihood"
+  ) +
+  theme_minimal()
+```
