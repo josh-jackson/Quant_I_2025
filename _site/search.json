@@ -1754,7 +1754,7 @@
     "href": "Inference_7.html#model-comparison",
     "title": "Statistical Inference",
     "section": "Model comparison",
-    "text": "Model comparison\nLogic:\n\nWe should explicitly test theories against one another rather than weak null/nil hypotheses.\nBuild more than one regression model and pit two (or more) models against one another\nCompare which fit the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used estimate SE."
+    "text": "Model comparison\nLogic:\n\nWe should explicitly test theories against one another rather than weak null/nil hypotheses.\nBuild more than one regression model and pit two (or more) models against one another\nCompare which fits the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used to estimate SE."
   },
   {
     "objectID": "Inference_7.html#problem-of-induction",
@@ -1964,7 +1964,7 @@
     "href": "Inference_7.html#revisit-anova-table",
     "title": "Statistical Inference",
     "section": "Revisit ANOVA table",
-    "text": "Revisit ANOVA table\n\nanova(model)\n\nAnalysis of Variance Table\n\nResponse: value\n          Df Sum Sq Mean Sq F value  Pr(&gt;F)  \ngroup      1   1241 1241.01  5.0567 0.02677 *\nResiduals 98  24051  245.42                  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+    "text": "Revisit ANOVA table\n\nanova(model)\n\nAnalysis of Variance Table\n\nResponse: value\n          Df Sum Sq Mean Sq F value  Pr(&gt;F)  \ngroup      1   1241 1241.01  5.0567 0.02677 *\nResiduals 98  24051  245.42                  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\n15.67^2\n\n[1] 245.5489"
   },
   {
     "objectID": "Inference_7.html#cis",
@@ -2090,7 +2090,7 @@
     "href": "Inference_7.html#model-comparison-1",
     "title": "Statistical Inference",
     "section": "Model comparison",
-    "text": "Model comparison\n\nSimplest model comparison is for a “null” or “intercept only” model vs a model with a predictor\n\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]"
+    "text": "Model comparison\n\nSimplest model comparison is for a “null” or “intercept only” model vs a model with a predictor\nWe evaluate our models by SSE, so lets compare the SSE between two models\n\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]"
   },
   {
     "objectID": "Inference_7.html#ss-needs-to-go-somewhere",
@@ -2110,8 +2110,8 @@
     "objectID": "Inference_7.html#nested-vs-non-nested",
     "href": "Inference_7.html#nested-vs-non-nested",
     "title": "Statistical Inference",
-    "section": "nested vs non-nested",
-    "text": "nested vs non-nested"
+    "section": "Nested vs non-nested",
+    "text": "Nested vs non-nested\n\nOften our model comparisons are nested if we can think of one as a simplified version of another\nWe can think of a nested version of y ~ \\(b_0\\) + \\(b_1\\)*X + \\(e_i\\) by fixing the slope to = 0.\nThe resulting model, y ~ \\(b_0\\) + \\(e_i\\) is our intercept only model"
   },
   {
     "objectID": "Inference_7.html#ml-for-linear-regression",
@@ -2153,7 +2153,7 @@
     "href": "Inference_7.html#magic-is-here",
     "title": "Statistical Inference",
     "section": "magic is here",
-    "text": "magic is here\n\ndnorm(y, mean = y_pred, sd = sigma, log = TRUE)\n\n\nOur data are fixed as we collected them. We test out which ones make better predictions by trying out different parameters, which will change the y_pred. Asks: How likely is y, using different parameters L(\\(\\theta\\)|d).\n\n\n#better guess! \ndnorm(20, mean = 25, sd = 3.23, log = TRUE)\n\n[1] -3.289554\n\n\n\ndnorm(20, mean = 40, sd = 3.23, log = TRUE)\n\n[1] -21.26155"
+    "text": "magic is here\n\nsum(dnorm(y, mean = y_pred, sd = sigma, log = TRUE))\n\n\nOur data are fixed as we collected them. We test out which ones make better predictions by trying out different parameters, which will change the y_pred. Asks: How likely is y, using different parameters L(\\(\\theta\\)|d).\n\n\n#better guess! \ndnorm(20, mean = 25, sd = 3.23, log = TRUE)\n\n[1] -3.289554\n\n\n\ndnorm(20, mean = 40, sd = 3.23, log = TRUE)\n\n[1] -21.26155"
   },
   {
     "objectID": "Inference_7.html#ols-vs-maximum-likelihood",
@@ -2175,5 +2175,124 @@
     "title": "Statistical Inference",
     "section": "Binomial likelihood",
     "text": "Binomial likelihood\n\n\nCode\nlibrary(ggplot2)\n# Our observed data from the experiment\nn_trials &lt;- 50\nk_successes &lt;- 30 # Number of heads\nmle_p = .6\n\n# Create a sequence of candidate p values (from 0 to 1)\n# THIS IS WHAT WE ARE TRYING TO ESTIMATE\np_values &lt;- seq(0, 1, by = 0.001)\n\n# Calculate the likelihood for each p using dbinom()\n# dbinom(x, size, prob) calculates P(X=x) for a binomial distribution\nlikelihoods &lt;- dbinom(x = k_successes, size = n_trials, prob = p_values)\n\n# Store the results in a data frame\nlikelihood_df &lt;- data.frame(p = p_values, likelihood = likelihoods)\n\n# Load the ggplot2 library for nice plots\nlibrary(ggplot2)\n\nggplot(likelihood_df, aes(x = p, y = likelihood)) +\n  geom_line(color = \"blue\", size = 1) +\n  # Add a vertical line at the MLE to highlight the peak\n  geom_vline(xintercept = mle_p, linetype = \"dashed\", color = \"black\") +\n  labs(\n    title = \"Binomial Likelihood Function for Coin Flips\",\n    subtitle = \"Likelihood of p given k=30 heads in n=50 flips\",\n    x = \"Candidate Probability of Heads (p)\",\n    y = \"Likelihood\"\n  ) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Inference_7.html#non-nested-comparisons",
+    "href": "Inference_7.html#non-nested-comparisons",
+    "title": "Statistical Inference",
+    "section": "Non-nested comparisons?",
+    "text": "Non-nested comparisons?\n\nWe want to ask is happiness ~ \\(b_0\\) + \\(b_1\\) * friends + \\(e_i\\) or happiness ~ \\(b_0\\) + \\(b_1\\)*money + \\(e_i\\)\nThis is non-nested data and we cannot use F-tests/ANOVA"
+  },
+  {
+    "objectID": "Inference_7.html#example-revisited",
+    "href": "Inference_7.html#example-revisited",
+    "title": "Statistical Inference",
+    "section": "example revisited",
+    "text": "example revisited\n\nsummary(model)\n\n\nCall:\nlm(formula = value ~ group, data = full_data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-46.407  -9.212   0.457  10.016  34.835 \n\nCoefficients:\n               Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      99.465      2.215  44.895   &lt;2e-16 ***\ngroupTreatment    7.046      3.133   2.249   0.0268 *  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 15.67 on 98 degrees of freedom\nMultiple R-squared:  0.04907,   Adjusted R-squared:  0.03936 \nF-statistic: 5.057 on 1 and 98 DF,  p-value: 0.02677"
+  },
+  {
+    "objectID": "Inference_7.html#likelihood-ratio-test",
+    "href": "Inference_7.html#likelihood-ratio-test",
+    "title": "Statistical Inference",
+    "section": "Likelihood ratio test",
+    "text": "Likelihood ratio test\n\nFor use with nested comparisons. Cannot use ANOVA (well for any other type of glm, but since this is a gaussian one, we can).\nLRT = -2(\\(LL_\\text{Simple}\\) - \\(LL_\\text{complex}\\) )\n\n\nlogLik(m.1)\n\n'log Lik.' -416.0318 (df=3)\n\n\n\nlogLik(m.0)\n\n'log Lik.' -418.5474 (df=2)"
+  },
+  {
+    "objectID": "Inference_7.html#deviance",
+    "href": "Inference_7.html#deviance",
+    "title": "Statistical Inference",
+    "section": "Deviance",
+    "text": "Deviance\n\nsummary(m.1)\n\n\nCall:\nglm(formula = value ~ group, data = full_data)\n\nCoefficients:\n               Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      99.465      2.215  44.895   &lt;2e-16 ***\ngroupTreatment    7.046      3.133   2.249   0.0268 *  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n(Dispersion parameter for gaussian family taken to be 245.4178)\n\n    Null deviance: 25292  on 99  degrees of freedom\nResidual deviance: 24051  on 98  degrees of freedom\nAIC: 838.06\n\nNumber of Fisher Scoring iterations: 2\n\n\n\ndeviance(m.1)\n\n[1] 24050.94\n\ndeviance(m.0)\n\n[1] 25291.95"
+  },
+  {
+    "objectID": "Inference_7.html#deviance-1",
+    "href": "Inference_7.html#deviance-1",
+    "title": "Statistical Inference",
+    "section": "Deviance",
+    "text": "Deviance\n\nWhile log likelihood is a measure of goodness of fit, deviance is a measure of poor fit (similar to SS error/Residual SS).\nDeviance = -2 * Log-Likelihood\nWhy do this at all, since they are the same? Multiplying the log-likelihood by -2 puts the measure of fit onto a scale that approximates a chi-square (For most models. For gaussian we will still use F-test)"
+  },
+  {
+    "objectID": "Inference_7.html#non-nested-comparisons-1",
+    "href": "Inference_7.html#non-nested-comparisons-1",
+    "title": "Statistical Inference",
+    "section": "Non-nested comparisons",
+    "text": "Non-nested comparisons\n\nNested designs can be thought of improvement from some simplier comparison. Non-nested are comparing apples and oranges.\nWe cannot directly use SSE / MSE / RSE / ll / deviance to test. Instead we will focus on “goodness of fit” and occularly, rather than formally, compare\nWe will use the likelihood + a penalty based on number of predictors\nWhy penalty? Because models can be more complex and thus be easier to predict some outcome."
+  },
+  {
+    "objectID": "Inference_7.html#information-criteria",
+    "href": "Inference_7.html#information-criteria",
+    "title": "Statistical Inference",
+    "section": "Information criteria",
+    "text": "Information criteria\nThe smaller the number, the better the fit:\n\nAIC (Akaike Information Criterion): AIC = -2 * log(Likelihood) + 2p(predictors)\nBIC (Bayesian Information Criterion): BIC = -2 * log(Likelihood) + p * log(n)\nBIC has a much harsher penalty for complexity, especially with large sample sizes (n), and will favor a simpler model"
+  },
+  {
+    "objectID": "Inference_7.html#aicbic",
+    "href": "Inference_7.html#aicbic",
+    "title": "Statistical Inference",
+    "section": "AIC/BIC",
+    "text": "AIC/BIC\n\nlibrary(\"performance\")\nmodel_performance(m.1)\n\n# Indices of model performance\n\nAIC     |    AICc |     BIC |    R2 |   RMSE |  Sigma\n-----------------------------------------------------\n838.064 | 838.314 | 845.879 | 0.049 | 15.508 | 15.666\n\n\n\ncompare_performance(m.1, m.0)\n\n# Comparison of Model Performance Indices\n\nName | Model | AIC (weights) | AICc (weights) | BIC (weights) |         R2\n--------------------------------------------------------------------------\nm.1  |   glm | 838.1 (0.820) |  838.3 (0.810) | 845.9 (0.553) |      0.049\nm.0  |   glm | 841.1 (0.180) |  841.2 (0.190) | 846.3 (0.447) | -2.220e-16\n\nName |   RMSE |  Sigma\n----------------------\nm.1  | 15.508 | 15.666\nm.0  | 15.903 | 15.984"
+  },
+  {
+    "objectID": "Inference_7.html#model-comparison-f-test",
+    "href": "Inference_7.html#model-comparison-f-test",
+    "title": "Statistical Inference",
+    "section": "Model comparison F test",
+    "text": "Model comparison F test\n\nF here is the same as the previous F and p-value. 1241/245.42\n\n\nanova(model.0, model)\n\nAnalysis of Variance Table\n\nModel 1: value ~ 1\nModel 2: value ~ group\n  Res.Df   RSS Df Sum of Sq      F  Pr(&gt;F)  \n1     99 25292                              \n2     98 24051  1      1241 5.0567 0.02677 *\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\nCan be thought of as “Improvement divided by remaining error” or a metric of how much does sigma decrease"
+  },
+  {
+    "objectID": "Inference_7.html#model-comparison-2",
+    "href": "Inference_7.html#model-comparison-2",
+    "title": "Statistical Inference",
+    "section": "Model comparison",
+    "text": "Model comparison\n\nTesting a predictor in the model (evaluating b) is the exact same as testing the overall fit of a model with the predictor vs fit a model without the predictor. Because the only thing that differs between the models is the predictor.\nThis plays out in other ways, as the F-test for the overall model (tests does this model explain any variance) is the exact same as the test of a 1 predictor model (does this explain any variance)"
+  },
+  {
+    "objectID": "Inference_7.html#equivalent-tests-for-1-predictor",
+    "href": "Inference_7.html#equivalent-tests-for-1-predictor",
+    "title": "Statistical Inference",
+    "section": "Equivalent tests (for 1 predictor)",
+    "text": "Equivalent tests (for 1 predictor)\n\nregression coef (b/se = t), R2 F test, regression CI, model comparison with null"
+  },
+  {
+    "objectID": "Inference_7.html#visualizing-f-comparison",
+    "href": "Inference_7.html#visualizing-f-comparison",
+    "title": "Statistical Inference",
+    "section": "Visualizing F comparison",
+    "text": "Visualizing F comparison\n\n\nCode\nlibrary(ggplot2)\n\n# --- Step 1: Define the Parameters for the Visualization ---\n\n# Degrees of freedom for the F-distribution\ndf1 &lt;- 1\ndf2 &lt;- 98\n\n# The alpha level for our hypothesis test\nalpha &lt;- 0.05\n\n# The observed F test statistic from your experiment\nobserved_f_statistic &lt;- 5.0567\n\n# --- Step 2: Calculate the Critical Value ---\n# This is the value that our F-statistic must exceed to be \"significant\".\n# It's the point on the distribution where 5% of the area is to its right.\ncritical_value &lt;- qf(1 - alpha, df1 = df1, df2 = df2)\n\n\n# --- Step 3: Create the Plot ---\n\nf_distribution_plot &lt;- ggplot(data.frame(x = c(0, 6)), aes(x = x)) +\n  \n  # Shade the rejection region (the area to the right of the critical value)\n  geom_rect(\n    aes(xmin = critical_value, xmax = Inf, ymin = 0, ymax = Inf),\n    fill = \"red\",\n    alpha = 0.3\n  ) +\n  \n  # Draw the F-distribution curve\n  stat_function(\n    fun = df, \n    args = list(df1 = df1, df2 = df2),\n    color = \"blue\",\n    size = 1\n  ) +\n  \n  # Add a vertical line for the critical value\n  geom_vline(\n    aes(xintercept = critical_value), \n    color = \"darkred\", \n    linetype = \"dashed\", \n    size = 1\n  ) +\n  \n  # Add a vertical line for our observed test statistic\n  geom_vline(\n    aes(xintercept = observed_f_statistic), \n    color = \"darkgreen\", \n    size = 1.5\n  ) +\n  \n  # --- Add Labels and Annotations ---\n  labs(\n    title = paste0(\"F-Distribution (df = \", df1, \", \", df2, \")\"),\n    subtitle = \"Comparing an Observed Test Statistic to the Critical Value\",\n    x = \"F-statistic\",\n    y = \"Density\"\n  ) +\n  annotate(\n    \"text\", x = critical_value, y = 0.2, \n    label = paste(\"Critical Value\\n(α = 0.05)\\nF =\", round(critical_value, 2)), \n    color = \"darkred\", fontface = \"bold\", hjust = 1.1\n  ) +\n  annotate(\n    \"text\", x = observed_f_statistic, y = 0.1, \n    label = paste(\"Our Test Statistic\\nF =\", round(observed_f_statistic, 2)), \n    color = \"darkgreen\", fontface = \"bold\", hjust = 1.1\n  ) +\n  theme_minimal(base_size = 14)\n\nprint(f_distribution_plot)"
+  },
+  {
+    "objectID": "Inference_7.html#fit-measure-summary",
+    "href": "Inference_7.html#fit-measure-summary",
+    "title": "Statistical Inference",
+    "section": "Fit measure summary",
+    "text": "Fit measure summary\n\nsigma (low is better fit), \\(R^2\\) & R (large is better fit)\nlog likelihood (ll; higher/less negative is better fit), deviance (lower is better fit)\nAll related; all are non-standardized (meaningless without more information) except for Rs\nFor Gaussian we test with F, for all else with Chi-square"
+  },
+  {
+    "objectID": "Inference_7.html#what-is-anova",
+    "href": "Inference_7.html#what-is-anova",
+    "title": "Statistical Inference",
+    "section": "what is ANOVA?",
+    "text": "what is ANOVA?\n\nANOVA is just a Sums of Squares table\nLooks at how much SSE / Residual SS reduces compared to another model or how much SSE / Residual SS is relative to SS regression"
+  },
+  {
+    "objectID": "Inference_7.html#key-take-aways",
+    "href": "Inference_7.html#key-take-aways",
+    "title": "Statistical Inference",
+    "section": "Key take aways",
+    "text": "Key take aways\n\nML is iterative, in that we try out a bunch of different values and then select the one that is most consistent with our data\nThe likelihood is a direct consequence of our data based on a theoretical probability distribution.\nIt does not mean it is the only answer, and we can see other values that are almost as likely"
+  },
+  {
+    "objectID": "Inference_7.html#ml-regression",
+    "href": "Inference_7.html#ml-regression",
+    "title": "Statistical Inference",
+    "section": "ML regression",
+    "text": "ML regression\n\nML is the default estimation algorithm using the glm (generalized linear model) function.\nWe will use this anytime we cannot assume Gaussian normal. However, we can still use it for Gaussian normal DGPs\n\n\nfit &lt;- glm( y ~ x, family = Gaussian, data = data)"
+  },
+  {
+    "objectID": "Inference_7.html#aicbic-1",
+    "href": "Inference_7.html#aicbic-1",
+    "title": "Statistical Inference",
+    "section": "Aic/bic",
+    "text": "Aic/bic\n\nOn their own, the numbers are meaningless. Need to directly compare to another model.\nThere is no formal test, though there are some informal guidelines about magnitude of difference\nSometimes AIC will differ from BIC on which model it prefers."
   }
 ]

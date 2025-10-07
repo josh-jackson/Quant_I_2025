@@ -1047,13 +1047,6 @@ pt(-0.394, df = 100)
 
 - The probability that you are wrong. A small p-value does not mean your conclusion has a low chance of being a fluke (prosecutors fallacy).
 
-## Prosecutors fallacy
-
-- The probability of finding a rare gene at the scene of the crime if the suspect is innocent is incredibly low, only 1 in 10,000. Therefore, the probability that the suspect is innocent must be incredibly low.
-
-- False equivalence between: P(Evidence | Innocence) = 1 in 10,000. This is the probability of the evidence, assuming innocence. AND p(Innocence | Evidence) = 1 in 10,000. This is what we want to know—the probability of the hypothesis being true, given our evidence
-
-- If there was 10 people in the city that has the rare gene, then it is 1/10 chance. 
 
 ## Problems with p-values
 
@@ -2078,11 +2071,13 @@ Logic:
 
 - Build more than one regression model and pit two (or more) models against one another
 
-- Compare which fit the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used estimate SE.
+- Compare which fits the best. The focus can be on the overall model fit or on specific coefficients. Each depend on sigma, which is used to estimate SE.
 
 ## Model comparison
 
 - Simplest model comparison is for a "null" or "intercept only" model vs a model with a predictor
+
+- We evaluate our models by SSE, so lets compare the SSE between two models
 
 $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
 
@@ -2090,6 +2085,11 @@ $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2
 
 ```{r}
 anova(model)
+```
+
+
+```{r}
+15.67^2
 ```
 
 -------
@@ -2107,12 +2107,16 @@ summary(model.0)
 ```
 
 
+
 -------------
 
 ```{r}
 anova(model.0)
 ```
 
+```{r}
+15.98^2
+```
 
 -----------
 
@@ -2130,7 +2134,7 @@ $$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2
 anova(model)
 ```
 
-## F test
+## Model comparison F test
 
 - F here is the same as the previous F and p-value. 1241/245.42
 
@@ -2140,8 +2144,26 @@ anova(model.0, model)
 - Can be thought of as "Improvement divided by remaining error" or a metric of how much does sigma decrease
 
 
+## Model comparison
+
+- Testing a predictor in the model (evaluating b) is the exact same as testing the overall fit of a model with the predictor vs fit a model without the predictor. Because the only thing that differs between the models is the predictor. 
+
+- This plays out in other ways, as the F-test for the overall model (tests does this model explain any variance) is the exact same as the test of a 1 predictor model (does this explain any variance)
+
 ---------
 
+```{r}
+summary(model)
+```
+
+## Equivalent tests (for 1 predictor)
+
+- regression coef (b/se = t), R2 F test, regression CI, model comparison with null
+
+
+
+
+## Visualizing F comparison
 
 ```{r}
 #| code-fold: true
@@ -2221,11 +2243,32 @@ f_distribution_plot <- ggplot(data.frame(x = c(0, 6)), aes(x = x)) +
 print(f_distribution_plot)
 ```
 
+## what is ANOVA? 
 
+- ANOVA is just a Sums of Squares table
+
+- Looks at how much SSE / Residual SS reduces compared to another model or how much SSE / Residual SS is relative to SS regression
+
+
+
+## Nested vs non-nested
+
+- Often our model comparisons are nested if we can think of one as a simplified version of another
+
+- We can think of a nested version of y ~ $b_0$ + $b_1$*X + $e_i$ by fixing the slope to = 0. 
+
+- The resulting model,  y ~ $b_0$ + $e_i$ is our intercept only model
+
+## Non-nested comparisons? 
+
+- We want to ask is happiness ~ $b_0$ + $b_1$ * friends + $e_i$ or happiness ~ $b_0$ + $b_1$*money  + $e_i$
+
+- This is non-nested data and we cannot use F-tests/ANOVA  
 
 ## OLS vs Maximum Likelihood
 
 - When we have nested models, we can use the F-test to compare. This works for linear models with residual sum of squares are calculated as the residuals are assumed to be Gaussian normal (and thus we can calculate MSE). 
+
 - We can do the same procedure with ML. It is called a Chi-Square Difference Test (more formally, a Likelihood Ratio Test). It is more flexible because it uses likelihoods. Tests the difference in the log-likelihoods between the simple and complex models
 
 - Asymptotically equivalent (we can see that because F and chi-square are related; and that log-likelihood is proportional to RSE. 
@@ -2387,6 +2430,15 @@ library(report)
 report_sample(galton.data$child)
 ```
 
+## Key take aways
+
+- ML is iterative, in that we try out a bunch of different values and then select the one that is *most consistent with our data*
+
+- The likelihood is a direct consequence of our data based on a theoretical probability distribution. 
+
+- It does not mean it is the only answer, and we can see  other values that are almost as likely
+
+
 ## Maximum Likelihood
 
 -   regression example
@@ -2453,7 +2505,7 @@ param_grid
 ## magic is here
 
 ```{r, eval = F}
-dnorm(y, mean = y_pred, sd = sigma, log = TRUE)
+sum(dnorm(y, mean = y_pred, sd = sigma, log = TRUE))
 ```
 
 -   Our data are fixed as we collected them. We test out which ones make better predictions by trying out different parameters, which will change the y_pred. Asks: How likely is y, using different parameters L($\theta$\|d).
@@ -2474,12 +2526,9 @@ print(mle_grid_estimate)
 ```
 
 ```{r}
-coef(ols_fit)
+summary(ols_fit)
 ```
 
-```{r}
-sigma(ols_fit)
-```
 
 ------------------------------------------------------------------------
 
@@ -2503,3 +2552,309 @@ ggplot(surface_data, aes(x = beta0, y = beta1, fill = ll)) +
   ) +
   theme_minimal()
 ```
+
+## ML regression
+
+- ML is the default estimation algorithm using the glm (generalized linear model) function. 
+
+- We will use this anytime we cannot assume Gaussian normal. However, we can still use it for Gaussian normal DGPs
+
+```{r, eval = FALSE}
+
+fit <- glm( y ~ x, family = Gaussian, data = data)
+```
+
+
+
+---------
+
+
+```{r}
+lmod <- glm(y~x)
+summary(lmod)
+```
+
+--------
+
+- We don't get the same information below the coefs because we are no longer doing sum of squares decomposition.
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
+
+- SSE/RSS as a measure of fit assumes that the errors around the regression line are continous and normally distributed
+
+-------------------------
+
+```{r}
+logLik(lmod)
+```
+
+```{r}
+mle_grid_estimate
+```
+
+
+## example revisited
+
+```{r}
+summary(model)
+```
+
+
+---------------
+
+```{r}
+m.1 <- glm(value ~ group, data = full_data)
+summary(m.1)
+```
+
+------------
+
+```{r}
+m.0 <- glm(value ~ 1, data = full_data)
+summary(m.0)
+```
+
+## Likelihood ratio test
+
+- For use with nested comparisons. Cannot use ANOVA (well for any other type of glm, but since this is a gaussian one, we can). 
+
+- LRT = -2($LL_\text{Simple}$ - $LL_\text{complex}$ )
+
+```{r}
+logLik(m.1)
+```
+
+```{r}
+logLik(m.0)
+```
+
+-------------
+
+```{r}
+#| code-fold: true
+chi_sq_statistic <- -2 * (as.numeric(logLik(m.0))-as.numeric(logLik(m.1)))
+
+df_diff <- length(coef(m.1)) - length(coef(m.0))
+
+# Calculate the p-value
+p_value_manual <- pchisq(chi_sq_statistic, df = df_diff, lower.tail = FALSE)
+
+chi_sq_statistic
+df_diff
+p_value_manual 
+```
+
+-----------
+
+```{r}
+#| code-fold: true
+library(lmtest)
+lrtest(m.0, m.1)
+```
+
+----------
+
+```{r}
+#| code-fold: true
+df <- 1
+
+# The alpha level for our hypothesis test
+alpha <- 0.05
+
+# The observed Chi-Square test statistic from your LRT
+observed_chi_sq <- 5.031213
+
+# --- Step 2: Calculate the Critical Value and p-value ---
+# The critical value is the point on the distribution where 5% of the area is to its right.
+critical_value <- qchisq(1 - alpha, df = df)
+
+# The p-value is the probability of getting a result as extreme or more extreme than ours.
+p_value <- pchisq(observed_chi_sq, df = df, lower.tail = FALSE)
+
+
+# --- Step 3: Create the Plot ---
+
+chi_sq_plot <- ggplot(data.frame(x = c(0, 8)), aes(x = x)) +
+  
+  # Shade the rejection region (the area to the right of the critical value)
+  geom_rect(
+    aes(xmin = critical_value, xmax = Inf, ymin = 0, ymax = Inf),
+    fill = "red",
+    alpha = 0.3
+  ) +
+  
+  # Draw the Chi-Square distribution curve
+  stat_function(
+    fun = dchisq, 
+    args = list(df = df),
+    color = "blue",
+    size = 1
+  ) +
+  
+  # Add a vertical line for the critical value
+  geom_vline(
+    aes(xintercept = critical_value), 
+    color = "darkred", 
+    linetype = "dashed", 
+    size = 1
+  ) +
+  
+  # Add a vertical line for our observed test statistic
+  geom_vline(
+    aes(xintercept = observed_chi_sq), 
+    color = "darkgreen", 
+    size = 1.5
+  ) +
+  
+  # --- Add Labels and Annotations ---
+  labs(
+    title = expression(paste("Chi-Square (", chi^2, ") Distribution with df = ", df)),
+    subtitle = "Comparing an Observed LRT Statistic to the Critical Value",
+    x = expression(paste(chi^2, " Statistic")),
+    y = "Density"
+  ) +
+  annotate(
+    "text", x = critical_value, y = 0.5, 
+    label = paste("Critical Value\n(α = 0.05)\nχ² =", round(critical_value, 2)), 
+    color = "darkred", fontface = "bold", hjust = 1.1
+  ) +
+  annotate(
+    "text", x = observed_chi_sq, y = 0.1, 
+    label = paste("Our Test Statistic\nχ² =", round(observed_chi_sq, 2), "\np-value =", format.pval(p_value, digits=2)), 
+    color = "darkgreen", fontface = "bold", hjust = 1.1
+  ) +
+  theme_minimal(base_size = 14)
+
+print(chi_sq_plot)
+```
+
+-------
+
+- Does our lm function results have likelihoods? 
+
+```{r}
+anova(model.0, model, test="LRT")
+```
+
+```{r}
+anova(model.0, model)
+```
+
+
+----------
+
+
+```{r}
+logLik(model)
+```
+
+```{r}
+
+lrtest(model.0, model)
+```
+
+
+---------
+
+Anova with glm models will give you deviances
+
+```{r}
+anova(m.0, m.1)
+```
+
+
+## Deviance
+
+
+```{r}
+summary(m.1)
+```
+
+
+```{r}
+deviance(m.1)
+deviance(m.0)
+```
+
+## Deviance
+
+- While log likelihood is a measure of goodness of fit, deviance is a measure of poor fit (similar to SS error/Residual SS). 
+
+- Deviance = -2 * Log-Likelihood
+
+- Why do this at all, since they are the same? Multiplying the log-likelihood by -2 puts the measure of fit onto a scale that approximates a chi-square (For most models. For gaussian we will still use F-test)
+
+------------
+
+
+$$F = \frac{\frac{\text{Deviance}_{\text{simple}} - \text{Deviance}_{\text{complex}}}{\text{df}_{\text{simple}} - \text{df}_{\text{complex}}}}{\frac{\text{Deviance}_{\text{complex}}}{\text{df}_{\text{complex}}}}$$
+
+```{r}
+(deviance(m.0)-deviance(m.1))/(deviance(m.1)/98)
+```
+
+----------
+
+- F will be roughly equal to a chi square (df = 1) when the df for the F(1, LARGE)
+
+Chi-square = 
+```{r}
+log(deviance(m.0)/deviance(m.1))*100
+```
+
+
+## Fit measure summary
+
+- sigma (low is better fit), $R^2$ & R (large is better fit) 
+
+- log likelihood (ll; higher/less negative is better fit), deviance (lower is better fit)
+
+- All related; all are non-standardized (meaningless without more information) except for Rs
+
+- For Gaussian we test with F, for all else with Chi-square
+
+## Non-nested comparisons
+
+- Nested designs can be thought of improvement from some simplier comparison. Non-nested are comparing apples and oranges. 
+
+- We cannot directly use SSE / MSE / RSE / ll / deviance to test. Instead we will focus on "goodness of fit" and occularly, rather than formally, compare
+
+- We will use the likelihood + a penalty based on number of predictors
+
+- Why penalty? Because models can be more complex and thus be easier to predict some outcome. 
+
+## Information criteria
+
+The smaller the number, the better the fit: 
+
+- AIC (Akaike Information Criterion): AIC = -2 * log(Likelihood) + 2p(predictors)
+
+- BIC (Bayesian Information Criterion): BIC = -2 * log(Likelihood) + p * log(n)
+
+- BIC has a much harsher penalty for complexity, especially with large sample sizes (n), and will favor a simpler model
+
+## AIC/BIC
+
+
+```{r}
+library("performance")
+model_performance(m.1)
+```
+
+```{r}
+compare_performance(m.1, m.0)
+```
+
+------------
+
+```{r}
+plot(compare_performance(m.1, m.0, rank = TRUE))
+```
+
+## Aic/bic
+
+- On their own, the numbers are meaningless. Need to directly compare to another model.
+
+- There is no formal test, though there are some informal guidelines about magnitude of difference
+
+- Sometimes AIC will differ from BIC on which model it prefers. 
