@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Quant 1 - Homework</title>
+<title>Quant 1 - hw2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -90,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Lectures</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./homework.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="./homework.html" rel="" target="">
  <span class="menu-text">Homework</span></a>
   </li>  
   <li class="nav-item">
@@ -109,14 +109,24 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions">Instructions</a>
+  <ul class="collapse">
+  <li><a href="#using-the-data-from-last-homework-answer-whether-worlds-categorized-in-group-1-vs-4-have-greater-levels-of-freedom." id="toc-using-the-data-from-last-homework-answer-whether-worlds-categorized-in-group-1-vs-4-have-greater-levels-of-freedom." class="nav-link" data-scroll-target="#using-the-data-from-last-homework-answer-whether-worlds-categorized-in-group-1-vs-4-have-greater-levels-of-freedom.">1. Using the data from last homework, answer whether worlds categorized in group 1 vs 4 have greater levels of freedom.</a></li>
+  <li><a href="#in-the-same-dataset-you-are-interested-in-understanding-what-relates-to-happiness.-you-hypothesize-that-higher-levels-of-generosity-will-lead-to-higher-levels-of-happiness." id="toc-in-the-same-dataset-you-are-interested-in-understanding-what-relates-to-happiness.-you-hypothesize-that-higher-levels-of-generosity-will-lead-to-higher-levels-of-happiness." class="nav-link" data-scroll-target="#in-the-same-dataset-you-are-interested-in-understanding-what-relates-to-happiness.-you-hypothesize-that-higher-levels-of-generosity-will-lead-to-higher-levels-of-happiness.">2. In the same dataset you are interested in understanding what relates to happiness. You hypothesize that higher levels of generosity will lead to higher levels of happiness.</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Homework</h1>
+<h1 class="title">hw2</h1>
 </div>
 
 
@@ -131,13 +141,46 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<ol type="1">
-<li><p><a href="hw1.html">Homework #1</a></p></li>
-<li><p><a href="HW_1_KEY.html">Homework #1 KEY</a></p></li>
-<li><p><a href="hw2.html">Homework #2</a></p></li>
-</ol>
+<section id="instructions" class="level1">
+<h1>Instructions</h1>
+<p>Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include <strong><em>both</em></strong> the .qmd or .Rmd and knitted .html files. Please turn in both documents to the <strong>ASSIGNMENTS</strong> page on Canvas.</p>
+<p>Put all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that <em>outside</em> of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.</p>
+<p>You are allowed to Google or use your preferred AI-overlord. <em>However</em>, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a <strong>working link</strong> to the website you used. You don’t need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and <strong>do not simply copy someone else’s code</strong>. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.</p>
+<p>In the instructions, when it says <strong><em>by hand</em></strong>, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean <em>by hand</em>, you should <strong>not</strong> use the <code>mean()</code> function. However, you can (and should!) use your variables. So for instance, if I ask you to find the <code>mean()</code> by hand, you may do something like <code>sum(variableX)/length(variableX)</code>. This would be an appropriate <em>by hand</em> calculation.</p>
+<p><strong>Data:</strong> We will use the same dataset as in Hw #1, referred to as <a href="https://raw.githubusercontent.com/josh-jackson/Quant_I_2025/refs/heads/main/homework-world.csv"><code>homework-world</code></a></p>
+<section id="using-the-data-from-last-homework-answer-whether-worlds-categorized-in-group-1-vs-4-have-greater-levels-of-freedom." class="level2">
+<h2 class="anchored" data-anchor-id="using-the-data-from-last-homework-answer-whether-worlds-categorized-in-group-1-vs-4-have-greater-levels-of-freedom.">1. Using the data from last homework, answer whether worlds categorized in group 1 vs 4 have greater levels of freedom.</h2>
+<p>A. Run model in R to test your hypothesis. Interpret regression coefficients.<br>
+B. Using the ANOVA function, interpret what the F test tests.<br>
+C. In words, what are the null and alternative hypotheses for the intercept and regression coefficient.<br>
+D. What is the null and alternative hypotheses for the F-test.<br>
+E. What is an effect size that you would use to interpret this model?<br>
+F. What is your critical value where you would reject an alpha of .01 in terms of both the t distribution and the original metric?<br>
+G. What is your test statistic? Both in terms of the original metric and the t-distribution.<br>
+H. What is your NHST decision?<br>
+I. Interpret your p-value.<br>
+J. Graph your result. K. Create a 91% confidence interval around your estimate.<br>
+L. Run a null or intercept only model. Compare this model to the model in A. Do you get the same p-value as in I? How come/why not?<br>
+M. Run the model in A using the glm function. Do a likelihood ratio test compared to a null model. How does this differ from L?</p>
+</section>
+<section id="in-the-same-dataset-you-are-interested-in-understanding-what-relates-to-happiness.-you-hypothesize-that-higher-levels-of-generosity-will-lead-to-higher-levels-of-happiness." class="level2">
+<h2 class="anchored" data-anchor-id="in-the-same-dataset-you-are-interested-in-understanding-what-relates-to-happiness.-you-hypothesize-that-higher-levels-of-generosity-will-lead-to-higher-levels-of-happiness.">2. In the same dataset you are interested in understanding what relates to happiness. You hypothesize that higher levels of generosity will lead to higher levels of happiness.</h2>
+<p>A. Run model in R to test your hypothesis. Interpret regression coefficients.<br>
+B. Using the ANOVA function, interpret what the F test tests.<br>
+C. In words, what are the null and alternative hypotheses for the intercept and regression coefficient.<br>
+D. What is the null and alternative hypotheses for the F-test.<br>
+E. What is an effect size that you would use to interpret this model?<br>
+F. What is your critical value where you would reject an alpha of .01 in terms of both the t distribution and the original metric?<br>
+G. What is your test statistic? Both in terms of the original metric and the t-distribution.<br>
+H. What is your NHST decision?<br>
+I. Interpret your p-value.<br>
+J. Graph your result. K. Create a 91% confidence interval around your estimate.<br>
+L. Run a null or intercept only model. Compare this model to the model in A. Do you get the same p-value as in I? How come/why not?<br>
+M. Run the model in A using the glm function. Do a likelihood ratio test compared to a null model. How does this differ from L?</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

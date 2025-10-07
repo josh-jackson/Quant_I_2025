@@ -3,55 +3,52 @@ title: "Syllabus"
 format: html
 ---
 
-What: Quant 1 
+What: Quant 1
 
-When: Class: 9:30 AM - 10:50 Tuesday & Thursday. 
+When: Class: 9:30 AM - 10:50 Tuesday & Thursday.
 
-Sam office hours: 11-12 Tue & Thursday 407A Somers
-Ben office hours: 2-3pm on Monday and Tuesday 250 Somers.
-Josh office hours: 
+Sam office hours: 11-12 Tue & Thursday 407A Somers Ben office hours: 2-3pm on Monday and Tuesday 250 Somers. Josh office hours:
 
-Where: 216 Somers 
+Where: 216 Somers
 
-Who: Josh Jackson and AIs Sam Bennett & Ben Hardin 
+Who: Josh Jackson and AIs Sam Bennett & Ben Hardin
 
-Why: Literally most important class ever. Plus it is a requirement.   
-
+Why: Literally most important class ever. Plus it is a requirement.
 
 # Weekly schedule
 
 | Week | Date | Topic | Readings | HW Due |
-|:--:|:--:|:--:|:--:|:--:|
-| 1 | 8/26 | Models | ST 5 - 5.4; LSR 1-4,7|  |
-| \- | 8/28 | Describing data  | LSR 5 |  |
-| 2 | 9/2 |  GLM basics  | LSR 15 - 15.2|  |
-| \- | 9/4 | Probability distributions |LSR 9 |  |
-| 3 | 9/9 | Probability distributions |  | |
-| \- | 9/11 | Estimation, Likelihood & Loss   | 15.4 -  |  |
-| 4 | 9/16 |  Estimation, Likelihood & Loss     |  |  |
-| \- | 9/18 | Simple regressions (1 predictor and t-tests) | LSR 13 | HW 1 due  |
-| 5 | 9/23 |  **Exam 1** |  |  |
-| \- | 9/25 | Statistical inference part 1 (Sampling and NHST)  | LSR 10 & 11 | |
-| 6 | 9/30 |  Statistical inference part 2 (Estimation) | LSR 15.5 - 15.7 |  |
-| \- | 10/2 | Statistical inference part 3 (Model comparisons)  | LSR 15.10 |  HW 2 due  |
+|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+| 1 | 8/26 | Models | ST 5 - 5.4; LSR 1-4,7 |  |
+| \- | 8/28 | Describing data | LSR 5 |  |
+| 2 | 9/2 | GLM basics | LSR 15 - 15.2 |  |
+| \- | 9/4 | Probability distributions | LSR 9 |  |
+| 3 | 9/9 | Probability distributions |  |  |
+| \- | 9/11 | Estimation, Likelihood & Loss | 15.4 - |  |
+| 4 | 9/16 | Estimation, Likelihood & Loss |  |  |
+| \- | 9/18 | Simple regressions (1 predictor and t-tests) | LSR 13 | HW 1 due |
+| 5 | 9/23 | **Exam 1** |  |  |
+| \- | 9/25 | Statistical inference part 1 (Sampling and NHST) | LSR 10 & 11 |  |
+| 6 | 9/30 | Statistical inference part 2 (Estimation) | LSR 15.5 - 15.7 |  |
+| \- | 10/2 | Statistical inference part 3 (Model comparisons) | LSR 15.10 |  |
 | 7 | 10/7 | *No Class - Fall Break!* |  |  |
-| \- | 10/9 | Simulation and prediction  | |  |
-| 8 | 10/14 |  What can go wrong (Transparency and Open science)|  | |  
-| \- | 10/16 | Assumptions | LSR 15.8  |  |
-| 9 | 10/21  | Power   |  |  |
-| \- | 10/23 | Visualizing Data   |LSR 6 |  |
-| 10 | 10/28 | Threats to Validity   |  |  |
+| \- | 10/9 | Simulation and prediction |  |  |
+| 8 | 10/14 | What can go wrong (Transparency and Open science) |  |  |
+| \- | 10/16 | Assumptions | LSR 15.8 |  ||
+| 9 | 10/21 | Power |  | HW 2 due |
+| \- | 10/23 | Visualizing Data | LSR 6 |  |
+| 10 | 10/28 | Threats to Validity |  |  |
 | \- | 10/30 | **Exam 2** |  | HW 3 due |
-| 11 | 11/4 |  3 or more means (ANOVA) | LSR 14 |
-| \- | 11/6 |  Multiple comparisons & contrasts |  |  |
-| 12 | 11/11 | Interactions  | LSR 16 |  |
-| \- | 11/13 | ANCOVA  | |  |
+| 11 | 11/4 | 3 or more means (ANOVA) | LSR 14 |  |
+| \- | 11/6 | Multiple comparisons & contrasts |  |  |
+| 12 | 11/11 | Interactions | LSR 16 |  |
+| \- | 11/13 | ANCOVA |  |  |
 | 13 | 11/18 | Within-subjects designs |  | HW 4 due |
-| \- | 11/20 | Binomial and logistic regression   |  | |
-| 14 | 11/25 | Chi-Square test  | LSR 12 |  |
+| \- | 11/20 | Binomial and logistic regression |  |  |
+| 14 | 11/25 | Chi-Square test | LSR 12 |  |
 | \- | 11/27 | *No Class – Happy Thanksgiving!* |  |  |
-| 15 | 12/2  | Estimation revisited |  | HW 5 due |
-| \- | 12/4  | **Exam 3** |  |  |
+| 15 | 12/2 | Estimation revisited |  | HW 5 due |
+| \- | 12/4 | **Exam 3** |  |  |
 
 # Overview
 
@@ -59,12 +56,9 @@ This course is the first in a two-course sequence that introduces necessary skil
 
 ### Textbook
 
-- We will primarily be referring to chapters in [*Learning Statistics with R*](https://learningstatisticswithr.com/book/) by Danielle Navarro. [pdf version](https://learningstatisticswithr.com/lsr-0.6.pdf)
+-   We will primarily be referring to chapters in [*Learning Statistics with R*](https://learningstatisticswithr.com/book/) by Danielle Navarro. [pdf version](https://learningstatisticswithr.com/lsr-0.6.pdf)
 
-- Statistical thinking for the 21st century is another good intro book to cover all bases. By Russell A. Poldrack
-[Statistical thinking for the 21st century](https://statsthinking21.github.io/statsthinking21-core-site/)
-
-
+-   Statistical thinking for the 21st century is another good intro book to cover all bases. By Russell A. Poldrack [Statistical thinking for the 21st century](https://statsthinking21.github.io/statsthinking21-core-site/)
 
 ### R and RStudio
 
@@ -90,7 +84,7 @@ HWs are due at their due date by 12:00am. Grading will go by the following rubri
 -   6/6: Completed all parts of the assignment, and results/interpretations were mostly correct (with maybe a few minor errors along the way)
 -   5/6: Completed all parts of the assignment, and \~5-25% of the results/interpretations are incorrect
 -   4/6: Completed all parts of the assignment, however \~26-40% of the results/interpretations are incorrect
--   3/6: Either parts of the assignment are missing but what is there is correct, OR all parts have been completed but there are substantial issues with the results/interpretation >40%
+-   3/6: Either parts of the assignment are missing but what is there is correct, OR all parts have been completed but there are substantial issues with the results/interpretation \>40%
 -   2/6: Parts of the assignment are missing, and there are substantial issues with the results/interpretation
 -   1/6: Nearly all of the assignment is missing, but something was turned in
 -   0/6: No assignment submitted
@@ -105,18 +99,15 @@ You may work with your peers on homework assignments, with the following caveats
 
 There will be 3 exams. They will test both your theoretical understanding of concepts, as well as your applied understanding of the material. You will not be expected to open `R` and code during these exams, however you will be expected to understand `R` code that has been provided. As exams get closer, I will go over the procedures and policies with you before the exam. If you have a disability that will require additional time, please contact me and Disability Resources as soon as possible (contact information below). The first exam is worth 20% of your grade. Exams 2 and 3 are each worth 25% of your grade.
 
-
 ### Final Grading Rubric
 
 All assignments and examinations are mandatory. If you need to miss an exam you must get in touch with me as soon as possible. Rescheduling of exams will be considered on a case by case basis, but I am *not* required to approve a rescheduled exam.
 
+$$\text{93 >=  A}$$ $$\text{90 - 92.99 = A-}  $$
 
- $$\text{93 >=  A}$$ 
- $$\text{90 - 92.99 = A-}  $$
- 
- $$\text{87 - 89.99 = B+} $$
+$$\text{87 - 89.99 = B+} $$
 
- $$\text{83 - 86.99 = B} $$
+$$\text{83 - 86.99 = B} $$
 
 $$\text{80 - 82.99 = B-} $$
 
@@ -130,11 +121,9 @@ $$\text{67 - 69.99 = D+}$$
 
 $$\text{63 - 66.99 = D}$$
 
- $$\text{60 - 62.99 = D-}$$
+$$\text{60 - 62.99 = D-}$$
 
 $$\text{< 60 = F}$$
-
-
 
 ### Staying Connected
 
@@ -142,7 +131,7 @@ $$\text{< 60 = F}$$
 
 ## LLMs and our AI overlords
 
-- Very useful for stats, especially basic stats. Use them! But do not be like me in terms of spellcheck and my subsequent spelling abilities. Have a discussion to understand the material at a deeper level. Do not use them just for efficiency. 
+-   Very useful for stats, especially basic stats. Use them! But do not be like me in terms of spellcheck and my subsequent spelling abilities. Have a discussion to understand the material at a deeper level. Do not use them just for efficiency.
 
 ### Be Considerate and Kind
 
@@ -157,15 +146,14 @@ $$\text{< 60 = F}$$
 -   I expect all students to be in class if they are able (not sick, not at a conference etc.). The best way to succeed is to come to class. Your chosen profession requires mastery of these skills! Come to class!
 
 -   You are adults. Come to class when you can. Let me know when you can't (quick email is OK).
-    
+
 -   **If you are not feeling well, don't come to class!!** You have access to the slides and you can ask a friend for notes.
 
 -   Most people will have electronics with them in class. Drinks should have a lid on them so that if they spill, we hopefully aren't ruining yours or another person's laptop/tablet/phone etc. Be careful!
 
-
 ### Online Etiquette
 
-- There will be a lot of online communication with the instructor, the AIs, and your peers. You are expected to maintain a polite and respectful tone in their online discourse. Some things to consider:
+-   There will be a lot of online communication with the instructor, the AIs, and your peers. You are expected to maintain a polite and respectful tone in their online discourse. Some things to consider:
 
 -   Any communication shared privately may become public, so be mindful of what you share in discussion boards or chats. This is especially true for sharing any personal and/or identifying information about you or someone else. Do not share any passwords or divulge any personal information (yours or others) that can be used in a malicious manner (phone numbers, addresses etc.).
 

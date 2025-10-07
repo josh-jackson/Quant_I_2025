@@ -1,0 +1,52 @@
+---
+title: "hw2"
+format: html
+---
+
+
+# Instructions
+
+Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include ***both*** the .qmd or .Rmd and knitted .html files. Please turn in both documents to the **ASSIGNMENTS** page on Canvas.
+
+Put all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that *outside* of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
+
+You are allowed to Google or use your preferred AI-overlord. *However*, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a **working link** to the website you used. You don't need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.
+
+In the instructions, when it says ***by hand***, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation.
+
+**Data:** We will use the same dataset as in Hw #1, referred to as [`homework-world`](https://raw.githubusercontent.com/josh-jackson/Quant_I_2025/refs/heads/main/homework-world.csv)
+
+
+
+
+## 1. Using the data from last homework, answer whether worlds categorized in group 1 vs 4 have greater levels of freedom. 
+
+A. Run model in R to test your hypothesis. Interpret regression coefficients.   
+B. Using the ANOVA function, interpret what the F test tests.   
+C. In words, what are the null and alternative hypotheses for the intercept and regression coefficient.   
+D. What is the null and alternative hypotheses for the F-test.   
+E. What is an effect size that you would use to interpret this model?   
+F. What is your critical value where you would reject an alpha of .01 in terms of both the t distribution and the original metric?  
+G. What is your test statistic? Both in terms of the original metric and the t-distribution.   
+H. What is your NHST decision?   
+I. Interpret your p-value.   
+J. Graph your result. 
+K. Create a 91% confidence interval around your estimate.   
+L. Run a null or intercept only model. Compare this model to the  model in A. Do you get the same p-value as in I? How come/why not?   
+M. Run the model in A using the glm function. Do a likelihood ratio test compared to a null model. How does this differ from L?   
+
+## 2. In the same dataset you are interested in understanding what relates to happiness. You hypothesize that higher levels of generosity will lead to higher levels of happiness. 
+
+A. Run model in R to test your hypothesis. Interpret regression coefficients.   
+B. Using the ANOVA function, interpret what the F test tests.   
+C. In words, what are the null and alternative hypotheses for the intercept and regression coefficient.    
+D. What is the null and alternative hypotheses for the F-test.   
+E. What is an effect size that you would use to interpret this model?   
+F. What is your critical value where you would reject an alpha of .01 in terms of both the t distribution and the original metric?  
+G. What is your test statistic? Both in terms of the original metric and the t-distribution.    
+H. What is your NHST decision?   
+I. Interpret your p-value.   
+J. Graph your result. 
+K. Create a 91% confidence interval around your estimate.   
+L. Run a null or intercept only model. Compare this model to the  model in A. Do you get the same p-value as in I? How come/why not?   
+M. Run the model in A using the glm function. Do a likelihood ratio test compared to a null model. How does this differ from L?   
