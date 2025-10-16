@@ -2805,17 +2805,17 @@ log(deviance(m.0)/deviance(m.1))*100
 
 ## Fit measure summary
 
-- sigma (low is better fit), $R^2$ & R (large is better fit) 
+- MSE/RSE/sigma (low is better fit), $R^2$ & R (large is better fit) 
 
 - log likelihood (ll; higher/less negative is better fit), deviance (lower is better fit)
 
 - All related; all are non-standardized (meaningless without more information) except for Rs
 
-- For Gaussian we test with F, for all else with Chi-square
+- For Gaussian we test with F, for all else with Chi-square. Each compares fit.
 
 ## Non-nested comparisons
 
-- Nested designs can be thought of improvement from some simplier comparison. Non-nested are comparing apples and oranges. 
+- Nested designs can be thought of improvement from some simpler comparison. Non-nested are comparing apples and oranges. 
 
 - We cannot directly use SSE / MSE / RSE / ll / deviance to test. Instead we will focus on "goodness of fit" and occularly, rather than formally, compare
 
@@ -2858,3 +2858,10 @@ plot(compare_performance(m.1, m.0, rank = TRUE))
 - There is no formal test, though there are some informal guidelines about magnitude of difference
 
 - Sometimes AIC will differ from BIC on which model it prefers. 
+
+## Summary
+
+1. NHST (primary outcome is decision)
+2. Effect size + CI (primary outcome is precision)
+3. Model Comparison (primary outcome is comparison)
+

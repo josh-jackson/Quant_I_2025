@@ -28864,16 +28864,16 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <section id="fit-measure-summary" class="slide level2">
 <h2>Fit measure summary</h2>
 <ul>
-<li><p>sigma (low is better fit), <span class="math inline">\(R^2\)</span> &amp; R (large is better fit)</p></li>
+<li><p>MSE/RSE/sigma (low is better fit), <span class="math inline">\(R^2\)</span> &amp; R (large is better fit)</p></li>
 <li><p>log likelihood (ll; higher/less negative is better fit), deviance (lower is better fit)</p></li>
 <li><p>All related; all are non-standardized (meaningless without more information) except for Rs</p></li>
-<li><p>For Gaussian we test with F, for all else with Chi-square</p></li>
+<li><p>For Gaussian we test with F, for all else with Chi-square. Each compares fit.</p></li>
 </ul>
 </section>
 <section id="non-nested-comparisons-1" class="slide level2">
 <h2>Non-nested comparisons</h2>
 <ul>
-<li><p>Nested designs can be thought of improvement from some simplier comparison. Non-nested are comparing apples and oranges.</p></li>
+<li><p>Nested designs can be thought of improvement from some simpler comparison. Non-nested are comparing apples and oranges.</p></li>
 <li><p>We cannot directly use SSE / MSE / RSE / ll / deviance to test. Instead we will focus on “goodness of fit” and occularly, rather than formally, compare</p></li>
 <li><p>We will use the likelihood + a penalty based on number of predictors</p></li>
 <li><p>Why penalty? Because models can be more complex and thus be easier to predict some outcome.</p></li>
@@ -28932,6 +28932,14 @@ m.0  | 15.903 | 15.984</code></pre>
 <li><p>There is no formal test, though there are some informal guidelines about magnitude of difference</p></li>
 <li><p>Sometimes AIC will differ from BIC on which model it prefers.</p></li>
 </ul>
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<ol type="1">
+<li>NHST (primary outcome is decision)</li>
+<li>Effect size + CI (primary outcome is precision)</li>
+<li>Model Comparison (primary outcome is comparison)</li>
+</ol>
 
 <div class="footer footer-default">
 

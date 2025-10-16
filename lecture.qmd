@@ -16,3 +16,5 @@ editor: source
 6. [Comparing 2 means](2mean_6.qmd)
 
 7. [Inference](Inference_7.qmd)
+
+8. [Open Science](open_8.qmd)

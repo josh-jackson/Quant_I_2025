@@ -1,0 +1,118 @@
+---
+title: "Reproducability crisis"
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+## Back to ~2011
+
+- Bem ESP paper, 
+- Fraud (Stapel, Hauser, Sanna, Smeesters et al). 
+- "running a study until it works; chalking up failures to design failures"
+- Culminating in 2015 replication project where 1/3 of studies replicated
+- Poor replication not just psych (cancer trials, economics, biz, etc)
+
+## Went wrong 
+
+- Garden of forking paths/Researcher degree of freedom (many equal choices that could lead to different conclusions)
+- p-hacking (trying out many different models until one works)
+- HARK-ing (hypothesizing/story telling after results are known)
+- Cherry picking (Selective reporting of sig effects, rest are not discussed)
+- Focus on p-value to make dichotomous decision, power, lack of statistical training, lack of focus on measurement, emphasis on story... 
+
+## Reactions
+
+- Old guard: denial
+- Hidden moderators
+- Replicators are not good scientists 
+- Name calling on both sides
+- First study is on pedestal rather than meta-analytic thinking 
+
+- New guard: lets do better science
+
+## Open Science Movement
+
+- Sometimes labelled "the reform movement" 
+
+Wants to:   
+
+- Change incentive structure. 
+
+- Improve training and research practices of the next generation. 
+
+- Empirically test the state of the field (meta-science). 
+
+- Develop new tools to enable better scientific research
+
+## Open science values
+
+- Reproducibility -- are other people able to obtain your same result with your same data?
+
+- Accessibility -- is work publicly available?
+
+- Incentive alignment -- do the policies of the field encourage good science or something else entirely?
+
+- Openness of opinion -- is criticism of work distinguished from criticism of people?
+
+- Diversity, equity, and inclusion -- Are there barriers to being a scientist, reading science, being helped by science?
+
+- Meta-science and informatics. -- How are we diagnosing the field? How do we determine the quality of a study?
+
+## Reproducibility
+
+|  | Same Data | Different Data | 
+|---------|-----|------|
+| Same Methods      | Reproducability   |    Replication/Generalizability | 
+| Different Methods     | Sensitivity  |   Conceptual replication/generalizability |  
+
+
+## Transperancy 
+
+- One of the primary problems of the replication crisis was the lack of transparency. Everyone did work in private; kept data secret; buried, hid, lost key aspects of research. Opaque was normal.
+
+- Many new practices are designed to lift this shroud of secrecy
+
+## Pre-registration
+
+- Creating a time-stamped, publicly available, frozen document of your research plan prior to executing that plan so as to sepearte theory driven decisions from data driven decisions
+
+- Limits researcher degree of freedom, p-hacking, and HARK-ing
+
+- CONs: often vague; not necessarily bad, scientifically, if you change ideas but can be percieved poorly; can still lie; doesn't work the same for many paradigms
+
+## Open Code, software and materials
+
+- OSF, github, Journal Supported Supplementary materials
+- R, python etc are eating SPSS, SAS, etc lunches
+
+## Registered Reports (RRs)
+
+- Goal: uncouple incentive (publication) from study result. New incentive is now doing a high-quality study
+
+- Changes the researcher's goal; also changes the reviewer's focus
+
+- No longer evaluate whether or not result was "statistically significant" -- instead, evaluate whether this is a good test of the research question.
+
+- Many journals now allow RRs, and even RRR (registered replication reports)
+
+## OS Criticisms
+
+
+- Some argue that open science methods are broadly harmful: stifle creativity, slow down research, incentivize ad hominem attacks and "methodological terrorists", and encourage data parasites.
+
+- Adoption of these methods can fool researchers into believing that all research using these methods is "good" and all research not using them are "bad"
+
+- It is worth admitting that, unless incentive structures don't change, there can be harm done with adoption of these methods. But part of the goal is to change the overall system.
+
+## So what should we do? 
+
+- "Good science"
+
+- Easiest to clear barriers: Transparency, sound statistics, good design, power. Basically: 1. "Can I understand what you did so I can evaluate it?" 2. "Does the design and analysis allow one to learn anything meaningful?"

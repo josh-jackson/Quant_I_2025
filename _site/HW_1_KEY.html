@@ -813,7 +813,7 @@ Support   0.0149711 0.1223564</code></pre>
 <span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>homework.world1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"homework-world.csv"</span>)</span>
 <span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>data_filtered <span class="ot">&lt;-</span> homework.world1 <span class="sc">|&gt;</span> </span>
-<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(World <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(World <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">World =</span> <span class="fu">as.factor</span>(World))</span>
 <span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Create a regression model for Freedom predicted by World</span></span>
@@ -831,28 +831,70 @@ lm(formula = Freedom ~ World, data = data_filtered)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--0.31906 -0.08054  0.03923  0.09750  0.25051 
+-0.31427 -0.07735  0.02967  0.09682  0.16732 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.83025    0.02796  29.690  &lt; 2e-16 ***
-World3      -0.11289    0.03843  -2.937  0.00503 ** 
+(Intercept)  0.83025    0.02469  33.629   &lt;2e-16 ***
+World4      -0.06771    0.02967  -2.282   0.0253 *  
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.137 on 49 degrees of freedom
-Multiple R-squared:  0.1497,    Adjusted R-squared:  0.1324 
-F-statistic: 8.628 on 1 and 49 DF,  p-value: 0.005033</code></pre>
+Residual standard error: 0.1209 on 76 degrees of freedom
+  (4 observations deleted due to missingness)
+Multiple R-squared:  0.06412,   Adjusted R-squared:  0.05181 
+F-statistic: 5.207 on 1 and 76 DF,  p-value: 0.02529</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Getting the effect size (Not required):</span></span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>emm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(model1v3, <span class="st">"World"</span>)</span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="fu">eff_size</span>(emm, <span class="at">sigma =</span> <span class="fu">sigma</span>(model1v3), <span class="at">edf =</span> <span class="fu">df.residual</span>(model1v3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> contrast        effect.size    SE df lower.CL upper.CL
- World1 - World3       0.824 0.293 49    0.236     1.41
+ World1 - World4        0.56 0.249 76   0.0629     1.06
 
-sigma used for effect sizes: 0.137 
+sigma used for effect sizes: 0.1209 
 Confidence level used: 0.95 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(Happiness, GDP, Support, Life, Freedom, Generosity, Corruption)  <span class="sc">|&gt;</span> <span class="fu">cor</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Happiness          GDP    Support        Life    Freedom
+Happiness   1.0000000  0.823217031  0.7317866  0.76599429  0.5085981
+GDP         0.8232170  1.000000000  0.7121414  0.84842896  0.3453470
+Support     0.7317866  0.712141406  1.0000000  0.60578186  0.3670727
+Life        0.7659943  0.848428965  0.6057819  1.00000000  0.3006421
+Freedom     0.5085981  0.345346974  0.3670727  0.30064207  1.0000000
+Generosity  0.2174625  0.009531499  0.1841681  0.04838897  0.3947917
+Corruption -0.4823416 -0.346664211 -0.2998693 -0.33739376 -0.5264837
+             Generosity Corruption
+Happiness   0.217462530 -0.4823416
+GDP         0.009531499 -0.3466642
+Support     0.184168126 -0.2998693
+Life        0.048388971 -0.3373938
+Freedom     0.394791684 -0.5264837
+Generosity  1.000000000 -0.3960720
+Corruption -0.396072030  1.0000000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(Happiness <span class="sc">~</span> Generosity, <span class="at">data =</span> data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Happiness ~ Generosity, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.6688 -0.8204  0.0955  0.8757  2.0442 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   5.3850     0.1013  53.160   &lt;2e-16 ***
+Generosity    1.4725     0.6494   2.268   0.0252 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.109 on 118 degrees of freedom
+  (16 observations deleted due to missingness)
+Multiple R-squared:  0.04176,   Adjusted R-squared:  0.03364 
+F-statistic: 5.142 on 1 and 118 DF,  p-value: 0.02517</code></pre>
 </div>
 </div>
 <ol type="1">

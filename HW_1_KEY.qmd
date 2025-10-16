@@ -25,7 +25,7 @@ data <- read.csv("homework-world.csv")
 data$World <- as.factor(data$World)
 ```
 
-## Q1 Calculate descriptive statistics for each of the 4 World groups. 
+## Q1 Calculate descriptive statistics for each of the 4 World groups.
 
 That is, you should get the mean GDP for countries that are coded as 1 in the World variable, mean GDP for countries coded as 2 in the World variable etc. This should include (it’s OK if more are included, but at least these): - mean - median - range - min & max - standard deviation - skew & kurtosis
 
@@ -373,7 +373,7 @@ library(emmeans)
 homework.world1 <- read.csv("homework-world.csv")
 
 data_filtered <- homework.world1 |> 
-  dplyr::filter(World %in% c(1, 3)) |> 
+  dplyr::filter(World %in% c(1, 4)) |> 
   dplyr::mutate(World = as.factor(World))
 
 #Create a regression model for Freedom predicted by World
@@ -388,6 +388,11 @@ summary(model1v3)
 #Getting the effect size (Not required):
 emm <- emmeans(model1v3, "World")
 eff_size(emm, sigma = sigma(model1v3), edf = df.residual(model1v3))
+
+
+data |>  drop_na() |> select(Happiness, GDP, Support, Life, Freedom, Generosity, Corruption)  |> cor()
+
+summary(lm(Happiness ~ Generosity, data = data))
 ```
 
 1.  The predicted freedom value for First World Countries is 0.83.
