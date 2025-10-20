@@ -220,7 +220,7 @@ ggplot(distributions_df, aes(
 
 ## Beta
 
-- The rate that we make type II errors. Area under curve to the left of our critical value. 
+- The rate that we make type II errors (not regression parameter, sorry). Area under curve to the left of our critical value. 
 
 
 ```{r}
@@ -325,11 +325,22 @@ pt(df = 75, -2.338269) # Beta / Type 2
 https://rpsychologist.com/d3/nhst/
 
 
+## Power is for all types of statistics
+
+- Example that we covered is for estimating the mean. But just as we can create a sampling distribution for any statistic, we can calculate power for any statistic. 
+
+- The smaller the standard error, the higher the statistical power, all else being equal.
+
+- Statistical power is your ability to reliably detect the signal (your statistic) through the noise (standard error)
+
+- Anything that leads to a higher t-stat (which we used for NHST) will increase power
+
+
 ## How can power be increased?
 
 - Increase effect size (move alternative father away)
 
-- increase your alpha (.056), which moves your critival value closer to the null
+- increase your alpha (.056), which moves your critical value closer to the null
 
 - increase N (reduces standard error --> more precision)
 
@@ -376,6 +387,7 @@ pwr::pwr.t.test(n = NULL,
 - much better than pwr
 
 ```{r}
+#| code-fold: true
 library(pwrss)
 power.t.regression(beta = 0.40,
                    sd.outcome = 1.2,
@@ -390,6 +402,7 @@ power.t.regression(beta = 0.40,
 ---------
 
 ```{r}
+#| code-fold: true
 power.t.regression(beta = 0.30,
                    k.total = 1,
                    r.squared = 0.09,
@@ -402,6 +415,7 @@ power.t.regression(beta = 0.30,
 
 
 ```{r}
+#| code-fold: true
 power.z.onecor(rho = 0.30,
                null.rho = 0.0,
                power = 0.80,
@@ -409,9 +423,11 @@ power.z.onecor(rho = 0.30,
                alternative = "one.sided")
 ```
 
-----------
+## Simulating power
 
 ```{r}
+#| code-fold: true
+
 # --- Define the Simulation Parameters ---
 
 n_simulations <- 10000
@@ -424,11 +440,15 @@ true_error_sd <- 1.145 #(SD of Y * square root (1 - assumed R^2))
 # --- Run the Simulation ---
 
 p_values_slope <- numeric(n_simulations)
+std_errors_slope <- numeric(n_simulations)
+slope_estimates <- numeric(n_simulations) 
+t_statistics <- numeric(n_simulations)    
+residual_std_errors <- numeric(n_simulations)
+
 
 for (i in 1:n_simulations) {
   # --- For each simulation, create one sample dataset ---
-  # 1. Generate the predictor variable 'x'
-  x <- rnorm(sample_size, mean = 3, sd = .8) 
+  x <- rnorm(sample_size, mean = 3, sd = 0.8)
   
   # 2. Generate the outcome 'y' based on our TRUE model
   y <- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)
@@ -437,34 +457,130 @@ for (i in 1:n_simulations) {
   
   # --- Fit the linear model for this one experiment ---
   model <- lm(y ~ x, data = simulated_data)
-  
-  # --- Extract the p-value for our predictor 'x' ---
-  # The summary() output gives us the t-test for each coefficient.
-  # The slope for 'x' is the second coefficient in the model.
-  # The p-value is in the 4th column of the coefficients table.
-  p_values_slope[i] <- summary(model)$coefficients[2, 4]
+  model_summary <- summary(model)
+
+  p_values_slope[i] <- model_summary$coefficients[2, 4]
+  std_errors_slope[i] <- model_summary$coefficients[2, 2]
+  slope_estimates[i] <- model_summary$coefficients[2, 1] # CHANGED
+  t_statistics[i] <- model_summary$coefficients[2, 3]    # CHANGED
+  residual_std_errors[i] <- model_summary$sigma
 }
 
 
-# --- Step 4: Calculate and Report the Power ---
-# Power is the proportion of our simulated experiments where we found a
-# "significant" result (p < alpha).
+# --- Calculate and Report the Power ---
+
 
 power <- mean(p_values_slope < alpha)
-
-# Print the final result
-cat("--- Power Simulation Results ---\n")
-cat("Number of simulations:", n_simulations, "\n")
-cat("Sample size:", sample_size, "\n")
-cat("Assumed True Slope (Effect Size):", true_slope, "\n")
-cat("Alpha level:", alpha, "\n")
-cat("\nEstimated Power to detect the effect:", power, "\n")
-cat("Interpretation: With this sample size and effect size, we would expect to find a statistically significant relationship", power * 100, "% of the time.\n")
+avg_coeff_se <- mean(std_errors_slope)
+avg_resid_se <- mean(residual_std_errors)
+avg_coef <- mean(coef)
+avg_t <- mean(t)
 
 
-# --- Step 5: Visualize the Distribution of p-values ---
-# This plot shows the distribution of p-values from our 2000 experiments.
-# Because a real effect exists, the p-values will be skewed toward zero.
+n_simulations
+sample_size
+true_slope
+alpha
+power
+
+```
+
+
+
+----------------------
+
+```{r}
+#| code-fold: true
+
+# ---Visualize the Distribution of p-values ---
+p_value_plot <- ggplot(data.frame(p_values = p_values_slope), aes(x = p_values)) +
+  geom_histogram(bins = 40, fill = "skyblue", color = "black", boundary = 0) +
+  geom_vline(xintercept = alpha, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "Distribution of p-values from Simulated Experiments",
+    subtitle = paste("Power is the proportion of p-values to the left of the red line (α = 0.05)"),
+    x = "p-value",
+    y = "Frequency"
+  ) +
+  annotate("text", x = alpha, y = 200, label = "Significance\nThreshold", color = "red", hjust = -0.1) +
+  theme_minimal(base_size = 14) + xlim(0,.3)
+
+print(p_value_plot)
+```
+
+## Again, but with lower sample size
+
+```{r}
+#| code-fold: true
+# --- Define the Simulation Parameters ---
+
+n_simulations <- 10000
+sample_size <- 53
+alpha <- 0.05
+true_intercept <- 10
+true_slope <- 0.4
+true_error_sd <- 1.145 #(SD of Y * square root (1 - assumed R^2))
+
+# --- Run the Simulation ---
+
+p_values_slope <- numeric(n_simulations)
+std_errors_slope <- numeric(n_simulations)
+slope_estimates <- numeric(n_simulations) 
+t_statistics <- numeric(n_simulations)    
+residual_std_errors <- numeric(n_simulations)
+
+for (i in 1:n_simulations) {
+  # --- For each simulation, create one sample dataset ---
+  x <- rnorm(sample_size, mean = 3, sd = 0.8)
+  
+  # 2. Generate the outcome 'y' based on our TRUE model
+  y <- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)
+  
+  simulated_data <- data.frame(x, y)
+  
+  # --- Fit the linear model for this one experiment ---
+  model <- lm(y ~ x, data = simulated_data)
+  model_summary <- summary(model)
+  
+  # --- Extract the desired values from the model summary ---
+  
+  # Store the p-value for our predictor 'x'
+  p_values_slope[i] <- model_summary$coefficients[2, 4]
+  
+  # NEW: Store the standard error of the slope coefficient
+  # This is in the 2nd row, 2nd column of the coefficients table
+  std_errors_slope[i] <- model_summary$coefficients[2, 2]
+  slope_estimates[i] <- model_summary$coefficients[2, 1]
+  t_statistics[i] <- model_summary$coefficients[2, 3]
+  # NEW: Store the residual standard error (sigma) of the model
+  residual_std_errors[i] <- model_summary$sigma
+}
+
+
+# --- Calculate and Report the Power ---
+
+
+power <- mean(p_values_slope < alpha)
+avg_coeff_se <- mean(std_errors_slope)
+avg_resid_se <- mean(residual_std_errors)
+avg_coef <- mean(slope_estimates)
+avg_t <- mean(t_statistics)
+
+n_simulations
+sample_size
+true_slope
+alpha
+power
+
+```
+
+--------------------
+
+```{r}
+#| code-fold: true
+
+# ---Visualize the Distribution of p-values ---
+
 
 p_value_plot <- ggplot(data.frame(p_values = p_values_slope), aes(x = p_values)) +
   geom_histogram(bins = 40, fill = "skyblue", color = "black", boundary = 0) +
@@ -476,8 +592,212 @@ p_value_plot <- ggplot(data.frame(p_values = p_values_slope), aes(x = p_values))
     y = "Frequency"
   ) +
   annotate("text", x = alpha, y = 200, label = "Significance\nThreshold", color = "red", hjust = -0.1) +
-  theme_minimal(base_size = 14)
+  theme_minimal(base_size = 14) + xlim(0,.3)
 
 print(p_value_plot)
 ```
+
+## Viewing ~50% power sampling t-distribution
+
+```{r}
+#| code-fold: true
+
+sample_size <- 53
+alpha <- 0.05
+true_intercept <- 10
+true_slope <- 0.4
+true_error_sd <- 1.145 
+
+SE = 1.145/.936
+
+
+distributions_df <- tribble(
+  ~distribution,       ~mu, ~sigma,
+  "Null (H0)",         0,   1,
+  "Alternative (H1)",   2.03,   1
+)
+
+# --- Step 2: Define the Critical Value ---
+critical_value <- 1.96
+
+ggplot(distributions_df, aes(
+    xdist = distributional::dist_normal(mu = mu, sigma = sigma)
+  )) +  stat_dist_slab(
+    alpha = 0.4
+  ) +
+
+  stat_dist_slab(
+    data = . %>% filter(distribution == "Alternative (H1)"),
+    alpha = 0.6,
+    fill = "green") +
+  
+  geom_vline(xintercept = critical_value, linetype = "dashed", color = "darkred", size = 1) +
+  
+  labs(
+    title = "Beta (type 2 error) is AUC left of C.V.",
+    subtitle = "Power is AUC right of C.V.",
+    x = "Sample Mean",
+    y = "Density"
+  )
+
+```
+
+
+## Viewing ~50% power sampling original unit 
+
+```{r}
+#| code-fold: true
+
+
+sample_size <- 100
+alpha <- 0.05
+true_intercept <- 10
+true_slope <- 0.4
+true_error_sd <- 1.145 #(SD of Y * square root (1 - assumed R^2))
+
+SE = 1.145/.936
+
+
+distributions_df <- tribble(
+  ~distribution,       ~mu, ~sigma,
+  "Null (H0)",         0,   .2,
+  "Alternative (H1)",   .4,   .2
+)
+
+# --- Step 2: Define the Critical Value ---
+critical_value <- 1.96*.2
+
+ggplot(distributions_df, aes(
+    xdist = distributional::dist_normal(mu = mu, sigma = sigma)
+  )) +  stat_dist_slab(
+    alpha = 0.4
+  ) +
+
+  stat_dist_slab(
+    data = . %>% filter(distribution == "Alternative (H1)"),
+    alpha = 0.6,
+    fill = "green") +
+  
+  geom_vline(xintercept = critical_value, linetype = "dashed", color = "darkred", size = 1) +
+  
+  labs(
+    title = "Beta (type 2 error) is AUC left of C.V.",
+    subtitle = "Power is AUC right of C.V.",
+    x = "Sample Mean",
+    y = "Density"
+  )
+
+```
+
+
+
+## Viewing ~79% power sampling t-distribution
+
+
+```{r}
+#| code-fold: true
+
+distributions_df <- tribble(
+  ~distribution,       ~mu, ~sigma,
+  "Null (H0)",         0,   1,
+  "Alternative (H1)",   2.83,   1
+)
+
+# --- Step 2: Define the Critical Value ---
+critical_value <- 1.96
+
+ggplot(distributions_df, aes(
+    xdist = distributional::dist_normal(mu = mu, sigma = sigma)
+  )) +  stat_dist_slab(
+    alpha = 0.4
+  ) +
+
+  stat_dist_slab(
+    data = . %>% filter(distribution == "Alternative (H1)"),
+    alpha = 0.6,
+    fill = "green") +
+  
+  geom_vline(xintercept = critical_value, linetype = "dashed", color = "darkred", size = 1) +
+  
+  labs(
+    title = "Beta (type 2 error) is AUC left of C.V.",
+    subtitle = "Power is AUC right of C.V.",
+    x = "Sample Mean",
+    y = "Density"
+  )
+
+```
+
+
+
+## Viewing ~79% power sampling original unit
+
+
+```{r}
+#| code-fold: true
+
+distributions_df <- tribble(
+  ~distribution,       ~mu, ~sigma,
+  "Null (H0)",         0,   .142,
+  "Alternative (H1)",   .399,   .142
+)
+
+# --- Step 2: Define the Critical Value ---
+critical_value <- 1.96*.144
+
+ggplot(distributions_df, aes(
+    xdist = distributional::dist_normal(mu = mu, sigma = sigma)
+  )) +  stat_dist_slab(
+    alpha = 0.4
+  ) +
+
+  stat_dist_slab(
+    data = . %>% filter(distribution == "Alternative (H1)"),
+    alpha = 0.6,
+    fill = "green") +
+  
+  geom_vline(xintercept = critical_value, linetype = "dashed", color = "darkred", size = 1) +
+  
+  labs(
+    title = "Beta (type 2 error) is AUC left of C.V.",
+    subtitle = "Power is AUC right of C.V.",
+    x = "Sample Mean",
+    y = "Density"
+  )
+
+```
+
+## Psychological power
+
+- Best estimates for psych are ~50% power
+- Less for moderation hypotheses
+- We've known this for 50+ years (Cohen, 1962) but do not change. 
+- Partly this is due to: 1. Assuming larger effects. 2. Estimating power for one part of model and assuming it works for all. 3. Simple heuristics. 
+
+## Power for precision
+
+
+- A test comparing two means with d = 0.50 and a sample size of N = 128
+(64 per group) has 80% power. 
+
+- But the 95% CI ranges from 0.15 to 0.85. Would you interpret the findings the same depending on these vast differences in effect size? 
+
+
+-----------
+
+![](power.png)
+
+- Widths have different power "attached" to them 
+
+## In Sum
+
+- Power is a combo of NHST and SE but viewed through both the null and  alternative distribution
+
+- Beta is the type 2 error we are okay with. Usually set at .2 (power = 1-beta), whereas alpha is .05. Should this be higher? 
+
+- Design studies to improve power (good measures, within-person designs, high sample size)
+
+- Do not forget what you are powering for (parameter not study/model)
+
+- Precision as an alternative/complimentary viewpoint
 

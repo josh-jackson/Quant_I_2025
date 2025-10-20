@@ -29,15 +29,15 @@ Why: Literally most important class ever. Plus it is a requirement.
 | \- | 9/18 | Simple regressions (1 predictor and t-tests) | LSR 13 | HW 1 due |
 | 5 | 9/23 | **Exam 1** |  |  |
 | \- | 9/25 | Statistical inference part 1 (Sampling and NHST) | LSR 10 & 11 |  |
-| 6 | 9/30 | Statistical inference part 2 (Estimation) | LSR 15.5 - 15.7 |  |
-| \- | 10/2 | Statistical inference part 3 (Model comparisons) | LSR 15.10 |  |
+| 6 | 9/30 | Statistical inference part 1 (Sampling and NHST)  | LSR 15.5 - 15.7 |  |
+| \- | 10/2 |  Statistical inference part 2 (Estimation) | LSR 15.10 |  |
 | 7 | 10/7 | *No Class - Fall Break!* |  |  |
-| \- | 10/9 | Simulation and prediction |  |  |
-| 8 | 10/14 | What can go wrong (Transparency and Open science) |  |  |
-| \- | 10/16 | Assumptions | LSR 15.8 |  ||
-| 9 | 10/21 | Power |  | HW 2 due |
-| \- | 10/23 | Visualizing Data | LSR 6 |  |
-| 10 | 10/28 | Threats to Validity |  |  |
+| \- | 10/9 |Statistical inference part 2 (Estimation)  |  |  |
+| 8 | 10/14 | Statistical inference part 3 (Model comparisons) |  |  |
+| \- | 10/16 | Statistical inference part 3 (Model comparisons) LSR 15.8 |  ||
+| 9 | 10/21 | What can go wrong (Transparency and Open science)  |  | HW 2 due |
+| \- | 10/23 | Power || LSR 6 |  |
+| 10 | 10/28 | Assumptions  |  |  |
 | \- | 10/30 | **Exam 2** |  | HW 3 due |
 | 11 | 11/4 | 3 or more means (ANOVA) | LSR 14 |  |
 | \- | 11/6 | Multiple comparisons & contrasts |  |  |

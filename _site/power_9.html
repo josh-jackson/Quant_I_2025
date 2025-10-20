@@ -622,7 +622,7 @@
 <section id="beta" class="slide level2">
 <h2>Beta</h2>
 <ul>
-<li>The rate that we make type II errors. Area under curve to the left of our critical value.</li>
+<li>The rate that we make type II errors (not regression parameter, sorry). Area under curve to the left of our critical value.</li>
 </ul>
 <div class="cell">
 <details>
@@ -748,11 +748,20 @@
 
 <p>https://rpsychologist.com/d3/nhst/</p>
 </section>
+<section id="power-is-for-all-types-of-statistics" class="slide level2">
+<h2>Power is for all types of statistics</h2>
+<ul>
+<li><p>Example that we covered is for estimating the mean. But just as we can create a sampling distribution for any statistic, we can calculate power for any statistic.</p></li>
+<li><p>The smaller the standard error, the higher the statistical power, all else being equal.</p></li>
+<li><p>Statistical power is your ability to reliably detect the signal (your statistic) through the noise (standard error)</p></li>
+<li><p>Anything that leads to a higher t-stat (which we used for NHST) will increase power</p></li>
+</ul>
+</section>
 <section id="how-can-power-be-increased" class="slide level2">
 <h2>How can power be increased?</h2>
 <ul>
 <li><p>Increase effect size (move alternative father away)</p></li>
-<li><p>increase your alpha (.056), which moves your critival value closer to the null</p></li>
+<li><p>increase your alpha (.056), which moves your critical value closer to the null</p></li>
 <li><p>increase N (reduces standard error –&gt; more precision)</p></li>
 <li><p>Reduce observed standard deviation/sigma via better measurement or a better manipulation</p></li>
 </ul>
@@ -813,6 +822,8 @@ NOTE: n is number in *each* group</code></pre>
 <li>much better than pwr</li>
 </ul>
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(pwrss)</span>
 <span id="cb25-2"><a href="#cb25-2"></a><span class="fu">power.t.regression</span>(<span class="at">beta =</span> <span class="fl">0.40</span>,</span>
 <span id="cb25-3"><a href="#cb25-3"></a>                   <span class="at">sd.outcome =</span> <span class="fl">1.2</span>,</span>
@@ -822,6 +833,7 @@ NOTE: n is number in *each* group</code></pre>
 <span id="cb25-7"><a href="#cb25-7"></a>                   <span class="at">power =</span> .<span class="dv">80</span>,</span>
 <span id="cb25-8"><a href="#cb25-8"></a>                   <span class="at">alpha =</span> <span class="fl">0.05</span>,</span>
 <span id="cb25-9"><a href="#cb25-9"></a>                   <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>+--------------------------------------------------+
 |             SAMPLE SIZE CALCULATION              |
@@ -848,12 +860,15 @@ Results
 <section class="slide level2">
 
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">power.t.regression</span>(<span class="at">beta =</span> <span class="fl">0.30</span>,</span>
 <span id="cb27-2"><a href="#cb27-2"></a>                   <span class="at">k.total =</span> <span class="dv">1</span>,</span>
 <span id="cb27-3"><a href="#cb27-3"></a>                   <span class="at">r.squared =</span> <span class="fl">0.09</span>,</span>
 <span id="cb27-4"><a href="#cb27-4"></a>                   <span class="at">power =</span> .<span class="dv">80</span>,</span>
 <span id="cb27-5"><a href="#cb27-5"></a>                   <span class="at">alpha =</span> <span class="fl">0.05</span>,</span>
 <span id="cb27-6"><a href="#cb27-6"></a>                   <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>+--------------------------------------------------+
 |             SAMPLE SIZE CALCULATION              |
@@ -880,11 +895,14 @@ Results
 <section class="slide level2">
 
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">power.z.onecor</span>(<span class="at">rho =</span> <span class="fl">0.30</span>,</span>
 <span id="cb29-2"><a href="#cb29-2"></a>               <span class="at">null.rho =</span> <span class="fl">0.0</span>,</span>
 <span id="cb29-3"><a href="#cb29-3"></a>               <span class="at">power =</span> <span class="fl">0.80</span>,</span>
 <span id="cb29-4"><a href="#cb29-4"></a>               <span class="at">alpha =</span> <span class="fl">0.05</span>,</span>
 <span id="cb29-5"><a href="#cb29-5"></a>               <span class="at">alternative =</span> <span class="st">"one.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>+--------------------------------------------------+
 |             SAMPLE SIZE CALCULATION              |
@@ -908,9 +926,11 @@ Results
 </div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="simulating-power" class="slide level2">
+<h2>Simulating power</h2>
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># --- Define the Simulation Parameters ---</span></span>
 <span id="cb31-2"><a href="#cb31-2"></a></span>
 <span id="cb31-3"><a href="#cb31-3"></a>n_simulations <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
@@ -923,85 +943,420 @@ Results
 <span id="cb31-10"><a href="#cb31-10"></a><span class="co"># --- Run the Simulation ---</span></span>
 <span id="cb31-11"><a href="#cb31-11"></a></span>
 <span id="cb31-12"><a href="#cb31-12"></a>p_values_slope <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)</span>
-<span id="cb31-13"><a href="#cb31-13"></a></span>
-<span id="cb31-14"><a href="#cb31-14"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_simulations) {</span>
-<span id="cb31-15"><a href="#cb31-15"></a>  <span class="co"># --- For each simulation, create one sample dataset ---</span></span>
-<span id="cb31-16"><a href="#cb31-16"></a>  <span class="co"># 1. Generate the predictor variable 'x'</span></span>
-<span id="cb31-17"><a href="#cb31-17"></a>  x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(sample_size, <span class="at">mean =</span> <span class="dv">3</span>, <span class="at">sd =</span> .<span class="dv">8</span>) </span>
-<span id="cb31-18"><a href="#cb31-18"></a>  </span>
-<span id="cb31-19"><a href="#cb31-19"></a>  <span class="co"># 2. Generate the outcome 'y' based on our TRUE model</span></span>
-<span id="cb31-20"><a href="#cb31-20"></a>  y <span class="ot">&lt;-</span> true_intercept <span class="sc">+</span> true_slope <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(sample_size, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> true_error_sd)</span>
-<span id="cb31-21"><a href="#cb31-21"></a>  </span>
-<span id="cb31-22"><a href="#cb31-22"></a>  simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
-<span id="cb31-23"><a href="#cb31-23"></a>  </span>
-<span id="cb31-24"><a href="#cb31-24"></a>  <span class="co"># --- Fit the linear model for this one experiment ---</span></span>
-<span id="cb31-25"><a href="#cb31-25"></a>  model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> simulated_data)</span>
-<span id="cb31-26"><a href="#cb31-26"></a>  </span>
-<span id="cb31-27"><a href="#cb31-27"></a>  <span class="co"># --- Extract the p-value for our predictor 'x' ---</span></span>
-<span id="cb31-28"><a href="#cb31-28"></a>  <span class="co"># The summary() output gives us the t-test for each coefficient.</span></span>
-<span id="cb31-29"><a href="#cb31-29"></a>  <span class="co"># The slope for 'x' is the second coefficient in the model.</span></span>
-<span id="cb31-30"><a href="#cb31-30"></a>  <span class="co"># The p-value is in the 4th column of the coefficients table.</span></span>
-<span id="cb31-31"><a href="#cb31-31"></a>  p_values_slope[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span>
-<span id="cb31-32"><a href="#cb31-32"></a>}</span>
-<span id="cb31-33"><a href="#cb31-33"></a></span>
-<span id="cb31-34"><a href="#cb31-34"></a></span>
-<span id="cb31-35"><a href="#cb31-35"></a><span class="co"># --- Step 4: Calculate and Report the Power ---</span></span>
-<span id="cb31-36"><a href="#cb31-36"></a><span class="co"># Power is the proportion of our simulated experiments where we found a</span></span>
-<span id="cb31-37"><a href="#cb31-37"></a><span class="co"># "significant" result (p &lt; alpha).</span></span>
+<span id="cb31-13"><a href="#cb31-13"></a>std_errors_slope <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)</span>
+<span id="cb31-14"><a href="#cb31-14"></a>slope_estimates <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations) </span>
+<span id="cb31-15"><a href="#cb31-15"></a>t_statistics <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)    </span>
+<span id="cb31-16"><a href="#cb31-16"></a>residual_std_errors <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)</span>
+<span id="cb31-17"><a href="#cb31-17"></a></span>
+<span id="cb31-18"><a href="#cb31-18"></a></span>
+<span id="cb31-19"><a href="#cb31-19"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_simulations) {</span>
+<span id="cb31-20"><a href="#cb31-20"></a>  <span class="co"># --- For each simulation, create one sample dataset ---</span></span>
+<span id="cb31-21"><a href="#cb31-21"></a>  x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(sample_size, <span class="at">mean =</span> <span class="dv">3</span>, <span class="at">sd =</span> <span class="fl">0.8</span>)</span>
+<span id="cb31-22"><a href="#cb31-22"></a>  </span>
+<span id="cb31-23"><a href="#cb31-23"></a>  <span class="co"># 2. Generate the outcome 'y' based on our TRUE model</span></span>
+<span id="cb31-24"><a href="#cb31-24"></a>  y <span class="ot">&lt;-</span> true_intercept <span class="sc">+</span> true_slope <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(sample_size, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> true_error_sd)</span>
+<span id="cb31-25"><a href="#cb31-25"></a>  </span>
+<span id="cb31-26"><a href="#cb31-26"></a>  simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
+<span id="cb31-27"><a href="#cb31-27"></a>  </span>
+<span id="cb31-28"><a href="#cb31-28"></a>  <span class="co"># --- Fit the linear model for this one experiment ---</span></span>
+<span id="cb31-29"><a href="#cb31-29"></a>  model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> simulated_data)</span>
+<span id="cb31-30"><a href="#cb31-30"></a>  model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)</span>
+<span id="cb31-31"><a href="#cb31-31"></a></span>
+<span id="cb31-32"><a href="#cb31-32"></a>  p_values_slope[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span>
+<span id="cb31-33"><a href="#cb31-33"></a>  std_errors_slope[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">2</span>]</span>
+<span id="cb31-34"><a href="#cb31-34"></a>  slope_estimates[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>] <span class="co"># CHANGED</span></span>
+<span id="cb31-35"><a href="#cb31-35"></a>  t_statistics[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">3</span>]    <span class="co"># CHANGED</span></span>
+<span id="cb31-36"><a href="#cb31-36"></a>  residual_std_errors[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>sigma</span>
+<span id="cb31-37"><a href="#cb31-37"></a>}</span>
 <span id="cb31-38"><a href="#cb31-38"></a></span>
-<span id="cb31-39"><a href="#cb31-39"></a>power <span class="ot">&lt;-</span> <span class="fu">mean</span>(p_values_slope <span class="sc">&lt;</span> alpha)</span>
-<span id="cb31-40"><a href="#cb31-40"></a></span>
-<span id="cb31-41"><a href="#cb31-41"></a><span class="co"># Print the final result</span></span>
-<span id="cb31-42"><a href="#cb31-42"></a><span class="fu">cat</span>(<span class="st">"--- Power Simulation Results ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-39"><a href="#cb31-39"></a></span>
+<span id="cb31-40"><a href="#cb31-40"></a><span class="co"># --- Calculate and Report the Power ---</span></span>
+<span id="cb31-41"><a href="#cb31-41"></a></span>
+<span id="cb31-42"><a href="#cb31-42"></a></span>
+<span id="cb31-43"><a href="#cb31-43"></a>power <span class="ot">&lt;-</span> <span class="fu">mean</span>(p_values_slope <span class="sc">&lt;</span> alpha)</span>
+<span id="cb31-44"><a href="#cb31-44"></a>avg_coeff_se <span class="ot">&lt;-</span> <span class="fu">mean</span>(std_errors_slope)</span>
+<span id="cb31-45"><a href="#cb31-45"></a>avg_resid_se <span class="ot">&lt;-</span> <span class="fu">mean</span>(residual_std_errors)</span>
+<span id="cb31-46"><a href="#cb31-46"></a>avg_coef <span class="ot">&lt;-</span> <span class="fu">mean</span>(coef)</span>
+<span id="cb31-47"><a href="#cb31-47"></a>avg_t <span class="ot">&lt;-</span> <span class="fu">mean</span>(t)</span>
+<span id="cb31-48"><a href="#cb31-48"></a></span>
+<span id="cb31-49"><a href="#cb31-49"></a></span>
+<span id="cb31-50"><a href="#cb31-50"></a>n_simulations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>--- Power Simulation Results ---</code></pre>
+<pre><code>[1] 10000</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">cat</span>(<span class="st">"Number of simulations:"</span>, n_simulations, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>sample_size</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Number of simulations: 10000 </code></pre>
+<pre><code>[1] 103</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">cat</span>(<span class="st">"Sample size:"</span>, sample_size, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>true_slope</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Sample size: 103 </code></pre>
+<pre><code>[1] 0.4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">cat</span>(<span class="st">"Assumed True Slope (Effect Size):"</span>, true_slope, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>alpha</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Assumed True Slope (Effect Size): 0.4 </code></pre>
+<pre><code>[1] 0.05</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">cat</span>(<span class="st">"Alpha level:"</span>, alpha, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>power</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Alpha level: 0.05 </code></pre>
+<pre><code>[1] 0.7939</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Estimated Power to detect the effect:"</span>, power, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Estimated Power to detect the effect: 0.7855 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="fu">cat</span>(<span class="st">"Interpretation: With this sample size and effect size, we would expect to find a statistically significant relationship"</span>, power <span class="sc">*</span> <span class="dv">100</span>, <span class="st">"% of the time.</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Interpretation: With this sample size and effect size, we would expect to find a statistically significant relationship 78.55 % of the time.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="co"># --- Step 5: Visualize the Distribution of p-values ---</span></span>
-<span id="cb45-2"><a href="#cb45-2"></a><span class="co"># This plot shows the distribution of p-values from our 2000 experiments.</span></span>
-<span id="cb45-3"><a href="#cb45-3"></a><span class="co"># Because a real effect exists, the p-values will be skewed toward zero.</span></span>
-<span id="cb45-4"><a href="#cb45-4"></a></span>
-<span id="cb45-5"><a href="#cb45-5"></a>p_value_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">p_values =</span> p_values_slope), <span class="fu">aes</span>(<span class="at">x =</span> p_values)) <span class="sc">+</span></span>
-<span id="cb45-6"><a href="#cb45-6"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">boundary =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb45-7"><a href="#cb45-7"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> alpha, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb45-8"><a href="#cb45-8"></a>  <span class="fu">labs</span>(</span>
-<span id="cb45-9"><a href="#cb45-9"></a>    <span class="at">title =</span> <span class="st">"Distribution of p-values from Simulated Experiments"</span>,</span>
-<span id="cb45-10"><a href="#cb45-10"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">"Power is the proportion of p-values to the left of the red line (α = 0.05)"</span>),</span>
-<span id="cb45-11"><a href="#cb45-11"></a>    <span class="at">x =</span> <span class="st">"p-value"</span>,</span>
-<span id="cb45-12"><a href="#cb45-12"></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
-<span id="cb45-13"><a href="#cb45-13"></a>  ) <span class="sc">+</span></span>
-<span id="cb45-14"><a href="#cb45-14"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> alpha, <span class="at">y =</span> <span class="dv">200</span>, <span class="at">label =</span> <span class="st">"Significance</span><span class="sc">\n</span><span class="st">Threshold"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb45-15"><a href="#cb45-15"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span>
-<span id="cb45-16"><a href="#cb45-16"></a></span>
-<span id="cb45-17"><a href="#cb45-17"></a><span class="fu">print</span>(p_value_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># ---Visualize the Distribution of p-values ---</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a>p_value_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">p_values =</span> p_values_slope), <span class="fu">aes</span>(<span class="at">x =</span> p_values)) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">boundary =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> alpha, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a>  <span class="fu">labs</span>(</span>
+<span id="cb41-6"><a href="#cb41-6"></a>    <span class="at">title =</span> <span class="st">"Distribution of p-values from Simulated Experiments"</span>,</span>
+<span id="cb41-7"><a href="#cb41-7"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">"Power is the proportion of p-values to the left of the red line (α = 0.05)"</span>),</span>
+<span id="cb41-8"><a href="#cb41-8"></a>    <span class="at">x =</span> <span class="st">"p-value"</span>,</span>
+<span id="cb41-9"><a href="#cb41-9"></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
+<span id="cb41-10"><a href="#cb41-10"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-11"><a href="#cb41-11"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> alpha, <span class="at">y =</span> <span class="dv">200</span>, <span class="at">label =</span> <span class="st">"Significance</span><span class="sc">\n</span><span class="st">Threshold"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb41-12"><a href="#cb41-12"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,.<span class="dv">3</span>)</span>
+<span id="cb41-13"><a href="#cb41-13"></a></span>
+<span id="cb41-14"><a href="#cb41-14"></a><span class="fu">print</span>(p_value_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 
 </div>
+<img data-src="power_9_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
+<section id="again-but-with-lower-sample-size" class="slide level2">
+<h2>Again, but with lower sample size</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># --- Define the Simulation Parameters ---</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a></span>
+<span id="cb42-3"><a href="#cb42-3"></a>n_simulations <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb42-4"><a href="#cb42-4"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">53</span></span>
+<span id="cb42-5"><a href="#cb42-5"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb42-6"><a href="#cb42-6"></a>true_intercept <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb42-7"><a href="#cb42-7"></a>true_slope <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
+<span id="cb42-8"><a href="#cb42-8"></a>true_error_sd <span class="ot">&lt;-</span> <span class="fl">1.145</span> <span class="co">#(SD of Y * square root (1 - assumed R^2))</span></span>
+<span id="cb42-9"><a href="#cb42-9"></a></span>
+<span id="cb42-10"><a href="#cb42-10"></a><span class="co"># --- Run the Simulation ---</span></span>
+<span id="cb42-11"><a href="#cb42-11"></a></span>
+<span id="cb42-12"><a href="#cb42-12"></a>p_values_slope <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)</span>
+<span id="cb42-13"><a href="#cb42-13"></a>std_errors_slope <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)</span>
+<span id="cb42-14"><a href="#cb42-14"></a>slope_estimates <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations) </span>
+<span id="cb42-15"><a href="#cb42-15"></a>t_statistics <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)    </span>
+<span id="cb42-16"><a href="#cb42-16"></a>residual_std_errors <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_simulations)</span>
+<span id="cb42-17"><a href="#cb42-17"></a></span>
+<span id="cb42-18"><a href="#cb42-18"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_simulations) {</span>
+<span id="cb42-19"><a href="#cb42-19"></a>  <span class="co"># --- For each simulation, create one sample dataset ---</span></span>
+<span id="cb42-20"><a href="#cb42-20"></a>  x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(sample_size, <span class="at">mean =</span> <span class="dv">3</span>, <span class="at">sd =</span> <span class="fl">0.8</span>)</span>
+<span id="cb42-21"><a href="#cb42-21"></a>  </span>
+<span id="cb42-22"><a href="#cb42-22"></a>  <span class="co"># 2. Generate the outcome 'y' based on our TRUE model</span></span>
+<span id="cb42-23"><a href="#cb42-23"></a>  y <span class="ot">&lt;-</span> true_intercept <span class="sc">+</span> true_slope <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(sample_size, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> true_error_sd)</span>
+<span id="cb42-24"><a href="#cb42-24"></a>  </span>
+<span id="cb42-25"><a href="#cb42-25"></a>  simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
+<span id="cb42-26"><a href="#cb42-26"></a>  </span>
+<span id="cb42-27"><a href="#cb42-27"></a>  <span class="co"># --- Fit the linear model for this one experiment ---</span></span>
+<span id="cb42-28"><a href="#cb42-28"></a>  model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> simulated_data)</span>
+<span id="cb42-29"><a href="#cb42-29"></a>  model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)</span>
+<span id="cb42-30"><a href="#cb42-30"></a>  </span>
+<span id="cb42-31"><a href="#cb42-31"></a>  <span class="co"># --- Extract the desired values from the model summary ---</span></span>
+<span id="cb42-32"><a href="#cb42-32"></a>  </span>
+<span id="cb42-33"><a href="#cb42-33"></a>  <span class="co"># Store the p-value for our predictor 'x'</span></span>
+<span id="cb42-34"><a href="#cb42-34"></a>  p_values_slope[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span>
+<span id="cb42-35"><a href="#cb42-35"></a>  </span>
+<span id="cb42-36"><a href="#cb42-36"></a>  <span class="co"># NEW: Store the standard error of the slope coefficient</span></span>
+<span id="cb42-37"><a href="#cb42-37"></a>  <span class="co"># This is in the 2nd row, 2nd column of the coefficients table</span></span>
+<span id="cb42-38"><a href="#cb42-38"></a>  std_errors_slope[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">2</span>]</span>
+<span id="cb42-39"><a href="#cb42-39"></a>  slope_estimates[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb42-40"><a href="#cb42-40"></a>  t_statistics[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb42-41"><a href="#cb42-41"></a>  <span class="co"># NEW: Store the residual standard error (sigma) of the model</span></span>
+<span id="cb42-42"><a href="#cb42-42"></a>  residual_std_errors[i] <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>sigma</span>
+<span id="cb42-43"><a href="#cb42-43"></a>}</span>
+<span id="cb42-44"><a href="#cb42-44"></a></span>
+<span id="cb42-45"><a href="#cb42-45"></a></span>
+<span id="cb42-46"><a href="#cb42-46"></a><span class="co"># --- Calculate and Report the Power ---</span></span>
+<span id="cb42-47"><a href="#cb42-47"></a></span>
+<span id="cb42-48"><a href="#cb42-48"></a></span>
+<span id="cb42-49"><a href="#cb42-49"></a>power <span class="ot">&lt;-</span> <span class="fu">mean</span>(p_values_slope <span class="sc">&lt;</span> alpha)</span>
+<span id="cb42-50"><a href="#cb42-50"></a>avg_coeff_se <span class="ot">&lt;-</span> <span class="fu">mean</span>(std_errors_slope)</span>
+<span id="cb42-51"><a href="#cb42-51"></a>avg_resid_se <span class="ot">&lt;-</span> <span class="fu">mean</span>(residual_std_errors)</span>
+<span id="cb42-52"><a href="#cb42-52"></a>avg_coef <span class="ot">&lt;-</span> <span class="fu">mean</span>(slope_estimates)</span>
+<span id="cb42-53"><a href="#cb42-53"></a>avg_t <span class="ot">&lt;-</span> <span class="fu">mean</span>(t_statistics)</span>
+<span id="cb42-54"><a href="#cb42-54"></a></span>
+<span id="cb42-55"><a href="#cb42-55"></a>n_simulations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10000</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>sample_size</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 53</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>true_slope</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>alpha</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.05</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>power</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5072</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
 
-<img data-src="power_9_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"><div class="footer footer-default">
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># ---Visualize the Distribution of p-values ---</span></span>
+<span id="cb52-2"><a href="#cb52-2"></a></span>
+<span id="cb52-3"><a href="#cb52-3"></a></span>
+<span id="cb52-4"><a href="#cb52-4"></a>p_value_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">p_values =</span> p_values_slope), <span class="fu">aes</span>(<span class="at">x =</span> p_values)) <span class="sc">+</span></span>
+<span id="cb52-5"><a href="#cb52-5"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">boundary =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb52-6"><a href="#cb52-6"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> alpha, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb52-7"><a href="#cb52-7"></a>  <span class="fu">labs</span>(</span>
+<span id="cb52-8"><a href="#cb52-8"></a>    <span class="at">title =</span> <span class="st">"Distribution of p-values from Simulated Experiments"</span>,</span>
+<span id="cb52-9"><a href="#cb52-9"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">"Power is the proportion of p-values to the left of the red line (α = 0.05)"</span>),</span>
+<span id="cb52-10"><a href="#cb52-10"></a>    <span class="at">x =</span> <span class="st">"p-value"</span>,</span>
+<span id="cb52-11"><a href="#cb52-11"></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
+<span id="cb52-12"><a href="#cb52-12"></a>  ) <span class="sc">+</span></span>
+<span id="cb52-13"><a href="#cb52-13"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> alpha, <span class="at">y =</span> <span class="dv">200</span>, <span class="at">label =</span> <span class="st">"Significance</span><span class="sc">\n</span><span class="st">Threshold"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb52-14"><a href="#cb52-14"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,.<span class="dv">3</span>)</span>
+<span id="cb52-15"><a href="#cb52-15"></a></span>
+<span id="cb52-16"><a href="#cb52-16"></a><span class="fu">print</span>(p_value_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="power_9_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
+<section id="viewing-50-power-sampling-t-distribution" class="slide level2">
+<h2>Viewing ~50% power sampling t-distribution</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">53</span></span>
+<span id="cb53-2"><a href="#cb53-2"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb53-3"><a href="#cb53-3"></a>true_intercept <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb53-4"><a href="#cb53-4"></a>true_slope <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
+<span id="cb53-5"><a href="#cb53-5"></a>true_error_sd <span class="ot">&lt;-</span> <span class="fl">1.145</span> </span>
+<span id="cb53-6"><a href="#cb53-6"></a></span>
+<span id="cb53-7"><a href="#cb53-7"></a>SE <span class="ot">=</span> <span class="fl">1.145</span><span class="sc">/</span>.<span class="dv">936</span></span>
+<span id="cb53-8"><a href="#cb53-8"></a></span>
+<span id="cb53-9"><a href="#cb53-9"></a></span>
+<span id="cb53-10"><a href="#cb53-10"></a>distributions_df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb53-11"><a href="#cb53-11"></a>  <span class="sc">~</span>distribution,       <span class="sc">~</span>mu, <span class="sc">~</span>sigma,</span>
+<span id="cb53-12"><a href="#cb53-12"></a>  <span class="st">"Null (H0)"</span>,         <span class="dv">0</span>,   <span class="dv">1</span>,</span>
+<span id="cb53-13"><a href="#cb53-13"></a>  <span class="st">"Alternative (H1)"</span>,   <span class="fl">2.03</span>,   <span class="dv">1</span></span>
+<span id="cb53-14"><a href="#cb53-14"></a>)</span>
+<span id="cb53-15"><a href="#cb53-15"></a></span>
+<span id="cb53-16"><a href="#cb53-16"></a><span class="co"># --- Step 2: Define the Critical Value ---</span></span>
+<span id="cb53-17"><a href="#cb53-17"></a>critical_value <span class="ot">&lt;-</span> <span class="fl">1.96</span></span>
+<span id="cb53-18"><a href="#cb53-18"></a></span>
+<span id="cb53-19"><a href="#cb53-19"></a><span class="fu">ggplot</span>(distributions_df, <span class="fu">aes</span>(</span>
+<span id="cb53-20"><a href="#cb53-20"></a>    <span class="at">xdist =</span> distributional<span class="sc">::</span><span class="fu">dist_normal</span>(<span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma)</span>
+<span id="cb53-21"><a href="#cb53-21"></a>  )) <span class="sc">+</span>  <span class="fu">stat_dist_slab</span>(</span>
+<span id="cb53-22"><a href="#cb53-22"></a>    <span class="at">alpha =</span> <span class="fl">0.4</span></span>
+<span id="cb53-23"><a href="#cb53-23"></a>  ) <span class="sc">+</span></span>
+<span id="cb53-24"><a href="#cb53-24"></a></span>
+<span id="cb53-25"><a href="#cb53-25"></a>  <span class="fu">stat_dist_slab</span>(</span>
+<span id="cb53-26"><a href="#cb53-26"></a>    <span class="at">data =</span> . <span class="sc">%&gt;%</span> <span class="fu">filter</span>(distribution <span class="sc">==</span> <span class="st">"Alternative (H1)"</span>),</span>
+<span id="cb53-27"><a href="#cb53-27"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb53-28"><a href="#cb53-28"></a>    <span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb53-29"><a href="#cb53-29"></a>  </span>
+<span id="cb53-30"><a href="#cb53-30"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> critical_value, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb53-31"><a href="#cb53-31"></a>  </span>
+<span id="cb53-32"><a href="#cb53-32"></a>  <span class="fu">labs</span>(</span>
+<span id="cb53-33"><a href="#cb53-33"></a>    <span class="at">title =</span> <span class="st">"Beta (type 2 error) is AUC left of C.V."</span>,</span>
+<span id="cb53-34"><a href="#cb53-34"></a>    <span class="at">subtitle =</span> <span class="st">"Power is AUC right of C.V."</span>,</span>
+<span id="cb53-35"><a href="#cb53-35"></a>    <span class="at">x =</span> <span class="st">"Sample Mean"</span>,</span>
+<span id="cb53-36"><a href="#cb53-36"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb53-37"><a href="#cb53-37"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="power_9_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<section id="viewing-50-power-sampling-original-unit" class="slide level2">
+<h2>Viewing ~50% power sampling original unit</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb54-2"><a href="#cb54-2"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb54-3"><a href="#cb54-3"></a>true_intercept <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb54-4"><a href="#cb54-4"></a>true_slope <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
+<span id="cb54-5"><a href="#cb54-5"></a>true_error_sd <span class="ot">&lt;-</span> <span class="fl">1.145</span> <span class="co">#(SD of Y * square root (1 - assumed R^2))</span></span>
+<span id="cb54-6"><a href="#cb54-6"></a></span>
+<span id="cb54-7"><a href="#cb54-7"></a>SE <span class="ot">=</span> <span class="fl">1.145</span><span class="sc">/</span>.<span class="dv">936</span></span>
+<span id="cb54-8"><a href="#cb54-8"></a></span>
+<span id="cb54-9"><a href="#cb54-9"></a></span>
+<span id="cb54-10"><a href="#cb54-10"></a>distributions_df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb54-11"><a href="#cb54-11"></a>  <span class="sc">~</span>distribution,       <span class="sc">~</span>mu, <span class="sc">~</span>sigma,</span>
+<span id="cb54-12"><a href="#cb54-12"></a>  <span class="st">"Null (H0)"</span>,         <span class="dv">0</span>,   .<span class="dv">2</span>,</span>
+<span id="cb54-13"><a href="#cb54-13"></a>  <span class="st">"Alternative (H1)"</span>,   .<span class="dv">4</span>,   .<span class="dv">2</span></span>
+<span id="cb54-14"><a href="#cb54-14"></a>)</span>
+<span id="cb54-15"><a href="#cb54-15"></a></span>
+<span id="cb54-16"><a href="#cb54-16"></a><span class="co"># --- Step 2: Define the Critical Value ---</span></span>
+<span id="cb54-17"><a href="#cb54-17"></a>critical_value <span class="ot">&lt;-</span> <span class="fl">1.96</span><span class="sc">*</span>.<span class="dv">2</span></span>
+<span id="cb54-18"><a href="#cb54-18"></a></span>
+<span id="cb54-19"><a href="#cb54-19"></a><span class="fu">ggplot</span>(distributions_df, <span class="fu">aes</span>(</span>
+<span id="cb54-20"><a href="#cb54-20"></a>    <span class="at">xdist =</span> distributional<span class="sc">::</span><span class="fu">dist_normal</span>(<span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma)</span>
+<span id="cb54-21"><a href="#cb54-21"></a>  )) <span class="sc">+</span>  <span class="fu">stat_dist_slab</span>(</span>
+<span id="cb54-22"><a href="#cb54-22"></a>    <span class="at">alpha =</span> <span class="fl">0.4</span></span>
+<span id="cb54-23"><a href="#cb54-23"></a>  ) <span class="sc">+</span></span>
+<span id="cb54-24"><a href="#cb54-24"></a></span>
+<span id="cb54-25"><a href="#cb54-25"></a>  <span class="fu">stat_dist_slab</span>(</span>
+<span id="cb54-26"><a href="#cb54-26"></a>    <span class="at">data =</span> . <span class="sc">%&gt;%</span> <span class="fu">filter</span>(distribution <span class="sc">==</span> <span class="st">"Alternative (H1)"</span>),</span>
+<span id="cb54-27"><a href="#cb54-27"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb54-28"><a href="#cb54-28"></a>    <span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb54-29"><a href="#cb54-29"></a>  </span>
+<span id="cb54-30"><a href="#cb54-30"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> critical_value, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb54-31"><a href="#cb54-31"></a>  </span>
+<span id="cb54-32"><a href="#cb54-32"></a>  <span class="fu">labs</span>(</span>
+<span id="cb54-33"><a href="#cb54-33"></a>    <span class="at">title =</span> <span class="st">"Beta (type 2 error) is AUC left of C.V."</span>,</span>
+<span id="cb54-34"><a href="#cb54-34"></a>    <span class="at">subtitle =</span> <span class="st">"Power is AUC right of C.V."</span>,</span>
+<span id="cb54-35"><a href="#cb54-35"></a>    <span class="at">x =</span> <span class="st">"Sample Mean"</span>,</span>
+<span id="cb54-36"><a href="#cb54-36"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb54-37"><a href="#cb54-37"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="power_9_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<section id="viewing-79-power-sampling-t-distribution" class="slide level2">
+<h2>Viewing ~79% power sampling t-distribution</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>distributions_df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb55-2"><a href="#cb55-2"></a>  <span class="sc">~</span>distribution,       <span class="sc">~</span>mu, <span class="sc">~</span>sigma,</span>
+<span id="cb55-3"><a href="#cb55-3"></a>  <span class="st">"Null (H0)"</span>,         <span class="dv">0</span>,   <span class="dv">1</span>,</span>
+<span id="cb55-4"><a href="#cb55-4"></a>  <span class="st">"Alternative (H1)"</span>,   <span class="fl">2.83</span>,   <span class="dv">1</span></span>
+<span id="cb55-5"><a href="#cb55-5"></a>)</span>
+<span id="cb55-6"><a href="#cb55-6"></a></span>
+<span id="cb55-7"><a href="#cb55-7"></a><span class="co"># --- Step 2: Define the Critical Value ---</span></span>
+<span id="cb55-8"><a href="#cb55-8"></a>critical_value <span class="ot">&lt;-</span> <span class="fl">1.96</span></span>
+<span id="cb55-9"><a href="#cb55-9"></a></span>
+<span id="cb55-10"><a href="#cb55-10"></a><span class="fu">ggplot</span>(distributions_df, <span class="fu">aes</span>(</span>
+<span id="cb55-11"><a href="#cb55-11"></a>    <span class="at">xdist =</span> distributional<span class="sc">::</span><span class="fu">dist_normal</span>(<span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma)</span>
+<span id="cb55-12"><a href="#cb55-12"></a>  )) <span class="sc">+</span>  <span class="fu">stat_dist_slab</span>(</span>
+<span id="cb55-13"><a href="#cb55-13"></a>    <span class="at">alpha =</span> <span class="fl">0.4</span></span>
+<span id="cb55-14"><a href="#cb55-14"></a>  ) <span class="sc">+</span></span>
+<span id="cb55-15"><a href="#cb55-15"></a></span>
+<span id="cb55-16"><a href="#cb55-16"></a>  <span class="fu">stat_dist_slab</span>(</span>
+<span id="cb55-17"><a href="#cb55-17"></a>    <span class="at">data =</span> . <span class="sc">%&gt;%</span> <span class="fu">filter</span>(distribution <span class="sc">==</span> <span class="st">"Alternative (H1)"</span>),</span>
+<span id="cb55-18"><a href="#cb55-18"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb55-19"><a href="#cb55-19"></a>    <span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb55-20"><a href="#cb55-20"></a>  </span>
+<span id="cb55-21"><a href="#cb55-21"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> critical_value, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb55-22"><a href="#cb55-22"></a>  </span>
+<span id="cb55-23"><a href="#cb55-23"></a>  <span class="fu">labs</span>(</span>
+<span id="cb55-24"><a href="#cb55-24"></a>    <span class="at">title =</span> <span class="st">"Beta (type 2 error) is AUC left of C.V."</span>,</span>
+<span id="cb55-25"><a href="#cb55-25"></a>    <span class="at">subtitle =</span> <span class="st">"Power is AUC right of C.V."</span>,</span>
+<span id="cb55-26"><a href="#cb55-26"></a>    <span class="at">x =</span> <span class="st">"Sample Mean"</span>,</span>
+<span id="cb55-27"><a href="#cb55-27"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb55-28"><a href="#cb55-28"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="power_9_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
+<section id="viewing-79-power-sampling-original-unit" class="slide level2">
+<h2>Viewing ~79% power sampling original unit</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>distributions_df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb56-2"><a href="#cb56-2"></a>  <span class="sc">~</span>distribution,       <span class="sc">~</span>mu, <span class="sc">~</span>sigma,</span>
+<span id="cb56-3"><a href="#cb56-3"></a>  <span class="st">"Null (H0)"</span>,         <span class="dv">0</span>,   .<span class="dv">142</span>,</span>
+<span id="cb56-4"><a href="#cb56-4"></a>  <span class="st">"Alternative (H1)"</span>,   .<span class="dv">399</span>,   .<span class="dv">142</span></span>
+<span id="cb56-5"><a href="#cb56-5"></a>)</span>
+<span id="cb56-6"><a href="#cb56-6"></a></span>
+<span id="cb56-7"><a href="#cb56-7"></a><span class="co"># --- Step 2: Define the Critical Value ---</span></span>
+<span id="cb56-8"><a href="#cb56-8"></a>critical_value <span class="ot">&lt;-</span> <span class="fl">1.96</span><span class="sc">*</span>.<span class="dv">144</span></span>
+<span id="cb56-9"><a href="#cb56-9"></a></span>
+<span id="cb56-10"><a href="#cb56-10"></a><span class="fu">ggplot</span>(distributions_df, <span class="fu">aes</span>(</span>
+<span id="cb56-11"><a href="#cb56-11"></a>    <span class="at">xdist =</span> distributional<span class="sc">::</span><span class="fu">dist_normal</span>(<span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma)</span>
+<span id="cb56-12"><a href="#cb56-12"></a>  )) <span class="sc">+</span>  <span class="fu">stat_dist_slab</span>(</span>
+<span id="cb56-13"><a href="#cb56-13"></a>    <span class="at">alpha =</span> <span class="fl">0.4</span></span>
+<span id="cb56-14"><a href="#cb56-14"></a>  ) <span class="sc">+</span></span>
+<span id="cb56-15"><a href="#cb56-15"></a></span>
+<span id="cb56-16"><a href="#cb56-16"></a>  <span class="fu">stat_dist_slab</span>(</span>
+<span id="cb56-17"><a href="#cb56-17"></a>    <span class="at">data =</span> . <span class="sc">%&gt;%</span> <span class="fu">filter</span>(distribution <span class="sc">==</span> <span class="st">"Alternative (H1)"</span>),</span>
+<span id="cb56-18"><a href="#cb56-18"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb56-19"><a href="#cb56-19"></a>    <span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb56-20"><a href="#cb56-20"></a>  </span>
+<span id="cb56-21"><a href="#cb56-21"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> critical_value, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb56-22"><a href="#cb56-22"></a>  </span>
+<span id="cb56-23"><a href="#cb56-23"></a>  <span class="fu">labs</span>(</span>
+<span id="cb56-24"><a href="#cb56-24"></a>    <span class="at">title =</span> <span class="st">"Beta (type 2 error) is AUC left of C.V."</span>,</span>
+<span id="cb56-25"><a href="#cb56-25"></a>    <span class="at">subtitle =</span> <span class="st">"Power is AUC right of C.V."</span>,</span>
+<span id="cb56-26"><a href="#cb56-26"></a>    <span class="at">x =</span> <span class="st">"Sample Mean"</span>,</span>
+<span id="cb56-27"><a href="#cb56-27"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb56-28"><a href="#cb56-28"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="power_9_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
+<section id="psychological-power" class="slide level2">
+<h2>Psychological power</h2>
+<ul>
+<li>Best estimates for psych are ~50% power</li>
+<li>Less for moderation hypotheses</li>
+<li>We’ve known this for 50+ years (Cohen, 1962) but do not change.</li>
+<li>Partly this is due to: 1. Assuming larger effects. 2. Estimating power for one part of model and assuming it works for all. 3. Simple heuristics.</li>
+</ul>
+</section>
+<section id="power-for-precision" class="slide level2">
+<h2>Power for precision</h2>
+<ul>
+<li><p>A test comparing two means with d = 0.50 and a sample size of N = 128 (64 per group) has 80% power.</p></li>
+<li><p>But the 95% CI ranges from 0.15 to 0.85. Would you interpret the findings the same depending on these vast differences in effect size?</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+
+<img data-src="power.png" class="r-stretch"><ul>
+<li>Widths have different power “attached” to them</li>
+</ul>
+</section>
+<section id="in-sum" class="slide level2">
+<h2>In Sum</h2>
+<ul>
+<li><p>Power is a combo of NHST and SE but viewed through both the null and alternative distribution</p></li>
+<li><p>Beta is the type 2 error we are okay with. Usually set at .2 (power = 1-beta), whereas alpha is .05. Should this be higher?</p></li>
+<li><p>Design studies to improve power (good measures, within-person designs, high sample size)</p></li>
+<li><p>Do not forget what you are powering for (parameter not study/model)</p></li>
+<li><p>Precision as an alternative/complimentary viewpoint</p></li>
+</ul>
+
+<div class="footer footer-default">
 
 </div>
 </section>

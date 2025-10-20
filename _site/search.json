@@ -2475,7 +2475,7 @@
     "href": "power_9.html#beta",
     "title": "Power",
     "section": "Beta",
-    "text": "Beta\n\nThe rate that we make type II errors. Area under curve to the left of our critical value.\n\n\n\nCode\ndistributions_df &lt;- tribble(\n  ~distribution,      ~df, ~mu, ~sigma,\n  \"Null (H0)\",        20,  10,   0.44,\n  \"Alternative (H1)\", 20,  11,   0.44\n)\n\n# --- Step 2: Define the Critical Value ---\ncritical_value &lt;- 10.93287\n\nggplot(distributions_df, aes(\n    xdist = distributional::dist_student_t(df = df, mu = mu, sigma = sigma)\n  )) +  stat_dist_slab(\n    alpha = 0.4\n  ) +\n\n  stat_dist_slab(\n    data = . %&gt;% filter(distribution == \"Alternative (H1)\"),\n    alpha = 0.6,\n    fill = \"green\") +\n  \n  geom_vline(xintercept = critical_value, linetype = \"dashed\", color = \"darkred\", size = 1) +\n  \n  labs(\n    title = \"Beta (type 2 error) is AUC left of C.V.\",\n    subtitle = \"Power is AUC right of C.V.\",\n    x = \"Sample Mean\",\n    y = \"Density\"\n  )"
+    "text": "Beta\n\nThe rate that we make type II errors (not regression parameter, sorry). Area under curve to the left of our critical value.\n\n\n\nCode\ndistributions_df &lt;- tribble(\n  ~distribution,      ~df, ~mu, ~sigma,\n  \"Null (H0)\",        20,  10,   0.44,\n  \"Alternative (H1)\", 20,  11,   0.44\n)\n\n# --- Step 2: Define the Critical Value ---\ncritical_value &lt;- 10.93287\n\nggplot(distributions_df, aes(\n    xdist = distributional::dist_student_t(df = df, mu = mu, sigma = sigma)\n  )) +  stat_dist_slab(\n    alpha = 0.4\n  ) +\n\n  stat_dist_slab(\n    data = . %&gt;% filter(distribution == \"Alternative (H1)\"),\n    alpha = 0.6,\n    fill = \"green\") +\n  \n  geom_vline(xintercept = critical_value, linetype = \"dashed\", color = \"darkred\", size = 1) +\n  \n  labs(\n    title = \"Beta (type 2 error) is AUC left of C.V.\",\n    subtitle = \"Power is AUC right of C.V.\",\n    x = \"Sample Mean\",\n    y = \"Density\"\n  )"
   },
   {
     "objectID": "power_9.html#increase-sample-size",
@@ -2489,7 +2489,7 @@
     "href": "power_9.html#how-can-power-be-increased",
     "title": "Power",
     "section": "How can power be increased?",
-    "text": "How can power be increased?\n\nIncrease effect size (move alternative father away)\nincrease your alpha (.056), which moves your critival value closer to the null\nincrease N (reduces standard error –&gt; more precision)\nReduce observed standard deviation/sigma via better measurement or a better manipulation"
+    "text": "How can power be increased?\n\nIncrease effect size (move alternative father away)\nincrease your alpha (.056), which moves your critical value closer to the null\nincrease N (reduces standard error –&gt; more precision)\nReduce observed standard deviation/sigma via better measurement or a better manipulation"
   },
   {
     "objectID": "power_9.html#how-do-you-choose-an-effect-size",
@@ -2517,6 +2517,76 @@
     "href": "power_9.html#pwrss",
     "title": "Power",
     "section": "pwrss",
-    "text": "pwrss\n\nmuch better than pwr\n\n\nlibrary(pwrss)\npower.t.regression(beta = 0.40,\n                   sd.outcome = 1.2,\n                   sd.predictor = .8,\n                   k.total = 1,\n                   r.squared = 0.09,\n                   power = .80,\n                   alpha = 0.05,\n                   alternative = \"two.sided\")\n\n+--------------------------------------------------+\n|             SAMPLE SIZE CALCULATION              |\n+--------------------------------------------------+\n\nLinear Regression Coefficient (T-Test)\n\n---------------------------------------------------\nHypotheses\n---------------------------------------------------\n  H0 (Null Claim) : beta - null.beta = 0 \n  H1 (Alt. Claim) : beta - null.beta != 0 \n\n---------------------------------------------------\nResults\n---------------------------------------------------\n  Sample Size            = 103  &lt;&lt;\n  Type 1 Error (alpha)   = 0.050\n  Type 2 Error           = 0.198\n  Statistical Power      = 0.802"
+    "text": "pwrss\n\nmuch better than pwr\n\n\n\nCode\nlibrary(pwrss)\npower.t.regression(beta = 0.40,\n                   sd.outcome = 1.2,\n                   sd.predictor = .8,\n                   k.total = 1,\n                   r.squared = 0.09,\n                   power = .80,\n                   alpha = 0.05,\n                   alternative = \"two.sided\")\n\n\n+--------------------------------------------------+\n|             SAMPLE SIZE CALCULATION              |\n+--------------------------------------------------+\n\nLinear Regression Coefficient (T-Test)\n\n---------------------------------------------------\nHypotheses\n---------------------------------------------------\n  H0 (Null Claim) : beta - null.beta = 0 \n  H1 (Alt. Claim) : beta - null.beta != 0 \n\n---------------------------------------------------\nResults\n---------------------------------------------------\n  Sample Size            = 103  &lt;&lt;\n  Type 1 Error (alpha)   = 0.050\n  Type 2 Error           = 0.198\n  Statistical Power      = 0.802"
+  },
+  {
+    "objectID": "power_9.html#power-is-for-all-types-of-statistics",
+    "href": "power_9.html#power-is-for-all-types-of-statistics",
+    "title": "Power",
+    "section": "Power is for all types of statistics",
+    "text": "Power is for all types of statistics\n\nExample that we covered is for estimating the mean. But just as we can create a sampling distribution for any statistic, we can calculate power for any statistic.\nThe smaller the standard error, the higher the statistical power, all else being equal.\nStatistical power is your ability to reliably detect the signal (your statistic) through the noise (standard error)\nAnything that leads to a higher t-stat (which we used for NHST) will increase power"
+  },
+  {
+    "objectID": "power_9.html#again-but-with-lower-sample-size",
+    "href": "power_9.html#again-but-with-lower-sample-size",
+    "title": "Power",
+    "section": "Again, but with lower sample size",
+    "text": "Again, but with lower sample size\n\n\nCode\n# --- Define the Simulation Parameters ---\n\nn_simulations &lt;- 10000\nsample_size &lt;- 53\nalpha &lt;- 0.05\ntrue_intercept &lt;- 10\ntrue_slope &lt;- 0.4\ntrue_error_sd &lt;- 1.145 #(SD of Y * square root (1 - assumed R^2))\n\n# --- Run the Simulation ---\n\np_values_slope &lt;- numeric(n_simulations)\nstd_errors_slope &lt;- numeric(n_simulations)\nslope_estimates &lt;- numeric(n_simulations) \nt_statistics &lt;- numeric(n_simulations)    \nresidual_std_errors &lt;- numeric(n_simulations)\n\nfor (i in 1:n_simulations) {\n  # --- For each simulation, create one sample dataset ---\n  x &lt;- rnorm(sample_size, mean = 3, sd = 0.8)\n  \n  # 2. Generate the outcome 'y' based on our TRUE model\n  y &lt;- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)\n  \n  simulated_data &lt;- data.frame(x, y)\n  \n  # --- Fit the linear model for this one experiment ---\n  model &lt;- lm(y ~ x, data = simulated_data)\n  model_summary &lt;- summary(model)\n  \n  # --- Extract the desired values from the model summary ---\n  \n  # Store the p-value for our predictor 'x'\n  p_values_slope[i] &lt;- model_summary$coefficients[2, 4]\n  \n  # NEW: Store the standard error of the slope coefficient\n  # This is in the 2nd row, 2nd column of the coefficients table\n  std_errors_slope[i] &lt;- model_summary$coefficients[2, 2]\n  slope_estimates[i] &lt;- model_summary$coefficients[2, 1]\n  t_statistics[i] &lt;- model_summary$coefficients[2, 3]\n  # NEW: Store the residual standard error (sigma) of the model\n  residual_std_errors[i] &lt;- model_summary$sigma\n}\n\n\n# --- Calculate and Report the Power ---\n\n\npower &lt;- mean(p_values_slope &lt; alpha)\navg_coeff_se &lt;- mean(std_errors_slope)\navg_resid_se &lt;- mean(residual_std_errors)\navg_coef &lt;- mean(slope_estimates)\navg_t &lt;- mean(t_statistics)\n\nn_simulations\n\n\n[1] 10000\n\n\nCode\nsample_size\n\n\n[1] 53\n\n\nCode\ntrue_slope\n\n\n[1] 0.4\n\n\nCode\nalpha\n\n\n[1] 0.05\n\n\nCode\npower\n\n\n[1] 0.5072"
+  },
+  {
+    "objectID": "power_9.html#simulating-power",
+    "href": "power_9.html#simulating-power",
+    "title": "Power",
+    "section": "Simulating power",
+    "text": "Simulating power\n\n\nCode\n# --- Define the Simulation Parameters ---\n\nn_simulations &lt;- 10000\nsample_size &lt;- 103\nalpha &lt;- 0.05\ntrue_intercept &lt;- 10\ntrue_slope &lt;- 0.4\ntrue_error_sd &lt;- 1.145 #(SD of Y * square root (1 - assumed R^2))\n\n# --- Run the Simulation ---\n\np_values_slope &lt;- numeric(n_simulations)\nstd_errors_slope &lt;- numeric(n_simulations)\nslope_estimates &lt;- numeric(n_simulations) \nt_statistics &lt;- numeric(n_simulations)    \nresidual_std_errors &lt;- numeric(n_simulations)\n\n\nfor (i in 1:n_simulations) {\n  # --- For each simulation, create one sample dataset ---\n  x &lt;- rnorm(sample_size, mean = 3, sd = 0.8)\n  \n  # 2. Generate the outcome 'y' based on our TRUE model\n  y &lt;- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)\n  \n  simulated_data &lt;- data.frame(x, y)\n  \n  # --- Fit the linear model for this one experiment ---\n  model &lt;- lm(y ~ x, data = simulated_data)\n  model_summary &lt;- summary(model)\n\n  p_values_slope[i] &lt;- model_summary$coefficients[2, 4]\n  std_errors_slope[i] &lt;- model_summary$coefficients[2, 2]\n  slope_estimates[i] &lt;- model_summary$coefficients[2, 1] # CHANGED\n  t_statistics[i] &lt;- model_summary$coefficients[2, 3]    # CHANGED\n  residual_std_errors[i] &lt;- model_summary$sigma\n}\n\n\n# --- Calculate and Report the Power ---\n\n\npower &lt;- mean(p_values_slope &lt; alpha)\navg_coeff_se &lt;- mean(std_errors_slope)\navg_resid_se &lt;- mean(residual_std_errors)\navg_coef &lt;- mean(coef)\navg_t &lt;- mean(t)\n\n\nn_simulations\n\n\n[1] 10000\n\n\nCode\nsample_size\n\n\n[1] 103\n\n\nCode\ntrue_slope\n\n\n[1] 0.4\n\n\nCode\nalpha\n\n\n[1] 0.05\n\n\nCode\npower\n\n\n[1] 0.7939"
+  },
+  {
+    "objectID": "power_9.html#viewing-50-power-sampling-t-distribution",
+    "href": "power_9.html#viewing-50-power-sampling-t-distribution",
+    "title": "Power",
+    "section": "Viewing ~50% power sampling t-distribution",
+    "text": "Viewing ~50% power sampling t-distribution\n\n\nCode\nsample_size &lt;- 53\nalpha &lt;- 0.05\ntrue_intercept &lt;- 10\ntrue_slope &lt;- 0.4\ntrue_error_sd &lt;- 1.145 \n\nSE = 1.145/.936\n\n\ndistributions_df &lt;- tribble(\n  ~distribution,       ~mu, ~sigma,\n  \"Null (H0)\",         0,   1,\n  \"Alternative (H1)\",   2.03,   1\n)\n\n# --- Step 2: Define the Critical Value ---\ncritical_value &lt;- 1.96\n\nggplot(distributions_df, aes(\n    xdist = distributional::dist_normal(mu = mu, sigma = sigma)\n  )) +  stat_dist_slab(\n    alpha = 0.4\n  ) +\n\n  stat_dist_slab(\n    data = . %&gt;% filter(distribution == \"Alternative (H1)\"),\n    alpha = 0.6,\n    fill = \"green\") +\n  \n  geom_vline(xintercept = critical_value, linetype = \"dashed\", color = \"darkred\", size = 1) +\n  \n  labs(\n    title = \"Beta (type 2 error) is AUC left of C.V.\",\n    subtitle = \"Power is AUC right of C.V.\",\n    x = \"Sample Mean\",\n    y = \"Density\"\n  )"
+  },
+  {
+    "objectID": "power_9.html#viewing-50-power-sampling-original-unit",
+    "href": "power_9.html#viewing-50-power-sampling-original-unit",
+    "title": "Power",
+    "section": "Viewing ~50% power sampling original unit",
+    "text": "Viewing ~50% power sampling original unit\n\n\nCode\nsample_size &lt;- 100\nalpha &lt;- 0.05\ntrue_intercept &lt;- 10\ntrue_slope &lt;- 0.4\ntrue_error_sd &lt;- 1.145 #(SD of Y * square root (1 - assumed R^2))\n\nSE = 1.145/.936\n\n\ndistributions_df &lt;- tribble(\n  ~distribution,       ~mu, ~sigma,\n  \"Null (H0)\",         0,   .2,\n  \"Alternative (H1)\",   .4,   .2\n)\n\n# --- Step 2: Define the Critical Value ---\ncritical_value &lt;- 1.96*.2\n\nggplot(distributions_df, aes(\n    xdist = distributional::dist_normal(mu = mu, sigma = sigma)\n  )) +  stat_dist_slab(\n    alpha = 0.4\n  ) +\n\n  stat_dist_slab(\n    data = . %&gt;% filter(distribution == \"Alternative (H1)\"),\n    alpha = 0.6,\n    fill = \"green\") +\n  \n  geom_vline(xintercept = critical_value, linetype = \"dashed\", color = \"darkred\", size = 1) +\n  \n  labs(\n    title = \"Beta (type 2 error) is AUC left of C.V.\",\n    subtitle = \"Power is AUC right of C.V.\",\n    x = \"Sample Mean\",\n    y = \"Density\"\n  )"
+  },
+  {
+    "objectID": "power_9.html#viewing-79-power-sampling-t-distribution",
+    "href": "power_9.html#viewing-79-power-sampling-t-distribution",
+    "title": "Power",
+    "section": "Viewing ~79% power sampling t-distribution",
+    "text": "Viewing ~79% power sampling t-distribution\n\n\nCode\ndistributions_df &lt;- tribble(\n  ~distribution,       ~mu, ~sigma,\n  \"Null (H0)\",         0,   1,\n  \"Alternative (H1)\",   2.83,   1\n)\n\n# --- Step 2: Define the Critical Value ---\ncritical_value &lt;- 1.96\n\nggplot(distributions_df, aes(\n    xdist = distributional::dist_normal(mu = mu, sigma = sigma)\n  )) +  stat_dist_slab(\n    alpha = 0.4\n  ) +\n\n  stat_dist_slab(\n    data = . %&gt;% filter(distribution == \"Alternative (H1)\"),\n    alpha = 0.6,\n    fill = \"green\") +\n  \n  geom_vline(xintercept = critical_value, linetype = \"dashed\", color = \"darkred\", size = 1) +\n  \n  labs(\n    title = \"Beta (type 2 error) is AUC left of C.V.\",\n    subtitle = \"Power is AUC right of C.V.\",\n    x = \"Sample Mean\",\n    y = \"Density\"\n  )"
+  },
+  {
+    "objectID": "power_9.html#viewing-79-power-sampling-original-unit",
+    "href": "power_9.html#viewing-79-power-sampling-original-unit",
+    "title": "Power",
+    "section": "Viewing ~79% power sampling original unit",
+    "text": "Viewing ~79% power sampling original unit\n\n\nCode\ndistributions_df &lt;- tribble(\n  ~distribution,       ~mu, ~sigma,\n  \"Null (H0)\",         0,   .142,\n  \"Alternative (H1)\",   .399,   .142\n)\n\n# --- Step 2: Define the Critical Value ---\ncritical_value &lt;- 1.96*.144\n\nggplot(distributions_df, aes(\n    xdist = distributional::dist_normal(mu = mu, sigma = sigma)\n  )) +  stat_dist_slab(\n    alpha = 0.4\n  ) +\n\n  stat_dist_slab(\n    data = . %&gt;% filter(distribution == \"Alternative (H1)\"),\n    alpha = 0.6,\n    fill = \"green\") +\n  \n  geom_vline(xintercept = critical_value, linetype = \"dashed\", color = \"darkred\", size = 1) +\n  \n  labs(\n    title = \"Beta (type 2 error) is AUC left of C.V.\",\n    subtitle = \"Power is AUC right of C.V.\",\n    x = \"Sample Mean\",\n    y = \"Density\"\n  )"
+  },
+  {
+    "objectID": "power_9.html#psychological-power",
+    "href": "power_9.html#psychological-power",
+    "title": "Power",
+    "section": "Psychological power",
+    "text": "Psychological power\n\nBest estimates for psych are ~50% power\nLess for moderation hypotheses\nWe’ve known this for 50+ years (Cohen, 1962) but do not change.\nPartly this is due to: 1. Assuming larger effects. 2. Estimating power for one part of model and assuming it works for all. 3. Simple heuristics."
+  },
+  {
+    "objectID": "power_9.html#power-for-precision",
+    "href": "power_9.html#power-for-precision",
+    "title": "Power",
+    "section": "Power for precision",
+    "text": "Power for precision\n\nA test comparing two means with d = 0.50 and a sample size of N = 128 (64 per group) has 80% power.\nBut the 95% CI ranges from 0.15 to 0.85. Would you interpret the findings the same depending on these vast differences in effect size?"
+  },
+  {
+    "objectID": "power_9.html#in-sum",
+    "href": "power_9.html#in-sum",
+    "title": "Power",
+    "section": "In Sum",
+    "text": "In Sum\n\nPower is a combo of NHST and SE but viewed through both the null and alternative distribution\nBeta is the type 2 error we are okay with. Usually set at .2 (power = 1-beta), whereas alpha is .05. Should this be higher?\nDesign studies to improve power (good measures, within-person designs, high sample size)\nDo not forget what you are powering for (parameter not study/model)\nPrecision as an alternative/complimentary viewpoint"
   }
 ]
