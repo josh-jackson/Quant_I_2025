@@ -1,0 +1,269 @@
+---
+title: "Assumptions"
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+
+## Assumptions of regression
+
+- No measurement error
+
+- Correctly specified form
+
+- No omitted variables
+
+- Homoscedasticity
+
+- Independence among the residuals
+
+- Normally distributed residuals
+
+## What happens
+
+
+| Violated Regression Assumption | Coefficients | Standard Errors |   
+|--------------------------------|--------------|-----------------|
+| 1. Measured without error      | Biased       | Biased             |
+| 2. Correctly specified form    | Biased       | Biased             |  
+| 3. Correctly specified model   | Biased       | Biased              |
+| 4. Homoscedasticity            | Biased       |                    |
+| 5. Independent Errors          | Biased       |                    |
+| 6. Normality of the Errors     | Biased       |                   |   
+
+
+## Detection
+
+| Assumption                   | Detection                   | 
+|------------------------------|-----------------------------|
+| 1. Measured without error    | Reliability                 |  
+| 2. Correctly specified form  | Residuals against predicted |   
+| 3. Correctly specified model | Theory & Prediction plot    |
+| 4. Homoscedasticity          | Residuals against predicted  |
+| 5. Independent Errors        | Research Design               |
+| 6. Normality of the Errors   | q-q plot or distribution      |
+
+## Reliability
+
+- If there is measurement error, our coefficient estimates will always UNDER-estimate the true parameter. This is because stochastic randomness (error) cannot relate with anything. 
+
+$$r_{xy} = \rho\sqrt{r_{xx}r_{yy}}$$
+- Measurement error inflates our standard errors, because they add...error
+
+
+## Correctly specified form
+
+- Categorical when categorical. Linear when linear. 
+
+
+-----------------
+
+```{r}
+#| code-fold: true
+library(performance)
+library(readr)
+anxiety <- read_csv("anxiety.csv")
+m1 <- lm(Anxiety ~ Support, anxiety)
+check_model(m1)
+```
+
+--------------
+
+```{r}
+#| code-fold: true
+# return a list of single plots
+diagnostic_plots <- plot(check_model(m1, panel = FALSE))
+# linearity
+diagnostic_plots[[2]]
+```
+
+
+
+
+
+## What about categorical predictor?
+
+```{r}
+#| code-fold: true
+m2 <- lm(Support ~ as.factor(group), anxiety)
+d_plots <- plot(check_model(m2,panel = FALSE))
+# linearity
+d_plots[[2]]
+```
+
+
+
+## Correctly specified model
+
+- Correct Likelihood function. 
+
+- Not overfitting or underfitting
+
+
+--------------
+
+```{r}
+#| code-fold: true
+diagnostic_plots[[1]]
+```
+
+
+---------------
+
+```{r}
+#| code-fold: true
+anxiety$skewed <- rpois(118, 1)
+m3 <- lm(skewed ~ Support, anxiety)
+dia_plots <- plot(check_model(m3, panel = FALSE))
+dia_plots[[1]]
+```
+
+
+------------
+
+```{r}
+# categorical
+d_plots[[1]]
+```
+
+
+
+
+## Homoscedasticity
+
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+d <- data.frame(
+  x = fitted(m1),
+  y = residuals(m1),
+  grp = as.factor(residuals(m1) >= 0)
+)
+ggplot(d, aes(x, y)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) + xlab("fitted") +ylab("redisuals")
+```
+
+-----------------------
+
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+d <- data.frame(
+  x = fitted(m1),
+  y = residuals(m1),
+  grp = as.factor(residuals(m1) >= 0)
+)
+ggplot(d, aes(x, y, colour = grp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)+ xlab("fitted") +ylab("redisuals")
+```
+
+---------
+
+```{r}
+#| code-fold: true
+# homoscedasticiy - homogeneity of variance
+diagnostic_plots[[3]]
+```
+
+
+## How to fix homoscedasticity
+
+- Calculating heteroscedasticity-consistent standard errors accounts for the larger variation, better reflecting the increased uncertainty. 
+
+- The heteroscedasticity can be modeled directly (MELSMs)
+
+- Transforming the response variable(eg log)
+
+- Different estimation (eg WLS) which weights observations differently
+
+
+## Independent Errors  
+
+- Based on design and sampling
+- Can tell by ICC if you know grouping and or residual based on time if time is a factor. 
+
+
+
+
+## Normally distributed residuals/errors
+
+```{r}
+ggplot(m1) +
+  stat_qq(aes(sample = .stdresid)) +
+  geom_abline() +
+  labs(title = "Q-Q Plot",
+       subtitle = "for Normality of Errors") +
+  theme_bw(base_size = 20)
+```
+
+---------
+
+```{r}
+diagnostic_plots[[5]]
+```
+
+
+
+## Note about normality
+
+- None of the assumptions are about normally distributed variables
+- But haven't I assumed at normal DGP? 
+- Yes, but the assumption is that it is conditionally normal. 
+
+So all you have to do is justify Gaussian as good default over another theoretically probablity distribution. And, check to see if residuals are normally distributed
+
+
+---------------
+
+| Assumption                   | Fix                                          |
+|------------------------------|----------------------------------------------|
+| 1. Measured without error    | SEM, factor scores, more data, better design |
+| 2. Correctly specified form  | Different model terms                              |
+| 3. Correctly specified model | Theory; new likelihood; Specificity tests                         |
+| 4. Homoscedasticity          | Robust SEs, WLS, transformations, model it             |
+| 5. Independent Errors        | Use different analysis method (MLM)                |
+| 6. Normality of the Errors   | Additional IVs, different form               |
+
+
+## When data go bad
+
+- Are "Outliers" expected? 
+
+- How do you know something is an outlier
+
+- Do you do anything about it? 
+
+## Outliers
+
+- Each conveys a sense of the magnitude of outliery-ness the case exhibits. 
+
+1. Leverage -- How unusual is this case from the rest of the cases in terms of predictors?
+2. Distance -- How distant is the observed case from the predicted value?
+3. Influence -- How much the does regression coefficient change if case were removed?
+
+## Leverage 
+
+- Leverage tells us how far observed values for a case are from mean values on the set of IVs (centroid).
+
+- Not dependent on Y values
+
+- Often arbitrarily at 3 sd
+
+
+## Distance 
+
+- Distance is the distance from prediction, or how far a case's observed value is from its predicted value i.e., residual
+
+- In units of Y.
+

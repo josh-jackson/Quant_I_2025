@@ -1,0 +1,108 @@
+---
+title: "hw3"
+format: html
+---
+
+# Instructions
+
+Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include ***both*** the .qmd or .Rmd and knitted .html files. Please turn in both documents to the **ASSIGNMENTS** page on Canvas.
+
+Put all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that *outside* of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
+
+You are allowed to Google or use your preferred AI-overlord. *However*, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a **working link** to the website you used. You don't need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.
+
+In the instructions, when it says ***by hand***, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation.
+
+**Data:** You will simulate your own data. FUN.
+
+
+1. Describe the relationship between standard error and power estimates.  
+
+2. Why is 80% power often considered a desirable target? What does this benchmark imply about the balance between Type I and Type II errors?
+
+3. Can something be "over" powered? 
+
+4. Someone, lets call them J. Jackson, thinks that power puts too much emphasis on dichotomous decisions due to p-values. Instead, he suggests that one should do "precision estimates" rather than "power estimates."   a. What is one pro and one con to this approach?  
+ b. For your own research topic, describe an association between two variables and the range of CI (in original units) that would be meaningful to your research question. 
+ 
+5. Below is a power simulation for a regression (and a reason to force you to run a for loop).  Run it. 
+
+```{r}
+
+# --- Parameters ---
+n_simulations <- 1000
+sample_size <- 100
+alpha <- 0.05
+true_intercept <- 0
+true_slope <- 0.25 # Assumed true effect size
+true_error_sd <- .9375 # Residual standard error
+predictor_sd <- 1 # SD of the predictor 'x'
+predictor_mean <- 0 # Mean of 'x' (doesn't affect power)
+
+# --- Simulation ---
+p_values_slope <- numeric(n_simulations)
+slope <- numeric(n_simulations)
+std_errors_slope <- numeric(n_simulations)
+
+for (i in 1:n_simulations) {
+  x <- rnorm(sample_size, mean = predictor_mean, sd = predictor_sd)
+  y <- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)
+  simulated_data <- data.frame(x, y)
+  model <- lm(y ~ x, data = simulated_data)
+  model_summary <- summary(model)
+  p_values_slope[i] <- model_summary$coefficients[2, 4]
+  slope[i] <- model_summary$coefficients[2, 1]
+  std_errors_slope[i] <- model_summary$coefficients[2, 2]
+}
+
+# --- Calculate Power & Average SE ---
+power <- mean(p_values_slope < alpha)
+avg_slope <- mean(slope)
+avg_coeff_se <- mean(std_errors_slope)
+
+
+```
+
+A. What is the power? Is this good or bad? What min sample size would you need for this? 
+
+B. What do the vectors p_values_slope, slope, std_errors_slope represent? Hint: are they all the same size?  
+
+C. What CI would you put around the average simulation est? Does it overlap with zero or not? Is this problematic, reassuring or asking a different question? 
+
+D. Graph a visualization of the power using this code from class. You will need to add stuff to it to make it run as well as delete the "eval = FALSE" in the first line. Then run a second visualization with a simulation that provides "good power." How do the two differ? 
+
+
+```{r, eval = FALSE}
+
+distributions_df <- tribble(
+  ~distribution,       ~mu, ~sigma,
+  "Null (H0)",         ??,   ??,
+  "Alternative (H1)",   ??,   ??
+)
+
+# --- Step 2: Define the Critical Value ---
+critical_value <- 1.96
+
+ggplot(distributions_df, aes(
+    xdist = distributional::dist_normal(mu = mu, sigma = sigma)
+  )) +  stat_dist_slab(
+    alpha = 0.4
+  ) +
+
+  stat_dist_slab(
+    data = . %>% filter(distribution == "Alternative (H1)"),
+    alpha = 0.6,
+    fill = "green") +
+  
+  geom_vline(xintercept = critical_value, linetype = "dashed", color = "darkred", size = 1) +
+  
+  labs(
+    title = "Beta (type 2 error) is AUC left of C.V.",
+    subtitle = "Power is AUC right of C.V.",
+    x = "Sample Mean",
+    y = "Density"
+  )
+
+```
+
+

@@ -1341,7 +1341,7 @@
     "href": "homework.html",
     "title": "Homework",
     "section": "",
-    "text": "Homework #1\nHomework #1 KEY\nHomework #2"
+    "text": "Homework #1\nHomework #1 KEY\nHomework #2\nHomework #3"
   },
   {
     "objectID": "2mean_6.html#last-time",
@@ -2531,14 +2531,14 @@
     "href": "power_9.html#again-but-with-lower-sample-size",
     "title": "Power",
     "section": "Again, but with lower sample size",
-    "text": "Again, but with lower sample size\n\n\nCode\n# --- Define the Simulation Parameters ---\n\nn_simulations &lt;- 10000\nsample_size &lt;- 53\nalpha &lt;- 0.05\ntrue_intercept &lt;- 10\ntrue_slope &lt;- 0.4\ntrue_error_sd &lt;- 1.145 #(SD of Y * square root (1 - assumed R^2))\n\n# --- Run the Simulation ---\n\np_values_slope &lt;- numeric(n_simulations)\nstd_errors_slope &lt;- numeric(n_simulations)\nslope_estimates &lt;- numeric(n_simulations) \nt_statistics &lt;- numeric(n_simulations)    \nresidual_std_errors &lt;- numeric(n_simulations)\n\nfor (i in 1:n_simulations) {\n  # --- For each simulation, create one sample dataset ---\n  x &lt;- rnorm(sample_size, mean = 3, sd = 0.8)\n  \n  # 2. Generate the outcome 'y' based on our TRUE model\n  y &lt;- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)\n  \n  simulated_data &lt;- data.frame(x, y)\n  \n  # --- Fit the linear model for this one experiment ---\n  model &lt;- lm(y ~ x, data = simulated_data)\n  model_summary &lt;- summary(model)\n  \n  # --- Extract the desired values from the model summary ---\n  \n  # Store the p-value for our predictor 'x'\n  p_values_slope[i] &lt;- model_summary$coefficients[2, 4]\n  \n  # NEW: Store the standard error of the slope coefficient\n  # This is in the 2nd row, 2nd column of the coefficients table\n  std_errors_slope[i] &lt;- model_summary$coefficients[2, 2]\n  slope_estimates[i] &lt;- model_summary$coefficients[2, 1]\n  t_statistics[i] &lt;- model_summary$coefficients[2, 3]\n  # NEW: Store the residual standard error (sigma) of the model\n  residual_std_errors[i] &lt;- model_summary$sigma\n}\n\n\n# --- Calculate and Report the Power ---\n\n\npower &lt;- mean(p_values_slope &lt; alpha)\navg_coeff_se &lt;- mean(std_errors_slope)\navg_resid_se &lt;- mean(residual_std_errors)\navg_coef &lt;- mean(slope_estimates)\navg_t &lt;- mean(t_statistics)\n\nn_simulations\n\n\n[1] 10000\n\n\nCode\nsample_size\n\n\n[1] 53\n\n\nCode\ntrue_slope\n\n\n[1] 0.4\n\n\nCode\nalpha\n\n\n[1] 0.05\n\n\nCode\npower\n\n\n[1] 0.5072"
+    "text": "Again, but with lower sample size\n\n\nCode\n# --- Define the Simulation Parameters ---\n\nn_simulations &lt;- 10000\nsample_size &lt;- 53\nalpha &lt;- 0.05\ntrue_intercept &lt;- 10\ntrue_slope &lt;- 0.4\ntrue_error_sd &lt;- 1.145 #(SD of Y * square root (1 - assumed R^2))\n\n# --- Run the Simulation ---\n\np_values_slope &lt;- numeric(n_simulations)\nstd_errors_slope &lt;- numeric(n_simulations)\nslope_estimates &lt;- numeric(n_simulations) \nt_statistics &lt;- numeric(n_simulations)    \nresidual_std_errors &lt;- numeric(n_simulations)\n\nfor (i in 1:n_simulations) {\n  # --- For each simulation, create one sample dataset ---\n  x &lt;- rnorm(sample_size, mean = 3, sd = 0.8)\n  \n  # 2. Generate the outcome 'y' based on our TRUE model\n  y &lt;- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)\n  \n  simulated_data &lt;- data.frame(x, y)\n  \n  # --- Fit the linear model for this one experiment ---\n  model &lt;- lm(y ~ x, data = simulated_data)\n  model_summary &lt;- summary(model)\n  \n  # --- Extract the desired values from the model summary ---\n  \n  # Store the p-value for our predictor 'x'\n  p_values_slope[i] &lt;- model_summary$coefficients[2, 4]\n  \n  # NEW: Store the standard error of the slope coefficient\n  # This is in the 2nd row, 2nd column of the coefficients table\n  std_errors_slope[i] &lt;- model_summary$coefficients[2, 2]\n  slope_estimates[i] &lt;- model_summary$coefficients[2, 1]\n  t_statistics[i] &lt;- model_summary$coefficients[2, 3]\n  # NEW: Store the residual standard error (sigma) of the model\n  residual_std_errors[i] &lt;- model_summary$sigma\n}\n\n\n# --- Calculate and Report the Power ---\n\n\npower &lt;- mean(p_values_slope &lt; alpha)\navg_coeff_se &lt;- mean(std_errors_slope)\navg_resid_se &lt;- mean(residual_std_errors)\navg_coef &lt;- mean(slope_estimates)\navg_t &lt;- mean(t_statistics)\n\nn_simulations\n\n\n[1] 10000\n\n\nCode\nsample_size\n\n\n[1] 53\n\n\nCode\ntrue_slope\n\n\n[1] 0.4\n\n\nCode\nalpha\n\n\n[1] 0.05\n\n\nCode\npower\n\n\n[1] 0.4948"
   },
   {
     "objectID": "power_9.html#simulating-power",
     "href": "power_9.html#simulating-power",
     "title": "Power",
     "section": "Simulating power",
-    "text": "Simulating power\n\n\nCode\n# --- Define the Simulation Parameters ---\n\nn_simulations &lt;- 10000\nsample_size &lt;- 103\nalpha &lt;- 0.05\ntrue_intercept &lt;- 10\ntrue_slope &lt;- 0.4\ntrue_error_sd &lt;- 1.145 #(SD of Y * square root (1 - assumed R^2))\n\n# --- Run the Simulation ---\n\np_values_slope &lt;- numeric(n_simulations)\nstd_errors_slope &lt;- numeric(n_simulations)\nslope_estimates &lt;- numeric(n_simulations) \nt_statistics &lt;- numeric(n_simulations)    \nresidual_std_errors &lt;- numeric(n_simulations)\n\n\nfor (i in 1:n_simulations) {\n  # --- For each simulation, create one sample dataset ---\n  x &lt;- rnorm(sample_size, mean = 3, sd = 0.8)\n  \n  # 2. Generate the outcome 'y' based on our TRUE model\n  y &lt;- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)\n  \n  simulated_data &lt;- data.frame(x, y)\n  \n  # --- Fit the linear model for this one experiment ---\n  model &lt;- lm(y ~ x, data = simulated_data)\n  model_summary &lt;- summary(model)\n\n  p_values_slope[i] &lt;- model_summary$coefficients[2, 4]\n  std_errors_slope[i] &lt;- model_summary$coefficients[2, 2]\n  slope_estimates[i] &lt;- model_summary$coefficients[2, 1] # CHANGED\n  t_statistics[i] &lt;- model_summary$coefficients[2, 3]    # CHANGED\n  residual_std_errors[i] &lt;- model_summary$sigma\n}\n\n\n# --- Calculate and Report the Power ---\n\n\npower &lt;- mean(p_values_slope &lt; alpha)\navg_coeff_se &lt;- mean(std_errors_slope)\navg_resid_se &lt;- mean(residual_std_errors)\navg_coef &lt;- mean(coef)\navg_t &lt;- mean(t)\n\n\nn_simulations\n\n\n[1] 10000\n\n\nCode\nsample_size\n\n\n[1] 103\n\n\nCode\ntrue_slope\n\n\n[1] 0.4\n\n\nCode\nalpha\n\n\n[1] 0.05\n\n\nCode\npower\n\n\n[1] 0.7939"
+    "text": "Simulating power\n\n\nCode\n# --- Define the Simulation Parameters ---\n\nn_simulations &lt;- 10000\nsample_size &lt;- 103\nalpha &lt;- 0.05\ntrue_intercept &lt;- 10\ntrue_slope &lt;- 0.4\ntrue_error_sd &lt;- 1.145 #(SD of Y * square root (1 - assumed R^2))\n\n# --- Run the Simulation ---\n\np_values_slope &lt;- numeric(n_simulations)\nstd_errors_slope &lt;- numeric(n_simulations)\nslope_estimates &lt;- numeric(n_simulations) \nt_statistics &lt;- numeric(n_simulations)    \nresidual_std_errors &lt;- numeric(n_simulations)\n\n\nfor (i in 1:n_simulations) {\n  # --- For each simulation, create one sample dataset ---\n  x &lt;- rnorm(sample_size, mean = 3, sd = 0.8)\n  \n  # 2. Generate the outcome 'y' based on our TRUE model\n  y &lt;- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)\n  \n  simulated_data &lt;- data.frame(x, y)\n  \n  # --- Fit the linear model for this one experiment ---\n  model &lt;- lm(y ~ x, data = simulated_data)\n  model_summary &lt;- summary(model)\n\n  p_values_slope[i] &lt;- model_summary$coefficients[2, 4]\n  std_errors_slope[i] &lt;- model_summary$coefficients[2, 2]\n  slope_estimates[i] &lt;- model_summary$coefficients[2, 1] # CHANGED\n  t_statistics[i] &lt;- model_summary$coefficients[2, 3]    # CHANGED\n  residual_std_errors[i] &lt;- model_summary$sigma\n}\n\n\n# --- Calculate and Report the Power ---\n\n\npower &lt;- mean(p_values_slope &lt; alpha)\navg_coeff_se &lt;- mean(std_errors_slope)\navg_resid_se &lt;- mean(residual_std_errors)\navg_coef &lt;- mean(coef)\navg_t &lt;- mean(t)\n\n\nn_simulations\n\n\n[1] 10000\n\n\nCode\nsample_size\n\n\n[1] 103\n\n\nCode\ntrue_slope\n\n\n[1] 0.4\n\n\nCode\nalpha\n\n\n[1] 0.05\n\n\nCode\npower\n\n\n[1] 0.7951"
   },
   {
     "objectID": "power_9.html#viewing-50-power-sampling-t-distribution",
@@ -2588,5 +2588,131 @@
     "title": "Power",
     "section": "In Sum",
     "text": "In Sum\n\nPower is a combo of NHST and SE but viewed through both the null and alternative distribution\nBeta is the type 2 error we are okay with. Usually set at .2 (power = 1-beta), whereas alpha is .05. Should this be higher?\nDesign studies to improve power (good measures, within-person designs, high sample size)\nDo not forget what you are powering for (parameter not study/model)\nPrecision as an alternative/complimentary viewpoint"
+  },
+  {
+    "objectID": "Assumptions_10.html#assumptions-of-regression",
+    "href": "Assumptions_10.html#assumptions-of-regression",
+    "title": "Assumptions",
+    "section": "Assumptions of regression",
+    "text": "Assumptions of regression\n\nNo measurement error\nCorrectly specified form\nNo omitted variables\nHomoscedasticity\nIndependence among the residuals\nNormally distributed residuals"
+  },
+  {
+    "objectID": "Assumptions_10.html#what-happens-if-we-violate-assumptions",
+    "href": "Assumptions_10.html#what-happens-if-we-violate-assumptions",
+    "title": "Assumptions",
+    "section": "What happens if we violate assumptions",
+    "text": "What happens if we violate assumptions\n\n\n\nViolated Regression Assumption\nCoefficients\nStandard Errors\n\n\n\n\n1. Measured without error\nBiased\nBiased\n\n\n2. Correctly specified form\nBiased\nBiased\n\n\n3. Correctly specified model\nBiased\nBiased\n\n\n4. Homoscedasticity\nBiased\n\n\n\n5. Independent Errors\nBiased\n\n\n\n6. Normality of the Errors\nBiased"
+  },
+  {
+    "objectID": "Assumptions_10.html#what-happens",
+    "href": "Assumptions_10.html#what-happens",
+    "title": "Assumptions",
+    "section": "What happens",
+    "text": "What happens\n\n\n\nViolated Regression Assumption\nCoefficients\nStandard Errors\n\n\n\n\n1. Measured without error\nBiased\nBiased\n\n\n2. Correctly specified form\nBiased\nBiased\n\n\n3. Correctly specified model\nBiased\nBiased\n\n\n4. Homoscedasticity\nBiased\n\n\n\n5. Independent Errors\nBiased\n\n\n\n6. Normality of the Errors\nBiased"
+  },
+  {
+    "objectID": "Assumptions_10.html#detection",
+    "href": "Assumptions_10.html#detection",
+    "title": "Assumptions",
+    "section": "Detection",
+    "text": "Detection\n\n\n\nAssumption\nDetection\n\n\n\n\n1. Measured without error\nReliability\n\n\n2. Correctly specified form\nResiduals against predicted\n\n\n3. Correctly specified model\nTheory & Prediction plot\n\n\n4. Homoscedasticity\nResiduals against predicted\n\n\n5. Independent Errors\nResearch Design\n\n\n6. Normality of the Errors\nq-q plot or distribution"
+  },
+  {
+    "objectID": "Assumptions_10.html#reliability",
+    "href": "Assumptions_10.html#reliability",
+    "title": "Assumptions",
+    "section": "Reliability",
+    "text": "Reliability\n\nIf there is measurement error, our coefficient estimates will always UNDER-estimate the true parameter. This is because stochastic randomness (error) cannot relate with anything.\n\n\\[r_{xy} = \\rho\\sqrt{r_{xx}r_{yy}}\\] - Measurement error inflates our standard errors, because they add…error"
+  },
+  {
+    "objectID": "Assumptions_10.html#correctly-specified-form",
+    "href": "Assumptions_10.html#correctly-specified-form",
+    "title": "Assumptions",
+    "section": "Correctly specified form",
+    "text": "Correctly specified form\n\nCategorical when categorical. Linear when linear."
+  },
+  {
+    "objectID": "Assumptions_10.html#what-about-categorical-predictor",
+    "href": "Assumptions_10.html#what-about-categorical-predictor",
+    "title": "Assumptions",
+    "section": "What about categorical predictor?",
+    "text": "What about categorical predictor?\n\n\nCode\nm2 &lt;- lm(Support ~ as.factor(group), anxiety)\nd_plots &lt;- plot(check_model(m2,panel = FALSE))\n# linearity\nd_plots[[2]]"
+  },
+  {
+    "objectID": "Assumptions_10.html#correctly-specified-model",
+    "href": "Assumptions_10.html#correctly-specified-model",
+    "title": "Assumptions",
+    "section": "Correctly specified model",
+    "text": "Correctly specified model\n\nCorrect Likelihood function.\nNot overfitting or underfitting"
+  },
+  {
+    "objectID": "Assumptions_10.html#homoscedasticity",
+    "href": "Assumptions_10.html#homoscedasticity",
+    "title": "Assumptions",
+    "section": "Homoscedasticity",
+    "text": "Homoscedasticity\n\n\nCode\nlibrary(ggplot2)\nd &lt;- data.frame(\n  x = fitted(m1),\n  y = residuals(m1),\n  grp = as.factor(residuals(m1) &gt;= 0)\n)\nggplot(d, aes(x, y)) +\n  geom_point() +\n  geom_smooth(method = \"lm\", se = FALSE) + xlab(\"fitted\") +ylab(\"redisuals\")"
+  },
+  {
+    "objectID": "Assumptions_10.html#how-to-fix-homoscedasticity",
+    "href": "Assumptions_10.html#how-to-fix-homoscedasticity",
+    "title": "Assumptions",
+    "section": "How to fix homoscedasticity",
+    "text": "How to fix homoscedasticity\n\nCalculating heteroscedasticity-consistent standard errors accounts for the larger variation, better reflecting the increased uncertainty.\nThe heteroscedasticity can be modeled directly (MELSMs)\nTransforming the response variable(eg log)\nDifferent estimation (eg WLS) which weights observations differently"
+  },
+  {
+    "objectID": "Assumptions_10.html#independent-errors",
+    "href": "Assumptions_10.html#independent-errors",
+    "title": "Assumptions",
+    "section": "Independent Errors",
+    "text": "Independent Errors\n\nBased on design and sampling\nCan tell by ICC if you know grouping and or residual based on time if time is a factor."
+  },
+  {
+    "objectID": "Assumptions_10.html#normally-distributed-residualserrors",
+    "href": "Assumptions_10.html#normally-distributed-residualserrors",
+    "title": "Assumptions",
+    "section": "Normally distributed residuals/errors",
+    "text": "Normally distributed residuals/errors\n\nggplot(m1) +\n  stat_qq(aes(sample = .stdresid)) +\n  geom_abline() +\n  labs(title = \"Q-Q Plot\",\n       subtitle = \"for Normality of Errors\") +\n  theme_bw(base_size = 20)"
+  },
+  {
+    "objectID": "Assumptions_10.html#note-about-normality",
+    "href": "Assumptions_10.html#note-about-normality",
+    "title": "Assumptions",
+    "section": "Note about normality",
+    "text": "Note about normality\n\nNone of the assumptions are about normally distributed variables\nBut haven’t I assumed at normal DGP?\nYes, but the assumption is that it is conditionally normal.\n\nSo all you have to do is justify Gaussian as good default over another theoretically probablity distribution. And, check to see if residuals are normally distributed"
+  },
+  {
+    "objectID": "Assumptions_10.html#when-data-go-bad",
+    "href": "Assumptions_10.html#when-data-go-bad",
+    "title": "Assumptions",
+    "section": "When data go bad",
+    "text": "When data go bad\n\nAre “Outliers” expected?\nHow do you know something is an outlier\nDo you do anything about it?"
+  },
+  {
+    "objectID": "Assumptions_10.html#outliers",
+    "href": "Assumptions_10.html#outliers",
+    "title": "Assumptions",
+    "section": "Outliers",
+    "text": "Outliers\n\nEach conveys a sense of the magnitude of outliery-ness the case exhibits.\n\n\nLeverage – How unusual is this case from the rest of the cases in terms of predictors?\nDistance – How distant is the observed case from the predicted value?\nInfluence – How much the does regression coefficient change if case were removed?"
+  },
+  {
+    "objectID": "Assumptions_10.html#leverage",
+    "href": "Assumptions_10.html#leverage",
+    "title": "Assumptions",
+    "section": "Leverage",
+    "text": "Leverage\n\nLeverage tells us how far observed values for a case are from mean values on the set of IVs (centroid).\nNot dependent on Y values\nOften arbitrarily at 3 sd"
+  },
+  {
+    "objectID": "Assumptions_10.html#distance",
+    "href": "Assumptions_10.html#distance",
+    "title": "Assumptions",
+    "section": "Distance",
+    "text": "Distance\n\nDistance is the distance from prediction, or how far a case’s observed value is from its predicted value i.e., residual\nIn units of Y."
+  },
+  {
+    "objectID": "hw3.html",
+    "href": "hw3.html",
+    "title": "hw3",
+    "section": "",
+    "text": "Instructions\nPlease complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include both the .qmd or .Rmd and knitted .html files. Please turn in both documents to the ASSIGNMENTS page on Canvas.\nPut all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that outside of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.\nYou are allowed to Google or use your preferred AI-overlord. However, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a working link to the website you used. You don’t need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and do not simply copy someone else’s code. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.\nIn the instructions, when it says by hand, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean by hand, you should not use the mean() function. However, you can (and should!) use your variables. So for instance, if I ask you to find the mean() by hand, you may do something like sum(variableX)/length(variableX). This would be an appropriate by hand calculation.\nData: You will simulate your own data. FUN.\n\nDescribe the relationship between standard error and power estimates.\nWhy is 80% power often considered a desirable target? What does this benchmark imply about the balance between Type I and Type II errors?\nCan something be “over” powered?\nSomeone, lets call them J. Jackson, thinks that power puts too much emphasis on dichotomous decisions due to p-values. Instead, he suggests that one should do “precision estimates” rather than “power estimates.” a. What is one pro and one con to this approach?\n\n\n\nFor your own research topic, describe an association between two variables and the range of CI (in original units) that would be meaningful to your research question.\n\n\nBelow is a power simulation for a regression (and a reason to force you to run a for loop). Run it.\n\n\n# --- Parameters ---\nn_simulations &lt;- 1000\nsample_size &lt;- 100\nalpha &lt;- 0.05\ntrue_intercept &lt;- 0\ntrue_slope &lt;- 0.25 # Assumed true effect size\ntrue_error_sd &lt;- .9375 # Residual standard error\npredictor_sd &lt;- 1 # SD of the predictor 'x'\npredictor_mean &lt;- 0 # Mean of 'x' (doesn't affect power)\n\n# --- Simulation ---\np_values_slope &lt;- numeric(n_simulations)\nslope &lt;- numeric(n_simulations)\nstd_errors_slope &lt;- numeric(n_simulations)\n\nfor (i in 1:n_simulations) {\n  x &lt;- rnorm(sample_size, mean = predictor_mean, sd = predictor_sd)\n  y &lt;- true_intercept + true_slope * x + rnorm(sample_size, mean = 0, sd = true_error_sd)\n  simulated_data &lt;- data.frame(x, y)\n  model &lt;- lm(y ~ x, data = simulated_data)\n  model_summary &lt;- summary(model)\n  p_values_slope[i] &lt;- model_summary$coefficients[2, 4]\n  slope[i] &lt;- model_summary$coefficients[2, 1]\n  std_errors_slope[i] &lt;- model_summary$coefficients[2, 2]\n}\n\n# --- Calculate Power & Average SE ---\npower &lt;- mean(p_values_slope &lt; alpha)\navg_slope &lt;- mean(slope)\navg_coeff_se &lt;- mean(std_errors_slope)\n\nA. What is the power? Is this good or bad? What min sample size would you need for this?\nB. What do the vectors p_values_slope, slope, std_errors_slope represent? Hint: are they all the same size?\nC. What CI would you put around the average simulation est? Does it overlap with zero or not? Is this problematic, reassuring or asking a different question?\nD. Graph a visualization of the power using this code from class. You will need to add stuff to it to make it run as well as delete the “eval = FALSE” in the first line. Then run a second visualization with a simulation that provides “good power.” How do the two differ?\n\ndistributions_df &lt;- tribble(\n  ~distribution,       ~mu, ~sigma,\n  \"Null (H0)\",         ??,   ??,\n  \"Alternative (H1)\",   ??,   ??\n)\n\n# --- Step 2: Define the Critical Value ---\ncritical_value &lt;- 1.96\n\nggplot(distributions_df, aes(\n    xdist = distributional::dist_normal(mu = mu, sigma = sigma)\n  )) +  stat_dist_slab(\n    alpha = 0.4\n  ) +\n\n  stat_dist_slab(\n    data = . %&gt;% filter(distribution == \"Alternative (H1)\"),\n    alpha = 0.6,\n    fill = \"green\") +\n  \n  geom_vline(xintercept = critical_value, linetype = \"dashed\", color = \"darkred\", size = 1) +\n  \n  labs(\n    title = \"Beta (type 2 error) is AUC left of C.V.\",\n    subtitle = \"Power is AUC right of C.V.\",\n    x = \"Sample Mean\",\n    y = \"Density\"\n  )"
   }
 ]
