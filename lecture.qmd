@@ -18,3 +18,5 @@ editor: source
 7. [Inference](Inference_7.qmd)
 
 8. [Open Science](open_8.qmd)
+
+9. [Power](power_9.qmd)
