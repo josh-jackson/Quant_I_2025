@@ -1,0 +1,350 @@
+---
+title: "homework 2 key"
+format: html
+---
+
+```{r setup, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(psych)
+library(emmeans)
+library(lmtest)
+
+data_full <- read.csv("homework-world.csv")
+```
+
+## Q1
+
+### 1A
+
+### Run model in R to test your hypothesis. Interpret regression coefficients.
+
+```{r Q1A}
+Q1_data <- data_full %>%
+  filter((World == 1 | World == 4) & !is.na(Freedom))
+
+Q1_data$World <- as.factor(Q1_data$World)
+contrasts(Q1_data$World)
+
+Q1_model <- lm(Freedom ~ World, data = Q1_data)
+summary(Q1_model)
+```
+
+For First-World Countries, the average Freedom score is expected to be 0.83.
+
+The average Freedom score for Fourth-World countries is expected to be 0.07 lower than First-World Countries.
+
+### 1B
+
+### Using the ANOVA function, interpret what the F test tests.
+
+```{r Q1B}
+anova(Q1_model)
+```
+
+The inclusion of World as an IV explains a significant proportion of variance in Freedom, *F*(1,76) = 5.21, *p* = .025.
+
+### 1C
+
+### In words, what are the null and alternative hypotheses for the intercept and regression coefficient.
+
+Intercept:
+
+Null Hypothesis: The mean of Freedom for First-World Countries is 0.
+
+Alternative Hypothesis: The mean of Freedom for First-World Countries is not 0.
+
+Slope:
+
+Null Hypothesis: The mean difference of Freedom between First and Fourth-World Countries is 0.
+
+Alternative Hypothesis: The mean difference of Freedom between First and Fourth-World Countries is not 0.
+
+### 1D
+
+### What is the null and alternative hypotheses for the F-test.
+
+Null Hypothesis: The proportion of variance in Freedom explained by World is 0.
+
+Alternative Hypothesis: The proportion of variance in Freedom explained by World is not 0.
+
+### 1E
+
+### What is an effect size that you would use to interpret this model?
+
+Either Cohen's *d* or Multiple R-squared would be appropriate for comparing means:
+
+```{r Q1E}
+Q1_cohen_d <- cohen.d(Freedom ~ World, data = Q1_data)
+
+paste("Cohen's d: ", round(Q1_cohen_d$cohen.d[2], 2))
+paste("Multiple R-squared: ", round(summary(Q1_model)$r.squared, 2))
+```
+
+### 1F
+
+### What is your critical value where you would reject an alpha of .01 in terms of both the t distribution and the original metric?
+
+```{r Q1F}
+#Getting the Standard Error of b1:
+b1_SE_Q1_model <- coef(summary(Q1_model))["World4","Std. Error"]
+paste("Standard Error of b1:", round(b1_SE_Q1_model, 2))
+
+
+#Getting the critical t-values when alpha = .01:
+t_critical_high = qt(p = .995, df = 76)
+paste("High critical t-value: ", round(t_critical_high, 2))
+t_critical_low = qt(p = .005, df = 76)
+paste("Low critical t-value: ", round(t_critical_low, 2))
+
+
+#Getting the raw critical values when alpha = .01:
+raw_critical_high <- t_critical_high * b1_SE_Q1_model
+paste("High critical raw unit value: ", round(raw_critical_high, 2))
+raw_critical_low <- t_critical_low * b1_SE_Q1_model
+paste("Low critical raw unit value: ", round(raw_critical_low, 2))
+```
+
+### 1G
+
+### What is your test statistic? Both in terms of the original metric and the t-distribution.
+
+```{r Q1G}
+#test statistic in term of the original metric:
+paste("Test statistic in original units: ", round(coef(summary(Q1_model))["World4","Estimate"],2))
+
+#test statistic in terms of the t-distribution:
+paste("Test statistic as a t-value: ", round(coef(summary(Q1_model))["World4","t value"],2))
+```
+
+### 1H
+
+### What is your NHST decision?
+
+```{r Q1H}
+#Get b1 coefficient:
+b1_Q1_model <- coef(summary(Q1_model))["World4","Estimate"]
+
+if(abs(b1_Q1_model) > raw_critical_high) {print("reject the null hypothesis")} else {print("retain the null hypothesis")}
+```
+
+With an alpha level of .01, our test statistic (-.07/-2.28) is less extreme than our critical value (-.08/-2.64), i.e., it does not fall within the critical region. Thus, we fail to reject the null hypothesis.
+
+### 1I
+
+### Interpret your p-value.
+
+Assuming that the null hypothesis is true, the probability of obtaining this test statistic or a more extreme value is .025.
+
+### 1J
+
+### Graph your result.
+
+### 1K
+
+### Create a 91% confidence interval around your estimate.
+
+```{r Q1JK}
+#Calculate CI for b1:
+b1_upper_CI <- b1_Q1_model + (qt(p = .955, df = 76)*b1_SE_Q1_model)
+b1_lower_CI <- b1_Q1_model - (qt(p = .955, df = 76)*b1_SE_Q1_model)
+
+#Create dataframe for graphing b1 only:
+b1_df <- data.frame(Freedom = b1_Q1_model, Coefficient = "b1", Upper_CI = b1_upper_CI, Lower_CI = b1_lower_CI)
+
+
+#Graphing the difference in beta1:
+ggplot(data = b1_df, aes(x = Coefficient, y = Freedom))+
+  geom_point(size = 5)+
+  geom_errorbar(aes(ymin = Lower_CI, ymax = Upper_CI), width = .1)+
+  geom_hline(yintercept = 0)+
+  ylim(-.3,.3)+
+  theme_classic()
+```
+
+These questions can be answered in a variety of ways.
+
+### 1L
+
+### Run a null or intercept only model. Compare this model to the model in A. Do you get the same p-value as in I? How come/why not?
+
+```{r Q1L}
+Q1_null_model <- lm(Freedom ~ 1, data = Q1_data)
+summary(Q1_null_model)
+
+anova(Q1_null_model, Q1_model)
+```
+
+The *p*-values are the same when comparing the original model to the intercept only model because the intercept only model does not explain any variance in Y.
+
+### 1M
+
+### Run the model in A using a glm function. Do a likelihood ratio test compared to a null model. How does this differ from L?
+
+```{r Q1M}
+#Generalized linear model:
+Q1_glm_model <- glm(Freedom ~ World, data = Q1_data)
+summary(Q1_glm_model)
+
+#Likelihood Ratio Test:
+lrtest(Q1_null_model, Q1_glm_model)
+```
+
+In the Likelihood Ratio Test (LRT), the p-value is slightly different because glm() uses Maximum Likelihood Estimation (MLE) rather than Ordinary Least Squares (OLS) to determine the best fit. This model has no residual SS vs model SS, so the model comparison instead uses logged likelihoods. Because the ratio of two logged likelihoods is chi-square distributed, the test statistic is a chi square instead of an F. However, the p-value is basically the same between the two model comparisons, so they lead to similar conclusions about whether First World vs. Fourth World status explains variance in Freedom.
+
+## Q2
+
+### 2A
+
+### Run model in R to test your hypothesis. Interpret regression coefficients.
+
+-   b0: A country with a Generosity level of 0 is predicted to have a Happiness level of 5.38.
+-   b1: For each 1-unit increase in Generosity, a country's Happiness level is predicted to increase by 1.47 units.
+
+```{r Q2A}
+#Only include rows with complete cases for Happiness and Generosity (no "NA"s)
+Q2_data <- data_full[complete.cases(data_full[c("Happiness", "Generosity")]), ]
+
+mod2 <- lm(Happiness ~ Generosity, data = Q2_data)
+summary(mod2)
+```
+
+### 2B
+
+### Using the ANOVA function, interpret what the F test tests.
+
+-   Does a country's level of Generosity explain any variance in its level of Happiness/improve our prediction of Happiness? The F-value quantifies this as the amount variance in Happiness explained by the model (Regression Sum Sq), relative to variance that remains unexplained (Residual Sum Sq).
+
+```{r Q2B}
+anova(mod2)
+```
+
+### 2C
+
+### In words, what are the null and alternative hypotheses for the intercept and regression coefficient.
+
+b0 - Null Hypothesis (H0): When a country's Generosity level is 0, its Happiness level is 0. - Alternative Hypothesis (H1): When a country's Generosity level is 0, its Happiness level is anything other than 0.
+
+b1 - Null Hypothesis (H0): There is no linear relationship between a country's level of Generosity and its level of Happiness. - Alternative Hypothesis (H1): There is some linear relationship (\> or \< 0) between a country's level of Generosity and its level of Happiness.
+
+### 2D
+
+### What is the null and alternative hypotheses for the F-test.
+
+-   Null Hypothesis (H0): A country's level of Generosity does not explain any variance in its level of Happiness.
+-   Alternative Hypothesis (H1): A country's level of Generosity explains some amount of variance in its level of Happiness.
+
+### 2E
+
+### What is an effect size that you would use to interpret this model?
+
+-   There are many effect sizes for relationships between two continuous variables, and so several correct answers for this question. Standardized effect sizes include R\^2, standardized b, r, and multiple R. The regression coefficient (b) is an unstandardized effect size.
+
+### 2F
+
+### What is your critical value where you would reject an alpha of .01 in terms of both the t distribution and the original metric?
+
+-   Critical t(alpha = 0.1, df = 118) = 2.62
+-   Critical value in original units = 1.70
+
+```{r Q2F}
+# Critical t
+alpha <- .01
+q2_df <- nrow(Q2_data)-1-1
+q2_critical_t <- qt(alpha/2, 
+                    df = q2_df)*-1
+
+# Critical b (original units)
+q2_se <- data.frame(summary(mod2)$coefficients)['Generosity', 'Std..Error']
+q2_critical_b <- q2_critical_t * q2_se
+
+q2_critical_t
+q2_critical_b
+```
+
+### 2G
+
+### What is your test statistic? Both in terms of the original metric and the t-distribution.
+
+-   In original units, the test statistic is the b1 coefficient (1.47)
+-   The t-statistic is the b1 coefficient/standard error of b1 = 2.27
+
+```{r Q2G}
+q2_b <- data.frame(summary(mod2)$coefficients)['Generosity', 'Estimate']
+q2_t <- q2_b/q2_se
+
+q2_b
+q2_t
+```
+
+### 2H
+
+### What is your NHST decision?
+
+-   With an alpha level of .01, our test statistic (1.47/2.27) is less extreme than our critical value (1.70/2.62), i.e., it does not fall within the critical region. Thus, we fail to reject the null hypothesis.
+
+### 2I
+
+### Interpret your p-value.
+
+-   The probability of observing a linear relationship between Generosity and Happiness equal to or more extreme than b = 1.47, assuming that the true relationship is B = 0, is \~.025.
+
+```{r Q2I}
+pt(q2_t*-1, df = q2_df) + (1 - pt(q2_t, df = q2_df))
+```
+
+### 2J
+
+### Graph your result.
+
+```{r Q2J}
+ggplot(data = Q2_data, aes(x = Generosity, y = Happiness))+
+  geom_jitter(color = "grey", alpha = 0.5)+
+  geom_smooth(method = "lm", se = F, linewidth = 1.8)+
+  theme_minimal()
+```
+
+### 2K
+
+### Create a 91% confidence interval around your estimate.
+
+-   b = 1.47 \[91% CI: 0.37, 2.57\]
+
+```{r Q2k}
+q2_crit <- qnorm((1-.91)/2)*-1
+q2_b - (q2_crit*q2_se)
+q2_b + (q2_crit*q2_se)
+
+ggplot(data = data.frame(y = " ",
+                         b = q2_b,
+                         ci = q2_crit*q2_se),
+       aes(x = b, y = y))+
+  geom_point(size = 4)+
+  geom_errorbar(aes(xmin = b - ci, xmax = b + ci),
+                width = 0.05, linewidth = 1.1)+
+  scale_x_continuous(limits = c(-3,3))+
+  labs(x = "Estimated relationship between Happiness and Generosity (b)",
+       y = "")
+```
+
+### 2L
+
+### Run a null or intercept only model. Compare this model to the model in A. Do you get the same p-value as in I? How come/why not?
+
+-   Yes, the p-value is the same. The two test are equivalent because testing whether Generosity explains variance in Happiness (against the null hypothesis that it explains no variance; i.e., is equivalent to a model with no predictors) is the same as testing whether there is a linear relationship between Generosity and Happiness (against the null hypothesis that there is no relationship; i.e., that the slope of the linear relationship between = 0).
+
+```{r Q2L}
+mod0.2 <- lm(Happiness ~ 1, data = Q2_data)
+anova(mod0.2, mod2)
+```
+
+### 1M
+
+### Run the model in A using a glm function. Do a likelihood ratio test compared to a null model. How does this differ from L?
+
+-   As before, this test differs from L in that it uses logged likelihood as the fit index rather than residual sums of squares, and thus uses the chi square test instead of the F-test. However, as before, the p-value is very similar between the two tests, so they produce similar conclusions about whether Generosity explains variance in Happiness.
+
+```{r Q2M}
+#Generalized linear model:
+glm2 <- glm(Happiness ~ Generosity, family = gaussian, data = Q2_data)
+lrtest(mod0.2, glm2)
+```

@@ -199,6 +199,7 @@ diagnostic_plots[[3]]
 ## Normally distributed residuals/errors
 
 ```{r}
+#| code-fold: true
 ggplot(m1) +
   stat_qq(aes(sample = .stdresid)) +
   geom_abline() +
@@ -260,10 +261,60 @@ So all you have to do is justify Gaussian as good default over another theoretic
 
 - Often arbitrarily at 3 sd
 
+----------
 
-## Distance 
+```{r}
+check_outliers(anxiety, method = "zscore_robust", ID = "id")
+```
 
-- Distance is the distance from prediction, or how far a case's observed value is from its predicted value i.e., residual
+```{r}
+data <- rbind(anxiety[1:4], 1, 12, 17, 55)
+outliers <- check_outliers(data, method = "zscore_robust", ID = "id")
+outliers
+```
 
-- In units of Y.
+## Influence
 
+Influence = Leverage × Distance (residual)
+
+```{r}
+diagnostic_plots[[4]]
+```
+
+
+## Cook's Distance
+
+Calculated by removing the ith data point from the model and recalculating the regression. It summarizes how much all the values in the regression model change when the ith observation is removed.
+
+$$CD_i = \frac{\sum_{j=1}^n(\hat{Y}_j-\hat{Y}_{j(1)})^2}{(p+1)MSE}$$
+
+
+---------------
+
+```{r}
+outliers <- check_outliers(m1, method = "cook")
+outliers
+```
+
+```{r}
+m1.o <- lm(Anxiety ~ Support, data)
+outliers <- check_outliers(m1.o, method = "cook")
+outliers
+```
+
+-----------
+
+```{r}
+library(see)
+plot(outliers)
+```
+
+
+
+## Recommendations
+
+- Analyze data with/without outliers and see how results change
+
+- If you throw out cases you must believe it is not representative of the population of interest. You need to be able to defend your decision to the readers, your colleagues, and yourself. 
+
+- Don't throw out data just to be "safe". Data are hard to collect and outliers are expected!

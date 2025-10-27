@@ -9,4 +9,6 @@ format: html
 
 3.  [Homework #2](hw2.html)
 
-4. [Homework #3](hw3.html)
+4. [Homework #2 KEY](HW_2_key.html)
+
+5. [Homework #3](hw3.html)

@@ -644,12 +644,15 @@
 <section id="normally-distributed-residualserrors" class="slide level2">
 <h2>Normally distributed residuals/errors</h2>
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">ggplot</span>(m1) <span class="sc">+</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">stat_qq</span>(<span class="fu">aes</span>(<span class="at">sample =</span> .stdresid)) <span class="sc">+</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q-Q Plot"</span>,</span>
 <span id="cb10-5"><a href="#cb10-5"></a>       <span class="at">subtitle =</span> <span class="st">"for Normality of Errors"</span>) <span class="sc">+</span></span>
 <span id="cb10-6"><a href="#cb10-6"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 
 </div>
 <img data-src="Assumptions_10_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
@@ -737,11 +740,103 @@
 <li><p>Often arbitrarily at 3 sd</p></li>
 </ul>
 </section>
-<section id="distance" class="slide level2">
-<h2>Distance</h2>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">check_outliers</span>(anxiety, <span class="at">method =</span> <span class="st">"zscore_robust"</span>, <span class="at">ID =</span> <span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OK: No outliers detected.
+- Based on the following method and threshold: zscore_robust (3.291).
+- For variables: id, Anxiety, Stress, Support, skewed</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(anxiety[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], <span class="dv">1</span>, <span class="dv">12</span>, <span class="dv">17</span>, <span class="dv">55</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>outliers <span class="ot">&lt;-</span> <span class="fu">check_outliers</span>(data, <span class="at">method =</span> <span class="st">"zscore_robust"</span>, <span class="at">ID =</span> <span class="st">"id"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>outliers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3 outliers detected: cases 120, 121, 122.
+- Based on the following method and threshold: zscore_robust (3.291).
+- For variables: id, Anxiety, Stress, Support.
+
+-----------------------------------------------------------------------------
+ 
+The following observations were considered outliers for two or more
+  variables by at least one of the selected methods:
+
+  Row id n_Zscore_robust
+1 122 55               3
+2 121 17               2
+
+-----------------------------------------------------------------------------
+Outliers per variable (zscore_robust): 
+
+$Anxiety
+    Row id Distance_Zscore_robust
+121 121 17               3.725685
+122 122 55              19.134228
+
+$Stress
+    Row id Distance_Zscore_robust
+120 120 12               3.671242
+121 121 17               6.425558
+122 122 55              27.358363
+
+$Support
+    Row id Distance_Zscore_robust
+122 122 55               14.30328</code></pre>
+</div>
+</div>
+</section>
+<section id="influence" class="slide level2">
+<h2>Influence</h2>
+<p>Influence = Leverage × Distance (residual)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>diagnostic_plots[[<span class="dv">4</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="Assumptions_10_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
+<section id="cooks-distance" class="slide level2">
+<h2>Cook’s Distance</h2>
+<p>Calculated by removing the ith data point from the model and recalculating the regression. It summarizes how much all the values in the regression model change when the ith observation is removed.</p>
+<p><span class="math display">\[CD_i = \frac{\sum_{j=1}^n(\hat{Y}_j-\hat{Y}_{j(1)})^2}{(p+1)MSE}\]</span></p>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>outliers <span class="ot">&lt;-</span> <span class="fu">check_outliers</span>(m1, <span class="at">method =</span> <span class="st">"cook"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>outliers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OK: No outliers detected.
+- Based on the following method and threshold: cook (0.7).
+- For variable: (Whole model)</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>m1.o <span class="ot">&lt;-</span> <span class="fu">lm</span>(Anxiety <span class="sc">~</span> Support, data)</span>
+<span id="cb19-2"><a href="#cb19-2"></a>outliers <span class="ot">&lt;-</span> <span class="fu">check_outliers</span>(m1.o, <span class="at">method =</span> <span class="st">"cook"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3"></a>outliers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1 outlier detected: case 122.
+- Based on the following method and threshold: cook (0.7).
+- For variable: (Whole model).</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">library</span>(see)</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">plot</span>(outliers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="Assumptions_10_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
+<section id="recommendations" class="slide level2">
+<h2>Recommendations</h2>
 <ul>
-<li><p>Distance is the distance from prediction, or how far a case’s observed value is from its predicted value i.e., residual</p></li>
-<li><p>In units of Y.</p></li>
+<li><p>Analyze data with/without outliers and see how results change</p></li>
+<li><p>If you throw out cases you must believe it is not representative of the population of interest. You need to be able to defend your decision to the readers, your colleagues, and yourself.</p></li>
+<li><p>Don’t throw out data just to be “safe”. Data are hard to collect and outliers are expected!</p></li>
 </ul>
 
 <div class="footer footer-default">
