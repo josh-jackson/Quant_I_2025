@@ -250,8 +250,7 @@ So all you have to do is justify Gaussian as good default over another theoretic
 - Each conveys a sense of the magnitude of outliery-ness the case exhibits. 
 
 1. Leverage -- How unusual is this case from the rest of the cases in terms of predictors?
-2. Distance -- How distant is the observed case from the predicted value?
-3. Influence -- How much the does regression coefficient change if case were removed?
+2. Influence -- How much the does regression coefficient change if case were removed?
 
 ## Leverage 
 

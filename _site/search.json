@@ -802,7 +802,7 @@
     "href": "lecture.html",
     "title": "Lectures",
     "section": "",
-    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation\nComparing 2 means\nInference\nOpen Science\nPower"
+    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation\nComparing 2 means\nInference\nOpen Science\nPower\nAssumptions"
   },
   {
     "objectID": "Estimation_5.html#likelihoods",
@@ -2692,7 +2692,7 @@
     "href": "Assumptions_10.html#outliers",
     "title": "Assumptions",
     "section": "Outliers",
-    "text": "Outliers\n\nEach conveys a sense of the magnitude of outliery-ness the case exhibits.\n\n\nLeverage – How unusual is this case from the rest of the cases in terms of predictors?\nDistance – How distant is the observed case from the predicted value?\nInfluence – How much the does regression coefficient change if case were removed?"
+    "text": "Outliers\n\nEach conveys a sense of the magnitude of outliery-ness the case exhibits.\n\n\nLeverage – How unusual is this case from the rest of the cases in terms of predictors?\nInfluence – How much the does regression coefficient change if case were removed?"
   },
   {
     "objectID": "Assumptions_10.html#leverage",
