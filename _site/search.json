@@ -802,7 +802,7 @@
     "href": "lecture.html",
     "title": "Lectures",
     "section": "",
-    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation\nComparing 2 means\nInference\nOpen Science\nPower\nAssumptions"
+    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation\nComparing 2 means\nInference\nOpen Science\nPower\nAssumptions\nANOVA"
   },
   {
     "objectID": "Estimation_5.html#likelihoods",
@@ -2756,5 +2756,243 @@
     "title": "homework 2 key",
     "section": "Q2",
     "text": "Q2\n\n2A\n\n\nRun model in R to test your hypothesis. Interpret regression coefficients.\n\nb0: A country with a Generosity level of 0 is predicted to have a Happiness level of 5.38.\nb1: For each 1-unit increase in Generosity, a country’s Happiness level is predicted to increase by 1.47 units.\n\n\n#Only include rows with complete cases for Happiness and Generosity (no \"NA\"s)\nQ2_data &lt;- data_full[complete.cases(data_full[c(\"Happiness\", \"Generosity\")]), ]\n\nmod2 &lt;- lm(Happiness ~ Generosity, data = Q2_data)\nsummary(mod2)\n\n\nCall:\nlm(formula = Happiness ~ Generosity, data = Q2_data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-2.6688 -0.8204  0.0955  0.8757  2.0442 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   5.3850     0.1013  53.160   &lt;2e-16 ***\nGenerosity    1.4725     0.6494   2.268   0.0252 *  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.109 on 118 degrees of freedom\nMultiple R-squared:  0.04176,   Adjusted R-squared:  0.03364 \nF-statistic: 5.142 on 1 and 118 DF,  p-value: 0.02517\n\n\n\n\n2B\n\n\nUsing the ANOVA function, interpret what the F test tests.\n\nDoes a country’s level of Generosity explain any variance in its level of Happiness/improve our prediction of Happiness? The F-value quantifies this as the amount variance in Happiness explained by the model (Regression Sum Sq), relative to variance that remains unexplained (Residual Sum Sq).\n\n\nanova(mod2)\n\nAnalysis of Variance Table\n\nResponse: Happiness\n            Df  Sum Sq Mean Sq F value  Pr(&gt;F)  \nGenerosity   1   6.329  6.3291  5.1423 0.02517 *\nResiduals  118 145.234  1.2308                  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\n\n2C\n\n\nIn words, what are the null and alternative hypotheses for the intercept and regression coefficient.\nb0 - Null Hypothesis (H0): When a country’s Generosity level is 0, its Happiness level is 0. - Alternative Hypothesis (H1): When a country’s Generosity level is 0, its Happiness level is anything other than 0.\nb1 - Null Hypothesis (H0): There is no linear relationship between a country’s level of Generosity and its level of Happiness. - Alternative Hypothesis (H1): There is some linear relationship (&gt; or &lt; 0) between a country’s level of Generosity and its level of Happiness.\n\n\n2D\n\n\nWhat is the null and alternative hypotheses for the F-test.\n\nNull Hypothesis (H0): A country’s level of Generosity does not explain any variance in its level of Happiness.\nAlternative Hypothesis (H1): A country’s level of Generosity explains some amount of variance in its level of Happiness.\n\n\n\n2E\n\n\nWhat is an effect size that you would use to interpret this model?\n\nThere are many effect sizes for relationships between two continuous variables, and so several correct answers for this question. Standardized effect sizes include R^2, standardized b, r, and multiple R. The regression coefficient (b) is an unstandardized effect size.\n\n\n\n2F\n\n\nWhat is your critical value where you would reject an alpha of .01 in terms of both the t distribution and the original metric?\n\nCritical t(alpha = 0.1, df = 118) = 2.62\nCritical value in original units = 1.70\n\n\n# Critical t\nalpha &lt;- .01\nq2_df &lt;- nrow(Q2_data)-1-1\nq2_critical_t &lt;- qt(alpha/2, \n                    df = q2_df)*-1\n\n# Critical b (original units)\nq2_se &lt;- data.frame(summary(mod2)$coefficients)['Generosity', 'Std..Error']\nq2_critical_b &lt;- q2_critical_t * q2_se\n\nq2_critical_t\n\n[1] 2.618137\n\nq2_critical_b\n\n[1] 1.700104\n\n\n\n\n2G\n\n\nWhat is your test statistic? Both in terms of the original metric and the t-distribution.\n\nIn original units, the test statistic is the b1 coefficient (1.47)\nThe t-statistic is the b1 coefficient/standard error of b1 = 2.27\n\n\nq2_b &lt;- data.frame(summary(mod2)$coefficients)['Generosity', 'Estimate']\nq2_t &lt;- q2_b/q2_se\n\nq2_b\n\n[1] 1.472521\n\nq2_t\n\n[1] 2.267662\n\n\n\n\n2H\n\n\nWhat is your NHST decision?\n\nWith an alpha level of .01, our test statistic (1.47/2.27) is less extreme than our critical value (1.70/2.62), i.e., it does not fall within the critical region. Thus, we fail to reject the null hypothesis.\n\n\n\n2I\n\n\nInterpret your p-value.\n\nThe probability of observing a linear relationship between Generosity and Happiness equal to or more extreme than b = 1.47, assuming that the true relationship is B = 0, is ~.025.\n\n\npt(q2_t*-1, df = q2_df) + (1 - pt(q2_t, df = q2_df))\n\n[1] 0.02516943\n\n\n\n\n2J\n\n\nGraph your result.\n\nggplot(data = Q2_data, aes(x = Generosity, y = Happiness))+\n  geom_jitter(color = \"grey\", alpha = 0.5)+\n  geom_smooth(method = \"lm\", se = F, linewidth = 1.8)+\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n2K\n\n\nCreate a 91% confidence interval around your estimate.\n\nb = 1.47 [91% CI: 0.37, 2.57]\n\n\nq2_crit &lt;- qnorm((1-.91)/2)*-1\nq2_b - (q2_crit*q2_se)\n\n[1] 0.3716037\n\nq2_b + (q2_crit*q2_se)\n\n[1] 2.573438\n\nggplot(data = data.frame(y = \" \",\n                         b = q2_b,\n                         ci = q2_crit*q2_se),\n       aes(x = b, y = y))+\n  geom_point(size = 4)+\n  geom_errorbar(aes(xmin = b - ci, xmax = b + ci),\n                width = 0.05, linewidth = 1.1)+\n  scale_x_continuous(limits = c(-3,3))+\n  labs(x = \"Estimated relationship between Happiness and Generosity (b)\",\n       y = \"\")\n\n\n\n\n\n\n2L\n\n\nRun a null or intercept only model. Compare this model to the model in A. Do you get the same p-value as in I? How come/why not?\n\nYes, the p-value is the same. The two test are equivalent because testing whether Generosity explains variance in Happiness (against the null hypothesis that it explains no variance; i.e., is equivalent to a model with no predictors) is the same as testing whether there is a linear relationship between Generosity and Happiness (against the null hypothesis that there is no relationship; i.e., that the slope of the linear relationship between = 0).\n\n\nmod0.2 &lt;- lm(Happiness ~ 1, data = Q2_data)\nanova(mod0.2, mod2)\n\nAnalysis of Variance Table\n\nModel 1: Happiness ~ 1\nModel 2: Happiness ~ Generosity\n  Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  \n1    119 151.56                              \n2    118 145.23  1    6.3291 5.1423 0.02517 *\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\n\n1M\n\n\nRun the model in A using a glm function. Do a likelihood ratio test compared to a null model. How does this differ from L?\n\nAs before, this test differs from L in that it uses logged likelihood as the fit index rather than residual sums of squares, and thus uses the chi square test instead of the F-test. However, as before, the p-value is very similar between the two tests, so they produce similar conclusions about whether Generosity explains variance in Happiness.\n\n\n#Generalized linear model:\nglm2 &lt;- glm(Happiness ~ Generosity, family = gaussian, data = Q2_data)\nlrtest(mod0.2, glm2)\n\nLikelihood ratio test\n\nModel 1: Happiness ~ 1\nModel 2: Happiness ~ Generosity\n  #Df  LogLik Df  Chisq Pr(&gt;Chisq)  \n1   2 -184.28                       \n2   3 -181.72  1 5.1187    0.02367 *\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+  },
+  {
+    "objectID": "anova_11.html#this-time",
+    "href": "anova_11.html#this-time",
+    "title": "ANOVA",
+    "section": "This time",
+    "text": "This time\n\nBring it together; glm as a functional tool\ncomparing two or more means ie ANOVA"
+  },
+  {
+    "objectID": "anova_11.html#two-means-t-test",
+    "href": "anova_11.html#two-means-t-test",
+    "title": "ANOVA",
+    "section": "two means (t-test)",
+    "text": "two means (t-test)\n\\[Y_i \\sim \\mathcal{N}(\\mu, \\sigma)\\]\n\\[\\mu_i \\ = \\beta_0 + \\beta_1 X_i\\]\n\\[Y_i = \\beta_0 + \\beta_1 X_i + e_{i}\\]"
+  },
+  {
+    "objectID": "anova_11.html#two-means",
+    "href": "anova_11.html#two-means",
+    "title": "ANOVA",
+    "section": "two means",
+    "text": "two means\n\\[t = \\frac{\\bar{X}_1-\\bar{X}_2}{{\\sigma}_p * \\sqrt{\\frac{1}{N_1} + \\frac{1}{N_2}}}\\] - difference / se(diff) aka se(regression) - difference / pooled SD * ~N aka sigma * ~N - standard error of group mean = sigma / sqrt(N)"
+  },
+  {
+    "objectID": "anova_11.html#dummyeffect-coding",
+    "href": "anova_11.html#dummyeffect-coding",
+    "title": "ANOVA",
+    "section": "dummy/effect coding",
+    "text": "dummy/effect coding\n\nGiven nominal variables we have to assign numbers to each group\nWe do so based on the hypothesis we want to test\nRegardless of how we code it does not impact the overall model fit"
+  },
+  {
+    "objectID": "anova_11.html#more-than-2-means",
+    "href": "anova_11.html#more-than-2-means",
+    "title": "ANOVA",
+    "section": "more than 2 means",
+    "text": "more than 2 means\n\nSame idea extends to when we have more than two means\nThis is often called “anova” (analysis of varince) but referring to anova vs t-test vs regression makes it appear these are all different rather than being the same"
+  },
+  {
+    "objectID": "anova_11.html#more-than-2-means-1",
+    "href": "anova_11.html#more-than-2-means-1",
+    "title": "ANOVA",
+    "section": "more than 2 means",
+    "text": "more than 2 means\n\nWhy is it called analysis of “VARIANCE” when we are interested in more than 2 means?\n\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]\n\nAnd we will often use ANOVA tables (which looks at this variance decomposition) rather than regression coefficients."
+  },
+  {
+    "objectID": "anova_11.html#example",
+    "href": "anova_11.html#example",
+    "title": "ANOVA",
+    "section": "Example",
+    "text": "Example\n\n\nCode\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(tibble) \n\n# --- 1. Set Simulation Parameters ---\n\nset.seed(74) # Makes your simulation reproducible\n\nn_per_group &lt;- 50  # 50 participants per group\nresidual_sd &lt;- 1.0 # This is the within-group SD\n\n# Define the true means for our three groups.\n# We'll set them apart to ensure the ANOVA finds a significant effect.\n\nmean_group_A &lt;- 4.0\nmean_group_B &lt;- 5.0\nmean_group_C &lt;- 6.0\n\n# --- 2. Generate the Data ---\n\n# Create the data for each group from a normal distribution\n\ngroup_A_data &lt;- rnorm(n_per_group, mean = mean_group_A, sd = residual_sd)\ngroup_B_data &lt;- rnorm(n_per_group, mean = mean_group_B, sd = residual_sd)\ngroup_C_data &lt;- rnorm(n_per_group, mean = mean_group_C, sd = residual_sd)\n\n# Combine into a single \"long\" data frame, which is required for ANOVA\nsimulated_data &lt;- data.frame(\n  dv = c(group_A_data, group_B_data, group_C_data),\n  group = factor(rep(c(\"Group A\", \"Group B\", \"Group C\"), each = n_per_group))\n)\n\n\n\n\nCode\nsimulated_data\n\n\n          dv   group\n1   4.537724 Group A\n2   3.144068 Group A\n3   5.125589 Group A\n4   2.024140 Group A\n5   4.532226 Group A\n6   4.898875 Group A\n7   5.561317 Group A\n8   2.355461 Group A\n9   3.151854 Group A\n10  2.452468 Group A\n11  3.847093 Group A\n12  4.616903 Group A\n13  3.482458 Group A\n14  3.620567 Group A\n15  4.418366 Group A\n16  3.295400 Group A\n17  2.627650 Group A\n18  4.294438 Group A\n19  3.876405 Group A\n20  4.756450 Group A\n21  4.500845 Group A\n22  4.969920 Group A\n23  3.646166 Group A\n24  4.707435 Group A\n25  2.111729 Group A\n26  4.695995 Group A\n27  2.764185 Group A\n28  4.805430 Group A\n29  4.070132 Group A\n30  3.595858 Group A\n31  4.249095 Group A\n32  5.802326 Group A\n33  4.502903 Group A\n34  2.639328 Group A\n35  2.451961 Group A\n36  3.326512 Group A\n37  4.431850 Group A\n38  4.664329 Group A\n39  2.969846 Group A\n40  4.389651 Group A\n41  2.756397 Group A\n42  4.694120 Group A\n43  3.247227 Group A\n44  2.807459 Group A\n45  3.447210 Group A\n46  3.078723 Group A\n47  3.797052 Group A\n48  3.715919 Group A\n49  3.268710 Group A\n50  4.401787 Group A\n51  3.492348 Group B\n52  3.602998 Group B\n53  4.276491 Group B\n54  4.836975 Group B\n55  5.759684 Group B\n56  5.857141 Group B\n57  5.293927 Group B\n58  6.807959 Group B\n59  4.053286 Group B\n60  4.318964 Group B\n61  5.683130 Group B\n62  4.947100 Group B\n63  6.061933 Group B\n64  4.650660 Group B\n65  3.631385 Group B\n66  5.134218 Group B\n67  4.023368 Group B\n68  3.984087 Group B\n69  5.178696 Group B\n70  5.620469 Group B\n71  5.121022 Group B\n72  5.892023 Group B\n73  4.323403 Group B\n74  4.961581 Group B\n75  5.606014 Group B\n76  4.771041 Group B\n77  6.776684 Group B\n78  4.930663 Group B\n79  4.511946 Group B\n80  5.088721 Group B\n81  5.008981 Group B\n82  3.077356 Group B\n83  4.031263 Group B\n84  4.658444 Group B\n85  7.041627 Group B\n86  5.293744 Group B\n87  5.242325 Group B\n88  5.343468 Group B\n89  5.767449 Group B\n90  4.356754 Group B\n91  3.394279 Group B\n92  5.031723 Group B\n93  5.919665 Group B\n94  5.879640 Group B\n95  6.665500 Group B\n96  4.213922 Group B\n97  4.738492 Group B\n98  4.021327 Group B\n99  5.060806 Group B\n100 3.496175 Group B\n101 5.114629 Group C\n102 5.959566 Group C\n103 4.615152 Group C\n104 6.507678 Group C\n105 7.632644 Group C\n106 7.963552 Group C\n107 7.287843 Group C\n108 4.598154 Group C\n109 6.129571 Group C\n110 3.753375 Group C\n111 5.420896 Group C\n112 5.463473 Group C\n113 3.973545 Group C\n114 7.528606 Group C\n115 7.870942 Group C\n116 6.336781 Group C\n117 8.336787 Group C\n118 5.806006 Group C\n119 7.126016 Group C\n120 5.010658 Group C\n121 6.262966 Group C\n122 5.136064 Group C\n123 5.896559 Group C\n124 6.170695 Group C\n125 5.522765 Group C\n126 6.521205 Group C\n127 6.307725 Group C\n128 6.178702 Group C\n129 5.235294 Group C\n130 3.796200 Group C\n131 6.988865 Group C\n132 7.478800 Group C\n133 6.116675 Group C\n134 6.051580 Group C\n135 6.025808 Group C\n136 6.343767 Group C\n137 5.617322 Group C\n138 6.860311 Group C\n139 6.496034 Group C\n140 5.688063 Group C\n141 5.841789 Group C\n142 4.600089 Group C\n143 4.998930 Group C\n144 5.310425 Group C\n145 5.260099 Group C\n146 5.000002 Group C\n147 6.115574 Group C\n148 5.162604 Group C\n149 7.277799 Group C\n150 5.805987 Group C"
+  },
+  {
+    "objectID": "anova_11.html#why-2-for-3-groups",
+    "href": "anova_11.html#why-2-for-3-groups",
+    "title": "ANOVA",
+    "section": "Why 2 for 3 groups?",
+    "text": "Why 2 for 3 groups?\n\nIf you have 3 means, how can you represent that in regression model?\nk(number of levels/groups) - 1\nIf you have an intercept, you have an additional mean so technically you are modeling 4 means if you try to model 3 coefficients, one for each group, plus an intercept."
+  },
+  {
+    "objectID": "anova_11.html#reference-group",
+    "href": "anova_11.html#reference-group",
+    "title": "ANOVA",
+    "section": "Reference group",
+    "text": "Reference group\n\nWhat ever is coded zero for both coeffiecents, will be the intercept\n\n\ncontrasts(simulated_data$group)\n\n        Group B Group C\nGroup A       0       0\nGroup B       1       0\nGroup C       0       1\n\n\n\n\n\nGroup\n\\(b_1\\)\n\\(b_2\\)\n\n\n\n\nGroup A\n0\n0\n\n\nGroup B\n1\n0\n\n\nGroup C\n0\n1"
+  },
+  {
+    "objectID": "anova_11.html#if-we-omit-an-intercept",
+    "href": "anova_11.html#if-we-omit-an-intercept",
+    "title": "ANOVA",
+    "section": "If we omit an intercept",
+    "text": "If we omit an intercept\n\nmod.2 &lt;- lm(dv ~ 0 + group, simulated_data)\nsummary(mod.2)\n\n\nCall:\nlm(formula = dv ~ 0 + group, data = simulated_data)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-2.21672 -0.70213  0.01863  0.67980  2.36670 \n\nCoefficients:\n             Estimate Std. Error t value Pr(&gt;|t|)    \ngroupGroup A   3.8226     0.1383   27.64   &lt;2e-16 ***\ngroupGroup B   4.9488     0.1383   35.79   &lt;2e-16 ***\ngroupGroup C   5.9701     0.1383   43.17   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.9779 on 147 degrees of freedom\nMultiple R-squared:  0.9638,    Adjusted R-squared:  0.963 \nF-statistic:  1303 on 3 and 147 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "anova_11.html#coding-contrasts-are-up-to-you",
+    "href": "anova_11.html#coding-contrasts-are-up-to-you",
+    "title": "ANOVA",
+    "section": "coding contrasts are up to you",
+    "text": "coding contrasts are up to you\n\ndeviation/efffect/sum coding\n\n\ncontr.sum(3)\n\n  [,1] [,2]\n1    1    0\n2    0    1\n3   -1   -1\n\ncontrasts(simulated_data$group) &lt;- contr.sum(3)\ncontrasts(simulated_data$group)\n\n        [,1] [,2]\nGroup A    1    0\nGroup B    0    1\nGroup C   -1   -1"
+  },
+  {
+    "objectID": "anova_11.html#deviationefffectsum-coding",
+    "href": "anova_11.html#deviationefffectsum-coding",
+    "title": "ANOVA",
+    "section": "deviation/efffect/sum coding",
+    "text": "deviation/efffect/sum coding\n\nUses -1, 1, and zeros\nCoefs compare to a grand mean\nOften used for ANOVA models\nIntercept is now the grand mean rather than reference group mean\n\nMean(A) = β₀ + β₁\nMean(B) = β₀ + β₂\nMean(C) = β₀ - β₁ - β₂"
+  },
+  {
+    "objectID": "anova_11.html#anova-dummy-coding",
+    "href": "anova_11.html#anova-dummy-coding",
+    "title": "ANOVA",
+    "section": "ANOVA Dummy coding",
+    "text": "ANOVA Dummy coding\n\nanova(mod.1)\n\nAnalysis of Variance Table\n\nResponse: dv\n           Df Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup       2 115.39  57.693  60.334 &lt; 2.2e-16 ***\nResiduals 147 140.56   0.956                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+  },
+  {
+    "objectID": "anova_11.html#degrees-of-freedom",
+    "href": "anova_11.html#degrees-of-freedom",
+    "title": "ANOVA",
+    "section": "degrees of freedom",
+    "text": "degrees of freedom\nMS Regression: p\nMS Error: n - p - 1"
+  },
+  {
+    "objectID": "anova_11.html#what-does-the-f-test",
+    "href": "anova_11.html#what-does-the-f-test",
+    "title": "ANOVA",
+    "section": "What does the F test?",
+    "text": "What does the F test?\n\\[H_0: \\mu_1 = \\mu_2 = \\mu_3 \\] \\[H_1: \\text{One group (or more) differs from another} \\]"
+  },
+  {
+    "objectID": "anova_11.html#why-not-run-many-t-tests",
+    "href": "anova_11.html#why-not-run-many-t-tests",
+    "title": "ANOVA",
+    "section": "Why not run many t-tests?",
+    "text": "Why not run many t-tests?\n\nparsimony\npooling\np-value inflation (increase family wise error rate)"
+  },
+  {
+    "objectID": "anova_11.html#family-wise-error-rate",
+    "href": "anova_11.html#family-wise-error-rate",
+    "title": "ANOVA",
+    "section": "family wise error rate",
+    "text": "family wise error rate\n\nThe probability that one or more of your “family” of multiple tests is false\n\nP(making at least 1 error in m tests) = \\(1 - (1-\\alpha)^m\\)\n\\(1-(1-.05)^6\\) = .265\n\nANOVA omnibus test “helps” control this"
+  },
+  {
+    "objectID": "anova_11.html#anova-effect-coding",
+    "href": "anova_11.html#anova-effect-coding",
+    "title": "ANOVA",
+    "section": "ANOVA effect coding",
+    "text": "ANOVA effect coding\n\nanova(mod.3)\n\nAnalysis of Variance Table\n\nResponse: dv\n           Df Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup       2 115.39  57.693  60.334 &lt; 2.2e-16 ***\nResiduals 147 140.56   0.956                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+  },
+  {
+    "objectID": "anova_11.html#compare-with-anova-dummy-coding",
+    "href": "anova_11.html#compare-with-anova-dummy-coding",
+    "title": "ANOVA",
+    "section": "Compare with ANOVA dummy coding",
+    "text": "Compare with ANOVA dummy coding\n\nanova(mod.1)\n\nAnalysis of Variance Table\n\nResponse: dv\n           Df Sum Sq Mean Sq F value    Pr(&gt;F)    \ngroup       2 115.39  57.693  60.334 &lt; 2.2e-16 ***\nResiduals 147 140.56   0.956                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+  },
+  {
+    "objectID": "anova_11.html#more-terminology",
+    "href": "anova_11.html#more-terminology",
+    "title": "ANOVA",
+    "section": "More terminology",
+    "text": "More terminology\n\nIn ANOVA speak, people often use MS between and MS within\nThese are exactly the same as MS model / MS regression and MS error / MS residual."
+  },
+  {
+    "objectID": "anova_11.html#can-you-visualize-anova",
+    "href": "anova_11.html#can-you-visualize-anova",
+    "title": "ANOVA",
+    "section": "Can you visualize ANOVA?",
+    "text": "Can you visualize ANOVA?\n\nWhat does MSregression represent?\nWhat does MSerror represent?"
+  },
+  {
+    "objectID": "anova_11.html#please-dont",
+    "href": "anova_11.html#please-dont",
+    "title": "ANOVA",
+    "section": "Please don’t",
+    "text": "Please don’t\n\naov.1 &lt;- aov(dv ~ group, simulated_data)\nsummary(aov.1)\n\n             Df Sum Sq Mean Sq F value Pr(&gt;F)    \ngroup         2  115.4   57.69   60.33 &lt;2e-16 ***\nResiduals   147  140.6    0.96                   \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+  },
+  {
+    "objectID": "anova_11.html#predictions-revisited",
+    "href": "anova_11.html#predictions-revisited",
+    "title": "ANOVA",
+    "section": "Predictions revisited",
+    "text": "Predictions revisited\n\nAs with all models, we want to learn from what we built.\nOften, this means we are going to create predictions from the model.\n\n\\[\\hat{Y_i} = \\beta_0 + \\beta_1 D1_i + \\beta_2 D2_i \\]"
+  },
+  {
+    "objectID": "anova_11.html#em-means",
+    "href": "anova_11.html#em-means",
+    "title": "ANOVA",
+    "section": "EM means",
+    "text": "EM means\n\nEstimated marginal means i.e., predicted values\nUseful for complex models where we want to average over (marginalize) some other variables e.g., what is the predicted value for a 74 year old from Missouri who identifies as female?\nUsed for figures, interpreting models, and post hoc comparisons"
+  },
+  {
+    "objectID": "anova_11.html#post-hoc-tests",
+    "href": "anova_11.html#post-hoc-tests",
+    "title": "ANOVA",
+    "section": "post-hoc tests",
+    "text": "post-hoc tests\n\nDoes our reference group (in dummy coding) differ from other groups?\nDoes our “left out” group (in effect/sum coding) differ from the grand mean?"
+  },
+  {
+    "objectID": "anova_11.html#same-predicted-means-for-effect-coding",
+    "href": "anova_11.html#same-predicted-means-for-effect-coding",
+    "title": "ANOVA",
+    "section": "Same predicted means for effect coding",
+    "text": "Same predicted means for effect coding\n\nemmeans(mod.3, ~group)\n\n group   emmean    SE  df lower.CL upper.CL\n Group A   3.82 0.138 147     3.55     4.10\n Group B   4.95 0.138 147     4.68     5.22\n Group C   5.97 0.138 147     5.70     6.24\n\nConfidence level used: 0.95"
+  },
+  {
+    "objectID": "anova_11.html#give-me-cis",
+    "href": "anova_11.html#give-me-cis",
+    "title": "ANOVA",
+    "section": "Give me CIs",
+    "text": "Give me CIs\n\npairs(m1.emm) |&gt; \n     confint()\n\n contrast          estimate    SE  df lower.CL upper.CL\n Group A - Group B    -1.13 0.196 147    -1.59   -0.663\n Group A - Group C    -2.15 0.196 147    -2.61   -1.684\n Group B - Group C    -1.02 0.196 147    -1.48   -0.558\n\nConfidence level used: 0.95 \nConf-level adjustment: tukey method for comparing a family of 3 estimates"
+  },
+  {
+    "objectID": "anova_11.html#what-is-tukeys-method",
+    "href": "anova_11.html#what-is-tukeys-method",
+    "title": "ANOVA",
+    "section": "What is Tukey’s method?",
+    "text": "What is Tukey’s method?\n\nUsed for pairwise comparisons\n\n\\[q = \\frac{\\text{Mean 1 - Mean 2}}{\\sqrt{\\frac{\\text{MS Within}}{\\text{N per group}}}} \\\\\n\\text{Mean 1 - Mean 2} = q\\sqrt{\\frac{\\text{MS Within}}{\\text{N per group}}}\\]\n\nAsks: What is the minimal difference between two means needed to declare something significantly different?"
+  },
+  {
+    "objectID": "anova_11.html#false-discovery-rate-fdr",
+    "href": "anova_11.html#false-discovery-rate-fdr",
+    "title": "ANOVA",
+    "section": "False Discovery Rate (FDR)",
+    "text": "False Discovery Rate (FDR)\n\npairs(m1.emm, adjust = \"fdr\") \n\n contrast          estimate    SE  df t.ratio p.value\n Group A - Group B    -1.13 0.196 147  -5.759  &lt;.0001\n Group A - Group C    -2.15 0.196 147 -10.981  &lt;.0001\n Group B - Group C    -1.02 0.196 147  -5.222  &lt;.0001\n\nP value adjustment: fdr method for 3 tests"
+  },
+  {
+    "objectID": "anova_11.html#adjusting-the-alpha-or-adjusting-the-p-value",
+    "href": "anova_11.html#adjusting-the-alpha-or-adjusting-the-p-value",
+    "title": "ANOVA",
+    "section": "adjusting the alpha or adjusting the p-value",
+    "text": "adjusting the alpha or adjusting the p-value\n\nOld school way is to adjust an alpha eg i now need to have my p-value below .023 to be considered significant. P-value was the same.\nNew way is to adjust the p-value (sometimes called q-values). Easier to do this. Technically the same."
+  },
+  {
+    "objectID": "anova_11.html#rant",
+    "href": "anova_11.html#rant",
+    "title": "ANOVA",
+    "section": "Rant",
+    "text": "Rant\n\nI hate this new way, even though technically the same.\nIt is not interpreted as a probability from a standard null, and thus it is one more source of confusion of what a p-value is.\nFDR comes from multiple distributions (as it depends on the other p-values observed), Tukey comes from a different null (Studentized Range Distribution (q-distribution)).\nIf I declare every test with a q-value of 0.05 or less to be ‘significant,’ I can expect that about 5% of the tests on this list of ‘discoveries’ are actually false positives. But any individual FDR q-value is difficult to impossible to interpret"
+  },
+  {
+    "objectID": "anova_11.html#p-value-correction-impacts-cis",
+    "href": "anova_11.html#p-value-correction-impacts-cis",
+    "title": "ANOVA",
+    "section": "p-value correction impacts CIs",
+    "text": "p-value correction impacts CIs\n\npairs(m1.emm, adjust = \"fdr\") |&gt; confint()\n\n contrast          estimate    SE  df lower.CL upper.CL\n Group A - Group B    -1.13 0.196 147    -1.60   -0.653\n Group A - Group C    -2.15 0.196 147    -2.62   -1.674\n Group B - Group C    -1.02 0.196 147    -1.49   -0.548\n\nConfidence level used: 0.95 \nConf-level adjustment: bonferroni method for 3 estimates"
+  },
+  {
+    "objectID": "anova_11.html#p-value-correction-impacts-cis-1",
+    "href": "anova_11.html#p-value-correction-impacts-cis-1",
+    "title": "ANOVA",
+    "section": "p-value correction impacts CIs",
+    "text": "p-value correction impacts CIs\n\npairs(m1.emm) |&gt; confint()\n\n contrast          estimate    SE  df lower.CL upper.CL\n Group A - Group B    -1.13 0.196 147    -1.59   -0.663\n Group A - Group C    -2.15 0.196 147    -2.61   -1.684\n Group B - Group C    -1.02 0.196 147    -1.48   -0.558\n\nConfidence level used: 0.95 \nConf-level adjustment: tukey method for comparing a family of 3 estimates \n\n\n\npairs(m1.emm, adjust = \"none\") |&gt; confint()\n\n contrast          estimate    SE  df lower.CL upper.CL\n Group A - Group B    -1.13 0.196 147    -1.51   -0.740\n Group A - Group C    -2.15 0.196 147    -2.53   -1.761\n Group B - Group C    -1.02 0.196 147    -1.41   -0.635\n\nConfidence level used: 0.95"
+  },
+  {
+    "objectID": "anova_11.html#graphing",
+    "href": "anova_11.html#graphing",
+    "title": "ANOVA",
+    "section": "Graphing",
+    "text": "Graphing\n\nplot(m1.emm)"
   }
 ]

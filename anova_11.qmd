@@ -1,0 +1,454 @@
+---
+title: "ANOVA"
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+
+## This time
+
+- Bring it together; glm as a functional tool
+ 
+- comparing two or more means ie ANOVA
+
+## two means (t-test)
+
+$$Y_i \sim \mathcal{N}(\mu, \sigma)$$
+
+$$\mu_i \ = \beta_0 + \beta_1 X_i$$
+
+$$Y_i = \beta_0 + \beta_1 X_i + e_{i}$$
+
+## two means
+
+$$t = \frac{\bar{X}_1-\bar{X}_2}{{\sigma}_p * \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}}$$
+- difference / se(diff) aka se(regression)
+- difference / pooled SD * ~N aka sigma * ~N
+- standard error of group mean = sigma / sqrt(N)
+
+
+## dummy/effect coding
+
+- Given nominal variables we have to assign numbers to each group
+- We do so based on the hypothesis we want to test
+- Regardless of how we code it does not impact the overall model fit
+
+
+## more than 2 means
+
+- Same idea extends to when we have more than two means
+- This is often called "anova" (analysis of varince) but referring to anova vs t-test vs regression makes it appear these are all different rather than being the same
+
+
+## more than 2 means
+
+- Why is it called analysis of "VARIANCE" when we are interested in more than 2 means?
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
+
+- And we will often use ANOVA tables (which looks at this variance decomposition) rather than regression coefficients. 
+
+## Example
+
+```{r}
+#| code-fold: true
+
+library(ggplot2)
+library(dplyr)
+library(tibble) 
+
+# --- 1. Set Simulation Parameters ---
+
+set.seed(74) # Makes your simulation reproducible
+
+n_per_group <- 50  # 50 participants per group
+residual_sd <- 1.0 # This is the within-group SD
+
+# Define the true means for our three groups.
+# We'll set them apart to ensure the ANOVA finds a significant effect.
+
+mean_group_A <- 4.0
+mean_group_B <- 5.0
+mean_group_C <- 6.0
+
+# --- 2. Generate the Data ---
+
+# Create the data for each group from a normal distribution
+
+group_A_data <- rnorm(n_per_group, mean = mean_group_A, sd = residual_sd)
+group_B_data <- rnorm(n_per_group, mean = mean_group_B, sd = residual_sd)
+group_C_data <- rnorm(n_per_group, mean = mean_group_C, sd = residual_sd)
+
+# Combine into a single "long" data frame, which is required for ANOVA
+simulated_data <- data.frame(
+  dv = c(group_A_data, group_B_data, group_C_data),
+  group = factor(rep(c("Group A", "Group B", "Group C"), each = n_per_group))
+)
+
+```
+
+
+```{r}
+#| code-fold: true
+simulated_data
+```
+
+---------------
+
+
+```{r}
+#| code-fold: true
+ggplot(simulated_data, aes(x = group, y = dv, fill = group)) +
+  geom_violin(trim = FALSE, alpha = 0.6) +
+  geom_jitter(width = 0.15, alpha = 0.4, color = "black") +
+  geom_boxplot(width=0.1) +
+  labs(
+    y = "Happiness",
+    x = "Group"
+  ) +
+  theme_minimal(base_size = 14) +
+  scale_fill_brewer(palette = "Set2") +
+  guides(fill = "none") 
+```
+
+
+--------------
+
+```{r}
+#| code-fold: true
+library(ggdist)
+ggplot(simulated_data, aes(x = group, y = dv, fill = group)) +
+stat_eye(alpha = .6)+ 
+  geom_jitter(width = 0.15, alpha = 0.4, color = "black") +
+  labs(
+    y = "Happiness",
+    x = "Group"
+  ) +
+  theme_minimal(base_size = 14) +
+  scale_fill_brewer(palette = "Set2") +
+  guides(fill = "none") 
+```
+
+
+--------------
+
+```{r}
+mod.1 <- lm(dv ~ group, simulated_data)
+summary(mod.1)
+```
+
+-----------------------
+
+
+$$Y_i = \beta_0 + \beta_1 D1_i + \beta_2 D2_i + e_{i}$$
+
+
+
+## Why 2 for 3 groups? 
+
+- If you have 3 means, how can you represent that in regression model? 
+
+- k(number of levels/groups) - 1
+
+- If you have an intercept, you have an additional mean so technically you are modeling 4 means if you try to model 3 coefficients, one for each group, plus an intercept.
+
+
+## Reference group
+
+- What ever is coded zero for both coeffiecents, will be the intercept
+
+
+```{r}
+contrasts(simulated_data$group)
+```
+
+| Group  | $b_1$ | $b_2$ | 
+|---------|:-----|------:|
+| Group A | 0   |    0 |  
+| Group B   | 1  |   0 |  
+| Group C   | 0  |     1 |  
+
+
+
+## If we omit an intercept
+
+
+```{r}
+mod.2 <- lm(dv ~ 0 + group, simulated_data)
+summary(mod.2)
+```
+
+----------
+
+- Creates correct coefficients, but it is harder to evaluate. 
+
+- R2 and F is off. Hard to learn from this model. 
+
+- This coding is done with some machine learning models that do not have intercepts (i.e. one hot encoding)
+
+
+## coding contrasts are up to you
+
+- deviation/efffect/sum coding
+```{r}
+contr.sum(3)
+contrasts(simulated_data$group) <- contr.sum(3)
+contrasts(simulated_data$group)
+```
+
+
+----------------
+
+```{r}
+mod.3 <- lm(dv ~ 1 + group, simulated_data)
+summary(mod.3)
+```
+
+
+## deviation/efffect/sum coding
+
+- Uses -1, 1, and zeros
+- Coefs compare to a grand mean
+- Often used for ANOVA models
+- Intercept is now the grand mean rather than reference group mean
+
+Mean(A) = β₀ + β₁
+
+Mean(B) = β₀ + β₂
+
+Mean(C) = β₀ - β₁ - β₂ 
+
+
+
+## ANOVA Dummy coding 
+
+```{r}
+anova(mod.1)
+```
+
+## degrees of freedom
+
+MS Regression: p 
+
+MS Error: n - p - 1
+
+
+## What does the F test? 
+
+$$H_0: \mu_1 = \mu_2 = \mu_3 $$
+$$H_1: \text{One group (or more) differs from another} $$
+
+## Why not run many t-tests?
+
+- parsimony
+- pooling
+- p-value inflation (increase family wise error rate)
+
+
+## family wise error rate
+
+- The probability that one or more of your "family" of multiple tests is false
+
+P(making at least 1 error in m tests) = $1 - (1-\alpha)^m$
+
+$1-(1-.05)^6$ = .265
+
+- ANOVA omnibus test "helps" control this
+
+--------------------
+
+- Two step approach to FWER: omnibus + post hoc comparisons
+
+- It only controls the family-wise error rate in a weak sense. 
+- It guarantees that you have only a 5% chance of making any error if the null hypothesis is 100% true (i.e., A=B=C). 
+- It does not control the error rate for the specific post hoc pairwise comparisons
+- If you are interested in only some subset of possible comparisons eg Ho: A = C, then the omnibus is not useful. 
+- Thus many say omnibus test is mostly useless, and one should just focus on post-hoc comparisons. 
+
+
+## ANOVA effect coding
+
+```{r}
+anova(mod.3)
+```
+
+## Compare with ANOVA dummy coding
+
+```{r}
+anova(mod.1)
+```
+
+## More terminology
+
+- In ANOVA speak, people often use MS between and MS within 
+
+- These are exactly the same as MS model / MS regression and MS error / MS residual. 
+
+## Can you visualize ANOVA? 
+
+- What does MSregression represent? 
+
+- What does MSerror represent? 
+
+
+
+## Please don't
+
+```{r}
+aov.1 <- aov(dv ~ group, simulated_data)
+summary(aov.1)
+```
+
+
+
+## Predictions revisited
+
+- As with all models, we want to learn from what we built.
+
+- Often, this means we are going to create predictions from the model.
+
+$$\hat{Y_i} = \beta_0 + \beta_1 D1_i + \beta_2 D2_i $$
+
+------------------
+
+```{r}
+library(broom)
+m1_aug<- augment(mod.1)
+m1_aug
+```
+
+## EM means
+
+- Estimated marginal means i.e., predicted values
+
+- Useful for complex models where we want to average over (marginalize) some other variables e.g., what is the predicted value for a 74 year old from Missouri who identifies as female?
+
+- Used for figures, interpreting models, and post hoc comparisons
+
+
+## post-hoc tests
+
+- Does our reference group (in dummy coding) differ from other groups? 
+
+- Does our "left out" group (in effect/sum coding) differ from the grand mean? 
+
+
+-----------
+
+```{r}
+library(emmeans)
+m1.emm<- emmeans(mod.1, ~group)
+m1.emm
+```
+
+## Same predicted means for effect coding
+
+```{r}
+emmeans(mod.3, ~group)
+```
+
+
+
+---------
+
+```{r}
+pairs(m1.emm)
+```
+
+## Give me CIs
+
+```{r}
+pairs(m1.emm) |> 
+     confint()
+```
+
+## What is Tukey's method? 
+
+- Used for pairwise comparisons
+
+$$q = \frac{\text{Mean 1 - Mean 2}}{\sqrt{\frac{\text{MS Within}}{\text{N per group}}}} \\
+\text{Mean 1 - Mean 2} = q\sqrt{\frac{\text{MS Within}}{\text{N per group}}}$$
+
+- Asks: What is the minimal difference between two means needed to declare something significantly different?
+
+
+## False Discovery Rate (FDR)
+
+```{r}
+pairs(m1.emm, adjust = "fdr") 
+```
+
+## adjusting the alpha or adjusting the p-value
+
+- Old school way is to adjust an alpha eg i now need to have my p-value below .023 to be considered significant. P-value was the same. 
+
+- New way is to adjust the p-value (sometimes called q-values). Easier to do this. Technically the same.  
+
+## Rant
+
+- I hate this new way, even though technically the same. 
+
+- It is not interpreted as a probability from a standard null, and thus it is one more source of confusion of what a p-value is. 
+
+- FDR comes from multiple distributions (as it depends on the other p-values observed), Tukey comes from a different null (Studentized Range Distribution (q-distribution)). 
+
+- If I declare every test with a q-value of 0.05 or less to be 'significant,' I can expect that about 5% of the tests on this list of 'discoveries' are actually false positives. But any individual FDR q-value is difficult to impossible to interpret
+
+## p-value correction impacts CIs
+
+
+```{r}
+pairs(m1.emm, adjust = "fdr") |> confint()
+```
+
+## p-value correction impacts CIs
+
+```{r}
+pairs(m1.emm) |> confint()
+```
+
+
+```{r}
+pairs(m1.emm, adjust = "none") |> confint()
+```
+
+-----------
+
+Cohen's d. 
+
+```{r}
+eff_size(m1.emm, sigma = sigma(mod.1), edf = 147)
+```
+
+
+## Graphing
+
+```{r}
+plot(m1.emm)
+```
+
+--------
+
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+dat.em <- as.data.frame(m1.emm) 
+simulated_data |>   
+ggplot(aes(x = group, y = dv)) + 
+  geom_violin()+
+  geom_point(position = position_jitter())+
+  geom_errorbar(data = dat.em, aes(x = group, y = emmean,ymin = lower.CL, ymax = upper.CL), width = 0.2)
+  
+  
+```
+
+
+

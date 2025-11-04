@@ -22,3 +22,5 @@ editor: source
 9. [Power](power_9.qmd)
 
 10. [Assumptions](Assumptions_10.qmd)
+
+11. [ANOVA](anova_11.qmd)
