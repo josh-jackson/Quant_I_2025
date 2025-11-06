@@ -24,3 +24,5 @@ editor: source
 10. [Assumptions](Assumptions_10.qmd)
 
 11. [ANOVA](anova_11.qmd)
+
+12. [Factorial ANOVA](factorial_12.qmd)

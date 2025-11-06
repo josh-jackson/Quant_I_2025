@@ -1,0 +1,421 @@
+---
+title: "factorial anova"
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+
+## This time
+
+- More than predictor! 
+- Two categorical predictors
+
+## nomenclature
+
+- Between subjects design 
+- Two-way
+- 3 Dose levels X 2 Treatment levels
+
+|        | Control  | Treatment | 
+|---------|-----|------|-------| 
+| Dose A |  $\hat{Y_{AC}}$   | $\hat{Y_{ATx}}$         |
+| Dose B |  $\hat{Y_{BC}}$   | $\hat{Y_{BTx}}$         | 
+| Dose C |  $\hat{Y_{CC}}$   |  $\hat{Y_{CTx}}$        | 
+
+
+## Cell vs Marginal Means
+
+|        | Control  | Treatment | Marginal Mean|
+|---------|-----|------|-------| 
+| Dose A |  $\hat{Y_{AC}}$   | $\hat{Y_{ATx}}$         |  A MM | 
+| Dose B |  $\hat{Y_{BC}}$   | $\hat{Y_{BTx}}$         | B MM | 
+| Dose C |  $\hat{Y_{CC}}$   |  $\hat{Y_{CTx}}$        | C MM | 
+| Marginal Mean |Control MM | Tx MM|
+  
+## Why two + variables? 
+
+- Efficiency
+- New questions like dependencies (ie interactions)
+
+
+## Variance decomposition one way
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\hat{Y_i} -\bar{Y})^2 + \sum(Y_i - \hat{Y_i})^2$$
+
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\bar{\text{Group}_k} -\text{Grand mean})^2$$
+
+$$+ \sum(Y_{ik} - \bar{\text{Group}_k})^2$$
+
+## Variance decomposition two way?
+
+- What does the model look like for a two way anova? 
+
+------------------
+
+```{r}
+#| code-fold: true
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(tibble) # For a cleaner summary print
+
+# --- 1. Set Simulation Parameters ---
+
+set.seed(123) # Makes your simulation reproducible
+
+# Design: 3 (Dose) x 2 (Condition)
+n_per_cell <- 50 # 300 total participants / 6 cells = 50 per cell
+
+# Set the standard deviation for the "noise" or error.
+# A smaller SD makes the effects easier to detect (i.e., "significant").
+residual_sd <- 2.0
+
+# --- 2. Define the "True" Population Means ---
+# We will set the 6 cell means to create a crossover interaction AND main effects.
+#
+# Interaction: The effect of Condition will be different at each level of Dose.
+#   - For Dose A, the mean goes UP (+4)
+#   - For Dose B, the mean goes UP (+2)
+#   - For Dose C, the mean is FLAT (0)
+#   This non-parallelism creates the interaction.
+#
+# We also set them so the marginal means are different.
+mean_A_Control <- 6
+mean_A_TX <- 10
+
+mean_B_Control <- 9
+mean_B_TX <- 11
+
+mean_C_Control <- 12
+mean_C_TX <- 12
+
+# --- 3. Generate the Data ---
+
+# Create the data for each of the 6 cells
+data_A_Control <- rnorm(n_per_cell, mean = mean_A_Control, sd = residual_sd)
+data_A_TX <- rnorm(n_per_cell, mean = mean_A_TX, sd = residual_sd)
+data_B_Control <- rnorm(n_per_cell, mean = mean_B_Control, sd = residual_sd)
+data_B_TX <- rnorm(n_per_cell, mean = mean_B_TX, sd = residual_sd)
+data_C_Control <- rnorm(n_per_cell, mean = mean_C_Control, sd = residual_sd)
+data_C_TX <- rnorm(n_per_cell, mean = mean_C_TX, sd = residual_sd)
+
+# Combine into a single "long" data frame
+simulated_data <- data.frame(
+  dv = c(data_A_Control, data_A_TX, data_B_Control, data_B_TX, data_C_Control, data_C_TX),
+  Dose = factor(rep(c("A", "A", "B", "B", "C", "C"), each = n_per_cell)),
+  Condition = factor(rep(c("Control", "TX", "Control", "TX", "Control", "TX"), each = n_per_cell))
+)
+
+simulated_data
+
+```
+
+-----------------
+
+```{r}
+ simulated_data |> 
+  group_by(Dose, Condition) |> 
+  summarise(Mean = mean(dv), .groups = 'drop')
+
+```
+
+---------
+
+```{r}
+simulated_data %>%
+  group_by(Dose) %>%
+  summarise(Marginal_Mean = mean(dv), .groups = 'drop')
+```
+
+
+
+```{r}
+simulated_data %>%
+  group_by(Condition) %>%
+  summarise(Marginal_Mean = mean(dv), .groups = 'drop')
+```
+
+----------
+
+```{r}
+#| code-fold: true
+ simulated_data |> 
+  group_by(Dose, Condition) |> 
+  summarise(Mean = mean(dv), .groups = 'drop') |> 
+ggplot(aes(x = Condition, y = Mean, color = Dose, group = Dose)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  labs(
+    title = "Cell means",
+    y = "DV",
+    x = "Condition",
+    color = "Dose"
+  ) +
+  theme_minimal(base_size = 14)
+
+```
+
+
+------------------
+
+$$Y_i = \beta_0 + \beta_1 \text{Dose1}_i + \beta_2 \text{Dose2}_i +  \beta_3 \text{Condition}_{i}$$
+
+
+-------------
+
+```{r}
+fit.1 <- lm(dv ~ Dose + Condition, simulated_data)
+summary(fit.1)
+```
+
+------------
+
+```{r}
+anova(fit.1)
+```
+
+## Sums of squares decomposition mk2
+
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\bar{\text{Dose}_k} -\text{Dose G.M.})^2 +$$
+$$\sum (\bar{\text{Condition}_j} -\text{Condition G.M.})^2 + \sum(Y_{ikj} -  \hat{Y_{jk}})^2$$
+
+Where $\hat{Y_{jk}}$ = Grand mean + Marginal Effect of Dose + Marginal effect of Condition.  
+
+------------
+
+```{r}
+#| code-fold: true
+grand_mean <- mean(simulated_data$dv)
+
+dose_means <- simulated_data |> 
+  group_by(Dose) |> 
+  summarise(ME_dose = mean(dv))
+
+condition_means <- simulated_data |> 
+  group_by(Condition) |> 
+  summarise(ME_condition = mean(dv))
+
+simulated_data |> 
+  left_join(dose_means, by = "Dose") |> 
+  left_join(condition_means, by = "Condition") |> 
+  mutate(GM = grand_mean) |> 
+  mutate(
+    Effect_Dose = ME_dose - GM,
+    Effect_Condition = ME_condition - GM) |> 
+  mutate(Predicted_Value = GM + Effect_Dose + Effect_Condition)  |> 
+  mutate(Residual = dv - Predicted_Value) |> 
+  mutate(Squared_Residual = Residual^2) |> 
+ summarise(
+  SS_Dose_Manual = sum(Effect_Dose^2), # SS Dose
+  SS_Condition_Manual = sum(Effect_Condition^2), # SS Dose
+  SS_Within_Manual = sum(Squared_Residual)) # SS within
+```
+
+## Differences from one way anova 
+
+- What would SS dose be if we ran a one way without condition? 
+
+- What would SS residuals look like in this model? 
+
+- What would SS residual look like, relative to two factor model, if dose was a horrible predictor? 
+
+-------------
+
+```{r}
+fit.dose <- lm(dv~Dose, simulated_data)
+anova(fit.dose)
+```
+
+## Model comparison
+
+- What if I wanted to test a dose only model vs a two-way model with condition? 
+- The comparison between SS error is equal to: 
+
+
+
+
+---------
+
+```{r}
+anova(fit.dose, fit.1)
+```
+
+--------
+
+- The comparison between SS error is equal to: 
+  1. The difference between SS error Full (Dose and condition) vs reduced (Dose only)
+  2. The SS condition
+  3. F for SS condition
+  
+## Model Effect size
+
+- Coef of determination ($R^2$) is percent variance explains. 
+- Eta-squared ($\eta^2$) is the same, but historically used for ANOVA models
+
+```{r}
+library(effectsize)
+eta_squared(fit.dose)
+```
+
+
+---------
+
+```{r}
+summary(fit.dose)
+```
+
+-------------
+
+$\eta^2$ = $R^2$ = SSRegression/SStotal
+
+```{r}
+836.32/(836.32 + 1660.89)
+```
+
+
+```{r}
+anova(fit.dose)
+```
+
+
+-----------
+
+- Effect size for model works when we have a single factor with multiple levels. But what if I wanted the effect size for condition?  
+
+
+```{r}
+anova(fit.1)
+```
+
+
+## Partial Eta squared
+
+
+```{r}
+eta_squared(fit.1)
+```
+
+
+------------------
+ 
+$$R^2 \neq \eta_{dose}^2 + \eta_{condition}^2 $$
+
+```{r}
+summary(fit.1)
+```
+
+-------------------
+
+```{r}
+836.32 / (836.32 + 1213.71) # Dose
+```
+
+```{r}
+447.17 / (447.17 + 1213.71) # Condistion
+```
+
+```{r}
+anova(fit.1)
+```
+
+
+--------------
+
+- In the two factor model $\eta_{dose}^2$ = .41 whereas in the one-factor model the effect of dose was .33. 
+
+- Why? 
+
+
+## partial eta squared interpretation
+
+- Percent variance explained after accounting for other variables in the model. 
+- If you put a good predictor in the model that explains the DV well your other variables are going to increase their $\eta^2$
+
+- Thus $\eta^2$ is not one number and it depends on what else is in the model. If you do not know what else is in the model and how strongly it relates to the DV, then $\eta^2$ has little utility.  
+
+
+## Omega squared
+
+- A less biased estimate of proportion of variance explained. 
+
+$$\omega^2 = \frac{df_{effect} \times (MS_{effect} - MS_{error})}{SS_{total} +  MS_{error} }$$
+
+```{r}
+omega_squared(fit.1)
+```
+
+## Interactions
+
+- Thus far our intepretations of the model have been at the marginal means. 
+
+- If we think the difference between control and tx DEPENDS on the dose, then we have an interaction. 
+
+|        | Control  | Treatment | Marginal Mean|
+|---------|-----|------|-------| 
+| Dose A |  $\hat{Y_{AC}}$   | $\hat{Y_{ATx}}$         |  A MM | 
+| Dose B |  $\hat{Y_{BC}}$   | $\hat{Y_{BTx}}$         | B MM | 
+| Dose C |  $\hat{Y_{CC}}$   |  $\hat{Y_{CTx}}$        | C MM | 
+| Marginal Mean |Control MM | Tx MM|
+
+
+## Marginal vs Cell means
+
+- When no interactions are present, the focus is on marginal means
+
+- When interactions are modeled, the focus is on cell means (or how the main effects differ across levels of the other variable; simple main effects)
+
+
+
+## model formula
+
+You take each term and multiply it by the other factor. 
+
+$$Y_i = \beta_0 + \beta_1 \text{Dose1}_i + \beta_2 \text{Dose2}_i +  \beta_3 \text{Condition}_{i}$$
+
+$$Y_i = \beta_0 + \beta_1 \text{Dose1}_i + \beta_2 \text{Dose2}_i +  \beta_3 \text{Condition}_{i}$$ 
+$$ + \beta_4 \text{(Dose1*Condition)}_i + \beta_5 \text{(Dose2*Condition)}_i$$
+
+--------------
+
+|ID | Dose1 | Dose2 | Control | D1*C | D2*C|
+|---|-------|------ |-------| ------|-------| 
+| 1 |  0    | 0     |  0    |   0   |  0     | 
+| 2 |  1    | 0     | 0     |   0   |  0    |
+| 3 |  0    | 1     | 0     |   0   |  0    |    
+| 4 |  0    | 1     | 1     |   0   |  1      |
+| 5 |  0    | 0     | 1     |   0   |  0     |
+| 6 |  1    | 0     | 1     |   1   |  0     |
+
+
+
+## recreates our six cell means
+
+|        | Control | Treatment | Marginal Mean|
+|---------|-----|------|-------| 
+| Dose A |  $\hat{Y_{AC}}$   | $\hat{Y_{ATx}}$         |  A MM | 
+| Dose B |  $\hat{Y_{BC}}$   | $\hat{Y_{BTx}}$         | B MM | 
+| Dose C |  $\hat{Y_{CC}}$   |  $\hat{Y_{CTx}}$        | C MM | 
+| Marginal Mean |Control MM | Tx MM|
+
+
+
+-----------
+
+```{r}
+fit.2 <- lm(dv ~ Dose * Condition, simulated_data)
+summary(fit.2)
+```
+
+
+
+## Simple main effects
+
