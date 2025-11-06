@@ -2797,7 +2797,7 @@
     "href": "anova_11.html#more-than-2-means-1",
     "title": "ANOVA",
     "section": "more than 2 means",
-    "text": "more than 2 means\n\nWhy is it called analysis of “VARIANCE” when we are interested in more than 2 means?\n\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]\n\nAnd we will often use ANOVA tables (which looks at this variance decomposition) rather than regression coefficients."
+    "text": "more than 2 means\n\nWhy is it called analysis of “VARIANCE” when we are interested in more than 2 means?\n\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\hat{Y_i} -\\bar{Y})^2 + \\sum(Y_i - \\hat{Y_i})^2\\]\n\\[\\sum (Y_i - \\bar{Y})^2 = \\sum (\\bar{\\text{Group}_k} -\\text{Grand mean})^2 + \\sum(Y_{ik} - \\bar{\\text{Group}_k})^2\\]\n\nAnd we will often use ANOVA tables (which looks at this variance decomposition) rather than regression coefficients."
   },
   {
     "objectID": "anova_11.html#example",
