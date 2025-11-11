@@ -398,8 +398,8 @@
 <section id="this-time" class="slide level2">
 <h2>This time</h2>
 <ul>
-<li>More than predictor!</li>
-<li>Two categorical predictors</li>
+<li>More than one IV!</li>
+<li>Two+ categorical predictors</li>
 </ul>
 </section>
 <section id="nomenclature" class="slide level2">
@@ -984,7 +984,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <section id="sums-of-squares-decomposition-mk2" class="slide level2">
 <h2>Sums of squares decomposition mk2</h2>
 <p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\bar{\text{Dose}_k} -\text{Dose G.M.})^2 +\]</span> <span class="math display">\[\sum (\bar{\text{Condition}_j} -\text{Condition G.M.})^2 + \sum(Y_{ikj} -  \hat{Y_{jk}})^2\]</span></p>
-<p>Where <span class="math inline">\(\hat{Y_{jk}}\)</span> = Grand mean + Marginal Effect of Dose + Marginal effect of Condition.</p>
+<p>Where <span class="math inline">\(\hat{Y_{jk}}\)</span> = Grand mean + Marginal Effect of Dose + Marginal effect of Condition. (technically cell means; but without an interaction we only focus on MMs)</p>
 </section>
 <section class="slide level2">
 
@@ -1051,7 +1051,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <h2>Model comparison</h2>
 <ul>
 <li>What if I wanted to test a dose only model vs a two-way model with condition?</li>
-<li>The comparison between SS error is equal to:</li>
+<li>The model comparison between SS error of the two models is equal to:</li>
 </ul>
 </section>
 <section class="slide level2">
@@ -1074,7 +1074,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <section class="slide level2">
 
 <ul>
-<li>The comparison between SS error is equal to:
+<li>The model comparison between SS error is equal to:
 <ol type="1">
 <li>The difference between SS error Full (Dose and condition) vs reduced (Dose only)</li>
 <li>The SS condition</li>
@@ -1348,6 +1348,7 @@ Condition |             0.26 | [0.20, 1.00]
 <th>Control</th>
 <th>D1*C</th>
 <th>D2*C</th>
+<th>Cell</th>
 </tr>
 </thead>
 <tbody>
@@ -1358,6 +1359,7 @@ Condition |             0.26 | [0.20, 1.00]
 <td>0</td>
 <td>0</td>
 <td>0</td>
+<td>ACon</td>
 </tr>
 <tr class="even">
 <td>2</td>
@@ -1366,6 +1368,7 @@ Condition |             0.26 | [0.20, 1.00]
 <td>0</td>
 <td>0</td>
 <td>0</td>
+<td>BCon</td>
 </tr>
 <tr class="odd">
 <td>3</td>
@@ -1374,6 +1377,7 @@ Condition |             0.26 | [0.20, 1.00]
 <td>0</td>
 <td>0</td>
 <td>0</td>
+<td>CCon</td>
 </tr>
 <tr class="even">
 <td>4</td>
@@ -1382,6 +1386,7 @@ Condition |             0.26 | [0.20, 1.00]
 <td>1</td>
 <td>0</td>
 <td>1</td>
+<td>Ctx</td>
 </tr>
 <tr class="odd">
 <td>5</td>
@@ -1390,6 +1395,7 @@ Condition |             0.26 | [0.20, 1.00]
 <td>1</td>
 <td>0</td>
 <td>0</td>
+<td>Atx</td>
 </tr>
 <tr class="even">
 <td>6</td>
@@ -1398,6 +1404,7 @@ Condition |             0.26 | [0.20, 1.00]
 <td>1</td>
 <td>1</td>
 <td>0</td>
+<td>Btx</td>
 </tr>
 </tbody>
 </table>
@@ -1472,8 +1479,193 @@ F-statistic: 82.24 on 5 and 294 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
+<section id="how-to-interpret" class="slide level2">
+<h2>How to interpret</h2>
+<p><span class="math inline">\(\beta_0\)</span> = Cell mean for Dose A and Control.</p>
+<p><span class="math inline">\(\beta_1\text{Dose1}_i\)</span> = Simple main effect of Dose B. It’s the difference between Dose B and Dose A when in control.</p>
+<p><span class="math inline">\(\beta_2\text{Dose2}_i\)</span> = Simple main effect of Dose C. It’s the difference between Dose C and Dose A when in control.</p>
+<p><span class="math inline">\(\beta_3 \text{Condition}_{i}\)</span> = Simple main effect of Condition. It’s the difference between Tx and Control when dose = 0.</p>
+</section>
 <section id="simple-main-effects" class="slide level2">
 <h2>Simple main effects</h2>
+<ul>
+<li><p>Not main effects (marginal means). They compare the effect of one variable at a specific level of the moderator variable.</p></li>
+<li><p>That specific level is always when the moderator is at zero. Why zero? Because that is how the math works.</p></li>
+<li><p>In the full model, if I want to ask what is the effect of condition, it is hard to say because condition is in <span class="math inline">\(\beta_3\)</span>, <span class="math inline">\(\beta_4\)</span>, and <span class="math inline">\(\beta_5\)</span> terms. But if I look at condition = 0, then <span class="math inline">\(\beta_4\)</span> and <span class="math inline">\(\beta_5\)</span> terms drop out.</p></li>
+<li><p>With interactions, lower order terms are always “conditional” – they depend on other terms in the model.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><span class="math inline">\(\beta_4 \text{(Dose1*Condition)}_i\)</span> = is the simple interaction effect (a contrast/comparison of an already existing contrast). A difference of a difference. It’s the difference between Dose B and Dose A when in control <span class="math inline">\(\beta_2\)</span> compared to the difference between Dose B and Dose A when in Treatment.</p>
+<p><span class="math inline">\(\beta_5 \text{(Dose2*Condition)}_i\)</span> = is the simple interaction effecet interpreted as the difference between Dose C and Dose A when in control <span class="math inline">\(\beta_3\)</span> compared to the difference between Dose C and Dose A when in Treatment.</p>
+</section>
+<section id="simple-interaction-effect" class="slide level2">
+<h2>simple interaction effect</h2>
+<ul>
+<li><p>If there is no difference between simple main effects at different levels of the moderator (ie a simple interaction effect) then there is no interaction. I.e., the effect for one variable does not DEPEND on the moderator variable. Can thus simplify to marginal means</p></li>
+<li><p>If there is an interaction it suggests that the interpretation of simple main effects DEPEND on the levels of the moderator variable. And thus you have to look at cell means to interpret.</p></li>
+</ul>
+</section>
+<section id="predicted-scores-i.e.-cell-means" class="slide level2">
+<h2>Predicted scores i.e., cell means</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Dose1</th>
+<th>Dose2</th>
+<th>Control</th>
+<th>D1*C</th>
+<th>D2*C</th>
+<th>Cell</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>ACon</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>BCon</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>CCon</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>Ctx</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>Atx</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>Btx</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1 \text{Dose1}_i + \beta_2 \text{Dose2}_i +  \beta_3 \text{Condition}_{i}\]</span> <span class="math display">\[ + \beta_4 \text{(Dose1*Condition)}_i + \beta_5 \text{(Dose2*Condition)}_i\]</span></p>
+</section>
+<section id="anova" class="slide level2">
+<h2>ANOVA</h2>
+<ul>
+<li>Where did SS Dose:Condition come from?</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">anova</span>(fit<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: dv
+                Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+Dose             2  836.32  418.16 118.090 &lt; 2.2e-16 ***
+Condition        1  447.17  447.17 126.283 &lt; 2.2e-16 ***
+Dose:Condition   2  172.65   86.32  24.378 1.601e-10 ***
+Residuals      294 1041.07    3.54                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
+<section id="degrees-of-freedom" class="slide level2">
+<h2>degrees of freedom</h2>
+<p>Effect: #levels - 1 (or number of coefficients)</p>
+<p>Interaction: df effect 1 * df effect 2</p>
+<p>Error: N - df effects - df interactions - 1</p>
+</section>
+<section id="sums-of-squares-decomp-interaction" class="slide level2">
+<h2>Sums of squares decomp interaction</h2>
+<p><span class="math display">\[\sum (Y_i - \bar{Y})^2 = \sum (\bar{\text{Dose}_k} -\text{Dose G.M.})^2 +\]</span></p>
+<p><span class="math display">\[\sum (\bar{\text{Condition}_j} -\text{Condition G.M.})^2 +\]</span> Variation of the cell means that cannot be explained by M.M.</p>
+<p><span class="math display">\[\sum (\hat{Y_{jk}} -  \text{G.M.})^2 - SS_\text{Dose} - SS_\text{condition}\]</span></p>
+<p><span class="math display">\[ + \sum(Y_{ikj} -  \hat{Y_{jk}})^2\]</span></p>
+</section>
+<section id="ss-interaction" class="slide level2">
+<h2>SS interaction</h2>
+<ul>
+<li>Can be thought of as whether I can predict the cell means using just the marginal means and ask if simple main effects are the same.</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Condition</th>
+<th style="text-align: right;"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Dose</td>
+<td>Control</td>
+<td style="text-align: right;">TX</td>
+<td>MM (Dose)</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>10 (17.5)</td>
+<td style="text-align: right;">20 (22.5)</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>20 (22.5)</td>
+<td style="text-align: right;">30 (27.5)</td>
+<td>25</td>
+</tr>
+<tr class="even">
+<td>C</td>
+<td>30 (27.5)</td>
+<td style="text-align: right;">40 (32.5)</td>
+<td>35</td>
+</tr>
+<tr class="odd">
+<td>MM (Condition)</td>
+<td>20</td>
+<td style="text-align: right;">30</td>
+<td>Grand Mean = 25</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="simple-main-effects-in-emmeans" class="slide level2">
+<h2>Simple main effects in emmeans</h2>
+<ul>
+<li>Be careful. With an interaction you are interested in cell means. Do not interpret marginal means</li>
+</ul>
+</section>
+<section id="paired-comparisons-in-emmeans" class="slide level2">
+<h2>Paired comparisons in emmeans</h2>
+</section>
+<section id="plotting" class="slide level2">
+<h2>plotting</h2>
 
 <div class="footer footer-default">
 

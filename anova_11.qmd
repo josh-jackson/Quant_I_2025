@@ -236,6 +236,9 @@ Mean(C) = β₀ - β₁ - β₂
 anova(mod.1)
 ```
 
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\bar{\text{Group}_k} -\text{Grand mean})^2 + \sum(Y_{ik} - \bar{\text{Group}_k})^2$$
+
 ## degrees of freedom
 
 MS Regression: p 

@@ -14,8 +14,8 @@ html:
 
 ## This time
 
-- More than predictor! 
-- Two categorical predictors
+- More than one IV! 
+- Two+ categorical predictors
 
 ## nomenclature
 
@@ -188,7 +188,7 @@ anova(fit.1)
 $$\sum (Y_i - \bar{Y})^2 = \sum (\bar{\text{Dose}_k} -\text{Dose G.M.})^2 +$$
 $$\sum (\bar{\text{Condition}_j} -\text{Condition G.M.})^2 + \sum(Y_{ikj} -  \hat{Y_{jk}})^2$$
 
-Where $\hat{Y_{jk}}$ = Grand mean + Marginal Effect of Dose + Marginal effect of Condition.  
+Where $\hat{Y_{jk}}$ = Grand mean + Marginal Effect of Dose + Marginal effect of Condition. (technically cell means; but without an interaction we only focus on MMs) 
 
 ------------
 
@@ -238,7 +238,7 @@ anova(fit.dose)
 ## Model comparison
 
 - What if I wanted to test a dose only model vs a two-way model with condition? 
-- The comparison between SS error is equal to: 
+- The model comparison between SS error of the two models is equal to: 
 
 
 
@@ -251,10 +251,12 @@ anova(fit.dose, fit.1)
 
 --------
 
-- The comparison between SS error is equal to: 
+- The model comparison between SS error is equal to: 
   1. The difference between SS error Full (Dose and condition) vs reduced (Dose only)
   2. The SS condition
   3. F for SS condition
+  
+  
   
 ## Model Effect size
 
@@ -386,14 +388,14 @@ $$ + \beta_4 \text{(Dose1*Condition)}_i + \beta_5 \text{(Dose2*Condition)}_i$$
 
 --------------
 
-|ID | Dose1 | Dose2 | Control | D1*C | D2*C|
-|---|-------|------ |-------| ------|-------| 
-| 1 |  0    | 0     |  0    |   0   |  0     | 
-| 2 |  1    | 0     | 0     |   0   |  0    |
-| 3 |  0    | 1     | 0     |   0   |  0    |    
-| 4 |  0    | 1     | 1     |   0   |  1      |
-| 5 |  0    | 0     | 1     |   0   |  0     |
-| 6 |  1    | 0     | 1     |   1   |  0     |
+|ID | Dose1 | Dose2 | Control | D1*C | D2*C| Cell | 
+|---|-------|------ |-------| ------|-------|------| 
+| 1 |  0    | 0     |  0    |   0   |  0    | ACon|
+| 2 |  1    | 0     | 0     |   0   |  0    |BCon |
+| 3 |  0    | 1     | 0     |   0   |  0    |CCon |  
+| 4 |  0    | 1     | 1     |   0   |  1    |Ctx |
+| 5 |  0    | 0     | 1     |   0   |  0     |Atx |
+| 6 |  1    | 0     | 1     |   1   |  0     |Btx |
 
 
 
@@ -416,6 +418,110 @@ summary(fit.2)
 ```
 
 
+## How to interpret
+
+
+$\beta_0$ = Cell mean for Dose A and Control. 
+
+$\beta_1\text{Dose1}_i$ = Simple main effect of Dose B. It's the difference between Dose B and Dose A when in control. 
+
+$\beta_2\text{Dose2}_i$ = Simple main effect of Dose C. It's the difference between Dose C and Dose A when in control. 
+
+$\beta_3 \text{Condition}_{i}$ = Simple main effect of Condition. It's the difference between Tx and Control when dose = 0.   
 
 ## Simple main effects
 
+- Not main effects (marginal means). They compare the effect of one variable at a specific level of the moderator variable.
+
+- That specific level is always when the moderator is at zero. Why zero? Because that is how the math works. 
+
+- In the full model, if I want to ask what is the effect of condition, it is hard to say because condition is in $\beta_3$, $\beta_4$, and $\beta_5$ terms. But if I look at condition = 0, then  $\beta_4$ and $\beta_5$ terms drop out. 
+
+- With interactions, lower order terms are always "conditional" -- they depend on other terms in the model. 
+
+----------------
+
+$\beta_4 \text{(Dose1*Condition)}_i$ = is the simple interaction effect (a contrast/comparison of an already existing contrast). A difference of a difference. It's the difference between Dose B and Dose A when in control $\beta_2$ compared to the  difference between Dose B and Dose A when in Treatment. 
+
+$\beta_5 \text{(Dose2*Condition)}_i$ = is the simple interaction effecet interpreted as the difference between Dose C and Dose A when in control $\beta_3$ compared to the   difference between Dose C and Dose A when in Treatment. 
+
+## simple interaction effect
+
+- If there is no difference between simple main effects at different levels of the moderator (ie a simple interaction effect) then there is no interaction. I.e., the effect for one variable does not DEPEND on the moderator variable. Can thus simplify to marginal means
+
+- If there is an interaction it suggests that the interpretation of simple main effects DEPEND on the levels of the moderator variable. And thus you have to look at cell means to interpret. 
+
+
+
+## Predicted scores i.e., cell means
+
+| Dose1 | Dose2 | Control | D1*C | D2*C| Cell | 
+|-------|------ |-------| ------|-------|------| 
+ |  0    | 0     |  0    |   0   |  0    | ACon|
+|  1    | 0     | 0     |   0   |  0    |BCon |
+|  0    | 1     | 0     |   0   |  0    |CCon |  
+|  0    | 1     | 1     |   0   |  1    |Ctx |
+|  0    | 0     | 1     |   0   |  0     |Atx |
+ |  1    | 0     | 1     |   1   |  0     |Btx |
+ 
+ $$Y_i = \beta_0 + \beta_1 \text{Dose1}_i + \beta_2 \text{Dose2}_i +  \beta_3 \text{Condition}_{i}$$ 
+$$ + \beta_4 \text{(Dose1*Condition)}_i + \beta_5 \text{(Dose2*Condition)}_i$$
+
+## ANOVA
+
+- Where did SS Dose:Condition come from? 
+```{r}
+anova(fit.2)
+```
+
+## degrees of freedom
+
+Effect: #levels - 1 (or number of coefficients)
+
+Interaction: df effect 1 * df effect 2
+
+Error: N - df effects - df interactions - 1
+
+
+## Sums of squares decomp interaction
+
+$$\sum (Y_i - \bar{Y})^2 = \sum (\bar{\text{Dose}_k} -\text{Dose G.M.})^2 +$$
+
+$$\sum (\bar{\text{Condition}_j} -\text{Condition G.M.})^2 +$$
+Variation of the cell means that cannot be explained by M.M.
+
+$$\sum (\hat{Y_{jk}} -  \text{G.M.})^2 - SS_\text{Dose} - SS_\text{condition}$$
+
+$$ + \sum(Y_{ikj} -  \hat{Y_{jk}})^2$$
+
+## SS interaction
+
+- Can be thought of as whether I can predict the cell means using just the marginal means and ask if simple main effects are the same. 
+
+|                           | Condition |    |                      |
+|----------------|----------|-------------:|------------------|
+|Dose            | Control  | TX |MM (Dose) |
+| A                         | 10 (17.5) | 20 (22.5) | 15         |
+| B                         | 20 (22.5)   | 30 (27.5) | 25       |
+| C                         | 30 (27.5)  | 40 (32.5)| 35           |
+| MM (Condition) | 20       | 30 | Grand Mean = 25      |
+
+
+## Simple main effects in emmeans
+
+- Be careful. With an interaction you are interested in cell means. Do not interpret marginal means
+
+
+## Paired comparisons in emmeans
+
+
+
+
+
+
+
+
+
+
+
+## plotting
