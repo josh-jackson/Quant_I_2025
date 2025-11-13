@@ -37,17 +37,17 @@ Why: Literally most important class ever. Plus it is a requirement.
 | \- | 10/16 | Statistical inference part 3 (Model comparisons) LSR 15.8 |  ||
 | 9 | 10/21 | What can go wrong (Transparency and Open science)  |  | HW 2 due |
 | \- | 10/23 | Power || LSR 6 |  |
-| 10 | 10/28 | Assumptions  |  |  |
+| 10 | 10/28 | Power  |  |  |
 | \- | 10/30 | **Exam 2** |  | HW 3 due |
-| 11 | 11/4 | 3 or more means (ANOVA) | LSR 14 |  |
-| \- | 11/6 | Multiple comparisons & contrasts |  |  |
-| 12 | 11/11 | Interactions | LSR 16 |  |
-| \- | 11/13 | ANCOVA |  |  |
-| 13 | 11/18 | Within-subjects designs |  | HW 4 due |
-| \- | 11/20 | Binomial and logistic regression |  |  |
-| 14 | 11/25 | Chi-Square test | LSR 12 |  |
+| 11 | 11/4 | Assumptions | LSR 14 |  |
+| \- | 11/6 | 3 or more means (ANOVA) |  |  |
+| 12 | 11/11 | 3 or more means (ANOVA) | LSR 16 |  |
+| \- | 11/13 | Factorial ANCOVA |  |  |
+| 13 | 11/18 | Factorial ANCOVA   |  |  |
+| \- | 11/20 | Factorial ANCOVA  |  | HW 4 due |
+| 14 | 11/25 |Within-subjects designs  | LSR 12 |  |
 | \- | 11/27 | *No Class – Happy Thanksgiving!* |  |  |
-| 15 | 12/2 | Estimation revisited |  | HW 5 due |
+| 15 | 12/2 | Chi-Square test |  | HW 5 due |
 | \- | 12/4 | **Exam 3** |  |  |
 
 # Overview
