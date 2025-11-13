@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Quant 1 - Homework</title>
+<title>Quant 1 - hw4</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -90,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Lectures</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./homework.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="./homework.html" rel="" target="">
  <span class="menu-text">Homework</span></a>
   </li>  
   <li class="nav-item">
@@ -116,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Homework</h1>
+<h1 class="title">hw4</h1>
 </div>
 
 
@@ -131,13 +165,51 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Instructions</p>
+<p>Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include both the .qmd or .Rmd and knitted .html files. Please turn in both documents to the ASSIGNMENTS page on Canvas.</p>
+<p>Put all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that outside of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.</p>
+<p>You are allowed to Google or use your preferred AI-overlord. However, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a working link to the website you used. You don’t need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and do not simply copy someone else’s code. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.</p>
+<p>Data: We will use the same data that simulation setup that we used in class, but tweak the number slightly.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 1. Set Simulation Parameters ---</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>) <span class="co"># Makes your simulation reproducible</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>n_per_group <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># 50 participants per group</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>residual_se <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># This is the within-group SD</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the true means for our three groups.</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll set them apart to ensure the ANOVA finds a significant effect.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>mean_group_A <span class="ot">&lt;-</span> <span class="fl">2.0</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>mean_group_B <span class="ot">&lt;-</span> <span class="fl">2.5</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>mean_group_C <span class="ot">&lt;-</span> <span class="fl">3.0</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 2. Generate the Data ---</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the data for each group from a normal distribution</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>group_A_data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> mean_group_A, <span class="at">sd =</span> residual_se)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>group_B_data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> mean_group_B, <span class="at">sd =</span> residual_se)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>group_C_data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_group, <span class="at">mean =</span> mean_group_C, <span class="at">sd =</span> residual_se)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine into a single "long" data frame, which is required for ANOVA</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">dv =</span> <span class="fu">c</span>(group_A_data, group_B_data, group_C_data),</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Group A"</span>, <span class="st">"Group B"</span>, <span class="st">"Group C"</span>), <span class="at">each =</span> n_per_group))</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ol type="1">
-<li><p><a href="hw1.html">Homework #1</a></p></li>
-<li><p><a href="HW_1_KEY.html">Homework #1 KEY</a></p></li>
-<li><p><a href="hw2.html">Homework #2</a></p></li>
-<li><p><a href="HW_2_key.html">Homework #2 KEY</a></p></li>
-<li><p><a href="hw3.html">Homework #3</a></p></li>
-<li><p><a href="HW_4.html">Homework #4</a></p></li>
+<li><p>Run a one way anova using the above code. Then rerun the model simulating the same data but using the set.seed with 4 and 2. a. What is different among the models? b. Why did this difference occur? c.&nbsp;What could you do to minimize this difference?</p></li>
+<li><p>Using the original set.seed of 42, rerun the simulation this time changing the sigma/RSE to 1. a. How does these results differ? b. In the original (RSE = 2) what is the effect size difference between group A and B? c.&nbsp;In the smaller RSE model, what is the effect size? Why do they differ?</p></li>
+<li><p>Using the simulated data with set.seed = 2, create the ANOVA table. a. Explain how MSgroup is calculated b. What hypothesis is being tested with the F test? c.&nbsp;What number in the simulation is the MSR related to?</p></li>
+<li><p>Run a model with effect coding rather than default dummy coding. a. Interpret each regression coefficient. b. how does the ANOVA table differ between the dummy and effect coded models?</p></li>
+<li><p>Using either the dummy or the effect coded model: a. create predicted scores for each of groups. b. what are the CIs around them? Given that you simulated these data and know the means do you think they are reasonable? c.&nbsp;Are the standard errors of each predicted mean the same or should they be different values because the SDs of each group differ?</p></li>
+<li><p>Calculate the differences between each of the groups. Based on what you know given you simulated the data, could anything be considered lucky or unlucky?</p></li>
+<li><p>What happens if we only sampled 30 per group rather than 50?</p></li>
 </ol>
 
 
