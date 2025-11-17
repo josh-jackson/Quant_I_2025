@@ -176,10 +176,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 1. Set Simulation Parameters ---</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>) <span class="co"># Makes your simulation reproducible</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>) <span class="co"># Makes your simulation reproducible</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>n_per_group <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># 50 participants per group</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>residual_se <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># This is the within-group SD</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>residual_se <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co"># This is the within-group SD</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the true means for our three groups.</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll set them apart to ensure the ANOVA finds a significant effect.</span></span>
@@ -203,8 +203,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol type="1">
-<li><p>Run a one way anova using the above code. Then rerun the model simulating the same data but using the set.seed with 4 and 2. a. What is different among the models? b. Why did this difference occur? c.&nbsp;What could you do to minimize this difference?</p></li>
-<li><p>Using the original set.seed of 42, rerun the simulation this time changing the sigma/RSE to 1. a. How does these results differ? b. In the original (RSE = 2) what is the effect size difference between group A and B? c.&nbsp;In the smaller RSE model, what is the effect size? Why do they differ?</p></li>
+<li><p>Run a one way anova using the above code. Then rerun the model simulating the same data but using the set.seed with 4 and 42 (So you have three different datasets, each with a different set.seed:2, 4 and 42). a. What is different among the models? b. Why did this difference occur? c.&nbsp;What could you do to minimize this difference?</p></li>
+<li><p>Using the set.seed of 4, rerun the simulation this time changing the sigma/RSE to 1. a. How do these results differ? b. In the original (RSE = 2) what is the effect size difference between group A and B? c.&nbsp;In the smaller RSE model, what is the effect size? Why do they differ?</p></li>
 <li><p>Using the simulated data with set.seed = 2, create the ANOVA table. a. Explain how MSgroup is calculated b. What hypothesis is being tested with the F test? c.&nbsp;What number in the simulation is the MSR related to?</p></li>
 <li><p>Run a model with effect coding rather than default dummy coding. a. Interpret each regression coefficient. b. how does the ANOVA table differ between the dummy and effect coded models?</p></li>
 <li><p>Using either the dummy or the effect coded model: a. create predicted scores for each of groups. b. what are the CIs around them? Given that you simulated these data and know the means do you think they are reasonable? c.&nbsp;Are the standard errors of each predicted mean the same or should they be different values because the SDs of each group differ?</p></li>

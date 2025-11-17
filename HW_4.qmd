@@ -20,10 +20,10 @@ library(dplyr)
 
 # --- 1. Set Simulation Parameters ---
 
-set.seed(2) # Makes your simulation reproducible
+set.seed(4) # Makes your simulation reproducible
 
 n_per_group <- 50  # 50 participants per group
-residual_se <- 2 # This is the within-group SD
+residual_se <- 1 # This is the within-group SD
 
 # Define the true means for our three groups.
 # We'll set them apart to ensure the ANOVA finds a significant effect.
@@ -50,9 +50,9 @@ simulated_data <- data.frame(
 
 
 1. Run a one way anova using the above code. Then rerun the model simulating the same data but using the set.seed with 4
-and 2. a. What is different among the models? b. Why did this difference occur? c. What could you do to minimize this difference? 
+and 42 (So you have three different datasets, each with a different set.seed:2, 4 and 42). a. What is different among the models? b. Why did this difference occur? c. What could you do to minimize this difference? 
 
-2. Using the original set.seed of 42, rerun the simulation this time changing the sigma/RSE to 1. a. How does these results differ? b. In the original (RSE = 2) what is the effect size difference between group A and B? c. In the smaller RSE model, what is the effect size? Why do they differ? 
+2. Using the set.seed of 4, rerun the simulation this time changing the sigma/RSE to 1. a. How do these results differ? b. In the original (RSE = 2) what is the effect size difference between group A and B? c. In the smaller RSE model, what is the effect size? Why do they differ? 
 
 3. Using the simulated data with set.seed = 2, create the ANOVA table. a. Explain how MSgroup is calculated b. What hypothesis is being tested with the F test? c. What number in the simulation is the MSR related to?   
 
