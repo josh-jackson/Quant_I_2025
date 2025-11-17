@@ -1281,10 +1281,155 @@ Condition |             0.26 | [0.20, 1.00]
 </div>
 </div>
 </section>
+<section id="post-hoc-tests" class="slide level2">
+<h2>post hoc tests</h2>
+<p>marginal means</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb42-2"><a href="#cb42-2"></a>emm<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">emmeans</span>(fit<span class="fl">.1</span>, <span class="sc">~</span> Dose)</span>
+<span id="cb42-3"><a href="#cb42-3"></a>emm<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Dose emmean    SE  df lower.CL upper.CL
+ A      8.18 0.202 296     7.78     8.58
+ B      9.78 0.202 296     9.39    10.18
+ C     12.24 0.202 296    11.84    12.64
+
+Results are averaged over the levels of: Condition 
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb44-2"><a href="#cb44-2"></a>emm<span class="fl">.2</span><span class="ot">&lt;-</span> <span class="fu">emmeans</span>(fit<span class="fl">.1</span>, <span class="sc">~</span>Condition)</span>
+<span id="cb44-3"><a href="#cb44-3"></a>emm<span class="fl">.2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Condition emmean    SE  df lower.CL upper.CL
+ Control     8.85 0.165 296     8.52     9.17
+ TX         11.29 0.165 296    10.96    11.62
+
+Results are averaged over the levels of: Dose 
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">pairs</span>(emm<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast     estimate    SE  df t.ratio p.value
+ Control - TX    -2.44 0.234 296 -10.443  &lt;.0001
+
+Results are averaged over the levels of: Dose </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">pairs</span>(emm<span class="fl">.1</span>) <span class="sc">|&gt;</span> <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast estimate    SE  df lower.CL upper.CL
+ A - B       -1.60 0.286 296    -2.28    -0.93
+ A - C       -4.06 0.286 296    -4.73    -3.39
+ B - C       -2.46 0.286 296    -3.13    -1.78
+
+Results are averaged over the levels of: Condition 
+Confidence level used: 0.95 
+Conf-level adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">summary</span>(fit<span class="fl">.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = dv ~ Dose + Condition, data = simulated_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.9749 -1.4200 -0.0751  1.2086  6.4763 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   6.9599     0.2338  29.766  &lt; 2e-16 ***
+DoseB         1.6041     0.2864   5.601 4.86e-08 ***
+DoseC         4.0601     0.2864  14.178  &lt; 2e-16 ***
+ConditionTX   2.4418     0.2338  10.443  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.025 on 296 degrees of freedom
+Multiple R-squared:  0.514, Adjusted R-squared:  0.509 
+F-statistic: 104.3 on 3 and 296 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<ul>
+<li>predicted mean vs actual mean for intercept</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a> simulated_data <span class="sc">|&gt;</span> </span>
+<span id="cb52-2"><a href="#cb52-2"></a>  <span class="fu">group_by</span>(Dose, Condition) <span class="sc">|&gt;</span> </span>
+<span id="cb52-3"><a href="#cb52-3"></a>  <span class="fu">summarise</span>(<span class="at">Mean =</span> <span class="fu">mean</span>(dv), <span class="at">.groups =</span> <span class="st">'drop'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  Dose  Condition  Mean
+  &lt;fct&gt; &lt;fct&gt;     &lt;dbl&gt;
+1 A     Control    6.07
+2 A     TX        10.3 
+3 B     Control    8.49
+4 B     TX        11.1 
+5 C     Control   12.0 
+6 C     TX        12.5 </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<ul>
+<li>Coefs are marginal means, not cell means (if balanced sample size)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="fl">8.492199</span>    <span class="sc">-</span> <span class="fl">6.068807</span>  <span class="co"># dose B difference from A in control</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.423392</code></pre>
+</div>
+</div>
+<ul>
+<li>1.6041 is regression est.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="fu">pairs</span>(emm<span class="fl">.1</span>) <span class="sc">|&gt;</span> <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast estimate    SE  df lower.CL upper.CL
+ A - B       -1.60 0.286 296    -2.28    -0.93
+ A - C       -4.06 0.286 296    -4.73    -3.39
+ B - C       -2.46 0.286 296    -3.13    -1.78
+
+Results are averaged over the levels of: Condition 
+Confidence level used: 0.95 
+Conf-level adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<ul>
+<li><p>When we have more than two predictors the coefficients cannot be computed directly from the 6 raw cell means (and vice versa).</p></li>
+<li><p>The model we fit assumes that all we need are the marginal means. Or that the cell mean difference, for example, between Tx and Con is the same across all levels of dose.</p></li>
+<li><p>How do we weaken this assumption?</p></li>
+</ul>
+</section>
 <section id="interactions" class="slide level2">
 <h2>Interactions</h2>
 <ul>
-<li><p>Thus far our intepretations of the model have been at the marginal means.</p></li>
+<li><p>Thus far our interpretations of the model have been at the marginal means.</p></li>
 <li><p>If we think the difference between control and tx DEPENDS on the dose, then we have an interaction.</p></li>
 </ul>
 <table>
@@ -1451,8 +1596,8 @@ Condition |             0.26 | [0.20, 1.00]
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>fit<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(dv <span class="sc">~</span> Dose <span class="sc">*</span> Condition, simulated_data)</span>
-<span id="cb42-2"><a href="#cb42-2"></a><span class="fu">summary</span>(fit<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>fit<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(dv <span class="sc">~</span> Dose <span class="sc">*</span> Condition, simulated_data)</span>
+<span id="cb58-2"><a href="#cb58-2"></a><span class="fu">summary</span>(fit<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1579,7 +1724,7 @@ F-statistic: 82.24 on 5 and 294 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>Where did SS Dose:Condition come from?</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">anova</span>(fit<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a><span class="fu">anova</span>(fit<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 

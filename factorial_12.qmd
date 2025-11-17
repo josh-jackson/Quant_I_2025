@@ -256,6 +256,9 @@ anova(fit.dose, fit.1)
   2. The SS condition
   3. F for SS condition
   
+
+  
+----------  
   
   
 ## Model Effect size
@@ -355,9 +358,76 @@ $$\omega^2 = \frac{df_{effect} \times (MS_{effect} - MS_{error})}{SS_{total} +  
 omega_squared(fit.1)
 ```
 
+## post hoc tests
+
+marginal means 
+
+```{r}
+library(emmeans)
+emm.1<- emmeans(fit.1, ~ Dose)
+emm.1
+```
+
+  
+-----------
+
+```{r}
+library(emmeans)
+emm.2<- emmeans(fit.1, ~Condition)
+emm.2
+```
+  
+------- 
+
+```{r}
+pairs(emm.2)
+```  
+  
+```{r}
+pairs(emm.1) |> confint()
+```   
+  
+---------
+
+```{r}
+summary(fit.1)
+```
+
+---------
+
+- predicted mean vs actual mean for intercept
+
+```{r}
+ simulated_data |> 
+  group_by(Dose, Condition) |> 
+  summarise(Mean = mean(dv), .groups = 'drop') 
+```
+
+------ 
+
+- Coefs are marginal means, not cell means (if balanced sample size)
+
+```{r}
+8.492199	- 6.068807	# dose B difference from A in control
+```
+- 1.6041 is regression est.
+
+```{r}
+pairs(emm.1) |> confint()
+```
+
+
+---------
+
+- When we have more than two predictors the coefficients cannot be computed directly from the 6 raw cell means (and vice versa).
+
+- The model we fit assumes that all we need are the marginal means. Or that the cell mean difference, for example, between Tx and Con is the same across all levels of dose. 
+
+- How do we weaken this assumption?
+
 ## Interactions
 
-- Thus far our intepretations of the model have been at the marginal means. 
+- Thus far our interpretations of the model have been at the marginal means. 
 
 - If we think the difference between control and tx DEPENDS on the dose, then we have an interaction. 
 
