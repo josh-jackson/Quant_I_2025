@@ -1,0 +1,86 @@
+---
+title: "hw5"
+format: html
+---
+
+
+
+Instructions
+
+Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include both the .qmd or .Rmd and knitted .html files. Please turn in both documents to the ASSIGNMENTS page on Canvas.
+
+Put all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that outside of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
+
+You are allowed to Google or use your preferred AI-overlord. However, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a working link to the website you used. You don't need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and do not simply copy someone else’s code. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.
+
+Data: We will use the same simulation setup that we used in class, but tweak the numbers a little.
+
+
+```{r, message = FALSE}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(tibble) 
+
+# --- 1. Set Simulation Parameters ---
+
+set.seed(123) 
+
+n_per_cell <- 75 
+residual_sd <- 2.5
+
+mean_A_Control <- 10
+mean_A_TX <- 11
+
+mean_B_Control <- 9
+mean_B_TX <- 11
+
+mean_C_Control <- 12
+mean_C_TX <- 12
+
+# --- 3. Generate the Data ---
+
+# Create the data for each of the 6 cells
+data_A_Control <- rnorm(n_per_cell, mean = mean_A_Control, sd = residual_sd)
+data_A_TX <- rnorm(n_per_cell, mean = mean_A_TX, sd = residual_sd)
+data_B_Control <- rnorm(n_per_cell, mean = mean_B_Control, sd = residual_sd)
+data_B_TX <- rnorm(n_per_cell, mean = mean_B_TX, sd = residual_sd)
+data_C_Control <- rnorm(n_per_cell, mean = mean_C_Control, sd = residual_sd)
+data_C_TX <- rnorm(n_per_cell, mean = mean_C_TX, sd = residual_sd)
+
+# Combine into a single "long" data frame
+simulated_data <- data.frame(
+  dv = c(data_A_Control, data_A_TX, data_B_Control, data_B_TX, data_C_Control, data_C_TX),
+  Dose = factor(rep(c("A", "A", "B", "B", "C", "C"), each = n_per_cell)),
+  Condition = factor(rep(c("Control", "TX", "Control", "TX", "Control", "TX"), each = n_per_cell))
+)
+
+```
+
+
+
+1. Run two models, a main effects only model and an interaction model, both with Dose and Condition as IVs. 
+
+a. DoseB is significant in one but not the other, why? 
+
+b. For each model, how would you interpret the intercept? Do they test the same hypothesis?
+
+c. Test to see whether you need to include an interaction. What is the null hypothesis of this test? 
+
+d. In summarizing your findings of the best fit model, what effect size estimate(s) would you want to report?
+
+e. Graph a figure of your results. 
+
+
+2. Run an interaction model with the RSE set to 4. 
+
+a. How does this model change the estimates and SEs? Will they always change in that way if your RSE is larger? How would they change if your RSE was smaller? What can you do to YOUR data to get a smaller RSE? 
+
+b. Should you include an interaction term or go with a main effects model? How do you know? 
+
+c. Assuming you you decide the no interaction model is the best fit, graph your results.
+
+d. Using the interaction model with RSE = 4, what are the estimated cell means and associated standard error? Why can the standard error of the mean be found in the summary output of the regression?  
+
+e. Estimate the simple main effects for both condition and for dose. 
+

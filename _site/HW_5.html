@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Quant 1 - Homework</title>
+<title>Quant 1 - hw5</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -90,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Lectures</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./homework.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="./homework.html" rel="" target="">
  <span class="menu-text">Homework</span></a>
   </li>  
   <li class="nav-item">
@@ -116,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Homework</h1>
+<h1 class="title">hw5</h1>
 </div>
 
 
@@ -131,14 +165,69 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Instructions</p>
+<p>Please complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include both the .qmd or .Rmd and knitted .html files. Please turn in both documents to the ASSIGNMENTS page on Canvas.</p>
+<p>Put all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that outside of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.</p>
+<p>You are allowed to Google or use your preferred AI-overlord. However, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a working link to the website you used. You don’t need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and do not simply copy someone else’s code. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.</p>
+<p>Data: We will use the same simulation setup that we used in class, but tweak the numbers a little.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble) </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 1. Set Simulation Parameters ---</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>n_per_cell <span class="ot">&lt;-</span> <span class="dv">75</span> </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>residual_sd <span class="ot">&lt;-</span> <span class="fl">2.5</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>mean_A_Control <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>mean_A_TX <span class="ot">&lt;-</span> <span class="dv">11</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>mean_B_Control <span class="ot">&lt;-</span> <span class="dv">9</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>mean_B_TX <span class="ot">&lt;-</span> <span class="dv">11</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>mean_C_Control <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>mean_C_TX <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 3. Generate the Data ---</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the data for each of the 6 cells</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>data_A_Control <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_cell, <span class="at">mean =</span> mean_A_Control, <span class="at">sd =</span> residual_sd)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>data_A_TX <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_cell, <span class="at">mean =</span> mean_A_TX, <span class="at">sd =</span> residual_sd)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>data_B_Control <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_cell, <span class="at">mean =</span> mean_B_Control, <span class="at">sd =</span> residual_sd)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>data_B_TX <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_cell, <span class="at">mean =</span> mean_B_TX, <span class="at">sd =</span> residual_sd)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>data_C_Control <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_cell, <span class="at">mean =</span> mean_C_Control, <span class="at">sd =</span> residual_sd)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>data_C_TX <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_per_cell, <span class="at">mean =</span> mean_C_TX, <span class="at">sd =</span> residual_sd)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine into a single "long" data frame</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">dv =</span> <span class="fu">c</span>(data_A_Control, data_A_TX, data_B_Control, data_B_TX, data_C_Control, data_C_TX),</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">Dose =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"C"</span>), <span class="at">each =</span> n_per_cell)),</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">Condition =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"TX"</span>, <span class="st">"Control"</span>, <span class="st">"TX"</span>, <span class="st">"Control"</span>, <span class="st">"TX"</span>), <span class="at">each =</span> n_per_cell))</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ol type="1">
-<li><p><a href="hw1.html">Homework #1</a></p></li>
-<li><p><a href="HW_1_KEY.html">Homework #1 KEY</a></p></li>
-<li><p><a href="hw2.html">Homework #2</a></p></li>
-<li><p><a href="HW_2_key.html">Homework #2 KEY</a></p></li>
-<li><p><a href="hw3.html">Homework #3</a></p></li>
-<li><p><a href="HW_4.html">Homework #4</a></p></li>
-<li><p><a href="HW_5.html">Homework #5</a></p></li>
+<li>Run two models, a main effects only model and an interaction model, both with Dose and Condition as IVs.</li>
+</ol>
+<ol type="a">
+<li><p>DoseB is significant in one but not the other, why?</p></li>
+<li><p>For each model, how would you interpret the intercept? Do they test the same hypothesis?</p></li>
+<li><p>Test to see whether you need to include an interaction. What is the null hypothesis of this test?</p></li>
+<li><p>In summarizing your findings of the best fit model, what effect size estimate(s) would you want to report?</p></li>
+<li><p>Graph a figure of your results.</p></li>
+</ol>
+<ol start="2" type="1">
+<li>Run an interaction model with the RSE set to 4.</li>
+</ol>
+<ol type="a">
+<li><p>How does this model change the estimates and SEs? Will they always change in that way if your RSE is larger? How would they change if your RSE was smaller? What can you do to YOUR data to get a smaller RSE?</p></li>
+<li><p>Should you include an interaction term or go with a main effects model? How do you know?</p></li>
+<li><p>Assuming you you decide the no interaction model is the best fit, graph your results.</p></li>
+<li><p>Using the interaction model with RSE = 4, what are the estimated cell means and associated standard error? Why can the standard error of the mean be found in the summary output of the regression?</p></li>
+<li><p>Estimate the simple main effects for both condition and for dose.</p></li>
 </ol>
 
 
