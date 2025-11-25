@@ -664,6 +664,17 @@ qq.f
 emmeans(fit.2, eff ~  Dose | Condition)
 ```
 
+---------------
+
+
+```{r}
+
+emmeans(fit.2, eff ~  Condition | Dose)
+```
+
+
+
+
 
 ----------
 

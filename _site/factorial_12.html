@@ -2063,12 +2063,55 @@ P value adjustment: fdr method for 3 tests </code></pre>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="fu">contrasts</span>(simulated_data<span class="sc">$</span>Dose) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">3</span>)</span>
-<span id="cb84-2"><a href="#cb84-2"></a><span class="fu">contrasts</span>(simulated_data<span class="sc">$</span>Condition) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">2</span>)</span>
-<span id="cb84-3"><a href="#cb84-3"></a></span>
-<span id="cb84-4"><a href="#cb84-4"></a>fit<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(dv <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Dose <span class="sc">*</span> Condition, simulated_data)</span>
-<span id="cb84-5"><a href="#cb84-5"></a></span>
-<span id="cb84-6"><a href="#cb84-6"></a><span class="fu">summary</span>(fit<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="fu">emmeans</span>(fit<span class="fl">.2</span>, eff <span class="sc">~</span>  Condition <span class="sc">|</span> Dose)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$emmeans
+Dose = A:
+ Condition emmean    SE  df lower.CL upper.CL
+ Control     6.07 0.266 294     5.55     6.59
+ TX         10.29 0.266 294     9.77    10.82
+
+Dose = B:
+ Condition emmean    SE  df lower.CL upper.CL
+ Control     8.49 0.266 294     7.97     9.02
+ TX         11.08 0.266 294    10.55    11.60
+
+Dose = C:
+ Condition emmean    SE  df lower.CL upper.CL
+ Control    11.98 0.266 294    11.46    12.51
+ TX         12.50 0.266 294    11.98    13.02
+
+Confidence level used: 0.95 
+
+$contrasts
+Dose = A:
+ contrast       estimate    SE  df t.ratio p.value
+ Control effect   -2.112 0.188 294 -11.224  &lt;.0001
+ TX effect         2.112 0.188 294  11.224  &lt;.0001
+
+Dose = B:
+ contrast       estimate    SE  df t.ratio p.value
+ Control effect   -1.293 0.188 294  -6.870  &lt;.0001
+ TX effect         1.293 0.188 294   6.870  &lt;.0001
+
+Dose = C:
+ contrast       estimate    SE  df t.ratio p.value
+ Control effect   -0.258 0.188 294  -1.371  0.1715
+ TX effect         0.258 0.188 294   1.371  0.1715
+
+P value adjustment: fdr method for 2 tests </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a><span class="fu">contrasts</span>(simulated_data<span class="sc">$</span>Dose) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">3</span>)</span>
+<span id="cb86-2"><a href="#cb86-2"></a><span class="fu">contrasts</span>(simulated_data<span class="sc">$</span>Condition) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">2</span>)</span>
+<span id="cb86-3"><a href="#cb86-3"></a></span>
+<span id="cb86-4"><a href="#cb86-4"></a>fit<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(dv <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Dose <span class="sc">*</span> Condition, simulated_data)</span>
+<span id="cb86-5"><a href="#cb86-5"></a></span>
+<span id="cb86-6"><a href="#cb86-6"></a><span class="fu">summary</span>(fit<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
