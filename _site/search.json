@@ -802,7 +802,7 @@
     "href": "lecture.html",
     "title": "Lectures",
     "section": "",
-    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation\nComparing 2 means\nInference\nOpen Science\nPower\nAssumptions\nANOVA\nFactorial ANOVA"
+    "text": "What are models\nData and description\nGLM basics\nDistributions\nEstimation\nComparing 2 means\nInference\nOpen Science\nPower\nAssumptions\nANOVA\nFactorial ANOVA\nData Viz"
   },
   {
     "objectID": "Estimation_5.html#likelihoods",
@@ -3253,5 +3253,376 @@
     "title": "hw5",
     "section": "",
     "text": "Instructions\nPlease complete this assignment using a quarto or RMarkdown file. Be sure to include your name in the YAML/preamble. When you turn in the assignment, include both the .qmd or .Rmd and knitted .html files. Please turn in both documents to the ASSIGNMENTS page on Canvas.\nPut all R code in code chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that outside of the code chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.\nYou are allowed to Google or use your preferred AI-overlord. However, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a working link to the website you used. You don’t need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and do not simply copy someone else’s code. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with.\nData: We will use the same simulation setup that we used in class, but tweak the numbers a little.\n\n# Load necessary libraries\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(tibble) \n\n# --- 1. Set Simulation Parameters ---\n\nset.seed(123) \n\nn_per_cell &lt;- 75 \nresidual_sd &lt;- 2.5\n\nmean_A_Control &lt;- 10\nmean_A_TX &lt;- 11\n\nmean_B_Control &lt;- 9\nmean_B_TX &lt;- 11\n\nmean_C_Control &lt;- 12\nmean_C_TX &lt;- 12\n\n# --- 3. Generate the Data ---\n\n# Create the data for each of the 6 cells\ndata_A_Control &lt;- rnorm(n_per_cell, mean = mean_A_Control, sd = residual_sd)\ndata_A_TX &lt;- rnorm(n_per_cell, mean = mean_A_TX, sd = residual_sd)\ndata_B_Control &lt;- rnorm(n_per_cell, mean = mean_B_Control, sd = residual_sd)\ndata_B_TX &lt;- rnorm(n_per_cell, mean = mean_B_TX, sd = residual_sd)\ndata_C_Control &lt;- rnorm(n_per_cell, mean = mean_C_Control, sd = residual_sd)\ndata_C_TX &lt;- rnorm(n_per_cell, mean = mean_C_TX, sd = residual_sd)\n\n# Combine into a single \"long\" data frame\nsimulated_data &lt;- data.frame(\n  dv = c(data_A_Control, data_A_TX, data_B_Control, data_B_TX, data_C_Control, data_C_TX),\n  Dose = factor(rep(c(\"A\", \"A\", \"B\", \"B\", \"C\", \"C\"), each = n_per_cell)),\n  Condition = factor(rep(c(\"Control\", \"TX\", \"Control\", \"TX\", \"Control\", \"TX\"), each = n_per_cell))\n)\n\n\nRun two models, a main effects only model and an interaction model, both with Dose and Condition as IVs.\n\n\nDoseB is significant in one but not the other, why?\nFor each model, how would you interpret the intercept? Do they test the same hypothesis?\nTest to see whether you need to include an interaction. What is the null hypothesis of this test?\nIn summarizing your findings of the best fit model, what effect size estimate(s) would you want to report?\nGraph a figure of your results.\n\n\nRun an interaction model with the RSE set to 4.\n\n\nHow does this model change the estimates and SEs? Will they always change in that way if your RSE is larger? How would they change if your RSE was smaller? What can you do to YOUR data to get a smaller RSE?\nShould you include an interaction term or go with a main effects model? How do you know?\nAssuming you you decide the no interaction model is the best fit, graph your results.\nUsing the interaction model with RSE = 4, what are the estimated cell means and associated standard error? Why can the standard error of the mean be found in the summary output of the regression?\nEstimate the simple main effects for both condition and for dose."
+  },
+  {
+    "objectID": "data_viz.html#this-time",
+    "href": "data_viz.html#this-time",
+    "title": "Data Viz",
+    "section": "This time",
+    "text": "This time\n\nHow to get from models -&gt; figures and tables\nSome guidance on effective visualization"
+  },
+  {
+    "objectID": "data_viz.html#recap",
+    "href": "data_viz.html#recap",
+    "title": "Data Viz",
+    "section": "Recap",
+    "text": "Recap\n\nThree group means\n\n\n\nCode\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(tibble) \n\n# --- 1. Set Simulation Parameters ---\n\nset.seed(74) # Makes your simulation reproducible\n\nn_per_group &lt;- 50  # 50 participants per group\nresidual_sd &lt;- 1.0 # This is the within-group SD\n\n# Define the true means for our three groups.\n# We'll set them apart to ensure the ANOVA finds a significant effect.\n\nmean_group_A &lt;- 4.0\nmean_group_B &lt;- 5.0\nmean_group_C &lt;- 6.0\n\n# --- 2. Generate the Data ---\n\n# Create the data for each group from a normal distribution\n\ngroup_A_data &lt;- rnorm(n_per_group, mean = mean_group_A, sd = residual_sd)\ngroup_B_data &lt;- rnorm(n_per_group, mean = mean_group_B, sd = residual_sd)\ngroup_C_data &lt;- rnorm(n_per_group, mean = mean_group_C, sd = residual_sd)\n\n# Combine into a single \"long\" data frame, which is required for ANOVA\nsimulated_data &lt;- data.frame(\n  dv = c(group_A_data, group_B_data, group_C_data),\n  group = factor(rep(c(\"Group A\", \"Group B\", \"Group C\"), each = n_per_group))\n)\n\n\n\n\nCode\nsimulated_data\n\n\n          dv   group\n1   4.537724 Group A\n2   3.144068 Group A\n3   5.125589 Group A\n4   2.024140 Group A\n5   4.532226 Group A\n6   4.898875 Group A\n7   5.561317 Group A\n8   2.355461 Group A\n9   3.151854 Group A\n10  2.452468 Group A\n11  3.847093 Group A\n12  4.616903 Group A\n13  3.482458 Group A\n14  3.620567 Group A\n15  4.418366 Group A\n16  3.295400 Group A\n17  2.627650 Group A\n18  4.294438 Group A\n19  3.876405 Group A\n20  4.756450 Group A\n21  4.500845 Group A\n22  4.969920 Group A\n23  3.646166 Group A\n24  4.707435 Group A\n25  2.111729 Group A\n26  4.695995 Group A\n27  2.764185 Group A\n28  4.805430 Group A\n29  4.070132 Group A\n30  3.595858 Group A\n31  4.249095 Group A\n32  5.802326 Group A\n33  4.502903 Group A\n34  2.639328 Group A\n35  2.451961 Group A\n36  3.326512 Group A\n37  4.431850 Group A\n38  4.664329 Group A\n39  2.969846 Group A\n40  4.389651 Group A\n41  2.756397 Group A\n42  4.694120 Group A\n43  3.247227 Group A\n44  2.807459 Group A\n45  3.447210 Group A\n46  3.078723 Group A\n47  3.797052 Group A\n48  3.715919 Group A\n49  3.268710 Group A\n50  4.401787 Group A\n51  3.492348 Group B\n52  3.602998 Group B\n53  4.276491 Group B\n54  4.836975 Group B\n55  5.759684 Group B\n56  5.857141 Group B\n57  5.293927 Group B\n58  6.807959 Group B\n59  4.053286 Group B\n60  4.318964 Group B\n61  5.683130 Group B\n62  4.947100 Group B\n63  6.061933 Group B\n64  4.650660 Group B\n65  3.631385 Group B\n66  5.134218 Group B\n67  4.023368 Group B\n68  3.984087 Group B\n69  5.178696 Group B\n70  5.620469 Group B\n71  5.121022 Group B\n72  5.892023 Group B\n73  4.323403 Group B\n74  4.961581 Group B\n75  5.606014 Group B\n76  4.771041 Group B\n77  6.776684 Group B\n78  4.930663 Group B\n79  4.511946 Group B\n80  5.088721 Group B\n81  5.008981 Group B\n82  3.077356 Group B\n83  4.031263 Group B\n84  4.658444 Group B\n85  7.041627 Group B\n86  5.293744 Group B\n87  5.242325 Group B\n88  5.343468 Group B\n89  5.767449 Group B\n90  4.356754 Group B\n91  3.394279 Group B\n92  5.031723 Group B\n93  5.919665 Group B\n94  5.879640 Group B\n95  6.665500 Group B\n96  4.213922 Group B\n97  4.738492 Group B\n98  4.021327 Group B\n99  5.060806 Group B\n100 3.496175 Group B\n101 5.114629 Group C\n102 5.959566 Group C\n103 4.615152 Group C\n104 6.507678 Group C\n105 7.632644 Group C\n106 7.963552 Group C\n107 7.287843 Group C\n108 4.598154 Group C\n109 6.129571 Group C\n110 3.753375 Group C\n111 5.420896 Group C\n112 5.463473 Group C\n113 3.973545 Group C\n114 7.528606 Group C\n115 7.870942 Group C\n116 6.336781 Group C\n117 8.336787 Group C\n118 5.806006 Group C\n119 7.126016 Group C\n120 5.010658 Group C\n121 6.262966 Group C\n122 5.136064 Group C\n123 5.896559 Group C\n124 6.170695 Group C\n125 5.522765 Group C\n126 6.521205 Group C\n127 6.307725 Group C\n128 6.178702 Group C\n129 5.235294 Group C\n130 3.796200 Group C\n131 6.988865 Group C\n132 7.478800 Group C\n133 6.116675 Group C\n134 6.051580 Group C\n135 6.025808 Group C\n136 6.343767 Group C\n137 5.617322 Group C\n138 6.860311 Group C\n139 6.496034 Group C\n140 5.688063 Group C\n141 5.841789 Group C\n142 4.600089 Group C\n143 4.998930 Group C\n144 5.310425 Group C\n145 5.260099 Group C\n146 5.000002 Group C\n147 6.115574 Group C\n148 5.162604 Group C\n149 7.277799 Group C\n150 5.805987 Group C"
+  },
+  {
+    "objectID": "data_viz.html#recap-1",
+    "href": "data_viz.html#recap-1",
+    "title": "Data Viz",
+    "section": "Recap",
+    "text": "Recap\n\nLet’s fit a model to estimate the group means\n\n\nmod.1 &lt;- lm(dv ~ group, simulated_data)\nsummary(mod.1)\n\n\nCall:\nlm(formula = dv ~ group, data = simulated_data)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-2.21672 -0.70213  0.01863  0.67980  2.36670 \n\nCoefficients:\n             Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)    3.8226     0.1383  27.642  &lt; 2e-16 ***\ngroupGroup B   1.1262     0.1956   5.759 4.78e-08 ***\ngroupGroup C   2.1475     0.1956  10.981  &lt; 2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.9779 on 147 degrees of freedom\nMultiple R-squared:  0.4508,    Adjusted R-squared:  0.4433 \nF-statistic: 60.33 on 2 and 147 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "data_viz.html#recap-2",
+    "href": "data_viz.html#recap-2",
+    "title": "Data Viz",
+    "section": "Recap",
+    "text": "Recap\n\nNow we want to display the results of our model to the world! How do we do it?\nMost often, people forget the model they fit at this stage, and just plot descriptive statistics from raw data.\n\n\n\nCode\n simulated_data %&gt;% \n  group_by(group) %&gt;% \n  summarise(Mean = mean(dv), \n            SD = sd(dv),\n            .groups = 'drop')\n\n\n# A tibble: 3 × 3\n  group    Mean    SD\n  &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt;\n1 Group A  3.82 0.929\n2 Group B  4.95 0.935\n3 Group C  5.97 1.06"
+  },
+  {
+    "objectID": "data_viz.html#recap-3",
+    "href": "data_viz.html#recap-3",
+    "title": "Data Viz",
+    "section": "Recap",
+    "text": "Recap\n\nBut we have predictions from our model! We can get estimates from these to display the model of the world that we are actually drawing our conclusions from.\n\n\n\nCode\nlibrary(emmeans)\nm1.emm&lt;- emmeans(mod.1, ~group)\nm1.emm\n\n\n group   emmean    SE  df lower.CL upper.CL\n Group A   3.82 0.138 147     3.55     4.10\n Group B   4.95 0.138 147     4.68     5.22\n Group C   5.97 0.138 147     5.70     6.24\n\nConfidence level used: 0.95"
+  },
+  {
+    "objectID": "data_viz.html#plot-estimated-means-cis",
+    "href": "data_viz.html#plot-estimated-means-cis",
+    "title": "Data Viz",
+    "section": "Plot estimated means + CIs",
+    "text": "Plot estimated means + CIs\n\nlibrary(ggplot2)\ndat.em &lt;- as.data.frame(m1.emm) \nsimulated_data %&gt;%   \nggplot(aes(x = group, y = dv)) + \n  geom_violin()+\n  geom_point(position = position_jitter())+\n  geom_errorbar(data = dat.em, aes(x = group, y = emmean,ymin = lower.CL, ymax = upper.CL), width = 0.2)"
+  },
+  {
+    "objectID": "data_viz.html#factorial-anova",
+    "href": "data_viz.html#factorial-anova",
+    "title": "Data Viz",
+    "section": "Factorial ANOVA",
+    "text": "Factorial ANOVA\n\nSimulated 2x3 design from last class.\n\n\n\nCode\n# Load necessary libraries\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(tibble) # For a cleaner summary print\n\n# --- 1. Set Simulation Parameters ---\n\nset.seed(123) # Makes your simulation reproducible\n\n# Design: 3 (Dose) x 2 (Condition)\nn_per_cell &lt;- 50 # 300 total participants / 6 cells = 50 per cell\n\n# Set the standard deviation for the \"noise\" or error.\n# A smaller SD makes the effects easier to detect (i.e., \"significant\").\nresidual_sd &lt;- 2.0\n\n# --- 2. Define the \"True\" Population Means ---\n# We will set the 6 cell means to create a crossover interaction AND main effects.\n#\n# Interaction: The effect of Condition will be different at each level of Dose.\n#   - For Dose A, the mean goes UP (+4)\n#   - For Dose B, the mean goes UP (+2)\n#   - For Dose C, the mean is FLAT (0)\n#   This non-parallelism creates the interaction.\n#\n# We also set them so the marginal means are different.\nmean_A_Control &lt;- 6\nmean_A_TX &lt;- 10\n\nmean_B_Control &lt;- 9\nmean_B_TX &lt;- 11\n\nmean_C_Control &lt;- 12\nmean_C_TX &lt;- 12\n\n# --- 3. Generate the Data ---\n\n# Create the data for each of the 6 cells\ndata_A_Control &lt;- rnorm(n_per_cell, mean = mean_A_Control, sd = residual_sd)\ndata_A_TX &lt;- rnorm(n_per_cell, mean = mean_A_TX, sd = residual_sd)\ndata_B_Control &lt;- rnorm(n_per_cell, mean = mean_B_Control, sd = residual_sd)\ndata_B_TX &lt;- rnorm(n_per_cell, mean = mean_B_TX, sd = residual_sd)\ndata_C_Control &lt;- rnorm(n_per_cell, mean = mean_C_Control, sd = residual_sd)\ndata_C_TX &lt;- rnorm(n_per_cell, mean = mean_C_TX, sd = residual_sd)\n\n# Combine into a single \"long\" data frame\nsimulated_data &lt;- data.frame(\n  dv = c(data_A_Control, data_A_TX, data_B_Control, data_B_TX, data_C_Control, data_C_TX),\n  Dose = factor(rep(c(\"A\", \"A\", \"B\", \"B\", \"C\", \"C\"), each = n_per_cell)),\n  Condition = factor(rep(c(\"Control\", \"TX\", \"Control\", \"TX\", \"Control\", \"TX\"), each = n_per_cell))\n)\n\nsimulated_data\n\n\n           dv Dose Condition\n1    4.879049    A   Control\n2    5.539645    A   Control\n3    9.117417    A   Control\n4    6.141017    A   Control\n5    6.258575    A   Control\n6    9.430130    A   Control\n7    6.921832    A   Control\n8    3.469878    A   Control\n9    4.626294    A   Control\n10   5.108676    A   Control\n11   8.448164    A   Control\n12   6.719628    A   Control\n13   6.801543    A   Control\n14   6.221365    A   Control\n15   4.888318    A   Control\n16   9.573826    A   Control\n17   6.995701    A   Control\n18   2.066766    A   Control\n19   7.402712    A   Control\n20   5.054417    A   Control\n21   3.864353    A   Control\n22   5.564050    A   Control\n23   3.947991    A   Control\n24   4.542218    A   Control\n25   4.749921    A   Control\n26   2.626613    A   Control\n27   7.675574    A   Control\n28   6.306746    A   Control\n29   3.723726    A   Control\n30   8.507630    A   Control\n31   6.852928    A   Control\n32   5.409857    A   Control\n33   7.790251    A   Control\n34   7.756267    A   Control\n35   7.643162    A   Control\n36   7.377281    A   Control\n37   7.107835    A   Control\n38   5.876177    A   Control\n39   5.388075    A   Control\n40   5.239058    A   Control\n41   4.610586    A   Control\n42   5.584165    A   Control\n43   3.469207    A   Control\n44  10.337912    A   Control\n45   8.415924    A   Control\n46   3.753783    A   Control\n47   5.194230    A   Control\n48   5.066689    A   Control\n49   7.559930    A   Control\n50   5.833262    A   Control\n51  10.506637    A        TX\n52   9.942906    A        TX\n53   9.914259    A        TX\n54  12.737205    A        TX\n55   9.548458    A        TX\n56  13.032941    A        TX\n57   6.902494    A        TX\n58  11.169227    A        TX\n59  10.247708    A        TX\n60  10.431883    A        TX\n61  10.759279    A        TX\n62   8.995353    A        TX\n63   9.333585    A        TX\n64   7.962849    A        TX\n65   7.856418    A        TX\n66  10.607057    A        TX\n67  10.896420    A        TX\n68  10.106008    A        TX\n69  11.844535    A        TX\n70  14.100169    A        TX\n71   9.017938    A        TX\n72   5.381662    A        TX\n73  12.011477    A        TX\n74   8.581598    A        TX\n75   8.623983    A        TX\n76  12.051143    A        TX\n77   9.430454    A        TX\n78   7.558565    A        TX\n79  10.362607    A        TX\n80   9.722217    A        TX\n81  10.011528    A        TX\n82  10.770561    A        TX\n83   9.258680    A        TX\n84  11.288753    A        TX\n85   9.559027    A        TX\n86  10.663564    A        TX\n87  12.193678    A        TX\n88  10.870363    A        TX\n89   9.348137    A        TX\n90  12.297615    A        TX\n91  11.987008    A        TX\n92  11.096794    A        TX\n93  10.477463    A        TX\n94   8.744188    A        TX\n95  12.721305    A        TX\n96   8.799481    A        TX\n97  14.374666    A        TX\n98  13.065221    A        TX\n99   9.528599    A        TX\n100  7.947158    A        TX\n101  7.579187    B   Control\n102  9.513767    B   Control\n103  8.506616    B   Control\n104  8.304915    B   Control\n105  7.096763    B   Control\n106  8.909945    B   Control\n107  7.430191    B   Control\n108  5.664116    B   Control\n109  8.239547    B   Control\n110 10.837993    B   Control\n111  7.849306    B   Control\n112 10.215929    B   Control\n113  5.764235    B   Control\n114  8.888876    B   Control\n115 10.038814    B   Control\n116  9.602307    B   Control\n117  9.211352    B   Control\n118  7.718588    B   Control\n119  7.300591    B   Control\n120  6.951742    B   Control\n121  9.235293    B   Control\n122  7.105051    B   Control\n123  8.018885    B   Control\n124  8.487816    B   Control\n125 12.687724    B   Control\n126  7.696100    B   Control\n127  9.470773    B   Control\n128  9.155922    B   Control\n129  7.076287    B   Control\n130  8.857384    B   Control\n131 11.889102    B   Control\n132  9.903008    B   Control\n133  9.082466    B   Control\n134  8.155006    B   Control\n135  4.893506    B   Control\n136 11.262674    B   Control\n137  6.078720    B   Control\n138 10.479895    B   Control\n139 12.818207    B   Control\n140  6.112214    B   Control\n141 10.403569    B   Control\n142  8.475605    B   Control\n143  5.855712    B   Control\n144  5.970665    B   Control\n145  5.796928    B   Control\n146  7.938187    B   Control\n147  6.076489    B   Control\n148 10.375834    B   Control\n149 13.200218    B   Control\n150  6.425939    B   Control\n151 12.575478    B        TX\n152 12.538084    B        TX\n153 11.664405    B        TX\n154  8.983247    B        TX\n155 10.761095    B        TX\n156 10.439209    B        TX\n157 12.125979    B        TX\n158 10.255122    B        TX\n159 12.953947    B        TX\n160 10.250838    B        TX\n161 13.105423    B        TX\n162  8.901646    B        TX\n163  8.479690    B        TX\n164 17.482080    B        TX\n165 10.166285    B        TX\n166 11.596455    B        TX\n167 12.273139    B        TX\n168 10.032439    B        TX\n169 12.033724    B        TX\n170 11.737929    B        TX\n171 10.569239    B        TX\n172 11.130586    B        TX\n173 10.931865    B        TX\n174 15.256904    B        TX\n175  9.517328    B        TX\n176  8.808007    B        TX\n177 11.075577    B        TX\n178 11.620961    B        TX\n179 11.873047    B        TX\n180 10.083269    B        TX\n181  8.873348    B        TX\n182 13.526370    B        TX\n183 10.300699    B        TX\n184  9.268974    B        TX\n185 10.527441    B        TX\n186 10.605648    B        TX\n187 13.219841    B        TX\n188 11.169475    B        TX\n189 12.508108    B        TX\n190 10.001416    B        TX\n191 11.428891    B        TX\n192 10.350628    B        TX\n193 11.189167    B        TX\n194  9.209273    B        TX\n195  8.378397    B        TX\n196 14.994427    B        TX\n197 12.201418    B        TX\n198  8.497457    B        TX\n199  9.777668    B        TX\n200  8.629040    B        TX\n201 16.397621    C   Control\n202 14.624826    C   Control\n203 11.469710    C   Control\n204 13.086388    C   Control\n205 11.171320    C   Control\n206 11.047506    C   Control\n207 10.422794    C   Control\n208 10.810765    C   Control\n209 15.301815    C   Control\n210 11.891944    C   Control\n211 12.238490    C   Control\n212 12.487375    C   Control\n213 14.464952    C   Control\n214 10.967872    C   Control\n215 10.014986    C   Control\n216 15.351394    C   Control\n217 11.117674    C   Control\n218 10.553868    C   Control\n219  9.527454    C   Control\n220  9.430569    C   Control\n221 10.852053    C   Control\n222 13.235972    C   Control\n223 14.219696    C   Control\n224 13.415177    C   Control\n225 11.272685    C   Control\n226 12.119500    C   Control\n227 10.590807    C   Control\n228 10.565564    C   Control\n229 13.769301    C   Control\n230  9.968815    C   Control\n231 15.910588    C   Control\n232 11.819361    C   Control\n233 12.429078    C   Control\n234 10.522945    C   Control\n235 10.851223    C   Control\n236  9.365968    C   Control\n237 11.634149    C   Control\n238 12.837965    C   Control\n239 12.648609    C   Control\n240 10.436927    C   Control\n241 10.422756    C   Control\n242 10.995603    C   Control\n243 14.992121    C   Control\n244  9.725393    C   Control\n245 11.641897    C   Control\n246 15.804724    C   Control\n247 11.798050    C   Control\n248  9.280319    C   Control\n249 10.670461    C   Control\n250 12.970920    C   Control\n251 11.248794    C        TX\n252 10.876247    C        TX\n253 11.312166    C        TX\n254 12.180993    C        TX\n255 15.197018    C        TX\n256 11.822870    C        TX\n257 14.161599    C        TX\n258 13.261508    C        TX\n259 11.772720    C        TX\n260  8.934196    C        TX\n261 10.957765    C        TX\n262 11.020259    C        TX\n263 12.094309    C        TX\n264 14.600397    C        TX\n265 16.586158    C        TX\n266 15.095162    C        TX\n267 11.733698    C        TX\n268  8.486945    C        TX\n269 11.222440    C        TX\n270 12.178414    C        TX\n271 13.690026    C        TX\n272 13.925056    C        TX\n273 13.368619    C        TX\n274  9.209451    C        TX\n275 13.699286    C        TX\n276 11.106886    C        TX\n277 12.349605    C        TX\n278 12.149102    C        TX\n279 12.856334    C        TX\n280 12.049350    C        TX\n281  8.665050    C        TX\n282 13.472992    C        TX\n283 12.772053    C        TX\n284 11.468697    C        TX\n285 12.236289    C        TX\n286 12.268077    C        TX\n287 12.442039    C        TX\n288 15.281692    C        TX\n289 11.561899    C        TX\n290 12.336131    C        TX\n291 14.336768    C        TX\n292 14.108362    C        TX\n293 14.290526    C        TX\n294 10.845064    C        TX\n295 16.004965    C        TX\n296 12.133402    C        TX\n297 15.733704    C        TX\n298  9.298195    C        TX\n299 12.041967    C        TX\n300 14.499829    C        TX"
+  },
+  {
+    "objectID": "data_viz.html#factorial-anova-1",
+    "href": "data_viz.html#factorial-anova-1",
+    "title": "Data Viz",
+    "section": "Factorial ANOVA",
+    "text": "Factorial ANOVA\n\nLet’s fit our model!\nModel says: There is a difference between tx vs. control AND that difference depends on the dosage.\n\n\nmod.2 &lt;- lm(dv ~ Dose * Condition, simulated_data)\nsummary(mod.2)\n\n\nCall:\nlm(formula = dv ~ Dose * Condition, data = simulated_data)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-4.9112 -1.2753 -0.2332  1.1922  6.4045 \n\nCoefficients:\n                  Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)         6.0688     0.2661  22.805  &lt; 2e-16 ***\nDoseB               2.4234     0.3764   6.439 4.89e-10 ***\nDoseC               5.9142     0.3764  15.714  &lt; 2e-16 ***\nConditionTX         4.2240     0.3764  11.224  &lt; 2e-16 ***\nDoseB:ConditionTX  -1.6386     0.5322  -3.079  0.00228 ** \nDoseC:ConditionTX  -3.7081     0.5322  -6.967 2.13e-11 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.882 on 294 degrees of freedom\nMultiple R-squared:  0.5831,    Adjusted R-squared:  0.576 \nF-statistic: 82.24 on 5 and 294 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "data_viz.html#factorial-anova-2",
+    "href": "data_viz.html#factorial-anova-2",
+    "title": "Data Viz",
+    "section": "Factorial ANOVA",
+    "text": "Factorial ANOVA\n\nSame as before, we have the cell differences that we are feeding to our model.\n\n\n\nCode\n simulated_data %&gt;% \n  group_by(Dose, Condition) %&gt;% \n  summarise(Mean = mean(dv),\n            SD = sd(dv),\n            .groups = 'drop')\n\n\n# A tibble: 6 × 4\n  Dose  Condition  Mean    SD\n  &lt;fct&gt; &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt;\n1 A     Control    6.07  1.85\n2 A     TX        10.3   1.81\n3 B     Control    8.49  1.98\n4 B     TX        11.1   1.86\n5 C     Control   12.0   1.89\n6 C     TX        12.5   1.89"
+  },
+  {
+    "objectID": "data_viz.html#factorial-anova-3",
+    "href": "data_viz.html#factorial-anova-3",
+    "title": "Data Viz",
+    "section": "Factorial ANOVA",
+    "text": "Factorial ANOVA\n\nThen, we have the output from our model, telling us what our model of the world says the outcome will look like for a given treatment group + dose combination.\n\n\n\nCode\nlibrary(emmeans)\nm2.emm&lt;- emmeans(mod.2, ~ Condition | Dose)\nm2.emm\n\n\nDose = A:\n Condition emmean    SE  df lower.CL upper.CL\n Control     6.07 0.266 294     5.55     6.59\n TX         10.29 0.266 294     9.77    10.82\n\nDose = B:\n Condition emmean    SE  df lower.CL upper.CL\n Control     8.49 0.266 294     7.97     9.02\n TX         11.08 0.266 294    10.55    11.60\n\nDose = C:\n Condition emmean    SE  df lower.CL upper.CL\n Control    11.98 0.266 294    11.46    12.51\n TX         12.50 0.266 294    11.98    13.02\n\nConfidence level used: 0.95"
+  },
+  {
+    "objectID": "data_viz.html#x-3-plot",
+    "href": "data_viz.html#x-3-plot",
+    "title": "Data Viz",
+    "section": "2 X 3 Plot",
+    "text": "2 X 3 Plot\n\n\nCode\nlibrary(ggplot2)\ndat.em2 &lt;- as.data.frame(m2.emm) \nsimulated_data %&gt;%   \nggplot(aes(x = interaction(Condition, Dose), y = dv, fill = Condition)) + \n  geom_violin(alpha = 0.7,\n              position = position_dodge(width = 1))+\n  geom_point(aes(x = interaction(Condition, Dose)), \n             alpha = 0.3,\n             position = position_jitter(width = 0.2))+\n  geom_errorbar(data = dat.em2, \n                aes(x = interaction(Condition, Dose), \n                    y = emmean, ymin = lower.CL, ymax = upper.CL),\n                width = 0.2,\n                position = position_dodge(width = 1))"
+  },
+  {
+    "objectID": "data_viz.html#x-3-plot-1",
+    "href": "data_viz.html#x-3-plot-1",
+    "title": "Data Viz",
+    "section": "2 X 3 Plot",
+    "text": "2 X 3 Plot\n\nOnce we start working with interactions, we may need more theory to guide our plotting decisions.\nE.g., does it make more sense to have the X axis grouped by condition or by dosage?\nMore on this sort of thing later.\n\n\n\nCode\nlibrary(ggplot2)\ndat.em2 &lt;- as.data.frame(m2.emm) \nsimulated_data %&gt;%   \nggplot(aes(x = interaction(Dose, Condition), y = dv, fill = Condition)) + \n  geom_violin(alpha = 0.7,\n              position = position_dodge(width = 1))+\n  geom_point(aes(x = interaction(Dose, Condition)), \n             alpha = 0.3,\n             position = position_jitter(width = 0.2))+\n  geom_errorbar(data = dat.em2, \n                aes(x = interaction(Dose, Condition), \n                    y = emmean, ymin = lower.CL, ymax = upper.CL),\n                width = 0.2,\n                position = position_dodge(width = 1))"
+  },
+  {
+    "objectID": "data_viz.html#x-3-plot-2",
+    "href": "data_viz.html#x-3-plot-2",
+    "title": "Data Viz",
+    "section": "2 X 3 Plot",
+    "text": "2 X 3 Plot\n\n\nCode\nlibrary(ggplot2)\ndat.em2 &lt;- as.data.frame(m2.emm) \nsimulated_data %&gt;%   \nggplot(aes(x = interaction(Dose, Condition), y = dv, fill = Condition)) + \n  geom_violin(alpha = 0.7,\n              position = position_dodge(width = 1))+\n  geom_point(aes(x = interaction(Dose, Condition)), \n             alpha = 0.3,\n             position = position_jitter(width = 0.2))+\n  geom_errorbar(data = dat.em2, \n                aes(x = interaction(Dose, Condition), \n                    y = emmean, ymin = lower.CL, ymax = upper.CL),\n                width = 0.2,\n                position = position_dodge(width = 1))"
+  },
+  {
+    "objectID": "data_viz.html#looking-ahead",
+    "href": "data_viz.html#looking-ahead",
+    "title": "Data Viz",
+    "section": "Looking ahead",
+    "text": "Looking ahead\n\nWe can apply this same approach to literally any type of model we want to run.\nHW data: I think that there is a relationship between Generosity & Happiness, but it depends on first-world vs. third world status.\n\n\n\nCode\n# Load data\nreal_data &lt;- read.csv(\"homework-world.csv\")\ntwo_world &lt;- real_data %&gt;%\n  filter(World == 1 | World == 3) %&gt;%\n  mutate(World = as.factor(World)) ## To prevent R from thinking that World is a numeric variable\n\n# Fit a model\nmoderation &lt;- lm(data = two_world, Happiness ~ Generosity * World)\nsummary(moderation)\n\n\n\nCall:\nlm(formula = Happiness ~ Generosity * World, data = two_world)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-1.29523 -0.38274  0.01923  0.36275  0.85590 \n\nCoefficients:\n                  Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)         6.4622     0.1234  52.372  &lt; 2e-16 ***\nGenerosity          3.3059     0.6359   5.199 4.99e-06 ***\nWorld3             -2.4562     0.1656 -14.834  &lt; 2e-16 ***\nGenerosity:World3  -2.3819     1.0794  -2.207   0.0326 *  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.5258 on 44 degrees of freedom\n  (3 observations deleted due to missingness)\nMultiple R-squared:  0.8876,    Adjusted R-squared:   0.88 \nF-statistic: 115.8 on 3 and 44 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "data_viz.html#plotting",
+    "href": "data_viz.html#plotting",
+    "title": "Data Viz",
+    "section": "Plotting",
+    "text": "Plotting\n\nNow we have a continuous DV. Therefore, it doesn’t make sense to work with cell means anymore.\n\n\nlibrary(emmeans)\nmoderation.emm &lt;- emmeans(moderation, ~ Generosity | World)\nmoderation.emm # This tells us, what is the average level of Happiness when Generosity is at the grand mean?\n\nWorld = 1:\n Generosity emmean    SE df lower.CL upper.CL\n     0.0628   6.67 0.111 44     6.45     6.89\n\nWorld = 3:\n Generosity emmean    SE df lower.CL upper.CL\n     0.0628   4.06 0.107 44     3.85     4.28\n\nConfidence level used: 0.95"
+  },
+  {
+    "objectID": "data_viz.html#plotting-1",
+    "href": "data_viz.html#plotting-1",
+    "title": "Data Viz",
+    "section": "Plotting",
+    "text": "Plotting\n\nWe need to get the predicted AKA fitted scores from our model.\nSome functions from the easystats package will help with this!\n\n\nlibrary(easystats)\n\n# Get predictions\nmoderation.p &lt;- estimate_expectation(moderation)\nmoderation.p\n\nModel-based Expectation\n\nGenerosity | World | Predicted |   SE |       95% CI | Residuals\n----------------------------------------------------------------\n0.32       |     1 |      7.51 | 0.18 | [7.14, 7.87] |     -0.20\n0.09       |     1 |      6.76 | 0.11 | [6.54, 6.98] |      0.32\n-0.06      |     3 |      3.95 | 0.14 | [3.68, 4.22] |      0.68\n0.05       |     1 |      6.64 | 0.11 | [6.41, 6.86] |      0.27\n1.50e-03   |     3 |      4.01 | 0.11 | [3.79, 4.23] |     -0.38\n0.29       |     3 |      4.27 | 0.24 | [3.79, 4.75] |      0.81\n0.02       |     3 |      4.03 | 0.11 | [3.81, 4.24] |      0.39\n0.21       |     3 |      4.20 | 0.18 | [3.83, 4.57] |     -0.04\n0.24       |     1 |      7.25 | 0.14 | [6.96, 7.54] |      0.17\n-0.04      |     3 |      3.97 | 0.13 | [3.71, 4.22] |      0.35\n-0.14      |     3 |      3.87 | 0.19 | [3.49, 4.26] |      0.82\n-0.01      |     3 |      3.99 | 0.11 | [3.76, 4.22] |     -0.09\n0.21       |     1 |      7.17 | 0.14 | [6.89, 7.44] |      0.35\n0.13       |     3 |      4.12 | 0.13 | [3.86, 4.38] |      0.45\n-0.15      |     1 |      5.96 | 0.19 | [5.59, 6.34] |      0.39\n0.16       |     1 |      7.01 | 0.12 | [6.77, 7.25] |      0.03\n-0.03      |     3 |      3.98 | 0.12 | [3.73, 4.22] |  8.54e-03\n-0.28      |     1 |      5.54 | 0.26 | [5.02, 6.06] |      0.08\n0.05       |     3 |      4.06 | 0.11 | [3.84, 4.27] |     -0.55\n0.31       |     3 |      4.29 | 0.26 | [3.77, 4.82] |     -0.72\n0.23       |     1 |      7.23 | 0.14 | [6.94, 7.52] |     -0.40\n0.10       |     1 |      6.79 | 0.11 | [6.57, 7.01] |      0.29\n-0.07      |     1 |      6.23 | 0.15 | [5.93, 6.53] |     -0.38\n-0.17      |     1 |      5.90 | 0.20 | [5.50, 6.30] |     -0.02\n-9.92e-03  |     3 |      4.00 | 0.11 | [3.77, 4.23] |     -1.30\n0.04       |     1 |      6.58 | 0.11 | [6.35, 6.81] |      0.12\n-0.03      |     3 |      3.98 | 0.12 | [3.74, 4.22] |     -0.39\n0.09       |     3 |      4.08 | 0.11 | [3.86, 4.31] |     -0.22\n-0.04      |     3 |      3.97 | 0.13 | [3.71, 4.22] |      0.62\n0.07       |     3 |      4.07 | 0.11 | [3.85, 4.29] |     -0.15\n0.24       |     3 |      4.23 | 0.21 | [3.81, 4.65] |      0.58\n0.25       |     1 |      7.28 | 0.15 | [6.98, 7.58] |      0.05\n0.32       |     1 |      7.52 | 0.18 | [7.15, 7.89] |     -0.10\n-9.49e-03  |     3 |      4.00 | 0.11 | [3.77, 4.23] |     -0.33\n0.23       |     1 |      7.22 | 0.14 | [6.93, 7.50] |      0.39\n-0.17      |     1 |      5.89 | 0.20 | [5.49, 6.29] |     -0.81\n0.04       |     3 |      4.04 | 0.11 | [3.83, 4.25] |     -0.56\n-0.09      |     3 |      3.92 | 0.16 | [3.61, 4.23] |      0.70\n0.05       |     3 |      4.05 | 0.11 | [3.84, 4.27] |      0.86\n-0.05      |     1 |      6.30 | 0.14 | [6.02, 6.58] |     -0.52\n-0.08      |     1 |      6.18 | 0.16 | [5.87, 6.50] |      0.20\n0.20       |     1 |      7.12 | 0.13 | [6.85, 7.38] |      0.17\n0.10       |     1 |      6.78 | 0.11 | [6.56, 7.00] |      0.79\n0.14       |     3 |      4.14 | 0.14 | [3.86, 4.42] |     -0.48\n-0.06      |     3 |      3.95 | 0.14 | [3.67, 4.22] |     -0.18\n0.29       |     1 |      7.41 | 0.17 | [7.08, 7.75] |     -0.90\n0.20       |     1 |      7.13 | 0.13 | [6.87, 7.39] |     -0.27\n-0.14      |     3 |      3.88 | 0.19 | [3.50, 4.26] |     -0.89\n\nVariable predicted: Happiness"
+  },
+  {
+    "objectID": "data_viz.html#plotting-2",
+    "href": "data_viz.html#plotting-2",
+    "title": "Data Viz",
+    "section": "Plotting",
+    "text": "Plotting\n\nA nice thing about this easystats approach is you can easily make a plot. These are good to see what is going on in your data. But these are not super flexible, so it may not be easy to turn these into effective, publication-ready plots.\n\n\n\nCode\n# Get predictions\nmoderation.p &lt;- estimate_expectation(moderation, by = c(\"Generosity\", \"World\"))\n\n# Plot\nplot(moderation.p)"
+  },
+  {
+    "objectID": "data_viz.html#plotting-3",
+    "href": "data_viz.html#plotting-3",
+    "title": "Data Viz",
+    "section": "Plotting",
+    "text": "Plotting\n\nUsing ggplot, we can take the predictions and plot them against the raw data.\n\n\n\nCode\n# Get predictions\nmoderation.p &lt;- estimate_expectation(moderation)\nmoderation.p\n\n\nModel-based Expectation\n\nGenerosity | World | Predicted |   SE |       95% CI | Residuals\n----------------------------------------------------------------\n0.32       |     1 |      7.51 | 0.18 | [7.14, 7.87] |     -0.20\n0.09       |     1 |      6.76 | 0.11 | [6.54, 6.98] |      0.32\n-0.06      |     3 |      3.95 | 0.14 | [3.68, 4.22] |      0.68\n0.05       |     1 |      6.64 | 0.11 | [6.41, 6.86] |      0.27\n1.50e-03   |     3 |      4.01 | 0.11 | [3.79, 4.23] |     -0.38\n0.29       |     3 |      4.27 | 0.24 | [3.79, 4.75] |      0.81\n0.02       |     3 |      4.03 | 0.11 | [3.81, 4.24] |      0.39\n0.21       |     3 |      4.20 | 0.18 | [3.83, 4.57] |     -0.04\n0.24       |     1 |      7.25 | 0.14 | [6.96, 7.54] |      0.17\n-0.04      |     3 |      3.97 | 0.13 | [3.71, 4.22] |      0.35\n-0.14      |     3 |      3.87 | 0.19 | [3.49, 4.26] |      0.82\n-0.01      |     3 |      3.99 | 0.11 | [3.76, 4.22] |     -0.09\n0.21       |     1 |      7.17 | 0.14 | [6.89, 7.44] |      0.35\n0.13       |     3 |      4.12 | 0.13 | [3.86, 4.38] |      0.45\n-0.15      |     1 |      5.96 | 0.19 | [5.59, 6.34] |      0.39\n0.16       |     1 |      7.01 | 0.12 | [6.77, 7.25] |      0.03\n-0.03      |     3 |      3.98 | 0.12 | [3.73, 4.22] |  8.54e-03\n-0.28      |     1 |      5.54 | 0.26 | [5.02, 6.06] |      0.08\n0.05       |     3 |      4.06 | 0.11 | [3.84, 4.27] |     -0.55\n0.31       |     3 |      4.29 | 0.26 | [3.77, 4.82] |     -0.72\n0.23       |     1 |      7.23 | 0.14 | [6.94, 7.52] |     -0.40\n0.10       |     1 |      6.79 | 0.11 | [6.57, 7.01] |      0.29\n-0.07      |     1 |      6.23 | 0.15 | [5.93, 6.53] |     -0.38\n-0.17      |     1 |      5.90 | 0.20 | [5.50, 6.30] |     -0.02\n-9.92e-03  |     3 |      4.00 | 0.11 | [3.77, 4.23] |     -1.30\n0.04       |     1 |      6.58 | 0.11 | [6.35, 6.81] |      0.12\n-0.03      |     3 |      3.98 | 0.12 | [3.74, 4.22] |     -0.39\n0.09       |     3 |      4.08 | 0.11 | [3.86, 4.31] |     -0.22\n-0.04      |     3 |      3.97 | 0.13 | [3.71, 4.22] |      0.62\n0.07       |     3 |      4.07 | 0.11 | [3.85, 4.29] |     -0.15\n0.24       |     3 |      4.23 | 0.21 | [3.81, 4.65] |      0.58\n0.25       |     1 |      7.28 | 0.15 | [6.98, 7.58] |      0.05\n0.32       |     1 |      7.52 | 0.18 | [7.15, 7.89] |     -0.10\n-9.49e-03  |     3 |      4.00 | 0.11 | [3.77, 4.23] |     -0.33\n0.23       |     1 |      7.22 | 0.14 | [6.93, 7.50] |      0.39\n-0.17      |     1 |      5.89 | 0.20 | [5.49, 6.29] |     -0.81\n0.04       |     3 |      4.04 | 0.11 | [3.83, 4.25] |     -0.56\n-0.09      |     3 |      3.92 | 0.16 | [3.61, 4.23] |      0.70\n0.05       |     3 |      4.05 | 0.11 | [3.84, 4.27] |      0.86\n-0.05      |     1 |      6.30 | 0.14 | [6.02, 6.58] |     -0.52\n-0.08      |     1 |      6.18 | 0.16 | [5.87, 6.50] |      0.20\n0.20       |     1 |      7.12 | 0.13 | [6.85, 7.38] |      0.17\n0.10       |     1 |      6.78 | 0.11 | [6.56, 7.00] |      0.79\n0.14       |     3 |      4.14 | 0.14 | [3.86, 4.42] |     -0.48\n-0.06      |     3 |      3.95 | 0.14 | [3.67, 4.22] |     -0.18\n0.29       |     1 |      7.41 | 0.17 | [7.08, 7.75] |     -0.90\n0.20       |     1 |      7.13 | 0.13 | [6.87, 7.39] |     -0.27\n-0.14      |     3 |      3.88 | 0.19 | [3.50, 4.26] |     -0.89\n\nVariable predicted: Happiness\n\n\nCode\n# Convert modelbased object to a dataframe\nmoderation.p &lt;- data.frame(moderation.p)\n\n# Plot\nggplot(data = moderation.p, aes(x = Generosity, y = Predicted, group = World, color = World))+\n  geom_line()+\n  geom_point(data = two_world,\n             aes(x = Generosity, y = Happiness, color = World), alpha = 0.5)+\n  geom_ribbon(aes(ymin = CI_low, ymax = CI_high, fill = World), alpha = 0.2)"
+  },
+  {
+    "objectID": "data_viz.html#plotting-4",
+    "href": "data_viz.html#plotting-4",
+    "title": "Data Viz",
+    "section": "Plotting",
+    "text": "Plotting\n\nThe default is to plot predictions for the actual data points that you observed.\nIn some cases (especially for plotting purposes), you might want to know – what would my model predict for scores that are outside the range in the observed data?"
+  },
+  {
+    "objectID": "data_viz.html#plotting-5",
+    "href": "data_viz.html#plotting-5",
+    "title": "Data Viz",
+    "section": "Plotting",
+    "text": "Plotting\n\nTo get more flexibility with what predictions we can make and plot, we can combine data_grid() from the modelr package with augment() from the broom package\n\n\n\nCode\nlibrary(modelr)\nlibrary(broom)\n\n# Get predictions\nmoderation.p &lt;- data_grid(two_world, \n                          Generosity = seq_range(Generosity, 10),\n                          World) %&gt;%\n  augment(moderation, \n          newdata = ., # feeds the datagrid object to the new data argument\n          interval = \"confidence\") # default CI = 95%\n\n# Plot predictions against raw data\nggplot(data = moderation.p, # predictions\n       aes(x = Generosity, y = .fitted, group = World, color = World))+\n  geom_line()+\n  geom_point(data = two_world, # raw data\n             aes(x = Generosity, y = Happiness, color = World), alpha = 0.5)+\n  geom_ribbon(aes(ymin = .lower, ymax = .upper, fill = World), alpha = 0.2)"
+  },
+  {
+    "objectID": "data_viz.html#plotting-6",
+    "href": "data_viz.html#plotting-6",
+    "title": "Data Viz",
+    "section": "Plotting",
+    "text": "Plotting\n\n\nCode\nlibrary(modelr)\nlibrary(broom)\n\n# Get predictions\nmoderation.p &lt;- data_grid(two_world, \n                          Generosity = seq_range(Generosity, 10),\n                          World) %&gt;%\n  augment(moderation, \n          newdata = ., # feeds the datagrid object to the new data argument\n          interval = \"confidence\") # default CI = 95%\n\n# Plot predictions against raw data\nggplot(data = moderation.p, # predictions\n       aes(x = Generosity, y = .fitted, group = World, color = World))+\n  geom_line()+\n  geom_point(data = two_world, # raw data\n             aes(x = Generosity, y = Happiness, color = World), alpha = 0.5)+\n  geom_ribbon(aes(ymin = .lower, ymax = .upper, fill = World), alpha = 0.2)"
+  },
+  {
+    "objectID": "data_viz.html#looking-ahead-1",
+    "href": "data_viz.html#looking-ahead-1",
+    "title": "Data Viz",
+    "section": "Looking ahead",
+    "text": "Looking ahead\n\nWe are going to learn about increasingly complex models next semester.\nThis approach (give data to model -&gt; model creates predictions -&gt; plot predictions) will work for all of them."
+  },
+  {
+    "objectID": "data_viz.html#looking-ahead-2",
+    "href": "data_viz.html#looking-ahead-2",
+    "title": "Data Viz",
+    "section": "Looking ahead",
+    "text": "Looking ahead\n\nE.g., I want to know how Happiness and Generosity are related separately for each World category.\n\n\n\nCode\n# Load data\nfour_world &lt;- real_data %&gt;%\n  mutate(World = as.factor(World)) ## To prevent R from thinking that World is a numeric variable\n\n# Fit a model\nmoderation &lt;- lm(data = four_world, Happiness ~ Generosity * World)\nsummary(moderation)\n\n\n\nCall:\nlm(formula = Happiness ~ Generosity * World, data = four_world)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-1.70552 -0.47722 -0.01398  0.46844  1.99969 \n\nCoefficients:\n                  Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)         6.4622     0.1648  39.204  &lt; 2e-16 ***\nGenerosity          3.3059     0.8495   3.892  0.00017 ***\nWorld2             -1.0354     0.2267  -4.568 1.27e-05 ***\nWorld3             -2.4562     0.2212 -11.104  &lt; 2e-16 ***\nWorld4             -1.0358     0.1955  -5.299 5.91e-07 ***\nGenerosity:World2  -3.1792     1.3272  -2.395  0.01826 *  \nGenerosity:World3  -2.3819     1.4419  -1.652  0.10135    \nGenerosity:World4  -3.0887     1.0985  -2.812  0.00582 ** \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.7024 on 112 degrees of freedom\n  (16 observations deleted due to missingness)\nMultiple R-squared:  0.6354,    Adjusted R-squared:  0.6127 \nF-statistic: 27.89 on 7 and 112 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "data_viz.html#looking-ahead-3",
+    "href": "data_viz.html#looking-ahead-3",
+    "title": "Data Viz",
+    "section": "Looking ahead",
+    "text": "Looking ahead\n\n\nCode\n# Get predictions\nmoderation.p &lt;- data_grid(four_world, \n                          Generosity = seq_range(Generosity, 10),\n                          World) %&gt;%\n  augment(moderation, \n          newdata = ., # feeds the datagrid object to the new data argument\n          interval = \"confidence\") # default CI = 95%\n\n# Plot predictions against raw data\nggplot(data = moderation.p, # predictions\n       aes(x = Generosity, y = .fitted, group = World, color = World))+\n  geom_line()+\n  geom_point(data = four_world, # raw data\n             aes(x = Generosity, y = Happiness, color = World), alpha = 0.5)+\n  geom_ribbon(aes(ymin = .lower, ymax = .upper, fill = World), alpha = 0.2)"
+  },
+  {
+    "objectID": "data_viz.html#looking-ahead-4",
+    "href": "data_viz.html#looking-ahead-4",
+    "title": "Data Viz",
+    "section": "Looking ahead",
+    "text": "Looking ahead\n\nAs we run increasingly complex models, graphical depictions will also get more complex and difficult to parse. More on this later."
+  },
+  {
+    "objectID": "data_viz.html#looking-ahead-5",
+    "href": "data_viz.html#looking-ahead-5",
+    "title": "Data Viz",
+    "section": "Looking ahead",
+    "text": "Looking ahead\n\nE.g., I want to know the relationship between X & Y, controlling for what I believe to be confounding variables W, Z, Q, ….\n\n\n# Fit a model\nmod3 &lt;- lm(data = four_world, Happiness ~ Generosity + GDP + Support + Freedom)\nsummary(mod3)\n\n\nCall:\nlm(formula = Happiness ~ Generosity + GDP + Support + Freedom, \n    data = four_world)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-1.99181 -0.29063  0.03551  0.40026  1.28055 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  -2.8590     0.4510  -6.339 5.00e-09 ***\nGenerosity    0.7450     0.3702   2.013 0.046552 *  \nGDP           0.5945     0.0648   9.174 2.66e-15 ***\nSupport       1.9833     0.6152   3.224 0.001657 ** \nFreedom       1.5754     0.4626   3.405 0.000918 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.5546 on 112 degrees of freedom\n  (19 observations deleted due to missingness)\nMultiple R-squared:  0.7719,    Adjusted R-squared:  0.7637 \nF-statistic: 94.74 on 4 and 112 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "data_viz.html#looking-ahead-6",
+    "href": "data_viz.html#looking-ahead-6",
+    "title": "Data Viz",
+    "section": "Looking ahead",
+    "text": "Looking ahead\n\n\nCode\n# Get predictions\nmod3.p &lt;- data_grid(four_world,\n                    GDP = mean(four_world$GDP, na.rm = T), \n                    Support = mean(four_world$Support, na.rm = T), \n                    Freedom = mean(four_world$Freedom, na.rm = T),\n                    Generosity = seq_range(Generosity, 10),) %&gt;%\n  augment(mod3, \n          newdata = ., # feeds the datagrid object to the new data argument\n          interval = \"confidence\") # default CI = 95%\n\n# Plot predictions against raw data\nggplot(data = mod3.p, # predictions\n       aes(x = Generosity, y = .fitted))+\n  geom_line()+\n  geom_point(data = four_world, # raw data\n             aes(x = Generosity, y = Happiness), alpha = 0.5)+\n  geom_ribbon(aes(ymin = .lower, ymax = .upper), alpha = 0.2)"
+  },
+  {
+    "objectID": "data_viz.html#looking-ahead-7",
+    "href": "data_viz.html#looking-ahead-7",
+    "title": "Data Viz",
+    "section": "Looking ahead",
+    "text": "Looking ahead\n\nAgain, it would not be out of the ordinary to see a paper that says “we controlled for Z, W, Q”, and then this is their plot. But this is not the effect they are telling you about.\n\n\n\nCode\n# Get predictions\nggplot(data = four_world, \n       aes(x = Generosity, y = Happiness))+\n  geom_point(alpha = 0.5)+\n  geom_smooth(method = \"lm\", color = \"black\")"
+  },
+  {
+    "objectID": "data_viz.html#tables-1",
+    "href": "data_viz.html#tables-1",
+    "title": "Data Viz",
+    "section": "Tables",
+    "text": "Tables\n\nOften, we want to run lots of models and summarize a large number of results in a table.\nMany of us begin life manually copy+pasting or typing numbers from summary outputs into a word document :’(\nWith R, there are better ways."
+  },
+  {
+    "objectID": "data_viz.html#tables-2",
+    "href": "data_viz.html#tables-2",
+    "title": "Data Viz",
+    "section": "Tables",
+    "text": "Tables\n\nOur model summary is just a big list of numbers and dataframes. We can manipulate these to get any given piece of info that we want from our model.\n\n\nmod4 &lt;- lm(Happiness ~ Generosity, data = four_world)\nresults &lt;- summary(mod4)\nresults$coefficients\n\n            Estimate Std. Error   t value     Pr(&gt;|t|)\n(Intercept) 5.384976  0.1012968 53.160398 2.800758e-84\nGenerosity  1.472521  0.6493563  2.267662 2.516943e-02\n\nbeta &lt;- results$coefficients[\"Generosity\", \"Estimate\"]\nbeta\n\n[1] 1.472521"
+  },
+  {
+    "objectID": "data_viz.html#tables-3",
+    "href": "data_viz.html#tables-3",
+    "title": "Data Viz",
+    "section": "Tables",
+    "text": "Tables\n\nUnfancy way to make a table: Run models, save info from models to a dataframe, formatted the way you want your table to be.\n\n\n\nCode\nlibrary(stats)\n\n# Formatting function to get bs to fit formatting conventions.\nformatbs &lt;- function(x) { gsub(\"-\",\"\\u2013\",sprintf(\"%.2f\", x))}\n\n# Create a list of predictors that we will run\nPredictors &lt;- c(\"GDP\", \"Support\", \"Life\", \"Freedom\", \"Generosity\", \"Corruption\")\n\n# Create an empty table, which we will use to build our table\ntable1 &lt;- data.frame()\n\n# This for loop runs a model with each of our predictors, pulls key information, and adds it to the dataframe\nfor(i in Predictors){\n  equation &lt;- paste0(\"Happiness ~ \", i) # write equation to feed to lm()\n  model &lt;- lm(paste0(equation), data = four_world)\n  results &lt;- summary(model)\n  \n  beta &lt;- formatbs(results$coefficients[paste0(i), \"Estimate\"]) # pull b1 coefficient and format\n  CI &lt;- paste0( # Here we are concatenating multiple pieces of information to get formatted CIs\n    \"[\",\n    formatbs(results$coefficients[paste0(i), \"Estimate\"] - 1.96*results$coefficients[paste0(i), \"Std. Error\"]),\n    \", \",\n    formatbs( results$coefficients[paste0(i), \"Estimate\"] + 1.96*results$coefficients[paste0(i), \"Std. Error\"]),\n    \"]\"\n  )\n  \n  # Add results to the table\n  table1 &lt;- rbind(table1, data.frame(\"b\" = beta,\n                                       \"ci\" = CI))\n}\n\n# Add predictor names as first column of the table\ntable1 &lt;- cbind(data.frame(Predictor = Predictors),\n                table1)\ntable1\n\n\n   Predictor     b             ci\n1        GDP  0.80   [0.70, 0.90]\n2    Support  6.56   [5.50, 7.62]\n3       Life  0.11   [0.09, 0.13]\n4    Freedom  4.31   [3.07, 5.54]\n5 Generosity  1.47   [0.20, 2.75]\n6 Corruption –2.57 [–3.47, –1.67]"
+  },
+  {
+    "objectID": "data_viz.html#tables-4",
+    "href": "data_viz.html#tables-4",
+    "title": "Data Viz",
+    "section": "Tables",
+    "text": "Tables\n\nThere are dozens of fancy ways in r to make tables that are clean and publication ready.\nYMMV. These can save you a ton of coding time trying to get a pretty table. Or you might want something super specific that is easiest to get by just coding it yourself the hard way."
+  },
+  {
+    "objectID": "data_viz.html#tables-5",
+    "href": "data_viz.html#tables-5",
+    "title": "Data Viz",
+    "section": "Tables",
+    "text": "Tables\n\nThe gtsummary package a great and super easy one for regression tables.\n\n\n\nCode\nlibrary(gtsummary)\n\ntable1 &lt;- four_world %&gt;%\n    tbl_uvregression(\n      method = lm,\n      y = Happiness,\n      include = Predictors,\n      hide_n = T)\n\ntable1\n\n\n\n\n\n\n  \n    \n      Characteristic\n      Beta\n      95% CI\n      p-value\n    \n  \n  \n    GDP\n0.80\n0.70, 0.90\n&lt;0.001\n    Support\n6.6\n5.5, 7.6\n&lt;0.001\n    Life\n0.11\n0.09, 0.13\n&lt;0.001\n    Freedom\n4.3\n3.1, 5.6\n&lt;0.001\n    Generosity\n1.5\n0.19, 2.8\n0.025\n    Corruption\n-2.6\n-3.5, -1.7\n&lt;0.001\n  \n  \n    \n      Abbreviation: CI = Confidence Interval"
+  },
+  {
+    "objectID": "data_viz.html#visually-summarizing-many-results",
+    "href": "data_viz.html#visually-summarizing-many-results",
+    "title": "Data Viz",
+    "section": "Visually summarizing Many Results",
+    "text": "Visually summarizing Many Results\n\nAdvantage of tables: Can summarize all the relevant information in one place.\nDisadvantage of tables: requires reading :(\npossibly even thinking :((((((("
+  },
+  {
+    "objectID": "data_viz.html#visually-summarizing-many-results-1",
+    "href": "data_viz.html#visually-summarizing-many-results-1",
+    "title": "Data Viz",
+    "section": "Visually summarizing Many Results",
+    "text": "Visually summarizing Many Results\n\nUsing similar approaches, we can turn our tables into plots.\n\n\n\nCode\nlibrary(tidyverse)\n\n# Create a dataframe with b + se for each predictor\neffects &lt;- data.frame()\nfor(i in Predictors){\n  standard &lt;- paste0(\"scale(\", i, \")\")\n  equation &lt;- paste0(\"Happiness ~ \", standard)\n  \n  model &lt;- lm(paste0(equation), data = four_world)\n  results &lt;- summary(model)\n  \n  beta &lt;- results$coefficients[paste0(standard), \"Estimate\"]\n  se &lt;- results$coefficients[paste0(standard), \"Std. Error\"]\n  \n  effects &lt;- rbind(effects, data.frame(\"B\" = beta,\n                                       \"se\" = se))\n}\neffects &lt;- cbind(data.frame(Predictor = Predictors),\n                effects)\n\n# Display all the results on one plot\nggplot(data = effects, aes(y = Predictor, x = B))+\n  geom_point(size = 3)+\n  geom_errorbar(aes(xmin = B - 1.96*se, \n                    xmax = B + 1.96*se),\n                width = .15)+\n  geom_vline(xintercept = 0, linetype = \"dashed\")"
+  },
+  {
+    "objectID": "data_viz.html#what-is-a-good-data-visualization",
+    "href": "data_viz.html#what-is-a-good-data-visualization",
+    "title": "Data Viz",
+    "section": "What is a good data visualization?",
+    "text": "What is a good data visualization?\n\nThere are lots and lots of opinions out there.\nSome of this is personal taste and judgment.\nI will try to share some tips that will generally lead to better visualizations, and note some ways to work with ggplot to get results."
+  },
+  {
+    "objectID": "data_viz.html#what-is-data-visualization",
+    "href": "data_viz.html#what-is-data-visualization",
+    "title": "Data Viz",
+    "section": "What is data visualization",
+    "text": "What is data visualization\n\nBoth art + science.\nArt = aesthetically pleasing. Coherent, meaningful, easy to look at.\nScience = accurately representing certain types of data.\nBoth = Communicating the story of your data to your audience."
+  },
+  {
+    "objectID": "data_viz.html#example-1",
+    "href": "data_viz.html#example-1",
+    "title": "Data Viz",
+    "section": "Example 1",
+    "text": "Example 1\n\nWow, crossover interaction!\n\n\n\nCode\nset.seed(8066)\nx &lt;- rnorm(2000, mean = 0, sd = 2)\ndata &lt;- data.frame(\n  x = x,\n  y = c(x*.3 + rnorm(1000, 0, 3), x*-.3 + rnorm(1000, 0, 3)),\n  group = c(rep(\"Group A\", 1000), rep(\"Group B\", 1000))\n)\n\nggplot(data = data, aes(x = x, y = y))+\n  geom_smooth(method = \"lm\", se = F, aes(color = group))"
+  },
+  {
+    "objectID": "data_viz.html#example-1-1",
+    "href": "data_viz.html#example-1-1",
+    "title": "Data Viz",
+    "section": "Example 1",
+    "text": "Example 1\n\nOh…\n\n\n\nCode\nggplot(data = data, aes(x = x, y = y))+\n  geom_point(alpha = 0.2)+\n  geom_smooth(method = \"lm\", se = F, aes(color = group))"
+  },
+  {
+    "objectID": "data_viz.html#example-2",
+    "href": "data_viz.html#example-2",
+    "title": "Data Viz",
+    "section": "Example 2",
+    "text": "Example 2\n\nBetter than before – full scale + error bars from predictions.\n\n\n\nCode\nset.seed(8066)\ndata &lt;- data.frame(\n  x = c(rep(\"Control\", 50), rep(\"Treatment\", 50)),\n  y = c(rep(1, 40), rep(5, 10),\n        rep(1, 25), rep(5, 25))\n)\n\nmodel &lt;- lm(y ~ x, data)\nlibrary(emmeans)\nmeans &lt;- data.frame(emmeans(model, ~ x))\n\nggplot(data = means, aes(x = x, y = emmean, fill = x))+\n  geom_bar(stat = \"summary\")+\n  geom_errorbar(aes(ymin = emmean - 1.96*SE, ymax = emmean + 1.96*SE), width = 0.1)+\n  scale_y_continuous(limits = c(0, 5))"
+  },
+  {
+    "objectID": "data_viz.html#example-2-1",
+    "href": "data_viz.html#example-2-1",
+    "title": "Data Viz",
+    "section": "Example 2",
+    "text": "Example 2\n\nBut raw data reveals some important context.\n\n\n\nCode\nggplot(data = means, aes(x = x, y = emmean, fill = x))+\n  geom_point(data = data, aes(x = x, y = y, color = x),\n             position = position_jitter(height = 0.5), alpha = 0.7)+\n  geom_bar(stat = \"summary\", alpha = 0.5)+\n  geom_errorbar(aes(ymin = emmean - 1.96*SE, ymax = emmean + 1.96*SE), width = 0.1)+\n  scale_y_continuous(limits = c(0, 5))"
+  },
+  {
+    "objectID": "data_viz.html#basics-of-a-good-figure",
+    "href": "data_viz.html#basics-of-a-good-figure",
+    "title": "Data Viz",
+    "section": "Basics of a good figure",
+    "text": "Basics of a good figure\n\nAxes are clearly labeled. Units of measurement are often helpful.\nScale is 1) consistent across the axis, 2) interpretable, chosen so that 3) data are evenly distributed, and 4) the full range of relevant values is represented.\nData points are represented clearly, with meaningful and obvious keys for categorical distinctions.\nGraph is the appropriate type for your data."
+  },
+  {
+    "objectID": "data_viz.html#what-graphs-are-appropriate-for-my-data",
+    "href": "data_viz.html#what-graphs-are-appropriate-for-my-data",
+    "title": "Data Viz",
+    "section": "What graphs are appropriate for my data?",
+    "text": "What graphs are appropriate for my data?\n\nE.g., barplots are not really ideal for continuous data (see earlier example). Violin plots and dot plots do better.\nSimilarly, it is inappropriate to graph a linear relationship between categorical variables (though ggplot will let you do it!)"
+  },
+  {
+    "objectID": "data_viz.html#what-graphs-are-appropriate-for-my-data-1",
+    "href": "data_viz.html#what-graphs-are-appropriate-for-my-data-1",
+    "title": "Data Viz",
+    "section": "What graphs are appropriate for my data?",
+    "text": "What graphs are appropriate for my data?"
+  },
+  {
+    "objectID": "data_viz.html#accessibility-is-important",
+    "href": "data_viz.html#accessibility-is-important",
+    "title": "Data Viz",
+    "section": "Accessibility is important",
+    "text": "Accessibility is important\n\nColorblindness is a thing.\nPeople have poor vision, and it can hard to know how big text will be when printed on a page or displayed on a screen.\nSo, we need to be thoughtful about colors, contrast, sizes, and fonts."
+  },
+  {
+    "objectID": "data_viz.html#colors",
+    "href": "data_viz.html#colors",
+    "title": "Data Viz",
+    "section": "Colors",
+    "text": "Colors\n\nThere are all kinds of color palettes you can try out.\nSome helpful options come with r, including the color_brewer and color_veridis families.\nDifferent kinds of color palettes are more appropriate for different kinds of data."
+  },
+  {
+    "objectID": "data_viz.html#colors-1",
+    "href": "data_viz.html#colors-1",
+    "title": "Data Viz",
+    "section": "Colors",
+    "text": "Colors\n\nViridis, intended to be easily perceptible for people with common forms of color blindness.\n\n\n\nCode\nlibrary(ggplot2)\nsimulated_data %&gt;%   \nggplot(aes(x = interaction(Dose, Condition), y = dv, fill = Condition)) + \n  geom_violin(alpha = 0.7,\n              position = position_dodge(width = 1))+\n  geom_point(aes(x = interaction(Dose, Condition)), \n             alpha = 0.3,\n             position = position_jitter(width = 0.2))+\n  geom_errorbar(data = dat.em2, \n                aes(x = interaction(Dose, Condition), \n                    y = emmean, ymin = lower.CL, ymax = upper.CL),\n                width = 0.2,\n                position = position_dodge(width = 1))+\n  scale_fill_viridis_d()"
+  },
+  {
+    "objectID": "data_viz.html#contrast",
+    "href": "data_viz.html#contrast",
+    "title": "Data Viz",
+    "section": "Contrast",
+    "text": "Contrast\n\nAnother good approach is to use the same or similar colors, but vary the shade/tone/tint. This means your plot will work for different types of vision and will work if printed in black and white.\n\n\n\nCode\nlibrary(ggplot2)\nsimulated_data %&gt;%   \nggplot(aes(x = interaction(Dose, Condition), y = dv, fill = Condition)) + \n  geom_violin(alpha = 0.9,\n              position = position_dodge(width = 1))+\n  geom_point(aes(x = interaction(Dose, Condition)), \n             alpha = 0.3,\n             position = position_jitter(width = 0.2))+\n  geom_errorbar(data = dat.em2, \n                aes(x = interaction(Dose, Condition), \n                    y = emmean, ymin = lower.CL, ymax = upper.CL),\n                width = 0.2,\n                position = position_dodge(width = 1))+\n  scale_fill_brewer()"
+  },
+  {
+    "objectID": "data_viz.html#text",
+    "href": "data_viz.html#text",
+    "title": "Data Viz",
+    "section": "Text",
+    "text": "Text\n\nErr on the side of larger text.\nSans serif fonts are always easier to read.\nBold the things that you want viewers eyes drawn to first (e.g., axis titles)"
+  },
+  {
+    "objectID": "data_viz.html#an-example",
+    "href": "data_viz.html#an-example",
+    "title": "Data Viz",
+    "section": "An example",
+    "text": "An example\n\nWe can walkthrough a first pass visualization, and an update that would be passable for a manuscript or presentation. Look at how to implement some improvements in ggplot."
+  },
+  {
+    "objectID": "data_viz.html#first-pass",
+    "href": "data_viz.html#first-pass",
+    "title": "Data Viz",
+    "section": "First pass",
+    "text": "First pass\n\n\nCode\nsimulated_data %&gt;%   \nggplot(aes(x = interaction(Condition, Dose), y = dv, fill = Condition)) + \n  geom_violin()+\n  geom_point(aes(x = interaction(Condition, Dose)),\n             position = position_jitter())+\n  geom_errorbar(data = dat.em2, \n                aes(x = interaction(Condition, Dose), \n                    y = emmean, ymin = lower.CL, ymax = upper.CL),\n                width = 0.2,\n                position = position_dodge(width = 1))\n\n\n\nCode\n# This has the basic elements we need for our plot. Let's try to make it tell our story more effectively"
+  },
+  {
+    "objectID": "data_viz.html#better-version",
+    "href": "data_viz.html#better-version",
+    "title": "Data Viz",
+    "section": "Better version",
+    "text": "Better version\n\n\nCode\n# Manually create an interaction/cell means variable. This lets us customize the spacing between each cell.\ndat.em2$iv &lt;- c(1, 1.33, 2, 2.33, 3, 3.33)\nsimulated_data %&gt;% \n  # Same thing as above in the raw data\n  mutate(iv = case_when(Dose == \"A\" & Condition == \"Control\" ~ 1,\n                        Dose == \"A\" & Condition == \"TX\" ~ 1.33,\n                        Dose == \"B\" & Condition == \"Control\" ~ 2,\n                        Dose == \"B\" & Condition == \"TX\" ~ 2.33,\n                        Dose == \"C\" & Condition == \"Control\" ~ 3,\n                        Dose == \"C\" & Condition == \"TX\" ~ 3.33) \n         ) %&gt;%\nggplot(aes(x = iv, y = dv))+ \n  geom_violin(aes(x = iv, group = iv, fill = Condition))+\n  geom_point(aes(x = iv), \n             position = position_jitter(width = 0.1), # try to keep points from overlapping\n             alpha = 0.2)+ # alpha = darkness. They are still visible, but lighter = cleaner plot\n  geom_errorbar(data = dat.em2, \n                aes(x = iv, y = emmean, ymin = lower.CL, ymax = upper.CL),\n                width = 0.13, # Controls the T-ness. I like the look of flatter CIs.\n                linewidth = 1.3)+ # We want to draw attention to our predictions, so let's make them bigger.\n  theme_classic()+ # Everyone has a favorite theme! This one has the classic psych article look.\n  scale_x_continuous(breaks = c(1.165, 2.165, 3.165), # Adds ticks at each margine\n                     labels = c(\"Dose A\",   # We used a continuous scale to control spacing\n                                \"Dose B\",   # But now we can add back discrete labels\n                                \"Dose C\"))+\n  scale_y_continuous(limits = c(2, 18),\n                     breaks = seq(2, 18, by = 4))+ # Setting some reasonable ticks on the DV\n  scale_fill_brewer(                     # An easy option to implement contrast\n    labels = c(\"Control\", \"Treatment\"))+ # Plus add descriptive legend keys\n  labs(x = \"Dosage\",\n       y = \"Outcome\")+\n  # Finally, customize all text in the theme argument\n  theme(axis.title.y = element_text(size = 20, color = 'black', face = 'bold'),\n    axis.title.x = element_text(size = 20, color = 'black', face = 'bold'),\n    axis.text.x = element_text(size = 18, color = 'black'),\n    axis.text.y = element_text(size = 18, color = 'black'),\n    legend.title = element_text(size = 20, color = 'black', face = 'bold'),\n    legend.text = element_text(size = 18, color = 'black'))"
+  },
+  {
+    "objectID": "data_viz.html#how-do-i-know-if-my-figure-is-good",
+    "href": "data_viz.html#how-do-i-know-if-my-figure-is-good",
+    "title": "Data Viz",
+    "section": "How do I know if my figure is good?",
+    "text": "How do I know if my figure is good?\n\nDoes it EASILY communicate what you want? Will your message be clear to a reader who is bored, tired, and/or lazy (i.e., a reviewer)?\nIs it accessible to people with poor eyesight and colorblindness?\nDoes it faithfully reflect the data? Good figures = beautiful and true &lt;3"
   }
 ]

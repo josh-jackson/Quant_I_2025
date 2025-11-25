@@ -1,0 +1,979 @@
+---
+title: "Data Viz"
+format: revealjs
+slide-number: true
+editor: visual
+execute:
+  echo: true
+html:
+  code-fold: true
+  code-summary: Show the code
+  scrollable: true
+---
+
+## This time
+
+-   How to get from models -\> figures and tables
+
+-   Some guidance on effective visualization
+
+------------------------------------------------------------------------
+
+## Recap
+
+-   Three group means
+
+```{r}
+#| code-fold: true
+
+library(ggplot2)
+library(dplyr)
+library(tibble) 
+
+# --- 1. Set Simulation Parameters ---
+
+set.seed(74) # Makes your simulation reproducible
+
+n_per_group <- 50  # 50 participants per group
+residual_sd <- 1.0 # This is the within-group SD
+
+# Define the true means for our three groups.
+# We'll set them apart to ensure the ANOVA finds a significant effect.
+
+mean_group_A <- 4.0
+mean_group_B <- 5.0
+mean_group_C <- 6.0
+
+# --- 2. Generate the Data ---
+
+# Create the data for each group from a normal distribution
+
+group_A_data <- rnorm(n_per_group, mean = mean_group_A, sd = residual_sd)
+group_B_data <- rnorm(n_per_group, mean = mean_group_B, sd = residual_sd)
+group_C_data <- rnorm(n_per_group, mean = mean_group_C, sd = residual_sd)
+
+# Combine into a single "long" data frame, which is required for ANOVA
+simulated_data <- data.frame(
+  dv = c(group_A_data, group_B_data, group_C_data),
+  group = factor(rep(c("Group A", "Group B", "Group C"), each = n_per_group))
+)
+
+```
+
+```{r}
+#| code-fold: true
+simulated_data
+```
+
+------------------------------------------------------------------------
+
+## Recap
+
+-   Let's fit a model to estimate the group means
+
+```{r}
+mod.1 <- lm(dv ~ group, simulated_data)
+summary(mod.1)
+```
+
+------------------------------------------------------------------------
+
+## Recap
+
+-   Now we want to display the results of our model to the world! How do we do it?
+
+-   Most often, people forget the model they fit at this stage, and just plot descriptive statistics from raw data.
+
+```{r}
+#| code-fold: true
+
+ simulated_data %>% 
+  group_by(group) %>% 
+  summarise(Mean = mean(dv), 
+            SD = sd(dv),
+            .groups = 'drop')
+```
+
+------------------------------------------------------------------------
+
+## Recap
+
+-   But we have predictions from our model! We can get estimates from these to display the model of the world that we are actually drawing our conclusions from.
+
+```{r}
+#| code-fold: true
+
+library(emmeans)
+m1.emm<- emmeans(mod.1, ~group)
+m1.emm
+```
+
+------------------------------------------------------------------------
+
+## Plot estimated means + CIs
+
+```{r}
+library(ggplot2)
+dat.em <- as.data.frame(m1.emm) 
+simulated_data %>%   
+ggplot(aes(x = group, y = dv)) + 
+  geom_violin()+
+  geom_point(position = position_jitter())+
+  geom_errorbar(data = dat.em, aes(x = group, y = emmean,ymin = lower.CL, ymax = upper.CL), width = 0.2)
+```
+
+------------------------------------------------------------------------
+
+## Factorial ANOVA
+
+-   Simulated 2x3 design from last class.
+
+```{r}
+#| code-fold: true
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(tibble) # For a cleaner summary print
+
+# --- 1. Set Simulation Parameters ---
+
+set.seed(123) # Makes your simulation reproducible
+
+# Design: 3 (Dose) x 2 (Condition)
+n_per_cell <- 50 # 300 total participants / 6 cells = 50 per cell
+
+# Set the standard deviation for the "noise" or error.
+# A smaller SD makes the effects easier to detect (i.e., "significant").
+residual_sd <- 2.0
+
+# --- 2. Define the "True" Population Means ---
+# We will set the 6 cell means to create a crossover interaction AND main effects.
+#
+# Interaction: The effect of Condition will be different at each level of Dose.
+#   - For Dose A, the mean goes UP (+4)
+#   - For Dose B, the mean goes UP (+2)
+#   - For Dose C, the mean is FLAT (0)
+#   This non-parallelism creates the interaction.
+#
+# We also set them so the marginal means are different.
+mean_A_Control <- 6
+mean_A_TX <- 10
+
+mean_B_Control <- 9
+mean_B_TX <- 11
+
+mean_C_Control <- 12
+mean_C_TX <- 12
+
+# --- 3. Generate the Data ---
+
+# Create the data for each of the 6 cells
+data_A_Control <- rnorm(n_per_cell, mean = mean_A_Control, sd = residual_sd)
+data_A_TX <- rnorm(n_per_cell, mean = mean_A_TX, sd = residual_sd)
+data_B_Control <- rnorm(n_per_cell, mean = mean_B_Control, sd = residual_sd)
+data_B_TX <- rnorm(n_per_cell, mean = mean_B_TX, sd = residual_sd)
+data_C_Control <- rnorm(n_per_cell, mean = mean_C_Control, sd = residual_sd)
+data_C_TX <- rnorm(n_per_cell, mean = mean_C_TX, sd = residual_sd)
+
+# Combine into a single "long" data frame
+simulated_data <- data.frame(
+  dv = c(data_A_Control, data_A_TX, data_B_Control, data_B_TX, data_C_Control, data_C_TX),
+  Dose = factor(rep(c("A", "A", "B", "B", "C", "C"), each = n_per_cell)),
+  Condition = factor(rep(c("Control", "TX", "Control", "TX", "Control", "TX"), each = n_per_cell))
+)
+
+simulated_data
+
+```
+
+------------------------------------------------------------------------
+
+## Factorial ANOVA
+
+-   Let's fit our model!
+
+-   Model says: There is a difference between tx vs. control AND that difference *depends* on the dosage.
+
+```{r}
+mod.2 <- lm(dv ~ Dose * Condition, simulated_data)
+summary(mod.2)
+```
+
+------------------------------------------------------------------------
+
+## Factorial ANOVA
+
+-   Same as before, we have the cell differences that we are feeding to our model.
+
+```{r}
+#| code-fold: true
+ simulated_data %>% 
+  group_by(Dose, Condition) %>% 
+  summarise(Mean = mean(dv),
+            SD = sd(dv),
+            .groups = 'drop')
+```
+
+------------------------------------------------------------------------
+
+## Factorial ANOVA
+
+-   Then, we have the output from our model, telling us what our model of the world says the outcome will look like for a given treatment group + dose combination.
+
+```{r}
+#| code-fold: true
+library(emmeans)
+m2.emm<- emmeans(mod.2, ~ Condition | Dose)
+m2.emm
+```
+
+------------------------------------------------------------------------
+
+## 2 X 3 Plot
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+dat.em2 <- as.data.frame(m2.emm) 
+simulated_data %>%   
+ggplot(aes(x = interaction(Condition, Dose), y = dv, fill = Condition)) + 
+  geom_violin(alpha = 0.7,
+              position = position_dodge(width = 1))+
+  geom_point(aes(x = interaction(Condition, Dose)), 
+             alpha = 0.3,
+             position = position_jitter(width = 0.2))+
+  geom_errorbar(data = dat.em2, 
+                aes(x = interaction(Condition, Dose), 
+                    y = emmean, ymin = lower.CL, ymax = upper.CL),
+                width = 0.2,
+                position = position_dodge(width = 1))
+```
+
+------------------------------------------------------------------------
+
+## 2 X 3 Plot
+
+-   Once we start working with interactions, we may need more theory to guide our plotting decisions.
+
+-   E.g., does it make more sense to have the X axis grouped by condition or by dosage?
+
+-   More on this sort of thing later.
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+dat.em2 <- as.data.frame(m2.emm) 
+simulated_data %>%   
+ggplot(aes(x = interaction(Dose, Condition), y = dv, fill = Condition)) + 
+  geom_violin(alpha = 0.7,
+              position = position_dodge(width = 1))+
+  geom_point(aes(x = interaction(Dose, Condition)), 
+             alpha = 0.3,
+             position = position_jitter(width = 0.2))+
+  geom_errorbar(data = dat.em2, 
+                aes(x = interaction(Dose, Condition), 
+                    y = emmean, ymin = lower.CL, ymax = upper.CL),
+                width = 0.2,
+                position = position_dodge(width = 1))
+```
+
+------------------------------------------------------------------------
+
+## 2 X 3 Plot
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+dat.em2 <- as.data.frame(m2.emm) 
+simulated_data %>%   
+ggplot(aes(x = interaction(Dose, Condition), y = dv, fill = Condition)) + 
+  geom_violin(alpha = 0.7,
+              position = position_dodge(width = 1))+
+  geom_point(aes(x = interaction(Dose, Condition)), 
+             alpha = 0.3,
+             position = position_jitter(width = 0.2))+
+  geom_errorbar(data = dat.em2, 
+                aes(x = interaction(Dose, Condition), 
+                    y = emmean, ymin = lower.CL, ymax = upper.CL),
+                width = 0.2,
+                position = position_dodge(width = 1))
+```
+
+------------------------------------------------------------------------
+
+## Looking ahead
+
+-   We can apply this same approach to literally any type of model we want to run.
+
+-   HW data: I think that there is a relationship between Generosity & Happiness, but *it depends* on first-world vs. third world status.
+
+```{r}
+#| code-fold: true
+# Load data
+real_data <- read.csv("homework-world.csv")
+two_world <- real_data %>%
+  filter(World == 1 | World == 3) %>%
+  mutate(World = as.factor(World)) ## To prevent R from thinking that World is a numeric variable
+
+# Fit a model
+moderation <- lm(data = two_world, Happiness ~ Generosity * World)
+summary(moderation)
+```
+
+------------------------------------------------------------------------
+
+## Plotting
+
+-   Now we have a continuous DV. Therefore, it doesn't make sense to work with cell means anymore.
+
+```{r}
+library(emmeans)
+moderation.emm <- emmeans(moderation, ~ Generosity | World)
+moderation.emm # This tells us, what is the average level of Happiness when Generosity is at the grand mean?
+```
+
+------------------------------------------------------------------------
+
+## Plotting
+
+-   We need to get the predicted AKA fitted scores from our model.
+
+-   Some functions from the easystats package will help with this!
+
+```{r}
+library(easystats)
+
+# Get predictions
+moderation.p <- estimate_expectation(moderation)
+moderation.p
+```
+
+------------------------------------------------------------------------
+
+## Plotting
+
+-   A nice thing about this easystats approach is you can easily make a plot. These are good to see what is going on in your data. But these are not super flexible, so it may not be easy to turn these into effective, publication-ready plots.
+
+```{r}
+#| code-fold: true
+# Get predictions
+moderation.p <- estimate_expectation(moderation, by = c("Generosity", "World"))
+
+# Plot
+plot(moderation.p)
+```
+
+------------------------------------------------------------------------
+
+## Plotting
+
+-   Using ggplot, we can take the predictions and plot them against the raw data.
+
+```{r}
+#| code-fold: true
+# Get predictions
+moderation.p <- estimate_expectation(moderation)
+moderation.p
+
+# Convert modelbased object to a dataframe
+moderation.p <- data.frame(moderation.p)
+
+# Plot
+ggplot(data = moderation.p, aes(x = Generosity, y = Predicted, group = World, color = World))+
+  geom_line()+
+  geom_point(data = two_world,
+             aes(x = Generosity, y = Happiness, color = World), alpha = 0.5)+
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high, fill = World), alpha = 0.2)
+```
+
+------------------------------------------------------------------------
+
+## Plotting
+
+-   The default is to plot predictions for the actual data points that you observed.
+
+-   In some cases (especially for plotting purposes), you might want to know -- what would my model predict for scores that are outside the range in the observed data?
+
+------------------------------------------------------------------------
+
+## Plotting
+
+-   To get more flexibility with what predictions we can make and plot, we can combine data_grid() from the modelr package with augment() from the broom package
+
+```{r}
+#| code-fold: true
+library(modelr)
+library(broom)
+
+# Get predictions
+moderation.p <- data_grid(two_world, 
+                          Generosity = seq_range(Generosity, 10),
+                          World) %>%
+  augment(moderation, 
+          newdata = ., # feeds the datagrid object to the new data argument
+          interval = "confidence") # default CI = 95%
+
+# Plot predictions against raw data
+ggplot(data = moderation.p, # predictions
+       aes(x = Generosity, y = .fitted, group = World, color = World))+
+  geom_line()+
+  geom_point(data = two_world, # raw data
+             aes(x = Generosity, y = Happiness, color = World), alpha = 0.5)+
+  geom_ribbon(aes(ymin = .lower, ymax = .upper, fill = World), alpha = 0.2)
+```
+
+------------------------------------------------------------------------
+
+## Plotting
+
+```{r}
+#| code-fold: true
+library(modelr)
+library(broom)
+
+# Get predictions
+moderation.p <- data_grid(two_world, 
+                          Generosity = seq_range(Generosity, 10),
+                          World) %>%
+  augment(moderation, 
+          newdata = ., # feeds the datagrid object to the new data argument
+          interval = "confidence") # default CI = 95%
+
+# Plot predictions against raw data
+ggplot(data = moderation.p, # predictions
+       aes(x = Generosity, y = .fitted, group = World, color = World))+
+  geom_line()+
+  geom_point(data = two_world, # raw data
+             aes(x = Generosity, y = Happiness, color = World), alpha = 0.5)+
+  geom_ribbon(aes(ymin = .lower, ymax = .upper, fill = World), alpha = 0.2)
+```
+
+------------------------------------------------------------------------
+
+## Looking ahead
+
+-   We are going to learn about increasingly complex models next semester.
+
+-   This approach (give data to model -\> model creates predictions -\> plot predictions) will work for all of them.
+
+------------------------------------------------------------------------
+
+## Looking ahead
+
+-   E.g., I want to know how Happiness and Generosity are related separately for each World category.
+
+```{r}
+#| code-fold: true
+# Load data
+four_world <- real_data %>%
+  mutate(World = as.factor(World)) ## To prevent R from thinking that World is a numeric variable
+
+# Fit a model
+moderation <- lm(data = four_world, Happiness ~ Generosity * World)
+summary(moderation)
+```
+
+------------------------------------------------------------------------
+
+## Looking ahead
+
+```{r}
+#| code-fold: true
+# Get predictions
+moderation.p <- data_grid(four_world, 
+                          Generosity = seq_range(Generosity, 10),
+                          World) %>%
+  augment(moderation, 
+          newdata = ., # feeds the datagrid object to the new data argument
+          interval = "confidence") # default CI = 95%
+
+# Plot predictions against raw data
+ggplot(data = moderation.p, # predictions
+       aes(x = Generosity, y = .fitted, group = World, color = World))+
+  geom_line()+
+  geom_point(data = four_world, # raw data
+             aes(x = Generosity, y = Happiness, color = World), alpha = 0.5)+
+  geom_ribbon(aes(ymin = .lower, ymax = .upper, fill = World), alpha = 0.2)
+```
+
+------------------------------------------------------------------------
+
+## Looking ahead
+
+-   As we run increasingly complex models, graphical depictions will also get more complex and difficult to parse. More on this later.
+
+------------------------------------------------------------------------
+
+## Looking ahead
+
+-   E.g., I want to know the relationship between X & Y, controlling for what I believe to be confounding variables W, Z, Q, ....
+
+```{r}
+# Fit a model
+mod3 <- lm(data = four_world, Happiness ~ Generosity + GDP + Support + Freedom)
+summary(mod3)
+```
+
+------------------------------------------------------------------------
+
+## Looking ahead
+
+```{r}
+#| code-fold: true
+# Get predictions
+mod3.p <- data_grid(four_world,
+                    GDP = mean(four_world$GDP, na.rm = T), 
+                    Support = mean(four_world$Support, na.rm = T), 
+                    Freedom = mean(four_world$Freedom, na.rm = T),
+                    Generosity = seq_range(Generosity, 10),) %>%
+  augment(mod3, 
+          newdata = ., # feeds the datagrid object to the new data argument
+          interval = "confidence") # default CI = 95%
+
+# Plot predictions against raw data
+ggplot(data = mod3.p, # predictions
+       aes(x = Generosity, y = .fitted))+
+  geom_line()+
+  geom_point(data = four_world, # raw data
+             aes(x = Generosity, y = Happiness), alpha = 0.5)+
+  geom_ribbon(aes(ymin = .lower, ymax = .upper), alpha = 0.2)
+```
+
+------------------------------------------------------------------------
+
+## Looking ahead
+
+-   Again, it would not be out of the ordinary to see a paper that says "we controlled for Z, W, Q", and then this is their plot. But this is not the effect they are telling you about.
+
+```{r}
+#| code-fold: true
+# Get predictions
+ggplot(data = four_world, 
+       aes(x = Generosity, y = Happiness))+
+  geom_point(alpha = 0.5)+
+  geom_smooth(method = "lm", color = "black")
+```
+
+------------------------------------------------------------------------
+
+# Tables
+
+------------------------------------------------------------------------
+
+## Tables
+
+-   Often, we want to run lots of models and summarize a large number of results in a table.
+
+-   Many of us begin life manually copy+pasting or typing numbers from summary outputs into a word document :'(
+
+-   With R, there are better ways.
+
+------------------------------------------------------------------------
+
+## Tables
+
+-   Our model summary is just a big list of numbers and dataframes. We can manipulate these to get any given piece of info that we want from our model.
+
+```{r}
+mod4 <- lm(Happiness ~ Generosity, data = four_world)
+results <- summary(mod4)
+results$coefficients
+beta <- results$coefficients["Generosity", "Estimate"]
+beta
+```
+
+------------------------------------------------------------------------
+
+## Tables
+
+-   Unfancy way to make a table: Run models, save info from models to a dataframe, formatted the way you want your table to be.
+
+```{r}
+#| code-fold: true
+library(stats)
+
+# Formatting function to get bs to fit formatting conventions.
+formatbs <- function(x) { gsub("-","\u2013",sprintf("%.2f", x))}
+
+# Create a list of predictors that we will run
+Predictors <- c("GDP", "Support", "Life", "Freedom", "Generosity", "Corruption")
+
+# Create an empty table, which we will use to build our table
+table1 <- data.frame()
+
+# This for loop runs a model with each of our predictors, pulls key information, and adds it to the dataframe
+for(i in Predictors){
+  equation <- paste0("Happiness ~ ", i) # write equation to feed to lm()
+  model <- lm(paste0(equation), data = four_world)
+  results <- summary(model)
+  
+  beta <- formatbs(results$coefficients[paste0(i), "Estimate"]) # pull b1 coefficient and format
+  CI <- paste0( # Here we are concatenating multiple pieces of information to get formatted CIs
+    "[",
+    formatbs(results$coefficients[paste0(i), "Estimate"] - 1.96*results$coefficients[paste0(i), "Std. Error"]),
+    ", ",
+    formatbs( results$coefficients[paste0(i), "Estimate"] + 1.96*results$coefficients[paste0(i), "Std. Error"]),
+    "]"
+  )
+  
+  # Add results to the table
+  table1 <- rbind(table1, data.frame("b" = beta,
+                                       "ci" = CI))
+}
+
+# Add predictor names as first column of the table
+table1 <- cbind(data.frame(Predictor = Predictors),
+                table1)
+table1
+```
+
+------------------------------------------------------------------------
+
+## Tables
+
+-   There are dozens of fancy ways in r to make tables that are clean and publication ready.
+
+-   YMMV. These can save you a ton of coding time trying to get a pretty table. Or you might want something super specific that is easiest to get by just coding it yourself the hard way.
+
+------------------------------------------------------------------------
+
+## Tables
+
+-   The gtsummary package a great and super easy one for regression tables.
+
+```{r}
+#| code-fold: true
+library(gtsummary)
+
+table1 <- four_world %>%
+    tbl_uvregression(
+      method = lm,
+      y = Happiness,
+      include = Predictors,
+      hide_n = T)
+
+table1
+```
+
+------------------------------------------------------------------------
+
+## Visually summarizing Many Results
+
+-   Advantage of tables: Can summarize all the relevant information in one place.
+-   Disadvantage of tables: requires reading :(
+-   possibly even thinking :(((((((
+
+------------------------------------------------------------------------
+
+## Visually summarizing Many Results
+
+-   Using similar approaches, we can turn our tables into plots.
+
+```{r}
+#| code-fold: true
+library(tidyverse)
+
+# Create a dataframe with b + se for each predictor
+effects <- data.frame()
+for(i in Predictors){
+  standard <- paste0("scale(", i, ")")
+  equation <- paste0("Happiness ~ ", standard)
+  
+  model <- lm(paste0(equation), data = four_world)
+  results <- summary(model)
+  
+  beta <- results$coefficients[paste0(standard), "Estimate"]
+  se <- results$coefficients[paste0(standard), "Std. Error"]
+  
+  effects <- rbind(effects, data.frame("B" = beta,
+                                       "se" = se))
+}
+effects <- cbind(data.frame(Predictor = Predictors),
+                effects)
+
+# Display all the results on one plot
+ggplot(data = effects, aes(y = Predictor, x = B))+
+  geom_point(size = 3)+
+  geom_errorbar(aes(xmin = B - 1.96*se, 
+                    xmax = B + 1.96*se),
+                width = .15)+
+  geom_vline(xintercept = 0, linetype = "dashed")
+```
+
+------------------------------------------------------------------------
+
+# Good data viz
+
+------------------------------------------------------------------------
+
+## What is a good data visualization?
+
+-   There are lots and lots of opinions out there.
+
+-   Some of this is personal taste and judgment.
+
+-   I will try to share some tips that will generally lead to better visualizations, and note some ways to work with ggplot to get results.
+
+------------------------------------------------------------------------
+
+## What is data visualization
+
+-   Both art + science.
+-   Art = aesthetically pleasing. Coherent, meaningful, easy to look at.
+-   Science = accurately representing certain types of data.
+-   Both = Communicating the story of your data to your audience.
+
+------------------------------------------------------------------------
+
+### Telling your story
+
+-   Raw data are not intuitive to understand.
+-   We fit a model to understand the relationships in our data. Then, we use our model to visualize the relationships that are in our data.
+-   Telling the <b>honest</b> story of the relationships we believe to be important in our data.
+
+------------------------------------------------------------------------
+
+## Example 1
+
+-   Wow, crossover interaction!
+
+```{r}
+#| code-fold: true
+set.seed(8066)
+x <- rnorm(2000, mean = 0, sd = 2)
+data <- data.frame(
+  x = x,
+  y = c(x*.3 + rnorm(1000, 0, 3), x*-.3 + rnorm(1000, 0, 3)),
+  group = c(rep("Group A", 1000), rep("Group B", 1000))
+)
+
+ggplot(data = data, aes(x = x, y = y))+
+  geom_smooth(method = "lm", se = F, aes(color = group))
+```
+
+------------------------------------------------------------------------
+
+## Example 1
+
+-   Oh...
+
+```{r}
+#| code-fold: true
+ggplot(data = data, aes(x = x, y = y))+
+  geom_point(alpha = 0.2)+
+  geom_smooth(method = "lm", se = F, aes(color = group))
+```
+
+------------------------------------------------------------------------
+
+## Example 2
+
+-   Better than before -- full scale + error bars from predictions.
+
+```{r}
+#| code-fold: true
+set.seed(8066)
+data <- data.frame(
+  x = c(rep("Control", 50), rep("Treatment", 50)),
+  y = c(rep(1, 40), rep(5, 10),
+        rep(1, 25), rep(5, 25))
+)
+
+model <- lm(y ~ x, data)
+library(emmeans)
+means <- data.frame(emmeans(model, ~ x))
+
+ggplot(data = means, aes(x = x, y = emmean, fill = x))+
+  geom_bar(stat = "summary")+
+  geom_errorbar(aes(ymin = emmean - 1.96*SE, ymax = emmean + 1.96*SE), width = 0.1)+
+  scale_y_continuous(limits = c(0, 5))
+```
+
+------------------------------------------------------------------------
+
+## Example 2
+
+-   But raw data reveals some important context.
+
+```{r}
+#| code-fold: true
+ggplot(data = means, aes(x = x, y = emmean, fill = x))+
+  geom_point(data = data, aes(x = x, y = y, color = x),
+             position = position_jitter(height = 0.5), alpha = 0.7)+
+  geom_bar(stat = "summary", alpha = 0.5)+
+  geom_errorbar(aes(ymin = emmean - 1.96*SE, ymax = emmean + 1.96*SE), width = 0.1)+
+  scale_y_continuous(limits = c(0, 5))
+```
+
+------------------------------------------------------------------------
+
+## Basics of a good figure
+
+-   Axes are clearly labeled. Units of measurement are often helpful.
+-   Scale is 1) consistent across the axis, 2) interpretable, chosen so that 3) data are evenly distributed, and 4) the full range of relevant values is represented.
+-   Data points are represented clearly, with meaningful and obvious keys for categorical distinctions.
+-   Graph is the appropriate type for your data.
+
+------------------------------------------------------------------------
+
+## What graphs are appropriate for my data?
+
+-   E.g., barplots are not really ideal for continuous data (see earlier example). Violin plots and dot plots do better.
+-   Similarly, it is inappropriate to graph a linear relationship between categorical variables (though ggplot will let you do it!)
+
+------------------------------------------------------------------------
+
+## What graphs are appropriate for my data?
+
+![](appropriate.png)
+
+------------------------------------------------------------------------
+
+## Accessibility is important
+
+-   Colorblindness is a thing.
+-   People have poor vision, and it can hard to know how big text will be when printed on a page or displayed on a screen.
+-   So, we need to be thoughtful about colors, contrast, sizes, and fonts.
+
+------------------------------------------------------------------------
+
+## Colors
+
+-   There are all kinds of color palettes you can try out.
+-   Some helpful options come with r, including the color_brewer and color_veridis families.
+-   Different kinds of color palettes are more appropriate for different kinds of data.
+
+------------------------------------------------------------------------
+
+## Colors
+
+-   Viridis, intended to be easily perceptible for people with common forms of color blindness.
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+simulated_data %>%   
+ggplot(aes(x = interaction(Dose, Condition), y = dv, fill = Condition)) + 
+  geom_violin(alpha = 0.7,
+              position = position_dodge(width = 1))+
+  geom_point(aes(x = interaction(Dose, Condition)), 
+             alpha = 0.3,
+             position = position_jitter(width = 0.2))+
+  geom_errorbar(data = dat.em2, 
+                aes(x = interaction(Dose, Condition), 
+                    y = emmean, ymin = lower.CL, ymax = upper.CL),
+                width = 0.2,
+                position = position_dodge(width = 1))+
+  scale_fill_viridis_d()
+```
+
+------------------------------------------------------------------------
+
+## Contrast
+
+-   Another good approach is to use the same or similar colors, but vary the shade/tone/tint. This means your plot will work for different types of vision *and* will work if printed in black and white.
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+simulated_data %>%   
+ggplot(aes(x = interaction(Dose, Condition), y = dv, fill = Condition)) + 
+  geom_violin(alpha = 0.9,
+              position = position_dodge(width = 1))+
+  geom_point(aes(x = interaction(Dose, Condition)), 
+             alpha = 0.3,
+             position = position_jitter(width = 0.2))+
+  geom_errorbar(data = dat.em2, 
+                aes(x = interaction(Dose, Condition), 
+                    y = emmean, ymin = lower.CL, ymax = upper.CL),
+                width = 0.2,
+                position = position_dodge(width = 1))+
+  scale_fill_brewer()
+```
+
+------------------------------------------------------------------------
+
+## Text
+
+-   Err on the side of larger text.
+-   Sans serif fonts are always easier to read.
+-   Bold the things that you want viewers eyes drawn to first (e.g., axis titles)
+
+------------------------------------------------------------------------
+
+## An example
+
+-   We can walkthrough a first pass visualization, and an update that would be passable for a manuscript or presentation. Look at how to implement some improvements in ggplot.
+
+------------------------------------------------------------------------
+
+## First pass
+
+```{r}
+#| code-fold: true
+simulated_data %>%   
+ggplot(aes(x = interaction(Condition, Dose), y = dv, fill = Condition)) + 
+  geom_violin()+
+  geom_point(aes(x = interaction(Condition, Dose)),
+             position = position_jitter())+
+  geom_errorbar(data = dat.em2, 
+                aes(x = interaction(Condition, Dose), 
+                    y = emmean, ymin = lower.CL, ymax = upper.CL),
+                width = 0.2,
+                position = position_dodge(width = 1))
+# This has the basic elements we need for our plot. Let's try to make it tell our story more effectively
+```
+
+------------------------------------------------------------------------
+
+## Better version
+
+```{r}
+#| code-fold: true
+# Manually create an interaction/cell means variable. This lets us customize the spacing between each cell.
+dat.em2$iv <- c(1, 1.33, 2, 2.33, 3, 3.33)
+simulated_data %>% 
+  # Same thing as above in the raw data
+  mutate(iv = case_when(Dose == "A" & Condition == "Control" ~ 1,
+                        Dose == "A" & Condition == "TX" ~ 1.33,
+                        Dose == "B" & Condition == "Control" ~ 2,
+                        Dose == "B" & Condition == "TX" ~ 2.33,
+                        Dose == "C" & Condition == "Control" ~ 3,
+                        Dose == "C" & Condition == "TX" ~ 3.33) 
+         ) %>%
+ggplot(aes(x = iv, y = dv))+ 
+  geom_violin(aes(x = iv, group = iv, fill = Condition))+
+  geom_point(aes(x = iv), 
+             position = position_jitter(width = 0.1), # try to keep points from overlapping
+             alpha = 0.2)+ # alpha = darkness. They are still visible, but lighter = cleaner plot
+  geom_errorbar(data = dat.em2, 
+                aes(x = iv, y = emmean, ymin = lower.CL, ymax = upper.CL),
+                width = 0.13, # Controls the T-ness. I like the look of flatter CIs.
+                linewidth = 1.3)+ # We want to draw attention to our predictions, so let's make them bigger.
+  theme_classic()+ # Everyone has a favorite theme! This one has the classic psych article look.
+  scale_x_continuous(breaks = c(1.165, 2.165, 3.165), # Adds ticks at each margine
+                     labels = c("Dose A",   # We used a continuous scale to control spacing
+                                "Dose B",   # But now we can add back discrete labels
+                                "Dose C"))+
+  scale_y_continuous(limits = c(2, 18),
+                     breaks = seq(2, 18, by = 4))+ # Setting some reasonable ticks on the DV
+  scale_fill_brewer(                     # An easy option to implement contrast
+    labels = c("Control", "Treatment"))+ # Plus add descriptive legend keys
+  labs(x = "Dosage",
+       y = "Outcome")+
+  # Finally, customize all text in the theme argument
+  theme(axis.title.y = element_text(size = 20, color = 'black', face = 'bold'),
+    axis.title.x = element_text(size = 20, color = 'black', face = 'bold'),
+    axis.text.x = element_text(size = 18, color = 'black'),
+    axis.text.y = element_text(size = 18, color = 'black'),
+    legend.title = element_text(size = 20, color = 'black', face = 'bold'),
+    legend.text = element_text(size = 18, color = 'black'))
+```
+
+------------------------------------------------------------------------
+
+## How do I know if my figure is good?
+
+-   Does it EASILY communicate what you want? Will your message be clear to a reader who is bored, tired, and/or lazy (i.e., a reviewer)?
+-   Is it accessible to people with poor eyesight and colorblindness?
+-   Does it *faithfully* reflect the data? Good figures = beautiful and true \<3

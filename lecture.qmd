@@ -26,3 +26,5 @@ editor: source
 11. [ANOVA](anova_11.qmd)
 
 12. [Factorial ANOVA](factorial_12.qmd)
+
+13. [Data Viz](data_viz.qmd)
