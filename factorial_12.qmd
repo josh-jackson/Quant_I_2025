@@ -483,7 +483,7 @@ $$ + \beta_4 \text{(Dose1*Condition)}_i + \beta_5 \text{(Dose2*Condition)}_i$$
 -----------
 
 ```{r}
-fit.2 <- lm(dv ~ Dose * Condition, simulated_data)
+fit.2 <- lm(dv ~ 1 + Dose * Condition, simulated_data)
 summary(fit.2)
 ```
 
@@ -513,7 +513,7 @@ $\beta_3 \text{Condition}_{i}$ = Simple main effect of Condition. It's the diffe
 
 $\beta_4 \text{(Dose1*Condition)}_i$ = is the simple interaction effect (a contrast/comparison of an already existing contrast). A difference of a difference. It's the difference between Dose B and Dose A when in control $\beta_2$ compared to the  difference between Dose B and Dose A when in Treatment. 
 
-$\beta_5 \text{(Dose2*Condition)}_i$ = is the simple interaction effecet interpreted as the difference between Dose C and Dose A when in control $\beta_3$ compared to the   difference between Dose C and Dose A when in Treatment. 
+$\beta_5 \text{(Dose2*Condition)}_i$ = is the simple interaction effecet interpreted as the difference between Dose C and Dose A when in control $\beta_3$ compared to the difference between Dose C and Dose A when in Treatment. 
 
 ## simple interaction effect
 
@@ -543,6 +543,8 @@ $$ + \beta_4 \text{(Dose1*Condition)}_i + \beta_5 \text{(Dose2*Condition)}_i$$
 ```{r}
 anova(fit.2)
 ```
+
+
 
 ## degrees of freedom
 
@@ -577,21 +579,102 @@ $$ + \sum(Y_{ikj} -  \hat{Y_{jk}})^2$$
 | MM (Condition) | 20       | 30 | Grand Mean = 25      |
 
 
+----------
+
+```{r}
+anova(fit.1, fit.2)
+```
+
 ## Simple main effects in emmeans
 
 - Be careful. With an interaction you are interested in cell means. Do not interpret marginal means
+
+```{r}
+qq <- emmeans(fit.2, ~  Dose )
+qq 
+```
+
+---------------
+
+```{r}
+pairs(qq)
+```
+
+
+------------------
+
+```{r}
+
+qq <- emmeans(fit.2, ~  Dose | Condition)
+pairs(qq)
+
+```
+
+-----------
+
+```{r}
+pairs(qq, simple = "Condition") 
+```
+
+--------------
+
+```{r}
+summary(fit.2)
+```
+
+## interaction contrasts
+
+```{r}
+qqq <- emmeans(fit.2, ~ Dose * Condition)
+CON <- pairs(qqq, by = "Dose")
+contrast(CON, "pairwise", by = NULL)
+```
+
+
+---------------
+
+
+```{r}
+
+CON <- pairs(qq, by = "Condition")
+contrast(CON, "consec", by = NULL)
+
+```
+
 
 
 ## Paired comparisons in emmeans
 
 
+```{r}
+emmeans(fit.2, pairwise  ~  Dose * Condition)
+```
+
+## effect coding
+
+```{r}
+
+qq.f<- emmeans(fit.2, eff  ~  Dose * Condition)
+qq.f
+```
+
+-----------
+
+```{r}
+emmeans(fit.2, eff ~  Dose | Condition)
+```
 
 
+----------
+
+```{r}
+contrasts(simulated_data$Dose) <- contr.sum(3)
+contrasts(simulated_data$Condition) <- contr.sum(2)
+
+fit.3 <- lm(dv ~ 1 + Dose * Condition, simulated_data)
+
+summary(fit.3)
+
+```
 
 
-
-
-
-
-
-## plotting

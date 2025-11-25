@@ -241,7 +241,7 @@ $$\sum (Y_i - \bar{Y})^2 = \sum (\bar{\text{Group}_k} -\text{Grand mean})^2 + \s
 
 ## degrees of freedom
 
-MS Regression: p 
+MS Regression: # of predictors, which is equal to #levels - 1 
 
 MS Error: n - p - 1
 

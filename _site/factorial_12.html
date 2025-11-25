@@ -1596,12 +1596,12 @@ Conf-level adjustment: tukey method for comparing a family of 3 estimates </code
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>fit<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(dv <span class="sc">~</span> Dose <span class="sc">*</span> Condition, simulated_data)</span>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>fit<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(dv <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Dose <span class="sc">*</span> Condition, simulated_data)</span>
 <span id="cb58-2"><a href="#cb58-2"></a><span class="fu">summary</span>(fit<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = dv ~ Dose * Condition, data = simulated_data)
+lm(formula = dv ~ 1 + Dose * Condition, data = simulated_data)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
@@ -1800,17 +1800,300 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </tbody>
 </table>
 </section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="fu">anova</span>(fit<span class="fl">.1</span>, fit<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: dv ~ Dose + Condition
+Model 2: dv ~ 1 + Dose * Condition
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    296 1213.7                                  
+2    294 1041.1  2    172.65 24.378 1.601e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
 <section id="simple-main-effects-in-emmeans" class="slide level2">
 <h2>Simple main effects in emmeans</h2>
 <ul>
 <li>Be careful. With an interaction you are interested in cell means. Do not interpret marginal means</li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>qq <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(fit<span class="fl">.2</span>, <span class="sc">~</span>  Dose )</span>
+<span id="cb64-2"><a href="#cb64-2"></a>qq </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Dose emmean    SE  df lower.CL upper.CL
+ A      8.18 0.188 294     7.81     8.55
+ B      9.78 0.188 294     9.41    10.16
+ C     12.24 0.188 294    11.87    12.61
+
+Results are averaged over the levels of: Condition 
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="fu">pairs</span>(qq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast estimate    SE  df t.ratio p.value
+ A - B       -1.60 0.266 294  -6.028  &lt;.0001
+ A - C       -4.06 0.266 294 -15.257  &lt;.0001
+ B - C       -2.46 0.266 294  -9.229  &lt;.0001
+
+Results are averaged over the levels of: Condition 
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>qq <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(fit<span class="fl">.2</span>, <span class="sc">~</span>  Dose <span class="sc">|</span> Condition)</span>
+<span id="cb68-2"><a href="#cb68-2"></a><span class="fu">pairs</span>(qq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Condition = Control:
+ contrast estimate    SE  df t.ratio p.value
+ A - B      -2.423 0.376 294  -6.439  &lt;.0001
+ A - C      -5.914 0.376 294 -15.714  &lt;.0001
+ B - C      -3.491 0.376 294  -9.275  &lt;.0001
+
+Condition = TX:
+ contrast estimate    SE  df t.ratio p.value
+ A - B      -0.785 0.376 294  -2.085  0.0946
+ A - C      -2.206 0.376 294  -5.862  &lt;.0001
+ B - C      -1.421 0.376 294  -3.776  0.0006
+
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="fu">pairs</span>(qq, <span class="at">simple =</span> <span class="st">"Condition"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dose = A:
+ contrast     estimate    SE  df t.ratio p.value
+ Control - TX   -4.224 0.376 294 -11.224  &lt;.0001
+
+Dose = B:
+ contrast     estimate    SE  df t.ratio p.value
+ Control - TX   -2.585 0.376 294  -6.870  &lt;.0001
+
+Dose = C:
+ contrast     estimate    SE  df t.ratio p.value
+ Control - TX   -0.516 0.376 294  -1.371  0.1715</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a><span class="fu">summary</span>(fit<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = dv ~ 1 + Dose * Condition, data = simulated_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.9112 -1.2753 -0.2332  1.1922  6.4045 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         6.0688     0.2661  22.805  &lt; 2e-16 ***
+DoseB               2.4234     0.3764   6.439 4.89e-10 ***
+DoseC               5.9142     0.3764  15.714  &lt; 2e-16 ***
+ConditionTX         4.2240     0.3764  11.224  &lt; 2e-16 ***
+DoseB:ConditionTX  -1.6386     0.5322  -3.079  0.00228 ** 
+DoseC:ConditionTX  -3.7081     0.5322  -6.967 2.13e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.882 on 294 degrees of freedom
+Multiple R-squared:  0.5831,    Adjusted R-squared:  0.576 
+F-statistic: 82.24 on 5 and 294 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="interaction-contrasts" class="slide level2">
+<h2>interaction contrasts</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a>qqq <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(fit<span class="fl">.2</span>, <span class="sc">~</span> Dose <span class="sc">*</span> Condition)</span>
+<span id="cb74-2"><a href="#cb74-2"></a>CON <span class="ot">&lt;-</span> <span class="fu">pairs</span>(qqq, <span class="at">by =</span> <span class="st">"Dose"</span>)</span>
+<span id="cb74-3"><a href="#cb74-3"></a><span class="fu">contrast</span>(CON, <span class="st">"pairwise"</span>, <span class="at">by =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast                            estimate    SE  df t.ratio p.value
+ (Control - TX A) - (Control - TX B)    -1.64 0.532 294  -3.079  0.0064
+ (Control - TX A) - (Control - TX C)    -3.71 0.532 294  -6.967  &lt;.0001
+ (Control - TX B) - (Control - TX C)    -2.07 0.532 294  -3.888  0.0004
+
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>CON <span class="ot">&lt;-</span> <span class="fu">pairs</span>(qq, <span class="at">by =</span> <span class="st">"Condition"</span>)</span>
+<span id="cb76-2"><a href="#cb76-2"></a><span class="fu">contrast</span>(CON, <span class="st">"consec"</span>, <span class="at">by =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast                          estimate    SE  df t.ratio p.value
+ (A - C Control) - (A - B Control)   -3.491 0.376 294  -9.275  &lt;.0001
+ (B - C Control) - (A - C Control)    2.423 0.376 294   6.439  &lt;.0001
+ (A - B TX) - (B - C Control)         2.706 0.532 294   5.084  &lt;.0001
+ (A - C TX) - (A - B TX)             -1.421 0.376 294  -3.776  0.0009
+ (B - C TX) - (A - C TX)              0.785 0.376 294   2.085  0.1463
+
+P value adjustment: mvt method for 5 tests </code></pre>
+</div>
+</div>
 </section>
 <section id="paired-comparisons-in-emmeans" class="slide level2">
 <h2>Paired comparisons in emmeans</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a><span class="fu">emmeans</span>(fit<span class="fl">.2</span>, pairwise  <span class="sc">~</span>  Dose <span class="sc">*</span> Condition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$emmeans
+ Dose Condition emmean    SE  df lower.CL upper.CL
+ A    Control     6.07 0.266 294     5.55     6.59
+ B    Control     8.49 0.266 294     7.97     9.02
+ C    Control    11.98 0.266 294    11.46    12.51
+ A    TX         10.29 0.266 294     9.77    10.82
+ B    TX         11.08 0.266 294    10.55    11.60
+ C    TX         12.50 0.266 294    11.98    13.02
+
+Confidence level used: 0.95 
+
+$contrasts
+ contrast              estimate    SE  df t.ratio p.value
+ A Control - B Control   -2.423 0.376 294  -6.439  &lt;.0001
+ A Control - C Control   -5.914 0.376 294 -15.714  &lt;.0001
+ A Control - A TX        -4.224 0.376 294 -11.224  &lt;.0001
+ A Control - B TX        -5.009 0.376 294 -13.309  &lt;.0001
+ A Control - C TX        -6.430 0.376 294 -17.085  &lt;.0001
+ B Control - C Control   -3.491 0.376 294  -9.275  &lt;.0001
+ B Control - A TX        -1.801 0.376 294  -4.784  &lt;.0001
+ B Control - B TX        -2.585 0.376 294  -6.870  &lt;.0001
+ B Control - C TX        -4.007 0.376 294 -10.646  &lt;.0001
+ C Control - A TX         1.690 0.376 294   4.491  0.0001
+ C Control - B TX         0.905 0.376 294   2.406  0.1576
+ C Control - C TX        -0.516 0.376 294  -1.371  0.7444
+ A TX - B TX             -0.785 0.376 294  -2.085  0.2978
+ A TX - C TX             -2.206 0.376 294  -5.862  &lt;.0001
+ B TX - C TX             -1.421 0.376 294  -3.776  0.0026
+
+P value adjustment: tukey method for comparing a family of 6 estimates </code></pre>
+</div>
+</div>
 </section>
-<section id="plotting" class="slide level2">
-<h2>plotting</h2>
+<section id="effect-coding" class="slide level2">
+<h2>effect coding</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>qq.f<span class="ot">&lt;-</span> <span class="fu">emmeans</span>(fit<span class="fl">.2</span>, eff  <span class="sc">~</span>  Dose <span class="sc">*</span> Condition)</span>
+<span id="cb80-2"><a href="#cb80-2"></a>qq.f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$emmeans
+ Dose Condition emmean    SE  df lower.CL upper.CL
+ A    Control     6.07 0.266 294     5.55     6.59
+ B    Control     8.49 0.266 294     7.97     9.02
+ C    Control    11.98 0.266 294    11.46    12.51
+ A    TX         10.29 0.266 294     9.77    10.82
+ B    TX         11.08 0.266 294    10.55    11.60
+ C    TX         12.50 0.266 294    11.98    13.02
+
+Confidence level used: 0.95 
+
+$contrasts
+ contrast         estimate    SE  df t.ratio p.value
+ A Control effect   -4.000 0.243 294 -16.466  &lt;.0001
+ B Control effect   -1.577 0.243 294  -6.490  &lt;.0001
+ C Control effect    1.914 0.243 294   7.879  &lt;.0001
+ A TX effect         0.224 0.243 294   0.922  0.3574
+ B TX effect         1.009 0.243 294   4.152  0.0001
+ C TX effect         2.430 0.243 294  10.003  &lt;.0001
+
+P value adjustment: fdr method for 6 tests </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a><span class="fu">emmeans</span>(fit<span class="fl">.2</span>, eff <span class="sc">~</span>  Dose <span class="sc">|</span> Condition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$emmeans
+Condition = Control:
+ Dose emmean    SE  df lower.CL upper.CL
+ A      6.07 0.266 294     5.55     6.59
+ B      8.49 0.266 294     7.97     9.02
+ C     11.98 0.266 294    11.46    12.51
+
+Condition = TX:
+ Dose emmean    SE  df lower.CL upper.CL
+ A     10.29 0.266 294     9.77    10.82
+ B     11.08 0.266 294    10.55    11.60
+ C     12.50 0.266 294    11.98    13.02
+
+Confidence level used: 0.95 
+
+$contrasts
+Condition = Control:
+ contrast estimate    SE  df t.ratio p.value
+ A effect   -2.779 0.217 294 -12.790  &lt;.0001
+ B effect   -0.356 0.217 294  -1.637  0.1026
+ C effect    3.135 0.217 294  14.428  &lt;.0001
+
+Condition = TX:
+ contrast estimate    SE  df t.ratio p.value
+ A effect   -0.997 0.217 294  -4.588  &lt;.0001
+ B effect   -0.212 0.217 294  -0.976  0.3297
+ C effect    1.209 0.217 294   5.565  &lt;.0001
+
+P value adjustment: fdr method for 3 tests </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="fu">contrasts</span>(simulated_data<span class="sc">$</span>Dose) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">3</span>)</span>
+<span id="cb84-2"><a href="#cb84-2"></a><span class="fu">contrasts</span>(simulated_data<span class="sc">$</span>Condition) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">2</span>)</span>
+<span id="cb84-3"><a href="#cb84-3"></a></span>
+<span id="cb84-4"><a href="#cb84-4"></a>fit<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(dv <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Dose <span class="sc">*</span> Condition, simulated_data)</span>
+<span id="cb84-5"><a href="#cb84-5"></a></span>
+<span id="cb84-6"><a href="#cb84-6"></a><span class="fu">summary</span>(fit<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = dv ~ 1 + Dose * Condition, data = simulated_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.9112 -1.2753 -0.2332  1.1922  6.4045 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      10.06888    0.10864  92.678  &lt; 2e-16 ***
+Dose1            -1.88807    0.15365 -12.288  &lt; 2e-16 ***
+Dose2            -0.28398    0.15365  -1.848   0.0656 .  
+Condition1       -1.22089    0.10864 -11.238  &lt; 2e-16 ***
+Dose1:Condition1 -0.89111    0.15365  -5.800 1.71e-08 ***
+Dose2:Condition1 -0.07181    0.15365  -0.467   0.6406    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.882 on 294 degrees of freedom
+Multiple R-squared:  0.5831,    Adjusted R-squared:  0.576 
+F-statistic: 82.24 on 5 and 294 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
 
 <div class="footer footer-default">
 

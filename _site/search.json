@@ -3175,14 +3175,14 @@
     "href": "factorial_12.html#simple-main-effects-in-emmeans",
     "title": "factorial anova",
     "section": "Simple main effects in emmeans",
-    "text": "Simple main effects in emmeans\n\nBe careful. With an interaction you are interested in cell means. Do not interpret marginal means"
+    "text": "Simple main effects in emmeans\n\nBe careful. With an interaction you are interested in cell means. Do not interpret marginal means\n\n\nqq &lt;- emmeans(fit.2, ~  Dose )\nqq \n\n Dose emmean    SE  df lower.CL upper.CL\n A      8.18 0.188 294     7.81     8.55\n B      9.78 0.188 294     9.41    10.16\n C     12.24 0.188 294    11.87    12.61\n\nResults are averaged over the levels of: Condition \nConfidence level used: 0.95"
   },
   {
     "objectID": "factorial_12.html#paired-comparisons-in-emmeans",
     "href": "factorial_12.html#paired-comparisons-in-emmeans",
     "title": "factorial anova",
     "section": "Paired comparisons in emmeans",
-    "text": "Paired comparisons in emmeans"
+    "text": "Paired comparisons in emmeans\n\nemmeans(fit.2, pairwise  ~  Dose * Condition)\n\n$emmeans\n Dose Condition emmean    SE  df lower.CL upper.CL\n A    Control     6.07 0.266 294     5.55     6.59\n B    Control     8.49 0.266 294     7.97     9.02\n C    Control    11.98 0.266 294    11.46    12.51\n A    TX         10.29 0.266 294     9.77    10.82\n B    TX         11.08 0.266 294    10.55    11.60\n C    TX         12.50 0.266 294    11.98    13.02\n\nConfidence level used: 0.95 \n\n$contrasts\n contrast              estimate    SE  df t.ratio p.value\n A Control - B Control   -2.423 0.376 294  -6.439  &lt;.0001\n A Control - C Control   -5.914 0.376 294 -15.714  &lt;.0001\n A Control - A TX        -4.224 0.376 294 -11.224  &lt;.0001\n A Control - B TX        -5.009 0.376 294 -13.309  &lt;.0001\n A Control - C TX        -6.430 0.376 294 -17.085  &lt;.0001\n B Control - C Control   -3.491 0.376 294  -9.275  &lt;.0001\n B Control - A TX        -1.801 0.376 294  -4.784  &lt;.0001\n B Control - B TX        -2.585 0.376 294  -6.870  &lt;.0001\n B Control - C TX        -4.007 0.376 294 -10.646  &lt;.0001\n C Control - A TX         1.690 0.376 294   4.491  0.0001\n C Control - B TX         0.905 0.376 294   2.406  0.1576\n C Control - C TX        -0.516 0.376 294  -1.371  0.7444\n A TX - B TX             -0.785 0.376 294  -2.085  0.2978\n A TX - C TX             -2.206 0.376 294  -5.862  &lt;.0001\n B TX - C TX             -1.421 0.376 294  -3.776  0.0026\n\nP value adjustment: tukey method for comparing a family of 6 estimates"
   },
   {
     "objectID": "factorial_12.html#simple-interaction-effect",
@@ -3624,5 +3624,19 @@
     "title": "Data Viz",
     "section": "How do I know if my figure is good?",
     "text": "How do I know if my figure is good?\n\nDoes it EASILY communicate what you want? Will your message be clear to a reader who is bored, tired, and/or lazy (i.e., a reviewer)?\nIs it accessible to people with poor eyesight and colorblindness?\nDoes it faithfully reflect the data? Good figures = beautiful and true &lt;3"
+  },
+  {
+    "objectID": "factorial_12.html#interaction-contrasts",
+    "href": "factorial_12.html#interaction-contrasts",
+    "title": "factorial anova",
+    "section": "interaction contrasts",
+    "text": "interaction contrasts\n\nqqq &lt;- emmeans(fit.2, ~ Dose * Condition)\nCON &lt;- pairs(qqq, by = \"Dose\")\ncontrast(CON, \"pairwise\", by = NULL)\n\n contrast                            estimate    SE  df t.ratio p.value\n (Control - TX A) - (Control - TX B)    -1.64 0.532 294  -3.079  0.0064\n (Control - TX A) - (Control - TX C)    -3.71 0.532 294  -6.967  &lt;.0001\n (Control - TX B) - (Control - TX C)    -2.07 0.532 294  -3.888  0.0004\n\nP value adjustment: tukey method for comparing a family of 3 estimates"
+  },
+  {
+    "objectID": "factorial_12.html#effect-coding",
+    "href": "factorial_12.html#effect-coding",
+    "title": "factorial anova",
+    "section": "effect coding",
+    "text": "effect coding\n\nqq.f&lt;- emmeans(fit.2, eff  ~  Dose * Condition)\nqq.f\n\n$emmeans\n Dose Condition emmean    SE  df lower.CL upper.CL\n A    Control     6.07 0.266 294     5.55     6.59\n B    Control     8.49 0.266 294     7.97     9.02\n C    Control    11.98 0.266 294    11.46    12.51\n A    TX         10.29 0.266 294     9.77    10.82\n B    TX         11.08 0.266 294    10.55    11.60\n C    TX         12.50 0.266 294    11.98    13.02\n\nConfidence level used: 0.95 \n\n$contrasts\n contrast         estimate    SE  df t.ratio p.value\n A Control effect   -4.000 0.243 294 -16.466  &lt;.0001\n B Control effect   -1.577 0.243 294  -6.490  &lt;.0001\n C Control effect    1.914 0.243 294   7.879  &lt;.0001\n A TX effect         0.224 0.243 294   0.922  0.3574\n B TX effect         1.009 0.243 294   4.152  0.0001\n C TX effect         2.430 0.243 294  10.003  &lt;.0001\n\nP value adjustment: fdr method for 6 tests"
   }
 ]
