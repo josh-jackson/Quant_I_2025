@@ -2106,12 +2106,15 @@ P value adjustment: fdr method for 2 tests </code></pre>
 <section class="slide level2">
 
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a><span class="fu">contrasts</span>(simulated_data<span class="sc">$</span>Dose) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">3</span>)</span>
 <span id="cb86-2"><a href="#cb86-2"></a><span class="fu">contrasts</span>(simulated_data<span class="sc">$</span>Condition) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">2</span>)</span>
 <span id="cb86-3"><a href="#cb86-3"></a></span>
 <span id="cb86-4"><a href="#cb86-4"></a>fit<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(dv <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Dose <span class="sc">*</span> Condition, simulated_data)</span>
 <span id="cb86-5"><a href="#cb86-5"></a></span>
 <span id="cb86-6"><a href="#cb86-6"></a><span class="fu">summary</span>(fit<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -2137,6 +2140,213 @@ Multiple R-squared:  0.5831,    Adjusted R-squared:  0.576
 F-statistic: 82.24 on 5 and 294 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
+</section>
+<section id="old-school-semester-review" class="slide level2 scrollable smaller">
+<h2>old school semester review</h2>
+<table>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 14%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>IV</th>
+<th>DV</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Continuous</td>
+<td>Continuous</td>
+<td>Correlation/linear regression</td>
+</tr>
+<tr class="even">
+<td>Continuous</td>
+<td>Categorical</td>
+<td>GLM (logistic, poisson, etc)</td>
+</tr>
+<tr class="odd">
+<td>2 levels</td>
+<td>Continuous</td>
+<td>Independent samples t-test</td>
+</tr>
+<tr class="even">
+<td>2 levels</td>
+<td>Continuous</td>
+<td>Mann-Whitney U (np)</td>
+</tr>
+<tr class="odd">
+<td>2 levels</td>
+<td>Categorical</td>
+<td>Chi-Square test of association</td>
+</tr>
+<tr class="even">
+<td>2 Levels (dependent)</td>
+<td>Continuous</td>
+<td>Paired t-test</td>
+</tr>
+<tr class="odd">
+<td>2 Levels (dependent)</td>
+<td>Continuous</td>
+<td>Wilcoxon signed rank test (np)</td>
+</tr>
+<tr class="even">
+<td>More than 2 levels (independent)</td>
+<td>Continuous</td>
+<td>One-way ANOVA (F-test)</td>
+</tr>
+<tr class="odd">
+<td>More than 2 levels (independent)</td>
+<td>Continuous</td>
+<td>Kruskal-Wallis (np)</td>
+</tr>
+<tr class="even">
+<td>More than 2 levels (independent)</td>
+<td>Categorical</td>
+<td>Chi-square test of association</td>
+</tr>
+<tr class="odd">
+<td>2+ levels (dependent)</td>
+<td>Continuous</td>
+<td>Repeated Measures ANOVA / HLM/MLM</td>
+</tr>
+<tr class="even">
+<td>2+ levels (dependent)</td>
+<td>Categorical</td>
+<td>Repeated Measures ANOVA / HLM/MLM</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="new-school" class="slide level2 scrollable smaller">
+<h2>new school</h2>
+<table>
+<colgroup>
+<col style="width: 34%">
+<col style="width: 23%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>IV</th>
+<th>model</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Continuous</td>
+<td>r; lm(y ~ 1 + x)</td>
+<td>Correlation/linear regression</td>
+</tr>
+<tr class="even">
+<td>Categorical</td>
+<td>r; glm(y ~ 1 + x)</td>
+<td>GLM (logistic, poisson, etc)</td>
+</tr>
+<tr class="odd">
+<td>2 levels</td>
+<td>lm(y ~ 1 + x)</td>
+<td>Independent samples t-test</td>
+</tr>
+<tr class="even">
+<td>2 levels</td>
+<td>lm(signed_rank(y) ~ 1 + x)</td>
+<td>Mann-Whitney U (np)</td>
+</tr>
+<tr class="odd">
+<td>2 levels</td>
+<td>glm(y ~ 1 + x1 + x2 …)</td>
+<td>Chi-Square test of association</td>
+</tr>
+<tr class="even">
+<td>2 Levels (dependent)</td>
+<td>lm(y2 - y1 ~ 1)</td>
+<td>Paired t-test</td>
+</tr>
+<tr class="odd">
+<td>2 Levels (dependent)</td>
+<td>lm(signed_rank(y2 - y1) ~ 1)</td>
+<td>Wilcoxon signed rank test (np)</td>
+</tr>
+<tr class="even">
+<td>More than 2 levels (independent)</td>
+<td>lm(y ~ 1 + x1 + x2 …)</td>
+<td>One-way ANOVA</td>
+</tr>
+<tr class="odd">
+<td>More than 2 levels (independent)</td>
+<td>lm(rank(y) ~ 1 + x1 + x2 …)</td>
+<td>Kruskal-Wallis (np)</td>
+</tr>
+<tr class="even">
+<td>More than 2 levels (independent)</td>
+<td>glm(y ~ 1 + x1 + x2 …)</td>
+<td>Chi-square test of association</td>
+</tr>
+<tr class="odd">
+<td>2+ levels (dependent)</td>
+<td>lmer(y ~ 1 + x1 + (1 | ID))</td>
+<td>Repeated Measures ANOVA / HLM/MLM</td>
+</tr>
+<tr class="even">
+<td>2+ levels (dependent)</td>
+<td>glmer(y ~ 1 + x1 + (1 | ID))</td>
+<td>Repeated Measures ANOVA / HLM/MLM</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="take-aways" class="slide level2">
+<h2>Take aways</h2>
+<ul>
+<li><p>Behold the power of: <span class="math inline">\(Y_i = b_0 + b_{1}X + b_{2}X_2 + ...e_i\)</span></p></li>
+<li><p>If you know how you measures the variables you can create the model:</p></li>
+<li><p>For IVs, do you need to dummy code?</p></li>
+<li><p>For DVs, do you need to reject the assumption of Gaussian? If so, how they are measured will assist in choosing a new theoretical probability function that serves as your likelihood function.</p></li>
+</ul>
+</section>
+<section id="estimation" class="slide level2">
+<h2>Estimation</h2>
+<ul>
+<li><p>OLS minimizes the residuals; we define that as best fit.</p></li>
+<li><p>Maximum Likelihood iteratively tries out different values of your parameters, finding values that maximizes the likelihood that your datapoints came from a population with those values.</p></li>
+</ul>
+</section>
+<section id="inference" class="slide level2">
+<h2>Inference</h2>
+<ul>
+<li><p>We could/will always be wrong; standard error tells us how much precision we have around our sample statistics</p></li>
+<li><p>When we try to learn from our models our eyes should be on the estimates and standard errors. Often converted into standardized effect sizes.</p></li>
+<li><p>A CI should be used to tell you “values consistent with your model” and you should think whether the range of plausible values is informative</p></li>
+</ul>
+</section>
+<section id="inference-1" class="slide level2">
+<h2>Inference</h2>
+<ul>
+<li><p>p value = p(data |<span class="math inline">\(H_0\)</span>), which isn’t what we want. We really want p(<span class="math inline">\(Hyp\)</span> |data). (Best we can do is p(<span class="math inline">\(\theta\)</span> |data) as almost all hypotheses are super vague eg different thank zero is very vague)</p></li>
+<li><p>p values -&gt; Dichotomous thinking -&gt; gaming the system</p></li>
+<li><p>Practical vs statistical significance</p></li>
+</ul>
+</section>
+<section id="inference-2" class="slide level2">
+<h2>Inference</h2>
+<ul>
+<li><p>Model comparison can be equivalent to tests of hypothesis</p></li>
+<li><p>Leverages the SS residual (which is directly related to MSE and RSE/sigma) to test which model (a “full” or reduced) explains the data better.</p></li>
+<li><p>The difference between the models SS residual (unexplained variance) is SS associated with the variable not in the reduced model.</p></li>
+</ul>
+</section>
+<section id="please" class="slide level2">
+<h2>Please</h2>
+<ul>
+<li><p>Think about your model while designing your experiment</p></li>
+<li><p>Describe your model in papers and talks (so I can interpret your findings!)</p></li>
+<li><p>Remember to provide CIs, effect sizes, and figures. And please make your effect sizes interpretable.</p></li>
+<li><p>Interpret based on all information, not just p-values.</p></li>
+</ul>
 
 <div class="footer footer-default">
 

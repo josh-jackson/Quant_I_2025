@@ -9,6 +9,8 @@ html:
   code-fold: true
   code-summary: Show the code
   scrollable: true
+  filters:
+  - highlight-text
 ---
 
 
@@ -604,10 +606,8 @@ pairs(qq)
 ------------------
 
 ```{r}
-
 qq <- emmeans(fit.2, ~  Dose | Condition)
 pairs(qq)
-
 ```
 
 -----------
@@ -679,6 +679,7 @@ emmeans(fit.2, eff ~  Condition | Dose)
 ----------
 
 ```{r}
+#| code-fold: true
 contrasts(simulated_data$Dose) <- contr.sum(3)
 contrasts(simulated_data$Condition) <- contr.sum(2)
 
@@ -688,4 +689,86 @@ summary(fit.3)
 
 ```
 
+## old school semester review {.scrollable .smaller}
 
+| IV                               | DV          |                                         |
+|----------------------------------|-------------|-----------------------------------------|
+| Continuous                   | Continuous   | Correlation/linear regression                  |
+| Continuous                   | Categorical | GLM (logistic, poisson, etc)             |
+| 2 levels                         | Continuous   | Independent samples t-test              |
+| 2 levels                         | Continuous   | Mann-Whitney U (np)                          |
+| 2 levels                         | Categorical | Chi-Square test of association          |
+| 2 Levels (dependent)             | Continuous   | Paired t-test                           |
+| 2 Levels (dependent)             | Continuous   | Wilcoxon signed rank test (np)              |
+| More than 2 levels (independent) | Continuous   | One-way ANOVA (F-test)                  |
+| More than 2 levels (independent) | Continuous | Kruskal-Wallis (np)                         |
+| More than 2 levels (independent) | Categorical | Chi-square test of association          |
+| 2+ levels (dependent)   | Continuous   | Repeated Measures ANOVA / HLM/MLM             |
+| 2+ levels (dependent)   | Categorical   | Repeated Measures ANOVA / HLM/MLM                |
+
+## new school {.scrollable .smaller}
+
+| IV                               | model          |                                         |
+|----------------------------|-------------------|-----------------------------------|
+| Continuous                   | r; lm(y ~ 1 + x) | Correlation/linear regression                  |
+| Categorical                   | r; glm(y ~ 1 + x) | GLM (logistic, poisson, etc)             |
+| 2 levels                         | lm(y ~ 1 + x)   | Independent samples t-test              |
+| 2 levels                         | lm(signed_rank(y) ~ 1 + x)   | Mann-Whitney U (np)                          |
+| 2 levels                         | glm(y ~ 1 + x1 + x2 ...) | Chi-Square test of association          |
+| 2 Levels (dependent)             | lm(y2 - y1 ~ 1)   | Paired t-test                           |
+| 2 Levels (dependent)             | lm(signed_rank(y2 - y1) ~ 1)   | Wilcoxon signed rank test (np)  |
+| More than 2 levels (independent) | lm(y ~ 1 + x1 + x2 ...)   | One-way ANOVA                  |
+| More than 2 levels (independent) | lm(rank(y) ~ 1 + x1 + x2 ...)  | Kruskal-Wallis (np)                         |
+| More than 2 levels (independent) | glm(y ~ 1 + x1 + x2 ...) | Chi-square test of association          |
+2+ levels (dependent)   | lmer(y ~ 1 + x1 + (1 \| ID))  | Repeated Measures ANOVA / HLM/MLM                 |
+2+ levels (dependent)   | glmer(y ~ 1 + x1 + (1 \| ID))   | Repeated Measures ANOVA / HLM/MLM                            |
+
+## Take aways
+
+- Behold the power of:
+$Y_i = b_0 + b_{1}X + b_{2}X_2 + ...e_i$
+
+- If you know how you measures the variables you can create the model: 
+
+- For IVs, do you need to dummy code?
+- For DVs, do you need to reject the assumption of Gaussian? If so, how they are measured will assist in choosing a new theoretical probability function that serves as your likelihood function.  
+
+## Estimation
+
+- OLS minimizes the residuals; we define that as best fit. 
+
+- Maximum Likelihood iteratively tries out different values of your parameters, finding values that maximizes the likelihood that your datapoints came from a population with those values. 
+
+## Inference
+
+- We could/will always be wrong; standard error tells us how much precision we have around our sample statistics
+
+- When we try to learn from our models our eyes should be on the estimates and standard errors. Often converted into standardized effect sizes. 
+
+- A CI should be used to tell you "values consistent with your model" and you should think whether the range of plausible values is informative
+
+## Inference
+
+- p value = p(data |$H_0$), which isn't what we want. We really want p($Hyp$ |data). (Best we can do is p($\theta$ |data) as almost all hypotheses are super vague eg different thank zero is very vague)
+
+- p values -> Dichotomous thinking -> gaming the system
+
+- Practical vs statistical significance
+
+## Inference
+
+- Model comparison can be equivalent to tests of hypothesis
+
+- Leverages the SS residual (which is directly related to MSE and RSE/sigma) to test which model (a "full" or reduced) explains the data better. 
+
+- The difference between the models SS residual (unexplained variance) is SS associated with the variable not in the reduced model. 
+
+## Please
+
+- Think about your model while designing your experiment
+
+- Describe your model in papers and talks (so I can interpret your findings!)
+
+- Remember to provide CIs, effect sizes, and figures. And please make your effect sizes interpretable. 
+
+- Interpret based on all information, not just p-values. 

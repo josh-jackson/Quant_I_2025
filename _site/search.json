@@ -3638,5 +3638,68 @@
     "title": "factorial anova",
     "section": "effect coding",
     "text": "effect coding\n\nqq.f&lt;- emmeans(fit.2, eff  ~  Dose * Condition)\nqq.f\n\n$emmeans\n Dose Condition emmean    SE  df lower.CL upper.CL\n A    Control     6.07 0.266 294     5.55     6.59\n B    Control     8.49 0.266 294     7.97     9.02\n C    Control    11.98 0.266 294    11.46    12.51\n A    TX         10.29 0.266 294     9.77    10.82\n B    TX         11.08 0.266 294    10.55    11.60\n C    TX         12.50 0.266 294    11.98    13.02\n\nConfidence level used: 0.95 \n\n$contrasts\n contrast         estimate    SE  df t.ratio p.value\n A Control effect   -4.000 0.243 294 -16.466  &lt;.0001\n B Control effect   -1.577 0.243 294  -6.490  &lt;.0001\n C Control effect    1.914 0.243 294   7.879  &lt;.0001\n A TX effect         0.224 0.243 294   0.922  0.3574\n B TX effect         1.009 0.243 294   4.152  0.0001\n C TX effect         2.430 0.243 294  10.003  &lt;.0001\n\nP value adjustment: fdr method for 6 tests"
+  },
+  {
+    "objectID": "factorial_12.html#semester-review",
+    "href": "factorial_12.html#semester-review",
+    "title": "factorial anova",
+    "section": "semester review",
+    "text": "semester review\n\n\n\n\n\n\n\n\nIV\nDV\n\n\n\n\n\nContinuous\nContinuous\nCorrelation/linear regression\n\n\nCategorical\nCategorical\nGLM (logistic, poisson, etc)\n\n\n2 levels\nContinuous\nIndependent samples t-test\n\n\n2 levels\nContinuous\nMann-Whitney U (np)\n\n\n2 levels\nCategorical\nChi-Square test of association\n\n\n2 levels\nCategorical\nFishers exact test (np)\n\n\n2 Levels (dependent)\nContinuous\nPaired t-test\n\n\n2 Levels (dependent)\nContinuous\nWilcoxon signed rank test (np)\n\n\n2 Levels (dependent)\nCategorical\nLots of strange np options (e.g., McNemar)\n\n\nMore than 2 levels (independent)\nContinuous\nOne-way ANOVA (F-test)\n\n\nMore than 2 levels (independent)\nCategorical\nKruskal-Wallis (np)\n\n\nMore than 2 levels (independent)\nCategorical\nChi-square test of association\n\n\nMore than 2 levels (dependent)\nContinuous\nRepeated Measures ANOVA / HLM/MLM\n\n\nMore than 2 levels (dependent)\nContinuous\nFriedman Test (np)"
+  },
+  {
+    "objectID": "factorial_12.html#old-school-semester-review",
+    "href": "factorial_12.html#old-school-semester-review",
+    "title": "factorial anova",
+    "section": "old school semester review",
+    "text": "old school semester review\n\n\n\n\n\n\n\n\nIV\nDV\n\n\n\n\n\nContinuous\nContinuous\nCorrelation/linear regression\n\n\nContinuous\nCategorical\nGLM (logistic, poisson, etc)\n\n\n2 levels\nContinuous\nIndependent samples t-test\n\n\n2 levels\nContinuous\nMann-Whitney U (np)\n\n\n2 levels\nCategorical\nChi-Square test of association\n\n\n2 Levels (dependent)\nContinuous\nPaired t-test\n\n\n2 Levels (dependent)\nContinuous\nWilcoxon signed rank test (np)\n\n\nMore than 2 levels (independent)\nContinuous\nOne-way ANOVA (F-test)\n\n\nMore than 2 levels (independent)\nContinuous\nKruskal-Wallis (np)\n\n\nMore than 2 levels (independent)\nCategorical\nChi-square test of association\n\n\n2+ levels (dependent)\nContinuous\nRepeated Measures ANOVA / HLM/MLM\n\n\n2+ levels (dependent)\nCategorical\nRepeated Measures ANOVA / HLM/MLM"
+  },
+  {
+    "objectID": "factorial_12.html#new-school",
+    "href": "factorial_12.html#new-school",
+    "title": "factorial anova",
+    "section": "new school",
+    "text": "new school\n\n\n\n\n\n\n\n\nIV\nmodel\n\n\n\n\n\nContinuous\nr; lm(y ~ 1 + x)\nCorrelation/linear regression\n\n\nCategorical\nr; glm(y ~ 1 + x)\nGLM (logistic, poisson, etc)\n\n\n2 levels\nlm(y ~ 1 + x)\nIndependent samples t-test\n\n\n2 levels\nlm(signed_rank(y) ~ 1 + x)\nMann-Whitney U (np)\n\n\n2 levels\nglm(y ~ 1 + x1 + x2 …)\nChi-Square test of association\n\n\n2 Levels (dependent)\nlm(y2 - y1 ~ 1)\nPaired t-test\n\n\n2 Levels (dependent)\nlm(signed_rank(y2 - y1) ~ 1)\nWilcoxon signed rank test (np)\n\n\nMore than 2 levels (independent)\nlm(y ~ 1 + x1 + x2 …)\nOne-way ANOVA\n\n\nMore than 2 levels (independent)\nlm(rank(y) ~ 1 + x1 + x2 …)\nKruskal-Wallis (np)\n\n\nMore than 2 levels (independent)\nglm(y ~ 1 + x1 + x2 …)\nChi-square test of association\n\n\n2+ levels (dependent)\nlmer(y ~ 1 + x1 + (1 | ID))\nRepeated Measures ANOVA / HLM/MLM\n\n\n2+ levels (dependent)\nglmer(y ~ 1 + x1 + (1 | ID))\nRepeated Measures ANOVA / HLM/MLM"
+  },
+  {
+    "objectID": "factorial_12.html#take-aways",
+    "href": "factorial_12.html#take-aways",
+    "title": "factorial anova",
+    "section": "Take aways",
+    "text": "Take aways\n\nBehold the power of: \\(Y_i = b_0 + b_{1}X + b_{2}X_2 + ...e_i\\)\nIf you know how you measures the variables you can create the model:\nFor IVs, do you need to dummy code?\nFor DVs, do you need to reject the assumption of Gaussian? If so, how they are measured will assist in choosing a new theoretical probability function that serves as your likelihood function."
+  },
+  {
+    "objectID": "factorial_12.html#estimation",
+    "href": "factorial_12.html#estimation",
+    "title": "factorial anova",
+    "section": "Estimation",
+    "text": "Estimation\n\nOLS minimizes the residuals; we define that as best fit.\nMaximum Likelihood iteratively tries out different values of your parameters, finding values that maximizes the likelihood that your datapoints came from a population with those values."
+  },
+  {
+    "objectID": "factorial_12.html#inference",
+    "href": "factorial_12.html#inference",
+    "title": "factorial anova",
+    "section": "Inference",
+    "text": "Inference\n\nWe could/will always be wrong; standard error tells us how much precision we have around our sample statistics\nWhen we try to learn from our models our eyes should be on the estimates and standard errors. Often converted into standardized effect sizes.\nA CI should be used to tell you “values consistent with your model” and you should think whether the range of plausible values is informative"
+  },
+  {
+    "objectID": "factorial_12.html#inference-1",
+    "href": "factorial_12.html#inference-1",
+    "title": "factorial anova",
+    "section": "Inference",
+    "text": "Inference\n\np value = p(data |\\(H_0\\)), which isn’t what we want. We really want p(\\(Hyp\\) |data). (Best we can do is p(\\(\\theta\\) |data) as almost all hypotheses are super vague eg different thank zero is very vague)\np values -&gt; Dichotomous thinking -&gt; gaming the system\nPractical vs statistical significance"
+  },
+  {
+    "objectID": "factorial_12.html#inference-2",
+    "href": "factorial_12.html#inference-2",
+    "title": "factorial anova",
+    "section": "Inference",
+    "text": "Inference\n\nModel comparison can be equivalent to tests of hypothesis\nLeverages the SS residual (which is directly related to MSE and RSE/sigma) to test which model (a “full” or reduced) explains the data better.\nThe difference between the models SS residual (unexplained variance) is SS associated with the variable not in the reduced model."
+  },
+  {
+    "objectID": "factorial_12.html#please",
+    "href": "factorial_12.html#please",
+    "title": "factorial anova",
+    "section": "Please",
+    "text": "Please\n\nThink about your model while designing your experiment\nDescribe your model in papers and talks (so I can interpret your findings!)\nRemember to provide CIs, effect sizes, and figures. And please make your effect sizes interpretable.\nInterpret based on all information, not just p-values."
   }
 ]
